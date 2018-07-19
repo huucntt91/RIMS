@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="export_interface" pageWidth="1190" pageHeight="842" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1190" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a309bf4c-7bd2-4c1e-b51f-ab23e7643233">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="P_TNODE_ID" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT a.interface_id,
+                                     a.tnode_id,
+                                     a.interface_name,
+                                     a.interface_type,
+                                     a.mtu,
+                                     a.speed,
+                                     a.update_date,
+                                     a.status,
+                                     a.description
+                                FROM interface a
+                               WHERE 1 = 1 AND a.tnode_id = $P{P_TNODE_ID}
+                            ORDER BY a.interface_name DESC]]>
+	</queryString>
+	<field name="INTERFACE_ID" class="java.math.BigDecimal"/>
+	<field name="TNODE_ID" class="java.math.BigDecimal"/>
+	<field name="INTERFACE_NAME" class="java.lang.String"/>
+	<field name="INTERFACE_TYPE" class="java.lang.String"/>
+	<field name="MTU" class="java.math.BigDecimal"/>
+	<field name="SPEED" class="java.lang.String"/>
+	<field name="UPDATE_DATE" class="java.sql.Timestamp"/>
+	<field name="STATUS" class="java.math.BigDecimal"/>
+	<field name="DESCRIPTION" class="java.lang.String"/>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="59" width="131" height="20" uuid="555783b1-efe7-4326-ba3c-5431d42c70ff"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Tên giao diện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="131" y="59" width="139" height="20" uuid="0cdc9943-a981-4b54-9a30-520fbd4d1a90"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Mô tả]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="270" y="59" width="100" height="20" uuid="a6579dd5-1377-454b-92bb-e6344a2ac0b5"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Loại]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="59" width="100" height="20" uuid="6afafb3a-0657-4fae-beb7-45c56ccee032"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[MTU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="59" width="100" height="20" uuid="8f4dfa51-8443-49d8-88b3-ee40f7519238"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Tốc độ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="571" y="59" width="100" height="20" uuid="3deea5e3-1ded-4411-9e08-f20609022ecb"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Trạng Thái]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="671" y="59" width="100" height="20" uuid="531f1d43-a1f9-4a2c-9823-8203ff17e4d5"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Thời gian thay đổi]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="131" height="20" uuid="a7301196-8c0e-472f-aa4e-cd63c0566618"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{INTERFACE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="131" y="0" width="139" height="20" uuid="c175f281-708a-4a0c-8e53-d1cdaabe2117"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="0" width="100" height="20" uuid="0f06523e-2068-4d9f-9df4-a38c16bc0b06"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{INTERFACE_TYPE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="100" height="20" uuid="3be50bb3-7f87-4436-81fe-0afbf02ec9fe"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MTU}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="470" y="0" width="100" height="20" uuid="64916db6-0a0a-4025-b87e-ae475647744d"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SPEED}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="571" y="0" width="100" height="20" uuid="51c15d99-b7d8-43ce-9a0b-0d765e614d3f"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{STATUS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="671" y="0" width="100" height="20" uuid="da2abfbf-caf7-4e87-b485-b3adce70a24a"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{UPDATE_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

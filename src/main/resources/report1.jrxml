@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="367f4037-9ce4-4e26-8eaa-96311152a333">
+	<queryString language="SQL">
+		<![CDATA[select * from tnode]]>
+	</queryString>
+	<field name="TNODE_ID" class="java.math.BigDecimal"/>
+	<field name="TNODE_CODE" class="java.lang.String"/>
+	<field name="TNODE_NAME" class="java.lang.String"/>
+	<field name="TLIST_NODE_CHA_ID" class="java.lang.String"/>
+	<field name="DONG_TBI_ID" class="java.math.BigDecimal"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="TOTAL_SLOT" class="java.lang.String"/>
+	<field name="BUILDING_ID" class="java.math.BigDecimal"/>
+	<field name="TNODE_TYPE_ID" class="java.math.BigDecimal"/>
+	<field name="IP" class="java.lang.String"/>
+	<field name="CREATE_DATE" class="java.sql.Timestamp"/>
+	<field name="TOTAL_EQ1" class="java.math.BigDecimal"/>
+	<field name="TID_EXTERNAL" class="java.lang.String"/>
+	<field name="NOTE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

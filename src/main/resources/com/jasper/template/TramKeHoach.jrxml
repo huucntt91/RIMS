@@ -1,0 +1,1688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TramKeHoach" pageWidth="3368" pageHeight="2380" orientation="Landscape" columnWidth="3328" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="150c228a-7032-4abe-bb49-67bed126b0ee">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="prs_tinhTp_Id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="prs_ma_tram_da" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="prs_ten_tram_da" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select rownum, a.tram_du_an_id, b.du_an_id, b.ma_du_an, b.ten_du_an, c.tram_qh_id, c.ma_quy_hoach, c.ten_quy_hoach, a.ma_so_hop_dong,
+        a.tinhtp_id, d.TEN_TINH_TP , a.quan_huyen_id, e.TEN_QUAN_HUYEN,
+        a.dia_chi, a.ma_tram_da, a.ten_tram, a.ma_tram_bts, a.ma_tram_nodeB,
+        a.ma_tram_quy_hoach, g.name hien_trang_tram, a.longitude, a.latitude,
+        --cam ket thiet bi
+        h.name vnpt_net_phe_duyet, i.cau_hinh_port cau_hinh_thiet_bi, k.ten_nguon_thiet_bi nguon_thiet_bi, l.ten_loai_cong_nghe loai_cong_nghe, a.chung_loai_thiet_bi, a.chung_loai_anten,
+        --cam ket ha tang
+       a.longitude_khao_sat, a.latitude_khao_sat, DECODE(a.nha_tram, 1, 'OK',0, 'NOK','') nha_tram,
+       DECODE(a.cot_anten, 1, 'OK',0, 'NOK','') cot_anten, DECODE(a.cau_cap_ngoai, 1, 'OK',0, 'NOK','') cau_cap_ngoai, DECODE(a.tu_nguon, 1, 'OK',0, 'NOK','') tu_nguon, a.dung_luong_tu_nguon,
+       a.so_module_tu_nguon, m.name chung_loai_accu, a.dung_luong_accu,
+       a.so_luong_to_accu, DECODE(a.truyen_dan, 1, 'OK',0, 'NOK','') truyen_dan, DECODE(a.dieu_hoa, 1, 'OK',0, 'NOK','') dieu_hoa,  DECODE(a.dien_ac, 1, 'OK',0, 'NOK','') dien_ac,
+       DECODE(a.dien_ac_noi_tram, 1, 'OK',0, 'NOK','') dien_ac_noi_tram, DECODE(a.du_dk_lap_enodeb, 1, 'OK',0, 'NOK','') du_dk_lap_enodeb, DECODE(a.cap_moi_tu_nguon_dc, 1, 'OK',0, 'NOK','') cap_moi_tu_nguon_dc,
+       DECODE(a.cap_moi_accu, 1, 'OK',0, 'NOK','') cap_moi_accu,
+       a.swap_anten, a.ngay_hoan_thanh_ks,
+       a.ngay_gui_so_lieu, a.dau_moi_nhan_thiet_bi, a.DAU_MOI_QL_CSHT_TRAM, a.don_vi_lap_dat,
+       -- trang thai trien khai netx
+       a.ngay_phe_duyet_khao_sat, a.ngay_tiep_nhan_truyen_dan,
+       -- trang thai trien khai
+       a.ke_hoach_xuat_thiet_bi, a.ngay_xuat_thiet_bi_thuc_te,
+       a.ngay_tiep_nhan_tb, a.ke_hoach_tb_den_site, a.ke_hoach_lap_dat,
+       a.ngay_bat_dau_lap_dat, a.NGAY_HT_LAP_TB, a.ke_hoach_hoa_mang,
+       a.ngay_hoa_mang_thuc_te, a.ke_hoach_phat_song_ct,
+       a.ngay_phat_song_ct, a.ke_hoach_nghiem_thu, a.ngay_nghiem_thu,
+       a.dau_moi_vnpt_net, a.don_vi_van_chuyen, a.ghi_chu,
+       a.trang_thai_tram, f.name ten_trang_thai_tram
+        from rims.TRAM_DU_AN a
+        LEFT JOIN rims.DU_AN_TINH b ON a.du_an_id = b.DU_AN_ID
+        LEFT JOIN rims.TRAM_QUY_HOACH c ON a.TRAM_DU_AN_ID = c.TRAM_DU_AN_ID
+        LEFT JOIN rims.TINH_TP d ON a.tinhtp_id = d.TINHTP_ID
+        LEFT JOIN rims.QUAN_HUYEN e ON a.quan_huyen_id = e.QUANHUYEN_ID
+        LEFT JOIN rims.DM_TRANGTHAI_TRAM_DA f ON a.trang_thai_tram = f.id
+        LEFT JOIN rims.dm_hien_trang_tram g ON a.hien_trang_tram = g.id
+        LEFT JOIN rims.dm_ok_nok h ON a.vnpt_net_phe_duyet = h.id
+        LEFT JOIN rims.dm_cau_hinh_port i ON a.cau_hinh_thiet_bi = i.cau_hinh_port_id
+        LEFT JOIN rims.dm_nguon_thiet_bi k ON a.nguon_thiet_bi = k.nguon_thiet_bi_id
+        LEFT JOIN rims.dm_loai_cong_nghe l ON a.loai_cong_nghe = l.id_loai_cong_nghe
+        LEFT JOIN rims.dm_dung_luong_accu m ON a.chung_loai_accu = m.id
+        WHERE 1=1
+        AND (a.trang_thai_tram != 0 OR a.trang_thai_tram is null)
+        AND( $P{prs_tinhTp_Id} IS NULL OR  a.tinhtp_id        IN
+          (SELECT regexp_substr($P{prs_tinhTp_Id},'[^,]+', 1, level) ids
+          FROM dual
+            CONNECT BY regexp_substr($P{prs_tinhTp_Id}, '[^,]+', 1, level) IS NOT NULL
+          ))
+        AND NVL(LOWER(a.ma_tram_da),' ') like LOWER('%'||$P{prs_ma_tram_da}||'%')
+        AND NVL(LOWER(a.ten_tram),' ') like LOWER('%'||$P{prs_ten_tram_da}||'%')]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="TRAM_DU_AN_ID" class="java.math.BigDecimal"/>
+	<field name="DU_AN_ID" class="java.math.BigDecimal"/>
+	<field name="MA_DU_AN" class="java.lang.String"/>
+	<field name="TEN_DU_AN" class="java.lang.String"/>
+	<field name="TRAM_QH_ID" class="java.math.BigDecimal"/>
+	<field name="MA_QUY_HOACH" class="java.lang.String"/>
+	<field name="TEN_QUY_HOACH" class="java.lang.String"/>
+	<field name="MA_SO_HOP_DONG" class="java.lang.String"/>
+	<field name="TINHTP_ID" class="java.math.BigDecimal"/>
+	<field name="TEN_TINH_TP" class="java.lang.String"/>
+	<field name="QUAN_HUYEN_ID" class="java.math.BigDecimal"/>
+	<field name="TEN_QUAN_HUYEN" class="java.lang.String"/>
+	<field name="DIA_CHI" class="java.lang.String"/>
+	<field name="MA_TRAM_DA" class="java.lang.String"/>
+	<field name="TEN_TRAM" class="java.lang.String"/>
+	<field name="MA_TRAM_BTS" class="java.lang.String"/>
+	<field name="MA_TRAM_NODEB" class="java.lang.String"/>
+	<field name="MA_TRAM_QUY_HOACH" class="java.lang.String"/>
+	<field name="HIEN_TRANG_TRAM" class="java.lang.String"/>
+	<field name="LONGITUDE" class="java.math.BigDecimal"/>
+	<field name="LATITUDE" class="java.math.BigDecimal"/>
+	<field name="VNPT_NET_PHE_DUYET" class="java.lang.String"/>
+	<field name="CAU_HINH_THIET_BI" class="java.lang.String"/>
+	<field name="NGUON_THIET_BI" class="java.lang.String"/>
+	<field name="LOAI_CONG_NGHE" class="java.lang.String"/>
+	<field name="CHUNG_LOAI_THIET_BI" class="java.lang.String"/>
+	<field name="CHUNG_LOAI_ANTEN" class="java.lang.String"/>
+	<field name="LONGITUDE_KHAO_SAT" class="java.math.BigDecimal"/>
+	<field name="LATITUDE_KHAO_SAT" class="java.math.BigDecimal"/>
+	<field name="NHA_TRAM" class="java.lang.String"/>
+	<field name="COT_ANTEN" class="java.lang.String"/>
+	<field name="CAU_CAP_NGOAI" class="java.lang.String"/>
+	<field name="TU_NGUON" class="java.lang.String"/>
+	<field name="DUNG_LUONG_TU_NGUON" class="java.lang.String"/>
+	<field name="SO_MODULE_TU_NGUON" class="java.lang.String"/>
+	<field name="CHUNG_LOAI_ACCU" class="java.lang.String"/>
+	<field name="DUNG_LUONG_ACCU" class="java.lang.String"/>
+	<field name="SO_LUONG_TO_ACCU" class="java.lang.String"/>
+	<field name="TRUYEN_DAN" class="java.lang.String"/>
+	<field name="DIEU_HOA" class="java.lang.String"/>
+	<field name="DIEN_AC" class="java.lang.String"/>
+	<field name="DIEN_AC_NOI_TRAM" class="java.lang.String"/>
+	<field name="DU_DK_LAP_ENODEB" class="java.lang.String"/>
+	<field name="CAP_MOI_TU_NGUON_DC" class="java.lang.String"/>
+	<field name="CAP_MOI_ACCU" class="java.lang.String"/>
+	<field name="SWAP_ANTEN" class="java.lang.String"/>
+	<field name="NGAY_HOAN_THANH_KS" class="java.sql.Timestamp"/>
+	<field name="NGAY_GUI_SO_LIEU" class="java.sql.Timestamp"/>
+	<field name="DAU_MOI_NHAN_THIET_BI" class="java.lang.String"/>
+	<field name="DAU_MOI_QL_CSHT_TRAM" class="java.lang.String"/>
+	<field name="DON_VI_LAP_DAT" class="java.lang.String"/>
+	<field name="NGAY_PHE_DUYET_KHAO_SAT" class="java.sql.Timestamp"/>
+	<field name="NGAY_TIEP_NHAN_TRUYEN_DAN" class="java.sql.Timestamp"/>
+	<field name="KE_HOACH_XUAT_THIET_BI" class="java.sql.Timestamp"/>
+	<field name="NGAY_XUAT_THIET_BI_THUC_TE" class="java.sql.Timestamp"/>
+	<field name="NGAY_TIEP_NHAN_TB" class="java.sql.Timestamp"/>
+	<field name="KE_HOACH_TB_DEN_SITE" class="java.sql.Timestamp"/>
+	<field name="KE_HOACH_LAP_DAT" class="java.sql.Timestamp"/>
+	<field name="NGAY_BAT_DAU_LAP_DAT" class="java.sql.Timestamp"/>
+	<field name="NGAY_HT_LAP_TB" class="java.sql.Timestamp"/>
+	<field name="KE_HOACH_HOA_MANG" class="java.sql.Timestamp"/>
+	<field name="NGAY_HOA_MANG_THUC_TE" class="java.sql.Timestamp"/>
+	<field name="KE_HOACH_PHAT_SONG_CT" class="java.sql.Timestamp"/>
+	<field name="NGAY_PHAT_SONG_CT" class="java.sql.Timestamp"/>
+	<field name="KE_HOACH_NGHIEM_THU" class="java.sql.Timestamp"/>
+	<field name="NGAY_NGHIEM_THU" class="java.sql.Timestamp"/>
+	<field name="DAU_MOI_VNPT_NET" class="java.lang.String"/>
+	<field name="DON_VI_VAN_CHUYEN" class="java.lang.String"/>
+	<field name="GHI_CHU" class="java.lang.String"/>
+	<field name="TRANG_THAI_TRAM" class="java.math.BigDecimal"/>
+	<field name="TEN_TRANG_THAI_TRAM" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="519" y="20" width="242" height="29" uuid="13e000e8-4b30-46d8-b090-8e6da6c3223a"/>
+				<textElement>
+					<font fontName="Times New Roman" size="20"/>
+				</textElement>
+				<text><![CDATA[Danh sách Trạm Kế Hoạch]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="89" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="28" width="50" height="61" uuid="2c4574fc-7796-4f3c-b01a-14441254a2e5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[STT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="28" width="50" height="61" uuid="6ca4935a-fc46-480f-8274-288d4b1f3af7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã Dự Án]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="28" width="50" height="61" uuid="0e8c2160-4af9-4134-a109-a08f9a60f633"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tên Dự Án]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="28" width="50" height="61" uuid="00150161-f93f-403a-82b2-114fcc40d951"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã Quy Hoạch]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="28" width="50" height="61" uuid="d4ef226e-703a-4c52-bf78-065dfdb4cf1c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tên Quy Hoạch]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="28" width="50" height="61" uuid="db5294f0-0aaa-4065-b14d-da0c3c3c0555"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã số hợp đồng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="28" width="50" height="61" uuid="59564af6-f5c1-4c8c-8c8c-e0a609633ef1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tên Tỉnh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="28" width="50" height="61" uuid="8ebe7168-e070-4425-a5cc-f10366f6d2ec"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tên Quận / Huyện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="28" width="50" height="61" uuid="389112ad-3606-402d-b806-8718266b20b1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Địa Chỉ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="28" width="50" height="61" uuid="6c05fd82-6773-425f-8ac1-05b1c6823c2c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã Trạm Dự Án]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="28" width="50" height="61" uuid="032de55d-e58d-465d-8c7c-5315ccecf15a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tên Trạm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="550" y="28" width="50" height="61" uuid="1e3d14b8-840a-448c-aff3-6bacd639cd70"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã trạm BTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="600" y="28" width="50" height="61" uuid="d81c8b79-9f7c-42b5-96b2-ddda65548c44"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã trạm NODEB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="650" y="28" width="50" height="61" uuid="d7ed4414-ff9c-40c8-b615-2f7fb56eefbe"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Mã trạm quy hoạch]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="700" y="28" width="50" height="61" uuid="9ea4edb5-4ad7-4ef6-9624-31a4d874c5ea"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Hiện trạng trạm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="750" y="28" width="50" height="61" uuid="c98f0cda-2ba6-45c9-900d-266b230f603f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LONGITUDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="800" y="28" width="50" height="61" uuid="c6a24c96-5704-4c3f-b5e8-4f348b10ba38"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LATITUDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="850" y="28" width="50" height="61" uuid="bbf9ec85-b1f5-49f7-8289-3e100ee064ca"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VNPT NET phê duyệt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="900" y="28" width="50" height="61" uuid="2c9f9494-462d-40af-bc4c-84481fd44927"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cấu hình thiết bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="950" y="28" width="50" height="61" uuid="35ba307a-9087-4a5b-8735-836e459a3c63"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nguồn thiết bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1000" y="28" width="50" height="61" uuid="6e9feeb7-db6f-4247-b8c9-416972085b0f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Loại công nghệ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1050" y="28" width="50" height="61" uuid="6d24a678-6ac2-4873-bd33-5c1879bccf48"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Chủng loại thiết bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1100" y="28" width="50" height="61" uuid="f494124e-0129-4d26-bceb-9c4b267430e4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Chủng loại anten]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1150" y="28" width="50" height="61" uuid="88774706-85b9-4c96-93ff-5b3b5b388baa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LONGITUDE khảo sát]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1200" y="28" width="50" height="61" uuid="04c35e97-0aef-4682-bb43-b876e8155770"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LATITUDE khảo sát]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1250" y="28" width="50" height="61" uuid="f455660a-affb-4ba0-9840-8f93ae8d706d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Nhà trạm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1300" y="28" width="50" height="61" uuid="6e70014e-893a-48c3-9749-cab7d00bc9f0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cột anten]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1350" y="28" width="50" height="61" uuid="9a42e934-3a03-43db-989a-eba8528584e7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cầu cáp ngoài]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1400" y="28" width="50" height="61" uuid="4cd33dec-7bed-4713-ba66-1bf85b5e9c5b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Tủ nguồn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1450" y="28" width="50" height="61" uuid="5e01035e-af97-43ac-a121-d26851cb24f2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Dung lượng tủ nguồn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1500" y="28" width="50" height="61" uuid="a7fd2857-fdd6-429d-b0a7-a0a687750922"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Số module tủ nguồn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1550" y="28" width="50" height="61" uuid="71f9053d-c34e-48f6-bfa1-fb73cdb27d0e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Chủng loại ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1600" y="28" width="50" height="61" uuid="d62f2193-6336-488b-9f3a-6116e7f6878f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Dung lượng ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1650" y="28" width="50" height="61" uuid="b2d9f2ca-a61c-4ac8-b402-0fd99f71ba07"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Số lượng tổ ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1700" y="28" width="50" height="61" uuid="4c8f27f2-7748-4802-b544-4f9ff272c8f7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Truyền dẫn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1750" y="28" width="50" height="61" uuid="2b9d3325-df2f-4e0d-9b3c-43c682a0dfa3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Điều hòa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1800" y="28" width="50" height="61" uuid="03562ff4-87ef-4b88-85fb-78fa3396a40a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Điện AC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1850" y="28" width="50" height="61" uuid="a22d3fee-faa6-4ac0-99df-4310537dba34"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Điện AC nội trạm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1900" y="28" width="50" height="61" uuid="610f2571-8f08-441e-b93f-56588f7325a6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Đủ điều kiện lắp đặt ENODEB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1950" y="28" width="50" height="61" uuid="11e82df2-3663-4ff7-833d-fad6bdb6ae80"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cấp mới tủ nguồn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2000" y="28" width="50" height="61" uuid="99da5708-7b42-46f9-9112-230806c2782b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cấp mới ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2050" y="28" width="50" height="61" uuid="29e45b4f-6a08-4dc3-84ff-7bcb4804d35d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Swap anten]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2100" y="28" width="50" height="61" uuid="92b840fe-d2f1-4f50-9c10-9098c58f5f8f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày hoàn thành KS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2150" y="28" width="50" height="61" uuid="559e4949-72e5-4ecf-8d3c-fcdca942f5d6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày gửi số liêu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2200" y="28" width="50" height="61" uuid="1d0fcc30-77dd-43ce-a047-67821ae60cc7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Đầu mối nhận thiế bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2250" y="28" width="50" height="61" uuid="86feb9fb-c03f-4db9-80c3-8111a8d8c081"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Đầu mối QL CSHT trậm]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2300" y="28" width="50" height="61" uuid="aeddf9f9-72ed-4b23-9df0-628162991fa7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Đơn vị lắp đặt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2350" y="28" width="50" height="61" uuid="91035e06-f480-4727-89b0-29303f730325"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày phê duyệt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2400" y="28" width="50" height="61" uuid="5c8a2fa2-9b64-4307-a358-55b1e6fa3e30"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày tiếp nhận]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2450" y="28" width="50" height="61" uuid="c7eaff58-e675-4cd6-b86e-792ac9407cbd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Kế hoạch xuất thiết bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2500" y="28" width="50" height="61" uuid="669b021e-22c7-4ad3-b402-b66c906cc275"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày xuất thiết bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2550" y="28" width="50" height="61" uuid="d6a2e7b3-3275-4d0f-83dc-bedbfd55a5e1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày tiếp nhận]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2600" y="28" width="50" height="61" uuid="2bbc685e-2c21-4e28-b9f1-3fce2e7c0b5b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Kế hoạch TB đến SITE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2650" y="28" width="50" height="61" uuid="97699200-96b8-4242-a0a5-c52e8181cf37"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Kế hoạch lắp đặt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2700" y="28" width="50" height="61" uuid="bdce788d-d2df-4e43-b8c5-356d8abc4de6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày bắt đầu lắp đặt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2750" y="28" width="50" height="61" uuid="47dc054c-053e-48c9-8d6b-4d3ad7bf9262"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày hoàn thành lắp TB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2800" y="28" width="50" height="61" uuid="15adda1c-d38b-4a29-8752-317c018cbdb0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Kế hoạch hòa mạng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2850" y="28" width="50" height="61" uuid="8885b1ba-c2d6-4863-8d22-f4aeb79a950b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày hòa mạng]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2900" y="28" width="50" height="61" uuid="4356c459-df98-4c5d-a815-e80df3ea39e2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Kế hoạch phát sóng CT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2950" y="28" width="50" height="61" uuid="f8eea00b-0bf3-4586-9ce0-aeace9cc7fc7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày phát sóng CT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3000" y="28" width="50" height="61" uuid="69603a39-83f0-4e36-98e6-51091f841850"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Kế hoạch nghiệm thu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3050" y="28" width="50" height="61" uuid="f2198409-f952-4ed7-b2fe-2dd794b00cd0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ngày nghiệm thu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3100" y="28" width="50" height="61" uuid="1268b71e-29d8-4441-b111-887f1716602c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Đầu mối VNPT net]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3150" y="28" width="50" height="61" uuid="c37731dd-904a-4bd7-9afe-12399db46717"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Đơn vị vận chuyển]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3200" y="28" width="50" height="61" uuid="2ad1a510-280a-4714-a5f9-0cae1fb81afc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Ghi chú]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3250" y="28" width="50" height="61" uuid="ced4555b-54de-449b-874c-48a8424b5959"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Trạng thái]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="46" uuid="9a9a119d-e83e-4974-a585-19b3e755a520"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="0" width="50" height="46" uuid="151a0293-1f48-4f11-b79d-965aa18409ef"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_DU_AN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="50" height="46" uuid="47fc44f5-e137-4237-b8f1-64d98ca4289d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_DU_AN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="50" height="46" uuid="cce9ba38-c4e6-44c1-b63f-79beff4cddcd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_QUY_HOACH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="50" height="46" uuid="a031b75b-347d-4e4f-b5f0-c9d266351392"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_QUY_HOACH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="50" height="46" uuid="bee73c89-aa72-4adf-b998-bbc3af7797a8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_SO_HOP_DONG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="50" height="46" uuid="63a6b0f9-9df4-489f-997a-ec9038edeeea"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_TINH_TP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="50" height="46" uuid="7f043e37-b400-4f8a-a1fc-eb59f6c06699"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_QUAN_HUYEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="50" height="46" uuid="fd0c84d5-55d2-4705-a8a6-4a2f486d95cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIA_CHI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="0" width="50" height="46" uuid="e9e4f9f5-4d77-4127-8024-61521653cb5a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_TRAM_DA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="50" height="46" uuid="f122021b-6e48-4232-a32a-229eff2878e5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_TRAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="0" width="50" height="46" uuid="b8694c90-d60b-434f-a423-9d0310c690cc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_TRAM_BTS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="600" y="0" width="50" height="46" uuid="a055f7ae-5424-4eeb-85ec-6f980983d1f4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_TRAM_NODEB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="650" y="0" width="50" height="46" uuid="46cd14da-7b6b-47b9-a4a2-dd1176b08695"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_TRAM_QUY_HOACH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="0" width="50" height="46" uuid="bd793931-ce0a-4b19-9b66-34f8b43b3f02"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{HIEN_TRANG_TRAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="750" y="0" width="50" height="46" uuid="168dd0b8-c526-4858-8f12-298222a9c5aa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LONGITUDE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="800" y="0" width="50" height="46" uuid="1620d691-40e2-4328-847e-9a8d00bb895a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LATITUDE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="850" y="0" width="50" height="46" uuid="e240f352-77bf-4512-892a-6e5364e78ece"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{VNPT_NET_PHE_DUYET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="900" y="0" width="50" height="46" uuid="2f99817b-22e2-4d8c-8f42-56e193ceda29"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAU_HINH_THIET_BI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="950" y="0" width="50" height="46" uuid="25969b21-d4d2-4a85-a437-0d21c79c1955"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGUON_THIET_BI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1000" y="0" width="50" height="46" uuid="e10e4608-0d92-4009-8031-74e092f10c57"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LOAI_CONG_NGHE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1050" y="0" width="50" height="46" uuid="2c76a3d8-bb40-402c-8671-a1791432c2ee"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CHUNG_LOAI_THIET_BI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1100" y="0" width="50" height="46" uuid="43abaed0-29fb-4177-b1f1-e2217c7488a7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CHUNG_LOAI_ANTEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1150" y="0" width="50" height="46" uuid="a0699705-4529-41d5-bfef-bced3aa2497c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LONGITUDE_KHAO_SAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1200" y="0" width="50" height="46" uuid="9ad9a7b2-b448-4a66-8c57-f1f7e3eef810"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LATITUDE_KHAO_SAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1250" y="0" width="50" height="46" uuid="757d59a6-8feb-4113-add5-50f39ef30ebd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NHA_TRAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1300" y="0" width="50" height="46" uuid="a190ba25-3253-47c6-a467-8179f4fea4a8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{COT_ANTEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1350" y="0" width="50" height="46" uuid="d8f6e85e-9f80-451a-9641-fd4dbcaab513"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAU_CAP_NGOAI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1400" y="0" width="50" height="46" uuid="37cb03f3-9ab7-47ac-9d50-7ab84efbad26"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1450" y="0" width="50" height="46" uuid="5aec66d6-e5e3-4ca7-a2ec-b86fa0f8f398"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DUNG_LUONG_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1500" y="0" width="50" height="46" uuid="2cd9715e-3321-4121-bcea-ced861f94f4d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SO_MODULE_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1550" y="0" width="50" height="46" uuid="3430a388-ae4c-4a28-9c32-eea0355846be"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CHUNG_LOAI_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1600" y="0" width="50" height="46" uuid="b1d3fae9-05a1-4f96-a7a5-6bf74870bd49"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DUNG_LUONG_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1650" y="0" width="50" height="46" uuid="62bb4080-2a1a-4429-a5bd-e79dfe77be0b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SO_LUONG_TO_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1700" y="0" width="50" height="46" uuid="f3f16983-f575-4780-a9f8-706e5b2957f7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TRUYEN_DAN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1750" y="0" width="50" height="46" uuid="866d71ef-b930-422e-829b-476429c8ed18"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIEU_HOA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1800" y="0" width="50" height="46" uuid="ea977d93-307d-414e-b466-169af53e75e2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIEN_AC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1850" y="0" width="50" height="46" uuid="b85c842b-ee45-46ed-b7ea-d7ce96b294e5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIEN_AC_NOI_TRAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1900" y="0" width="50" height="46" uuid="01d23454-20a0-4f9a-aeae-8842fae256bc"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DU_DK_LAP_ENODEB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1950" y="0" width="50" height="46" uuid="f258eaf8-9f9d-443c-a42e-58dec62e3e58"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAP_MOI_TU_NGUON_DC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2000" y="0" width="50" height="46" uuid="63599bbe-05a9-4903-ae5e-c43336b41543"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAP_MOI_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2050" y="0" width="50" height="46" uuid="36692ddd-f585-4d27-bebf-9d2a40dc2375"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SWAP_ANTEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2100" y="0" width="50" height="46" uuid="586fcdf3-a4dd-4265-8c56-a497808bd803"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HOAN_THANH_KS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2150" y="0" width="50" height="46" uuid="4295000e-4e5b-4b0e-a2ac-17cac1d1a443"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_GUI_SO_LIEU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2200" y="0" width="50" height="46" uuid="2bd623fc-45b0-4eef-a163-bffa69c6185f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DAU_MOI_NHAN_THIET_BI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2250" y="0" width="50" height="46" uuid="a601d61c-9793-4a72-9500-6494dc4e00e8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DAU_MOI_QL_CSHT_TRAM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2300" y="0" width="50" height="46" uuid="b1d69e93-265d-4471-bbbc-2ec9c16a6e08"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DON_VI_LAP_DAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2350" y="0" width="50" height="46" uuid="f0a7fb04-0004-4aec-a345-4f6ddb9b6a74"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_PHE_DUYET_KHAO_SAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2400" y="0" width="50" height="46" uuid="b9845375-d311-4cfe-9adf-1f4cfcaab9c3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_TIEP_NHAN_TRUYEN_DAN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2450" y="0" width="50" height="46" uuid="a367765e-9f72-42d8-bee1-a49cce41f460"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{KE_HOACH_XUAT_THIET_BI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2500" y="0" width="50" height="46" uuid="bff9fa26-191d-4440-afb6-e57bd4249c60"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_XUAT_THIET_BI_THUC_TE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2550" y="0" width="50" height="46" uuid="529eef46-3ac5-49bd-833c-2b312350d422"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_TIEP_NHAN_TB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2600" y="0" width="50" height="46" uuid="35c0fc42-e9a3-4daf-bceb-7346ec40bf52"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{KE_HOACH_TB_DEN_SITE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2650" y="0" width="50" height="46" uuid="6c707bad-d842-4107-a216-bfad8af1af99"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{KE_HOACH_LAP_DAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2700" y="0" width="50" height="46" uuid="91ba6574-7d5e-468d-9b2d-b84a058d95c7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_BAT_DAU_LAP_DAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2750" y="0" width="50" height="46" uuid="6928e338-b1d1-46c5-85ff-1a5f048e9fb4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HT_LAP_TB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2800" y="0" width="50" height="46" uuid="b143edcd-5310-4374-80f9-541fc4dc3cbb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{KE_HOACH_HOA_MANG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2850" y="0" width="50" height="46" uuid="f0204b7f-0a80-4e5f-8890-e40895dc158f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HOA_MANG_THUC_TE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2900" y="0" width="50" height="46" uuid="dc86dc90-a571-42d7-ada3-eb95479d3a09"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{KE_HOACH_PHAT_SONG_CT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2950" y="0" width="50" height="46" uuid="484feb29-9dee-45e3-a775-22c951780a0a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_PHAT_SONG_CT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3000" y="0" width="50" height="46" uuid="14efdf28-157d-4d4f-bb9f-aaf87d0ed8af"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{KE_HOACH_NGHIEM_THU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3050" y="0" width="50" height="46" uuid="8669b3aa-1547-40f6-b61e-9d51fd4a70a6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_NGHIEM_THU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3100" y="0" width="50" height="46" uuid="9cba7f62-c345-49e7-bdb0-ed25f42bcf77"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DAU_MOI_VNPT_NET}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3150" y="0" width="50" height="46" uuid="5fa43aae-999e-4a7a-b9ca-ca36d17f1bfa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DON_VI_VAN_CHUYEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3200" y="0" width="50" height="46" uuid="8c4ead53-161f-4320-aa2a-19240e18be23"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{GHI_CHU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="3250" y="0" width="50" height="46" uuid="ff220db7-e598-4839-82c3-c7752273efb8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_TRANG_THAI_TRAM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

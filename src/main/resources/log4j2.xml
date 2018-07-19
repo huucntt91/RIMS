@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration packages="com.media.plugins"
+               monitorInterval="60">
+    <properties>
+        <property name="pattern">[%-5level] [%c{1}.%L] %d{yyyy-MM-dd HH:mm:ss.SSS} %m%n</property>
+        <property name="rims_log">../rims_test_log</property>
+        <!--<property name="com.meditor.download.ne.FTPConnect">FTPConnect</property>-->
+    </properties>
+    <appenders>
+
+        <!-- file appender 
+        <RollingFile name="com.meditor.download.ne.FTPConnect"
+                     fileName="../log/${com.meditor.download.ne.FTPConnect}.log"
+                     append="true"
+                     filePattern="../log/$${date:yyyy-MM-dd}/${com.meditor.download.ne.FTPConnect}-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="${pattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        -->
+        
+        <!--ghi toan bo log ra 1 file -->
+        <RollingFile name="log_info"
+                     fileName="${rims_log}/log_info.log"
+                     append="true"
+                     filePattern="${rims_log}/$${date:yyyy}/$${date:yyyy-MM}/log_info_%d{yyyy-MM-dd}_%i.log.gz">
+            <PatternLayout pattern="${pattern}" />
+             <Filters>
+                <!--Lọc không cho phép log level warn,error,fatal-->
+                <!--Vì ở level info chỉ lưu info và debug, mức error,fatal đã có appender riêng-->
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <!--Cho phép log level info-->
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+            </Filters>
+            <Policies>
+                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/> 
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+        </RollingFile>
+        
+        <RollingFile name="log_error"
+                     fileName="${rims_log}/log_error.log"
+                     append="true"
+                     filePattern="${rims_log}/$${date:yyyy}/$${date:yyyy-MM}/log_error_%d{yyyy-MM-dd}_%i.log.gz">
+            <PatternLayout pattern="${pattern}" />
+            <Policies>
+                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/> 
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+        </RollingFile>
+
+        <!--                 console appender -->
+<!--        <Console name="STDOUT" target="SYSTEM_ERR">
+            <PatternLayout pattern="${pattern}" />
+        </Console>-->
+        
+    </appenders>
+    <loggers>
+        
+<!--        <root level="info" additivity="true">
+            <AppenderRef ref="STDOUT" />
+            
+        </root>-->
+        <Logger name="com" level="debug" additivity="false">
+            <appender-ref ref="log_info" level="debug" />
+            <appender-ref ref="log_error" level="error" />
+        </Logger>
+
+        
+    </loggers>
+</configuration>

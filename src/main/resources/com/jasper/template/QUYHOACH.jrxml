@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="QUYHOACH" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb8696bd-ea97-4efc-b7d9-8fd06cc2b33f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<queryString>
+		<![CDATA[SELECT rownum,a.quyhoach_id,
+                     a.ma_quy_hoach,
+                     a.ten_quy_hoach,
+                     a.quyhoach_cha_id,
+                     b.ten_quy_hoach quy_hoach_cha
+                FROM rims.quy_hoach a
+                     LEFT JOIN rims.quy_hoach b ON a.quyhoach_cha_id = b.quyhoach_id
+               WHERE 1=1
+            ORDER BY a.create_time DESC]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="QUYHOACH_ID" class="java.math.BigDecimal"/>
+	<field name="MA_QUY_HOACH" class="java.lang.String"/>
+	<field name="TEN_QUY_HOACH" class="java.lang.String"/>
+	<field name="QUYHOACH_CHA_ID" class="java.math.BigDecimal"/>
+	<field name="QUY_HOACH_CHA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="321" y="19" width="187" height="36" uuid="99b1528b-e025-4387-8de0-73c59cd6f0d2"/>
+				<textElement>
+					<font fontName="Times New Roman" size="24"/>
+				</textElement>
+				<text><![CDATA[Quy hoạch]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="108" height="20" uuid="e2924af9-b49e-41c0-bc87-84d284e5aaf8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[ROWNUM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="0" width="200" height="20" uuid="320396f4-4772-49cb-a3a7-0bdb2486e7e9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[MA_QUY_HOACH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="308" y="0" width="200" height="20" uuid="cd2a0aff-6915-4d16-b1a1-9012a76d25ce"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[TEN_QUY_HOACH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="200" height="20" uuid="11441028-693b-4991-9863-8669351f78ab"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[QUY_HOACH_CHA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="108" height="20" uuid="c5d75699-0b1b-466a-a3e1-17f433088867"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="108" y="0" width="200" height="20" uuid="5e320ac6-b7a9-4562-b32b-29ec781311b8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_QUY_HOACH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="308" y="0" width="200" height="20" uuid="34b44a1d-25da-4589-9f8f-2b42aa6b934d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_QUY_HOACH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="0" width="200" height="20" uuid="ab35729b-a332-474f-95e8-720aba77de78"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{QUY_HOACH_CHA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="export_iplayer3" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a309bf4c-7bd2-4c1e-b51f-ab23e7643233">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="P_TNODE_ID" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT    a.iplayer3_id,
+                                     a.tnode_id,
+                                     a.iplayer3_name,
+                                     a.ip,
+                                     a.subnet
+                                FROM iplayer3 a
+                               WHERE 1 = 1 AND a.tnode_id = $P{P_TNODE_ID}
+                            ORDER BY a.iplayer3_name DESC]]>
+	</queryString>
+	<field name="IPLAYER3_ID" class="java.math.BigDecimal"/>
+	<field name="TNODE_ID" class="java.math.BigDecimal"/>
+	<field name="IPLAYER3_NAME" class="java.lang.String"/>
+	<field name="IP" class="java.lang.String"/>
+	<field name="SUBNET" class="java.lang.String"/>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="59" width="185" height="20" uuid="e432972f-1eff-42dc-82b1-035b0b6ac7b1"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[Tên giao diện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="59" width="185" height="20" uuid="9d41e3f7-a08b-4c63-b92a-13439aa848cc"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[IP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="59" width="185" height="20" uuid="6e70cb3c-2a22-4b95-a0c5-75270472e558"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<text><![CDATA[SUBNET]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="185" height="20" uuid="767d2168-c4db-40ea-85c1-fb0db73fe5c4"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{IPLAYER3_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="185" y="0" width="185" height="20" uuid="5bf58aea-2264-48c6-b747-60eb89ad3248"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{IP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="185" height="20" uuid="ae28ffd2-e51b-4fab-8c4d-80d144875bdd"/>
+				<box>
+					<topPen lineWidth="0.1"/>
+					<leftPen lineWidth="0.1"/>
+					<bottomPen lineWidth="0.1"/>
+					<rightPen lineWidth="0.1"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SUBNET}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

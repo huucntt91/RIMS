@@ -1,0 +1,112 @@
+.DeviceASR9000 {
+    display: inline-block;
+    margin-top:20px;
+    
+}
+
+.DeviceASR9000 > .lblMiddle {
+    height: 30px;
+    line-height: 35px;
+    background-repeat: no-repeat;
+    background: #949494;
+    text-align: center;
+}
+.DeviceASR9000 > .desk {
+    height: 372px;
+    position: relative;
+    background-color: #DFE1E0;
+    border-bottom: 3px solid;
+}
+.DeviceASR9000 > .desk > .keyboard-black {
+    position: absolute;
+    /* margin-top: 0.6%; */
+    /* margin-left: 5%; */
+    /* z-index: 2; */
+    float: left;
+    clear: left;
+    margin-left: 13px;
+}
+.DeviceASR9000 > .desk > .keyboard-black > .key-b1 {
+    position: relative;
+    left: 0px;
+    /* background-color: #45877C !important; */
+}
+.DeviceASR9000 > .desk > .keyboard-black > .keyboard-b {
+    width: 44px;
+    height: 19px;
+    display: inline-block;
+    z-index: 2;
+    float: left;
+    margin-top: 350px;
+    margin-left: -2px;
+    /* background-color: #D0D02B; */
+}
+.DeviceASR9000 > .desk > .keyboard-black > .keyboard-b > .keyboard-b-inside {
+    width: 8px;
+    height: 6px;
+    background-color: #C5CCCB;
+    position: relative;
+    border-radius: 5px;
+    margin: auto;
+    bottom: -1px;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgb(7, 91, 241);
+    line-height: 26px;
+    box-shadow: inset 1px 0px 11px -2px rgb(34, 32, 32);
+    background: linear-gradient(to bottom, #C1C4C3 0%,#C1C4C3 10%,#C1C4C3 25%,#C1C4C3 37%,#C1C4C3 50%,#C1C4C3 51%,#C1C4C3 83%,#C1C4C3 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b8e1fc', endColorstr='#bdf3fd',GradientType=0 );
+}
+
+.DeviceASR9000 > .desk > .keyboard-white {
+    /* margin-top: 0.3%; */
+    /* margin-left: 1.92%; */
+    position: relative;
+    z-index: 1;
+    float: left;
+    clear: right;
+    margin: 0px auto;
+}
+.keyboard-w {
+    width: 42px;
+    height: 173px;
+    background-color: #eee;
+    display: inline-block;
+    margin: 0 -2px;
+    border-color: rgb(44, 111, 169);
+    border: 1px solid;
+    position: relative;
+}
+
+.active {
+    background-color: #8DA98B !important;
+}
+
+.verticaltext {
+    transform: rotate(-90deg);
+    transform-origin: right, top;
+    -ms-transform: rotate(-90deg);
+    -ms-transform-origin: right, top;
+    -webkit-transform: rotate(-90deg);
+    -webkit-transform-origin: right, top;
+    position: absolute;
+    bottom: 45%;
+    right: -80px;
+    color: #96104B;
+    width: 200px;
+    z-index: 40;
+    display: block;
+    font-size: medium;
+}
+.khung_left{
+    width: 13px;
+    height: 372px;
+    background: url(../img/device/khung_left.png) repeat-y;
+    float:left;
+}
+.khung_right{
+    width: 13px;
+    height: 372px;
+    background: url(../img/device/khung_right.png) repeat-y;
+    float:right;
+}

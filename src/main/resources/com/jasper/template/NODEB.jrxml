@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="NODEB" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="29dd6779-ae2d-4c8d-aee8-c17ec9ea3550">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="prs_node_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="prs_name" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_list_khuvuc_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_list_tinh_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_list_quan_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_list_phuong_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_ne_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_vender_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="prn_status_list" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select rownum, a.ne_type_id ne_type_id,
+                           a.ma_node ma_node,
+                           a.node_cha_id node_cha_id,
+                           a.donvi_id donvi_id,
+                           a.building_id building_id,
+                           a.ten_ng_qly ten_ng_qly,
+                           a.sdt_ng_qly sdt_ng_qly,
+                           a.thiet_bi_id thiet_bi_id,
+                           a.loai_tram_id loai_tram_id,
+                           a.trang_thai_hd_id trang_thai_hd_id,
+                           a.trang_thai_ql_id trang_thai_ql_id,
+                           a.tram_du_an_id tram_du_an_id,
+                           DECODE(a.status, 112, 'Đăng ký on air',
+                    			  211, 'On air',
+				  121, 'Hủy duyệt On air',
+				  212, 'Đăng ký off air',
+				  111, 'Off air',
+                    			  221, 'Hủy duyệt off air',
+				  'Inactive') status,
+                           b.*,
+                           m.cau_hinh_port cau_hinh,
+                           c.dia_chi,
+                           c.ma_building,
+                           c.longitude,
+                           c.latitude,
+                           e.ten_don_vi,
+                           d.ten_thiet_bi,
+                           f.ten_loai_ne,
+                           g.ma_node AS ma_node_cha,
+                           o.ten_tren_he_thong,
+                           o.ten_bsc_rnc,
+                           o.ten_bsc_rnc_ql,
+                           --o.MSC_MSS,
+                           --o.SGSN,
+                           o.dc_hsdpa_42m,
+                           o.filter_user,
+                           n.ten_bang_tan frequency_band,
+                           n.bang_tan_id,
+                           j.ma_tram_da,
+                           a.user_insert
+                      FROM rims.node a
+                           LEFT JOIN rims.nodeb_info b ON a.node_id = b.node_id
+                           LEFT JOIN rims.node g ON a.node_cha_id = g.node_id
+                           LEFT JOIN rims.omc_nodeb_info o
+                               ON a.node_id = o.node_id
+                           LEFT JOIN rims.tram_du_an j
+                               ON a.tram_du_an_id = j.tram_du_an_id
+                           LEFT JOIN rims.dm_cau_hinh_port m
+                               ON m.cau_hinh_port_id = b.cau_hinh_port_id
+                           LEFT JOIN rims.dm_bang_tan n
+                               ON n.bang_tan_id = o.bang_tan_id
+                           INNER JOIN rims.loai_ne f
+                               ON a.ne_type_id = f.ne_type_id
+                           LEFT JOIN rims.thiet_bi d
+                               ON d.thiet_bi_id = a.thiet_bi_id
+                           LEFT JOIN rims.building c
+                               ON a.building_id = c.building_id
+                           LEFT JOIN rims.donvi e ON a.donvi_id = e.donvi_id
+                           LEFT JOIN rims.tinh_tp t ON c.tinhtp_id = t.tinhtp_id
+                           LEFT JOIN rims.quan_huyen qh
+                               ON c.quanhuyen_id = qh.quanhuyen_id
+                           LEFT JOIN rims.phuong_xa px
+                               ON c.phuongxa_id = px.phuongxa_id
+                     WHERE  1=1
+AND (a.node_id = $P{prs_node_id}
+                               OR NVL ($P{prs_node_id}, 0) = 0)
+                           AND (   LOWER (a.ma_node) LIKE
+                                       '%' || LOWER ($P{prs_name}) || '%'
+                                OR NVL ($P{prs_name}, '') = ''
+                                OR LOWER (c.dia_chi) LIKE
+                                       '%' || LOWER ($P{prs_name}) || '%')
+                           AND (   a.ne_type_id = $P{pri_ne_id}
+                                OR NVL ($P{pri_ne_id}, 0) = 0)
+                           AND (   a.thiet_bi_id = $P{pri_vender_id}
+                                OR NVL ($P{pri_vender_id}, 0) = 0)
+                           AND (   $P{pri_list_khuvuc_id} IS NULL
+                                OR t.khu_vuc IN (    SELECT REGEXP_SUBSTR (
+                                                                $P{pri_list_khuvuc_id},
+                                                                '[^,]+',
+                                                                1,
+                                                                LEVEL)
+                                                                ids
+                                                       FROM DUAL
+                                                 CONNECT BY REGEXP_SUBSTR (
+                                                                $P{pri_list_khuvuc_id},
+                                                                '[^,]+',
+                                                                1,
+                                                                LEVEL)
+                                                                IS NOT NULL))
+                           AND (   $P{pri_list_tinh_id} IS NULL
+                                OR c.tinhtp_id IN (    SELECT REGEXP_SUBSTR (
+                                                                  $P{pri_list_tinh_id},
+                                                                  '[^,]+',
+                                                                  1,
+                                                                  LEVEL)
+                                                                  ids
+                                                         FROM DUAL
+                                                   CONNECT BY REGEXP_SUBSTR (
+                                                                  $P{pri_list_tinh_id},
+                                                                  '[^,]+',
+                                                                  1,
+                                                                  LEVEL)
+                                                                  IS NOT NULL))
+                           AND (   $P{pri_list_quan_id} IS NULL
+                                OR qh.quanhuyen_id IN (    SELECT REGEXP_SUBSTR (
+                                                                      $P{pri_list_quan_id},
+                                                                      '[^,]+',
+                                                                      1,
+                                                                      LEVEL)
+                                                                      ids
+                                                             FROM DUAL
+                                                       CONNECT BY REGEXP_SUBSTR (
+                                                                      $P{pri_list_quan_id},
+                                                                      '[^,]+',
+                                                                      1,
+                                                                      LEVEL)
+                                                                      IS NOT NULL))
+                           AND (   $P{pri_list_phuong_id} IS NULL
+                                OR px.phuongxa_id IN (    SELECT REGEXP_SUBSTR (
+                                                                     $P{pri_list_phuong_id},
+                                                                     '[^,]+',
+                                                                     1,
+                                                                     LEVEL)
+                                                                     ids
+                                                            FROM DUAL
+                                                      CONNECT BY REGEXP_SUBSTR (
+                                                                     $P{pri_list_phuong_id},
+                                                                     '[^,]+',
+                                                                     1,
+                                                                     LEVEL)
+                                                                     IS NOT NULL))
+                           AND (   $P{prn_status_list} IS NULL
+                                OR a.status IN ( (    SELECT REGEXP_SUBSTR (
+                                                                 $P{prn_status_list},
+                                                                 '[^,]+',
+                                                                 1,
+                                                                 LEVEL)
+                                                                 ids
+                                                        FROM DUAL
+                                                  CONNECT BY REGEXP_SUBSTR (
+                                                                 $P{prn_status_list},
+                                                                 '[^,]+',
+                                                                 1,
+                                                                 LEVEL)
+                                                                 IS NOT NULL)))]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="NE_TYPE_ID" class="java.math.BigDecimal"/>
+	<field name="MA_NODE" class="java.lang.String"/>
+	<field name="NODE_CHA_ID" class="java.math.BigDecimal"/>
+	<field name="DONVI_ID" class="java.math.BigDecimal"/>
+	<field name="BUILDING_ID" class="java.math.BigDecimal"/>
+	<field name="TEN_NG_QLY" class="java.lang.String"/>
+	<field name="SDT_NG_QLY" class="java.lang.String"/>
+	<field name="THIET_BI_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_TRAM_ID" class="java.math.BigDecimal"/>
+	<field name="TRANG_THAI_HD_ID" class="java.math.BigDecimal"/>
+	<field name="TRANG_THAI_QL_ID" class="java.math.BigDecimal"/>
+	<field name="TRAM_DU_AN_ID" class="java.math.BigDecimal"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="NODE_ID" class="java.math.BigDecimal"/>
+	<field name="NGAY_HOAT_DONG" class="java.sql.Timestamp"/>
+	<field name="HOAN_CANH_RA_DOI" class="java.lang.String"/>
+	<field name="TEN_NODEB" class="java.lang.String"/>
+	<field name="NGAY_DANG_KY" class="java.sql.Timestamp"/>
+	<field name="NGAY_KIEM_DUYET" class="java.sql.Timestamp"/>
+	<field name="NGAY_CAP_PHEP" class="java.sql.Timestamp"/>
+	<field name="CAU_HINH_PORT_ID" class="java.math.BigDecimal"/>
+	<field name="COSITE_2G_3G_TYPE" class="java.math.BigDecimal"/>
+	<field name="MA_COSITE_2G_3G" class="java.lang.String"/>
+	<field name="CAU_HINH" class="java.lang.String"/>
+	<field name="DIA_CHI" class="java.lang.String"/>
+	<field name="MA_BUILDING" class="java.lang.String"/>
+	<field name="LONGITUDE" class="java.math.BigDecimal"/>
+	<field name="LATITUDE" class="java.math.BigDecimal"/>
+	<field name="TEN_DON_VI" class="java.lang.String"/>
+	<field name="TEN_THIET_BI" class="java.lang.String"/>
+	<field name="TEN_LOAI_NE" class="java.lang.String"/>
+	<field name="MA_NODE_CHA" class="java.lang.String"/>
+	<field name="TEN_TREN_HE_THONG" class="java.lang.String"/>
+	<field name="TEN_BSC_RNC" class="java.lang.String"/>
+	<field name="TEN_BSC_RNC_QL" class="java.lang.String"/>
+	<field name="DC_HSDPA_42M" class="java.lang.String"/>
+	<field name="FILTER_USER" class="java.lang.String"/>
+	<field name="FREQUENCY_BAND" class="java.lang.String"/>
+	<field name="BANG_TAN_ID" class="java.math.BigDecimal"/>
+	<field name="MA_TRAM_DA" class="java.lang.String"/>
+	<field name="USER_INSERT" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="386" y="22" width="398" height="38" uuid="7ecf3e1e-ca2c-46bf-adcb-103501bf0043"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="24"/>
+				</textElement>
+				<text><![CDATA[Danh sách NODEB]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement x="78" y="3" width="47" height="30" uuid="fc918598-386e-44c8-932e-aafc917c0e39"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_LOAI_NE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="837" y="3" width="47" height="30" uuid="1e383ced-91cb-44ae-b78e-dfb228d9931b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[LONGITUDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="501" y="3" width="47" height="30" uuid="ccd69549-4ec2-4ad1-9ee7-f62afb86d6f9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NGAY_HOAT_DONG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="931" y="3" width="47" height="30" uuid="74ee4427-b1d5-4422-a629-7bb22a474730"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_COSITE_2G_3G]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1072" y="3" width="47" height="30" uuid="f6e244c0-9123-4ac8-9d2d-a5af4d1489ac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CAU_HINH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="3" width="30" height="30" uuid="0bcc8086-23a3-413f-bccb-fc0cdd70db00"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[ROWNUM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="266" y="3" width="47" height="30" uuid="48232d47-f20e-4e9e-8368-a43b420b73c6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_BUILDING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="790" y="3" width="47" height="30" uuid="364f399f-c8c5-4c84-9a1b-241b7caf1c22"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[LATITUDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="884" y="3" width="47" height="30" uuid="679aa701-b2c3-42fe-bb69-6e20c868cdd0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[COSITE_2G_3G_TYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="219" y="3" width="47" height="30" uuid="278d831a-9a27-430b-96f0-f17bf433d654"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_DON_VI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="454" y="3" width="47" height="30" uuid="3b493b57-e6dd-410f-9c3f-aaea9a762eb7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[HOAN_CANH_RA_DOI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="548" y="3" width="47" height="30" uuid="58484a65-1333-4fd4-a97b-dede10f49e11"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_TREN_HE_THONG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="696" y="3" width="47" height="30" uuid="9ffef12a-3584-4634-8e32-9faa60197294"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FILTER_USER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="313" y="3" width="47" height="30" uuid="f0fc1720-d76d-42bd-bd71-dce8f0cb1189"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_NG_QLY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="743" y="3" width="47" height="30" uuid="67f3ad72-1bc2-4da5-86d6-83e378f9cf98"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[FREQUENCY_BAND]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="595" y="3" width="47" height="30" uuid="683471a3-582c-427c-9561-b85b4cf289e7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_BSC_RNC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="172" y="3" width="47" height="30" uuid="228f7081-f5f6-4ac1-81e6-9d92dd01f6dd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_TRAM_DA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1025" y="3" width="47" height="30" uuid="94a4c2d9-8244-4d98-87ca-5d10ed9b6fe5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[LOAI_TRAM_ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="407" y="3" width="47" height="30" uuid="2c107e55-d5f0-4d69-aa9b-457711dec4da"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_BTS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1119" y="3" width="47" height="30" uuid="89fa3dfb-e0c5-4015-89e9-2b1877765e62"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="31" y="3" width="47" height="30" uuid="f407e8ef-56ca-42da-bc02-0adb5c46f43f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_NODE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="3" width="47" height="30" uuid="e0411e9d-fa11-46d4-af46-5b10c4638c35"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SDT_NG_QLY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="125" y="3" width="47" height="30" uuid="41c80b9b-c096-46d0-893a-29309a92eb64"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_NODE_CHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="978" y="3" width="47" height="30" uuid="998cb47b-c13b-4106-8327-07130f8d3e03"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_THIET_BI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="643" y="3" width="53" height="30" uuid="956caa51-6ea7-40de-a1fd-65f3a614e34e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[DC_HSDPA_42M]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="219" y="0" width="47" height="43" uuid="00eb0b4d-445c-4ccc-a49f-7712506205cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_DON_VI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="595" y="0" width="47" height="43" uuid="801e0450-af5b-4af5-8a5d-0ddeb8bb0542"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_BSC_RNC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="837" y="0" width="47" height="43" uuid="42d7a40f-1da1-4d43-a7e0-47fd2c2c726a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LONGITUDE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="0" width="47" height="43" uuid="31688c36-bf4e-4ac1-9341-9fe12e734cc2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{HOAN_CANH_RA_DOI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="0" width="47" height="43" uuid="ce22fecc-fbe3-4c8f-8abb-5cf7fa86e72d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_NODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="78" y="0" width="47" height="43" uuid="5bc267d3-537c-4336-85ca-9bd6907400c4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_LOAI_NE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="501" y="0" width="47" height="43" uuid="400b5ffd-2f27-4bb9-9fbc-940c4a0e21e8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HOAT_DONG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="696" y="0" width="47" height="43" uuid="81947318-c3eb-4dd7-a958-25ada03aee6a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FILTER_USER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1072" y="0" width="47" height="43" uuid="88ed675d-6773-455f-b261-5ab7d726ead9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CAU_HINH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="30" height="43" uuid="a0d2d694-5b7f-44c9-b6be-42485f897bb1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="978" y="0" width="47" height="43" uuid="71b97528-ba9d-45e7-b24b-981992c64cc4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_THIET_BI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1025" y="0" width="47" height="43" uuid="5f8eaddd-ab1f-45b2-b260-8abc41c53438"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LOAI_TRAM_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="0" width="47" height="43" uuid="10b2b6f4-695c-4de7-a907-e72ddb0c29ff"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_NODE_CHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="548" y="0" width="47" height="43" uuid="cfa8de47-0e3d-4f4a-99d0-c88809b3345a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_TREN_HE_THONG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="931" y="0" width="47" height="43" uuid="ba9e00bb-3419-4bd6-8768-4a64437ddc9a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_COSITE_2G_3G}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="47" height="43" uuid="93740037-cafb-4ea4-9355-7eb755d15e1b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SDT_NG_QLY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="743" y="0" width="47" height="43" uuid="48a0d29d-8171-41e4-9eef-f4ba77cc700d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{FREQUENCY_BAND}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1119" y="0" width="47" height="43" uuid="987934ef-07f2-4f72-876d-1381668fc9e6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{STATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="172" y="0" width="47" height="43" uuid="eda63c08-375e-4448-89bc-9f19fdae0484"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_TRAM_DA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="266" y="0" width="47" height="43" uuid="b8b2f9c1-d329-45a6-9bfa-ce5b7efe1e8d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_BUILDING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="407" y="0" width="47" height="43" uuid="ce528107-f059-4ebb-8d07-ca66878d26f5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_BTS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="884" y="0" width="47" height="43" uuid="1c6987e8-6f2b-4d12-945d-90a4d534f3be"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{COSITE_2G_3G_TYPE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="790" y="0" width="47" height="43" uuid="2f3ef289-087d-4805-b31e-562020128642"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LATITUDE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="313" y="0" width="47" height="43" uuid="5d7712a3-baef-46a1-b9f8-a9833283d301"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_NG_QLY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="643" y="0" width="53" height="43" uuid="b9bad864-3903-44d2-86ad-f7e2a5593a21"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DC_HSDPA_42M}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

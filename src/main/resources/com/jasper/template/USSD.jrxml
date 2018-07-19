@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="USSD" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="921aac86-9cfc-4a04-acfb-810da424f168">
+	<property name="ireport.zoom" value="0.9090909090909091"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<queryString>
+		<![CDATA[select rownum, a.ma_node,
+                             a.node_cha_id,
+                             a.donvi_id,
+                             a.thiet_bi_id,
+                             a.building_id,
+                             a.loai_tram_id,
+                             a.ten_ng_qly,
+                             a.sdt_ng_qly,
+                             a.ne_type_id,
+                             parentusertype.ma_node ma_node_cha,
+                             b.ma_building,
+                             h.*,
+                             thiet_bi.ten_thiet_bi
+
+                        FROM rims.ussd_info h
+                             LEFT JOIN rims.node a ON a.node_id = h.node_id
+                             LEFT JOIN rims.node parentusertype
+                                 ON a.node_cha_id = parentusertype.node_id
+                             LEFT JOIN rims.building b
+                                 ON a.building_id = b.building_id
+                             LEFT JOIN rims.thiet_bi on thiet_bi.thiet_bi_id = a.thiet_bi_id
+                       WHERE     1 = 1]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="MA_NODE" class="java.lang.String"/>
+	<field name="NODE_CHA_ID" class="java.math.BigDecimal"/>
+	<field name="DONVI_ID" class="java.math.BigDecimal"/>
+	<field name="THIET_BI_ID" class="java.math.BigDecimal"/>
+	<field name="BUILDING_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_TRAM_ID" class="java.math.BigDecimal"/>
+	<field name="TEN_NG_QLY" class="java.lang.String"/>
+	<field name="SDT_NG_QLY" class="java.lang.String"/>
+	<field name="NE_TYPE_ID" class="java.math.BigDecimal"/>
+	<field name="MA_NODE_CHA" class="java.lang.String"/>
+	<field name="MA_BUILDING" class="java.lang.String"/>
+	<field name="NODE_ID" class="java.math.BigDecimal"/>
+	<field name="NAME" class="java.lang.String"/>
+	<field name="NGAY_HOAT_DONG" class="oracle.sql.TIMESTAMP"/>
+	<field name="NE_STATUS" class="java.lang.String"/>
+	<field name="IP_NE" class="java.lang.String"/>
+	<field name="OPC" class="java.lang.String"/>
+	<field name="SOFTWARE_VERSION" class="java.lang.String"/>
+	<field name="HW_FLATFORM" class="java.lang.String"/>
+	<field name="VENDOR" class="java.lang.String"/>
+	<field name="THUOC_DU_AN" class="java.lang.String"/>
+	<field name="DIA_DIEM_LAP_DAT" class="java.lang.String"/>
+	<field name="DON_VI_QUAN_LY" class="java.lang.String"/>
+	<field name="LICENSE" class="java.lang.String"/>
+	<field name="TEN_CARD" class="java.lang.String"/>
+	<field name="SERIAL_PART_NUMBER" class="java.lang.String"/>
+	<field name="CARD_STATUS" class="java.lang.String"/>
+	<field name="SO_LUONG_CARD" class="java.math.BigDecimal"/>
+	<field name="CARD_VERSION" class="java.lang.String"/>
+	<field name="FILE_HLD_LLD" class="java.lang.String"/>
+	<field name="TEN_THIET_BI" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="470" y="21" width="209" height="37" uuid="38004c7f-909d-462d-b688-5d04ae3e793d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="20"/>
+				</textElement>
+				<text><![CDATA[Danh sách USSD]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="02aa4c19-2b00-4ac9-9c35-47b1aa4661d4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[ROWNUM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="47" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="fe40f70f-7841-4846-bd3c-1f5c22d0e422"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_NODE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="94" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="6b684597-dc75-4d85-8ed3-2a199b321a8e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_NG_QLY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="5bfd1faa-f04b-4f79-8f77-f45b98e459ee"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SDT_NG_QLY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="188" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="93842ac5-f1c2-44b3-b337-d85336e4e9d0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_NODE_CHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="53f0ab3c-dfb2-4dc2-bef6-de6c3fe6269a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[MA_BUILDING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="a2b7bd76-02f7-43fe-9b3d-1a2c9ef723bf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="3987a5ab-e28a-4dce-a819-9ab7bbf5a2af"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NGAY_HOAT_DONG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="e50526b6-4d62-427b-bcd1-f61f7a41e874"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[IP_NE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="cc2c083b-2aff-4201-88dc-b5be437a131e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[NE_STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="8460b45b-3643-46f9-bad4-292f0a76c479"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[OPC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="517" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="f33f6db8-bfb2-441b-b300-e18cc1152708"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SOFTWARE_VERSION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="564" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="e5126b67-7aa5-4f1c-b148-98d0d01b0f7d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[HW_FLATFORM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="611" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="a3d6608f-342b-4e2a-a855-7e1923a829b0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[VENDOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="658" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="e4260886-855c-4273-8c43-809a742a6c7f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[THUOC_DU_AN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="705" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="b3d29de8-aa60-4fc2-b930-efcc72239f7d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[DIA_DIEM_LAP_DAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="752" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="e99623d5-1070-4f98-bdef-87334cd82a92"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[DON_VI_QUAN_LY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="799" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="2836fe69-60d5-4468-959a-4e96710afd8c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[LICENSE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="846" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="7be736aa-08c5-4a19-a682-d3dd1d7199ff"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_CARD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="893" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="468a92c1-36c0-41da-bef3-e74805a95aac"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SERIAL_PART_NUMBER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="940" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="12ba5ffc-bda2-412f-9b0d-7dadb4997c95"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CARD_STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="987" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="24c1d640-09da-4244-8f8c-e86582a45f4f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[SO_LUONG_CARD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1034" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="c6b1d28d-a4d4-44ff-9e43-4123a4ddf054"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[CARD_VERSION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1081" y="0" width="47" height="48" isPrintWhenDetailOverflows="true" uuid="8a562355-ae70-4b0c-a474-d456b0a01f37"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[TEN_THIET_BI]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="5775ab41-b464-408d-a161-d59cdbcc3fe8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="47" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="fbc49919-1e55-450e-9154-638e9c412a5f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_NODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="94" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="1380d531-8e16-4ad0-9eb1-ee4a7f665a59"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_NG_QLY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="80c226ea-0092-40b9-a84c-4a85f6300886"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SDT_NG_QLY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="188" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="1f1eaa8b-2bf8-42f8-9e91-a13cbcdf3738"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_NODE_CHA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="95a3ac42-f1e4-49e7-83b1-7746613e65a3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_BUILDING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="282" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="220a93dc-23de-4db5-bcc4-76e8453660d4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="329" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="db20595b-06e6-4ce0-954c-6c98f940578e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[""+$F{NGAY_HOAT_DONG}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="376" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="47cc20b0-5bd8-4274-86d5-24089325d858"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{IP_NE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="48a77273-1903-4d8d-b8f7-d1addd2426a7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NE_STATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="867fffe5-0fbc-4005-b197-7514dfe37055"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{OPC}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="517" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="cba97427-3eb7-495d-b587-99d8d493e921"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SOFTWARE_VERSION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="564" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="fbbc9208-b1bc-4244-8aa9-4f10fcfd5214"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{HW_FLATFORM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="611" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="8e40fb42-5975-4bd0-8384-8fdacd82d7ff"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{VENDOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="658" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="5f3ab6e0-4c3c-4983-828e-b4476ec7590f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{THUOC_DU_AN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="705" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="ce021cda-8e98-49d9-8d17-2c336e98fb83"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIA_DIEM_LAP_DAT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="752" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="77eeee87-99be-4240-8a37-a9ec84dfb8d1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DON_VI_QUAN_LY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="799" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="d11dfc6e-8fb2-4e59-987e-e0fea4f56024"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LICENSE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="846" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="44921a68-c5a6-486e-b8b3-a4cee566e17e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_CARD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="893" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="c8971e1f-e511-48bb-88ad-d695c7600754"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SERIAL_PART_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="940" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="a87fb1ac-540f-4df5-8ec4-a0f5dd27f86a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CARD_STATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="987" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="aa31dcb5-2095-46fd-bc5d-23192e76dbdf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SO_LUONG_CARD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1034" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="0e9bf0ee-51d7-41a9-858e-79d064311ad0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CARD_VERSION}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1081" y="0" width="47" height="41" isPrintWhenDetailOverflows="true" uuid="180d84a9-e387-4403-b8f6-bfd7db351795"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_THIET_BI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

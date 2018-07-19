@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PHUTRO" pageWidth="2380" pageHeight="1684" orientation="Landscape" columnWidth="2340" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ea94e716-ad4c-44d5-8e57-e40b646b62bd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="prs_name" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_khuvuc_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_tinh_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select rownum, a.*,b.tinhtp_id,b.dia_chi,b.ma_building,b.donvi_id, c.ten_loai_anten,d.ten_loai_ac_quy,e.ten_loai_tu_nguon,f.ten_loai_may_no,g.ten_loai_truyen_dan,h.ten_tinh_tp
+      FROM rims.PHU_TRO a
+      left join rims.building b on a.building_id = b.building_id
+      left join rims.loai_anten c on a.loai_anten_id = c.loai_anten_id
+      left join rims.loai_ac_quy d on a.loai_ac_quy_id = d.loai_ac_quy_id
+      left join rims.loai_tu_nguon e on a.loai_tu_nguon_id = e.loai_tu_nguon_id
+      left join rims.loai_may_no f on a.loai_may_no_id = f.loai_may_no_id
+      left join rims.loai_truyen_dan g on a.loai_truyen_dan_id = g.loai_truyen_dan_id
+      left join rims.tinh_tp h on b.tinhtp_id = h.tinhtp_id
+      left join rims.dm_khu_vuc kv on h.khu_vuc=kv.id
+      WHERE 1=1
+      AND ( lower(b.MA_BUILDING) like '%'||lower($P{prs_name})||'%'
+            or NVL($P{prs_name},'') = '' or lower(b.dia_chi) like '%'||lower($P{prs_name})||'%' )
+      and ( $P{pri_tinh_id} is null or  b.tinhtp_id in (
+                            select regexp_substr($P{pri_tinh_id},'[^,]+', 1, level) ids from dual
+                            connect by regexp_substr($P{pri_tinh_id}, '[^,]+', 1, level) is not null   ))
+      and ( $P{pri_khuvuc_id} is null or  kv.id in (
+                            select regexp_substr($P{pri_khuvuc_id},'[^,]+', 1, level) ids from dual
+                            connect by regexp_substr($P{pri_khuvuc_id}, '[^,]+', 1, level) is not null   ))
+
+      ORDER BY PHU_TRO_ID desc]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="PHU_TRO_ID" class="java.math.BigDecimal"/>
+	<field name="BUILDING_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_TRUYEN_DAN_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_AC_QUY_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_MAY_NO_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_TU_NGUON_ID" class="java.math.BigDecimal"/>
+	<field name="LOAI_ANTEN_ID" class="java.math.BigDecimal"/>
+	<field name="CHUNG_CSHT" class="java.lang.String"/>
+	<field name="DO_CAO_ANTEN" class="java.math.BigDecimal"/>
+	<field name="DO_CAO_NHA_DAT_ANTEN" class="java.math.BigDecimal"/>
+	<field name="NGAY_HD_TU_NGUON" class="java.sql.Timestamp"/>
+	<field name="SO_MODULE_TU_NGUON" class="java.math.BigDecimal"/>
+	<field name="NGAY_HD_MAY_NO" class="java.sql.Timestamp"/>
+	<field name="CONG_SUAT_MAY_NO" class="java.lang.String"/>
+	<field name="TRANG_THAI_DAT_MAY_NO" class="java.lang.String"/>
+	<field name="NGAY_HD_ACCU" class="java.sql.Timestamp"/>
+	<field name="DUNG_LUONG_ACCU" class="java.lang.String"/>
+	<field name="THOI_GIAN_HD_SAU_MAT_DIEN" class="java.math.BigDecimal"/>
+	<field name="NGAY_BAO_DUONG_ACCU" class="java.sql.Timestamp"/>
+	<field name="DUNG_LUONG_TRUYEN_DAN" class="java.lang.String"/>
+	<field name="DIEN_TRO_TIEP_DIA" class="java.math.BigDecimal"/>
+	<field name="LOAI_TRAM_CSHT" class="java.math.BigDecimal"/>
+	<field name="TONG_CS_DIEUHOA" class="java.lang.String"/>
+	<field name="GIAO_DIEN_TRUYEN_DAN" class="java.lang.String"/>
+	<field name="LOAI_COT_ANTEN_ID" class="java.math.BigDecimal"/>
+	<field name="DONG_CUNG_CAP_TU_NGUON" class="java.lang.String"/>
+	<field name="TIEU_THU_TU_NGUON" class="java.lang.String"/>
+	<field name="DIEN_AP_ACCU" class="java.lang.String"/>
+	<field name="SL_ACCU_BINH" class="java.lang.String"/>
+	<field name="SL_DIEU_HOA" class="java.lang.String"/>
+	<field name="LOAI_HINH_MAY_NO" class="java.lang.String"/>
+	<field name="TINHTP_ID" class="java.math.BigDecimal"/>
+	<field name="DIA_CHI" class="java.lang.String"/>
+	<field name="MA_BUILDING" class="java.lang.String"/>
+	<field name="DONVI_ID" class="java.math.BigDecimal"/>
+	<field name="TEN_LOAI_ANTEN" class="java.lang.String"/>
+	<field name="TEN_LOAI_AC_QUY" class="java.lang.String"/>
+	<field name="TEN_LOAI_TU_NGUON" class="java.lang.String"/>
+	<field name="TEN_LOAI_MAY_NO" class="java.lang.String"/>
+	<field name="TEN_LOAI_TRUYEN_DAN" class="java.lang.String"/>
+	<field name="TEN_TINH_TP" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="511" y="17" width="365" height="35" uuid="8cbf975b-601a-49ed-adca-7d203c1b33ad"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="20"/>
+				</textElement>
+				<text><![CDATA[Danh sách phụ trợ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="38" uuid="153f8450-7072-4a7e-9d7a-792e9300c97e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[ROWNUM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="0" width="73" height="38" uuid="96e41870-6118-401e-a6cc-4bd4ca7a0643"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[MA_BUILDING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="113" y="0" width="73" height="38" uuid="c44938b7-b12d-499c-af48-84b1bd415e41"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TEN_TINH_TP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="186" y="0" width="106" height="38" uuid="667d9f1b-a32a-4fa4-b67f-cd4d955e7534"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DIA_CHI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="0" width="73" height="38" uuid="0654cdbe-df4d-4da9-9ced-13d88960f2d1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TEN_LOAI_ANTEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="365" y="0" width="73" height="38" uuid="5fe353ca-dbe4-4d74-918b-8418d7d8fdb2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TEN_LOAI_AC_QUY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="0" width="73" height="38" uuid="668279f6-8e25-4533-a339-9762f759cbd3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TEN_LOAI_TU_NGUON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="511" y="0" width="73" height="38" uuid="13974b54-2461-4003-9ec8-194091ef9968"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TEN_LOAI_MAY_NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="584" y="0" width="73" height="38" uuid="f0ee2f3e-0f81-472f-8def-d8393ae487b5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TEN_LOAI_TRUYEN_DAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="657" y="0" width="73" height="38" uuid="4ff8c158-0d5e-4c5a-be77-a243e356e7e9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[CHUNG_CSHT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="730" y="0" width="73" height="38" uuid="9d8aa434-2fbd-48cb-a847-e7e66f3cb723"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DO_CAO_ANTEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="803" y="0" width="73" height="38" uuid="620c1124-a984-4ba9-bb5e-c06753e9db7d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DO_CAO_NHA_DAT_ANTEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="876" y="0" width="73" height="38" uuid="5decf193-434b-48a9-bc72-3cb9fa375cb4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NGAY_HD_TU_NGUON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="949" y="0" width="73" height="38" uuid="0b97da46-cf2d-4fc1-bb04-5c9d06f89a5a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[SO_MODULE_TU_NGUON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1022" y="0" width="73" height="38" uuid="080fc530-ca47-4641-9e8e-15da26f7158d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NGAY_HD_MAY_NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1095" y="0" width="73" height="38" uuid="f2129714-aa01-4f0e-8246-8c03588a97ad"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[CONG_SUAT_MAY_NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1168" y="0" width="73" height="38" uuid="0a05bf70-c201-47ae-b6f9-20b714fb1f7c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TRANG_THAI_DAT_MAY_NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1241" y="0" width="73" height="38" uuid="73a177dc-e8c3-431a-9091-f5e7482bbe9e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NGAY_HD_ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1314" y="0" width="73" height="38" uuid="75643803-4b4a-482c-82c4-75a9b81fa332"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DUNG_LUONG_ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1387" y="0" width="73" height="38" uuid="d0db7ed6-4ea2-4934-a020-43bf3eda11cd"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[THOI_GIAN_HD_SAU_MAT_DIEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1460" y="0" width="73" height="38" uuid="40c9df95-b866-481f-973a-17991e975557"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NGAY_BAO_DUONG_ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1533" y="0" width="73" height="38" uuid="ed9ce3e6-f652-4e18-a89c-41fe9cc91bae"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DUNG_LUONG_TRUYEN_DAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1606" y="0" width="73" height="38" uuid="5eda6b9f-ed98-4294-b84b-1ecfef4ff493"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DIEN_TRO_TIEP_DIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1679" y="0" width="73" height="38" uuid="9ce6e1d6-877b-47c9-9165-badb52586673"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LOAI_TRAM_CSHT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1752" y="0" width="73" height="38" uuid="13dfef77-ddd2-40a1-a235-5f5135e122e6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TONG_CS_DIEUHOA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1825" y="0" width="73" height="38" uuid="974fcf13-6488-45bc-8640-b6a97e026fb3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[GIAO_DIEN_TRUYEN_DAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1898" y="0" width="73" height="38" uuid="ea983d99-a57e-4a55-9379-c78167332eaa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DONG_CUNG_CAP_TU_NGUON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1971" y="0" width="73" height="38" uuid="da8112f8-0d13-4ffe-8314-0eaa9a830e6e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TIEU_THU_TU_NGUON]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2044" y="0" width="73" height="38" uuid="0dd26740-cdfb-4c90-87b8-27bb53dac41f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[DIEN_AP_ACCU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2117" y="0" width="73" height="38" uuid="f0e89454-88cb-4e53-8d25-d3b553a1d462"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[SL_ACCU_BINH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2190" y="0" width="73" height="38" uuid="bddaf148-37e7-4478-909a-69d3c4f6cc1e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[SL_DIEU_HOA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2263" y="0" width="73" height="38" uuid="d61b81a7-d168-4097-9a2b-c9b34f37edc7"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[LOAI_HINH_MAY_NO]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="40" height="45" uuid="e1b1b0fc-3f31-4621-aac6-f2877a85b69c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="0" width="73" height="45" uuid="605732da-6208-4b7c-a004-3200982d9dc2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_BUILDING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="0" width="73" height="45" uuid="075b0cf2-185b-4e51-a8d5-1cd31ebb00cb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_TINH_TP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="186" y="0" width="106" height="45" uuid="44b76870-ed20-4f33-9451-768e1e76cefa"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIA_CHI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="0" width="73" height="45" uuid="8ef1f2e2-90ce-4a12-bb1c-087f192e8b65"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_LOAI_ANTEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="365" y="0" width="73" height="45" uuid="58cc3fb0-181e-477e-9d29-2ff9bd2cf98e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_LOAI_AC_QUY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="438" y="0" width="73" height="45" uuid="fd630b39-5853-428b-bef2-248e0baa1510"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_LOAI_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="511" y="0" width="73" height="45" uuid="e02a51b2-9071-4e6f-b142-f73a952c22ea"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_LOAI_MAY_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="584" y="0" width="73" height="45" uuid="c45f039d-9346-4038-a466-8c2d60bbd35d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_LOAI_TRUYEN_DAN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="657" y="0" width="73" height="45" uuid="134a3ef2-9f1d-4f7e-8653-03bddf434041"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CHUNG_CSHT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="730" y="0" width="73" height="45" uuid="a8e92df1-8fa2-4871-8e32-dbd4ff1ad7cb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DO_CAO_ANTEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="803" y="0" width="73" height="45" uuid="92cbb70d-f72f-4307-ab28-799d3bbaec7f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DO_CAO_NHA_DAT_ANTEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="876" y="0" width="73" height="45" uuid="4c501906-bfc1-484e-ae3b-020d57ba680b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HD_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="949" y="0" width="73" height="45" uuid="a7270703-9a85-4beb-b084-40ede834a017"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SO_MODULE_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1022" y="0" width="73" height="45" uuid="7032a4ca-2100-458b-81d5-78bbda65147e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HD_MAY_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1095" y="0" width="73" height="45" uuid="9db6156f-a552-4e7a-bd8c-50297eeb705d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{CONG_SUAT_MAY_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1168" y="0" width="73" height="45" uuid="2292da03-2b57-4b08-acad-8d4c9f825d46"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TRANG_THAI_DAT_MAY_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1241" y="0" width="73" height="45" uuid="7729b723-f891-45ce-89b6-2ff71e6f9def"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_HD_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1314" y="0" width="73" height="45" uuid="a611fb80-fe34-46bc-9d8f-c92d159a8073"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DUNG_LUONG_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1387" y="0" width="73" height="45" uuid="b41235cd-831e-43bb-a4ce-cf536fa184d0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{THOI_GIAN_HD_SAU_MAT_DIEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1460" y="0" width="73" height="45" uuid="725a4492-3089-4c10-80c7-db53d8baf9bf"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NGAY_BAO_DUONG_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1533" y="0" width="73" height="45" uuid="e3a4ba46-9cfd-4263-8b29-821c359a7191"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DUNG_LUONG_TRUYEN_DAN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1606" y="0" width="73" height="45" uuid="c4f57190-c4ba-4d4b-95c5-655fb537cb83"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIEN_TRO_TIEP_DIA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1679" y="0" width="73" height="45" uuid="9051e062-8063-4592-909a-ee04750b01a8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LOAI_TRAM_CSHT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1752" y="0" width="73" height="45" uuid="1ba68a6d-80c6-4aa9-b62c-77963e36a82d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TONG_CS_DIEUHOA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1825" y="0" width="73" height="45" uuid="4b72d98f-ab8b-4c7b-bb35-d1408448b975"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{GIAO_DIEN_TRUYEN_DAN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1898" y="0" width="73" height="45" uuid="c9158bec-b665-41b4-8ab4-afcc75260a31"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DONG_CUNG_CAP_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1971" y="0" width="73" height="45" uuid="3b18323d-882c-4a7f-a2a3-15d7b6175587"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TIEU_THU_TU_NGUON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2044" y="0" width="73" height="45" uuid="afc6f6e1-e213-4a8c-8a92-4aed985c93d3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIEN_AP_ACCU}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2117" y="0" width="73" height="45" uuid="f05f324a-fb80-4398-a099-52ab78eeb42e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SL_ACCU_BINH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2190" y="0" width="73" height="45" uuid="748cddbb-c82d-4e5e-b19d-2feb6a0983f0"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{SL_DIEU_HOA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="2263" y="0" width="73" height="45" uuid="40f9d798-e488-4020-a64d-0cf7630ba32b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LOAI_HINH_MAY_NO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

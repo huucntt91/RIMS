@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BUILDING" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="24a08e73-3bb9-44a2-a7b3-6470a21eb5c2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="prs_name" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_khuvuc_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_tinh_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_quan_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pri_phuong_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select rownum, a.*,
+                             b.ten_tinh_tp,
+                             c.ten_quan_huyen,
+                             d.ten_phuong_xa,
+                             e.ten_don_vi
+                        FROM rims.building a
+                             LEFT JOIN rims.tinh_tp b ON a.tinhtp_id = b.tinhtp_id
+                             LEFT JOIN rims.quan_huyen c
+                                 ON a.quanhuyen_id = c.quanhuyen_id
+                             LEFT JOIN rims.phuong_xa d
+                                 ON a.phuongxa_id = d.phuongxa_id
+                             LEFT JOIN rims.donvi e ON a.donvi_id = e.donvi_id
+                             LEFT JOIN rims.dm_khu_vuc kv ON b.khu_vuc = kv.id
+                       WHERE     1 = 1
+		  AND (   LOWER (a.ma_building) LIKE
+                                         '%' || LOWER ($P{prs_name}) || '%'
+                                  OR NVL ($P{prs_name}, '') = ''
+                                  OR LOWER (a.dia_chi) LIKE
+                                         '%' || LOWER ($P{prs_name}) || '%')
+                             AND (   $P{pri_tinh_id} IS NULL
+                                  OR a.tinhtp_id IN (    SELECT REGEXP_SUBSTR (
+                                                                    $P{pri_tinh_id},
+                                                                    '[^,]+',
+                                                                    1,
+                                                                    LEVEL)
+                                                                    ids
+                                                           FROM DUAL
+                                                     CONNECT BY REGEXP_SUBSTR (
+                                                                    $P{pri_tinh_id},
+                                                                    '[^,]+',
+                                                                    1,
+                                                                    LEVEL)
+                                                                    IS NOT NULL))
+                             AND (   $P{pri_khuvuc_id} IS NULL
+                                  OR kv.id IN (    SELECT REGEXP_SUBSTR (
+                                                              $P{pri_khuvuc_id},
+                                                              '[^,]+',
+                                                              1,
+                                                              LEVEL)
+                                                              ids
+                                                     FROM DUAL
+                                               CONNECT BY REGEXP_SUBSTR (
+                                                              $P{pri_khuvuc_id},
+                                                              '[^,]+',
+                                                              1,
+                                                              LEVEL)
+                                                              IS NOT NULL))
+                             AND (  $P{pri_quan_id} IS NULL
+                                  OR a.quanhuyen_id IN (    SELECT REGEXP_SUBSTR (
+                                                                       $P{pri_quan_id},
+                                                                       '[^,]+',
+                                                                       1,
+                                                                       LEVEL)
+                                                                       ids
+                                                              FROM DUAL
+                                                        CONNECT BY REGEXP_SUBSTR (
+                                                                       $P{pri_quan_id},
+                                                                       '[^,]+',
+                                                                       1,
+                                                                       LEVEL)
+                                                                       IS NOT NULL))
+                             AND (   $P{pri_phuong_id} IS NULL
+                                  OR a.phuongxa_id IN (    SELECT REGEXP_SUBSTR (
+                                                                      $P{pri_phuong_id},
+                                                                      '[^,]+',
+                                                                      1,
+                                                                      LEVEL)
+                                                                      ids
+                                                             FROM DUAL
+                                                       CONNECT BY REGEXP_SUBSTR (
+                                                                      $P{pri_phuong_id},
+                                                                      '[^,]+',
+                                                                      1,
+                                                                      LEVEL)
+                                                                      IS NOT NULL))
+                    ORDER BY building_id DESC]]>
+	</queryString>
+	<field name="ROWNUM" class="java.math.BigDecimal"/>
+	<field name="BUILDING_ID" class="java.math.BigDecimal"/>
+	<field name="TINHTP_ID" class="java.math.BigDecimal"/>
+	<field name="QUANHUYEN_ID" class="java.math.BigDecimal"/>
+	<field name="PHUONGXA_ID" class="java.math.BigDecimal"/>
+	<field name="DONVI_ID" class="java.math.BigDecimal"/>
+	<field name="MA_BUILDING" class="java.lang.String"/>
+	<field name="DIA_CHI" class="java.lang.String"/>
+	<field name="LATITUDE" class="java.math.BigDecimal"/>
+	<field name="LONGITUDE" class="java.math.BigDecimal"/>
+	<field name="GEOMETRY" class="oracle.jdbc.OracleStruct"/>
+	<field name="TEN_TINH_TP" class="java.lang.String"/>
+	<field name="TEN_QUAN_HUYEN" class="java.lang.String"/>
+	<field name="TEN_PHUONG_XA" class="java.lang.String"/>
+	<field name="TEN_DON_VI" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="381" y="13" width="357" height="47" uuid="8cbcaf1c-9d1e-4f5b-9c83-518b5b8bb60b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="24"/>
+				</textElement>
+				<text><![CDATA[Danh sách vị trí]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="53" height="27" uuid="2b6238ed-587b-4d24-8dae-f7c8f50ef365"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[STT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="53" y="0" width="127" height="27" uuid="40097b56-f97f-4dd0-9a6f-f939c798a32d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Mã tòa nhà]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="201" height="27" uuid="2a8ce5c9-3d8d-4ec9-80b7-eb17ca399421"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Địa chỉ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="381" y="0" width="127" height="27" uuid="e29a8839-3096-45f5-bf68-d4420536b82b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[LATITUDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="508" y="0" width="127" height="27" uuid="6772d933-7fd3-4e62-80ed-3b3eacd08061"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[LONGITUDE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="635" y="0" width="127" height="27" uuid="dee042b6-f2f6-4b94-82c7-c2461a7c9072"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tên tỉnh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="762" y="0" width="127" height="27" uuid="8b515e06-6fbd-4555-af44-f8c881c6ffad"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tên quận huyện]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="889" y="0" width="127" height="27" uuid="5733571c-6d61-4bcd-b2b2-bb7a634802a8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tên phường xã]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1016" y="0" width="127" height="27" uuid="5c0bf5bc-d3a4-468d-9dd8-e922fe77596d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Tên đơn vị]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="53" height="41" uuid="3f0e8e18-7b5d-48f7-99a4-9367d1dbdfa6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{ROWNUM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="53" y="0" width="127" height="41" uuid="8a47a696-70df-4e04-b44d-2dfb36b13618"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_BUILDING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="201" height="41" uuid="076c06d4-807b-4dc6-a40a-65288c086f39"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{DIA_CHI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="381" y="0" width="127" height="41" uuid="7aa40e7a-b7be-47ce-b997-ad27779b0051"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LATITUDE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="508" y="0" width="127" height="41" uuid="82c4dd17-319d-4f86-bf1c-d4ac05c4cdb1"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{LONGITUDE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="635" y="0" width="127" height="41" uuid="e286d94a-fc49-4a7c-8e06-9425145c90b5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_TINH_TP}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="762" y="0" width="127" height="41" uuid="c3998ec4-e4af-40c9-8f90-b2ef23056ae5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_QUAN_HUYEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="889" y="0" width="127" height="41" uuid="b6d53e96-863a-4533-b4e2-e8ce08a4de12"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_PHUONG_XA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1016" y="0" width="127" height="41" uuid="6cad13b4-87f7-4e42-9f86-bc7f6c315dfb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_DON_VI}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

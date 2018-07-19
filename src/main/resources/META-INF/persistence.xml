@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="vn.vnpt.media_RIMS_war_1.0PU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.vnpt.media.rims.bean.DmCachXayCsht</class>
+    <class>com.vnpt.media.rims.bean.Cell2gInfoBO</class>
+    <class>com.vnpt.media.rims.bean.Cell4gInfoBO</class>
+    <class>com.vnpt.media.rims.bean.OmcCell3gInfoBO</class>
+    <class>com.vnpt.media.rims.bean.OmcCell2gInfoBO</class>
+    <class>com.vnpt.media.rims.bean.Cell3gInfoBO</class>
+    <class>com.vnpt.media.rims.bean.OmcCell4gInfoBO</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@10.1.4.172:1521:RIMS"/>
+      <property name="javax.persistence.jdbc.user" value="RIMS"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.password" value="1"/>
+    </properties>
+  </persistence-unit>
+</persistence>

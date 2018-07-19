@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="export_prouter" pageWidth="802" pageHeight="1150" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0d598b1c-e951-4a55-9bc4-fd93abb8decd">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="429"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	<parameter name="p_tnode_type_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_tnode_code" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_tnode_name" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_khu_vuc_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_province_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_district_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="p_wards_id" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+       a.tnode_code,
+       a.tnode_name,
+       pkg_mane.find_cha_list_name (a.tlist_node_cha_id) tlist_node_cha_name,
+       a.total_slot,
+       a.ip,
+       a.note,
+       c.ma_building,
+       d.ten_dong_tbi
+  FROM tnode a
+       LEFT JOIN rims.building c ON a.building_id = c.building_id
+       LEFT JOIN dong_thiet_bi d ON a.dong_tbi_id = d.dong_tbi_id
+       LEFT JOIN rims.tinh_tp tp ON c.tinhtp_id = tp.tinhtp_id
+       LEFT JOIN rims.quan_huyen qh ON c.quanhuyen_id = qh.quanhuyen_id
+       LEFT JOIN rims.phuong_xa px ON c.phuongxa_id = px.phuongxa_id
+ WHERE 1 = 1 AND a.status <> 0
+AND a.tnode_type_id = NVL ($P{p_tnode_type_id}, a.tnode_type_id)
+AND upper(a.tnode_code) LIKE upper('%'||$P{p_tnode_code}||'%')
+AND upper(a.tnode_name) LIKE upper('%'||$P{p_tnode_name}||'%')
+AND (  $P{p_khu_vuc_id}  IS NULL
+                    OR tp.khu_vuc IN (    SELECT REGEXP_SUBSTR ($P{p_khu_vuc_id},
+                                                                '[^,]+',
+                                                                1,
+                                                                LEVEL)
+                                                     ids
+                                            FROM DUAL
+                                      CONNECT BY REGEXP_SUBSTR ($P{p_khu_vuc_id},
+                                                                '[^,]+',
+                                                                1,
+                                                                LEVEL)
+                                                     IS NOT NULL))
+AND (  $P{p_province_id}  IS NULL
+                    OR tp.tinhtp_id IN (    SELECT REGEXP_SUBSTR ($P{p_province_id},
+                                                                  '[^,]+',
+                                                                  1,
+                                                                  LEVEL)
+                                                       ids
+                                              FROM DUAL
+                                        CONNECT BY REGEXP_SUBSTR (
+                                                       $P{p_province_id},
+                                                       '[^,]+',
+                                                       1,
+                                                       LEVEL)
+                                                       IS NOT NULL))
+               --
+AND (  $P{p_district_id}  IS NULL
+                    OR qh.quanhuyen_id IN (    SELECT REGEXP_SUBSTR (
+                                                          $P{p_district_id},
+                                                          '[^,]+',
+                                                          1,
+                                                          LEVEL)
+                                                          ids
+                                                 FROM DUAL
+                                           CONNECT BY REGEXP_SUBSTR (
+                                                          $P{p_district_id},
+                                                          '[^,]+',
+                                                          1,
+                                                          LEVEL)
+                                                          IS NOT NULL))
+               --
+AND (  $P{p_wards_id}  IS NULL
+                    OR px.phuongxa_id IN (    SELECT REGEXP_SUBSTR ($P{p_wards_id},
+                                                                    '[^,]+',
+                                                                    1,
+                                                                    LEVEL)
+                                                         ids
+                                                FROM DUAL
+                                          CONNECT BY REGEXP_SUBSTR (
+                                                         $P{p_wards_id},
+                                                         '[^,]+',
+                                                         1,
+                                                         LEVEL)
+                                                         IS NOT NULL))]]>
+	</queryString>
+	<field name="TNODE_CODE" class="java.lang.String"/>
+	<field name="TNODE_NAME" class="java.lang.String"/>
+	<field name="TLIST_NODE_CHA_NAME" class="java.lang.String"/>
+	<field name="TOTAL_SLOT" class="java.lang.String"/>
+	<field name="IP" class="java.lang.String"/>
+	<field name="NOTE" class="java.lang.String"/>
+	<field name="MA_BUILDING" class="java.lang.String"/>
+	<field name="TEN_DONG_TBI" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="59" width="123" height="20" uuid="e7951a21-7d85-478c-8e09-6f8054c10466"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Mã node]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="123" y="59" width="139" height="20" uuid="c2aa0a12-31f6-421b-89c2-8a7cecb4d5c6"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Tên node]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="262" y="59" width="83" height="20" uuid="5faabc59-f64d-45ec-94c5-750b7564028a"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Danh sách node cha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="59" width="61" height="20" uuid="1fbda806-09ea-443b-9e5f-871bec2eb1b1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Số slot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="406" y="59" width="90" height="20" uuid="2e5c76b3-b9d1-4724-85e5-5266946b8292"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[IP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="496" y="59" width="81" height="20" uuid="9f98f578-cf49-441a-8605-e1a029574650"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Mã building]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="577" y="59" width="61" height="20" uuid="c7c469b1-d4db-42c7-a88c-45e66cf62549"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Dòng thiết bị]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="638" y="59" width="100" height="20" uuid="0ab65105-3206-4fcf-9775-73237bc25b7e"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<text><![CDATA[Ghi chú]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="123" height="20" uuid="9c82b144-b94a-4f3b-a1b0-fb73a9e27e82"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TNODE_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="123" y="0" width="139" height="20" uuid="6df96b51-234e-4d0f-9687-d4b36fa35e8c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TNODE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="262" y="0" width="83" height="20" uuid="f15147b0-90d5-4510-9c48-d6a97e508d14"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TLIST_NODE_CHA_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="345" y="0" width="61" height="20" uuid="e5c97296-cadd-495f-a319-caab9651dadc"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TOTAL_SLOT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="406" y="0" width="90" height="20" uuid="2c14935b-3d21-4f91-b60d-b60c9cffeedd"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{IP}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="496" y="0" width="81" height="20" uuid="4b001f22-b42c-401e-ae2f-2324739c2664"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{MA_BUILDING}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="577" y="0" width="61" height="20" uuid="c6dfe626-c3aa-4859-8e83-3e42fe60fc2a"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{TEN_DONG_TBI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="638" y="0" width="100" height="20" uuid="04b5bf4c-98d6-42de-933c-3364764b453a"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{NOTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
