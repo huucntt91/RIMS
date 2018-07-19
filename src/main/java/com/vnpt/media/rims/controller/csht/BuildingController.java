@@ -503,7 +503,6 @@ public class BuildingController {
                 return "redirect:/building/init";
             }
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.error("Exception :", e);
             String msg = messageSource.getMessage("admin.common.error", null, locale);
             attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));

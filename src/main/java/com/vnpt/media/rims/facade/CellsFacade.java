@@ -338,7 +338,7 @@ public class CellsFacade {
         }
     }
 
-    public String addCell4gExcel(ICells i, Cell4GNewExcelModel cell4gExcel, long userId) throws ServiceException {
+    public String addCell4gExcel(ICells i, Cell4GNewExcelModel cell4gExcel, long userId) {
         try {
             String objectId = "6";
             ManagerAdminFacade adminFacade = new ManagerAdminFacade();
@@ -347,12 +347,11 @@ public class CellsFacade {
             String sRet = i.addCell4gExcel(permission, cell4gExcel, userId);
             return Convert.convertErrorImportDkCell4G(sRet);
         } catch (DAOException de) {
-            logger.error("DAOException : ", de);
-            return "-99";
+            throw de;
         }
     }
 
-    public List<Cell4GNewExcelModel> importCell4G(List<Cell4GNewExcelModel> list, boolean resultCheckFile, long userId) throws ServiceException {
+    public List<Cell4GNewExcelModel> importCell4G(List<Cell4GNewExcelModel> list, boolean resultCheckFile, long userId) {
         ITransaction trans = null;
         try {
             ResourceBundle resourceBundle = ResourceBundle.getBundle("locale/messages", new Locale("en"));
@@ -383,8 +382,7 @@ public class CellsFacade {
                 trans.endTransaction();
             }
         } catch (DAOException de) {
-            logger.error("DAOException : ", de);
-            DatabaseUtils.rollback(trans);
+            //de.printStackTrace();
         } finally {
             DatabaseUtils.close(trans);
         }
