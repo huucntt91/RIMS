@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    
+    <filter>
+        <filter-name>encodingFilter</filter-name>  
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>  
+        <init-param>  
+            <param-name>encoding</param-name>  
+            <param-value>UTF-8</param-value>  
+        </init-param>  
+        <init-param>  
+            <param-name>forceEncoding</param-name>  
+            <param-value>true</param-value>  
+        </init-param> 
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>  
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>SessionHandleFilter</filter-name>
+        <filter-class>com.vnpt.media.rims.controller.security.SessionHandleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessionHandleFilter</filter-name>
+        
+        <url-pattern>/*</url-pattern>
+        
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>ConfigurableSiteMeshFilter</filter-name>
+        <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ConfigurableSiteMeshFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+       
+         
+    <filter>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+        <init-param>
+            <param-name>casServerUrlPrefix</param-name>
+            <param-value>https://id.vnpt.com.vn/cas</param-value>
+        </init-param>
+    </filter>
+
+    <listener>
+        <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+    </listener>
+    
+
+    <filter>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <!--<filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>-->
+        <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+        <init-param>
+            <param-name>casServerLoginUrl</param-name>
+            <param-value>https://id.vnpt.com.vn/cas/login</param-value>
+        </init-param>
+        <init-param>
+            <param-name>serverName</param-name>
+            <!--<param-value>https://oss.vnpt.vn:8080/RIMS/</param-value>-->
+            <!--<param-value>https://oss.vnpt.vn/test</param-value>-->
+            <param-value>http://localhost:8080/RIMS/</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <!--<filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>-->
+        <filter-class>org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter</filter-class>
+        <init-param>
+            <param-name>casServerUrlPrefix</param-name>
+            <param-value>https://id.vnpt.com.vn/cas</param-value>
+        </init-param>
+        <init-param>
+            <param-name>serverName</param-name>
+            <!--<param-value>http://localhost:8080/RIMS/</param-value>-->
+            <!--<param-value>https://oss.vnpt.vn/test</param-value>-->
+            <param-value>http://localhost:8080/RIMS/</param-value>
+        </init-param>
+        <init-param>
+            <param-name>redirectAfterValidation</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>useSession</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        
+        
+        <!--
+        <init-param>
+            <param-name>acceptAnyProxy</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyReceptorUrl</param-name>
+            <param-value>/sample/proxyUrl</param-value>
+        </init-param>
+        <init-param>
+            <param-name>proxyCallbackUrl</param-name>
+            <param-value>https://mmoayyed.unicon.net:9443/sample/proxyUrl</param-value>
+        </init-param>
+        -->
+        <init-param>
+            <param-name>authn_method</param-name>
+            <param-value>mfa-duo</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <servlet>
+        <servlet-name>data-report-servlet</servlet-name>
+        <servlet-class>
+            com.vnpt.media.rims.controller.report.DataReportServlet
+        </servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet> 
+    <context-param>
+        <param-name>defaultHtmlEscape</param-name>
+        <param-value>true</param-value>
+    </context-param>       
+</web-app>
