@@ -485,23 +485,28 @@ public class BuildingController {
             BuildingBO model = new BuildingBO();
             model.setId(Long.parseLong(Id));
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-            LOGGER.info("user: {}, ip: {}, call modifyBuilding({},{})", user.getUsername(), request.getRemoteAddr(), "del", model.getId());
-            if (adminFacade.modifyBuilding("del", model) > -1) {
+            String checkDelete = adminFacade.checkBeforeDeleteBuilding(Id);
+            if (checkDelete == null || checkDelete.isEmpty()) {
+                LOGGER.info("user: {}, ip: {}, call modifyBuilding({},{})", user.getUsername(), request.getRemoteAddr(), "del", model.getId());
+                if (adminFacade.modifyBuilding("del", model) > -1) {
 
-                String msg = messageSource.getMessage("admin.common.delete.success", null, locale);
-                attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, msg));
-                return "redirect:/building/init";
+                    String msg = messageSource.getMessage("admin.common.delete.success", null, locale);
+                    attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, msg));
+                    return "redirect:/building/init";
+                } else {
+                    String msg = messageSource.getMessage("admin.common.error", null, locale);
+                    attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
+                    return "redirect:/building/init";
+                }
             } else {
-                String msg = messageSource.getMessage("admin.common.error", null, locale);
-                attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
+                attr.addFlashAttribute("info", new Message(Message.TYPE_WARNING, Message.HEAD_WARNING, "Bạn phải offair hoặc mapping sang CSHT của những trạm/cell sau: " + checkDelete));
                 return "redirect:/building/init";
             }
         } catch (Exception e) {
+            e.printStackTrace();
             LOGGER.error("Exception :", e);
             String msg = messageSource.getMessage("admin.common.error", null, locale);
             attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
-            LOGGER.error("Exception :", e);
-
             return "redirect:/building/init";
         }
 

@@ -35,7 +35,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  *
@@ -971,7 +970,8 @@ public class CategoriesFacade {
         }
         return false;
     }
-    public  boolean checkLongLatExist(String longtidue, String latidue, String buildingId) {
+
+    public boolean checkLongLatExist(String longtidue, String latidue, String buildingId) {
         ITransaction trans = null;
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -1004,6 +1004,31 @@ public class CategoriesFacade {
             DatabaseUtils.close(trans);
         }
         return false;
+    }
+
+    public String checkBeforeDeleteBuilding(String buildingId) throws SQLException {
+        ITransaction trans = null;
+        CallableStatement cs = null;
+        Connection conn = null;
+        String numResult = null;
+        try {
+            //get connecttion
+            trans = factory.getTransaction();
+            trans.connectionType(DB_ADMIN);
+            conn = trans.getConnection();
+            //
+            String sql = "begin ?:=pkg_building.check_before_delete(?); end;";
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
+            cs.setString(2, buildingId);
+            cs.executeQuery();
+            numResult = (String) cs.getObject(1);
+        } catch (DAOException | SQLException de) {
+            throw de;
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+        return numResult;
     }
 
 }
