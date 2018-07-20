@@ -552,8 +552,8 @@ public class StationPlansFacade {
             cstmt.setString(21, tramDABO.getLoaiCongNghe());
             cstmt.setString(22, tramDABO.getChungLoaiThietBi());
             cstmt.setString(23, tramDABO.getChungLoaiAnten());
-            cstmt.setString(24, tramDABO.getThoiDiemCungCapThietBi());
-            cstmt.setString(25, tramDABO.getThoiDiemSwapThietBi());
+            cstmt.setString(24, tramDABO.getNgayCungCapThietBi());
+            cstmt.setString(25, tramDABO.getNgaySwapThietBi());
             cstmt.setString(26, tramDABO.getGhiChu());
             
             

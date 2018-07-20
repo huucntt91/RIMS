@@ -71,8 +71,7 @@
         </init-param>
         <init-param>
             <param-name>serverName</param-name>
-            <!--<param-value>https://oss.vnpt.vn:8080/RIMS/</param-value>-->
-            <!--<param-value>https://oss.vnpt.vn/test</param-value>-->
+            <!--<param-value>https://oss.vnpt.vn/</param-value>-->
             <param-value>http://localhost:8080/RIMS/</param-value>
         </init-param>
     </filter>
@@ -87,8 +86,7 @@
         </init-param>
         <init-param>
             <param-name>serverName</param-name>
-            <!--<param-value>http://localhost:8080/RIMS/</param-value>-->
-            <!--<param-value>https://oss.vnpt.vn/test</param-value>-->
+            <!--<param-value>https://oss.vnpt.vn/</param-value>-->
             <param-value>http://localhost:8080/RIMS/</param-value>
         </init-param>
         <init-param>

@@ -57,10 +57,10 @@ public class TramDuAnPTMExcel {
     private String chungLoaiThietBi;
     @Column(name = "chungLoaiAnten", index = "19")
     private String chungLoaiAnten;
-    @Column(name = "thoiDiemCungCapThietBi", index = "20")
-    private String thoiDiemCungCapThietBi;
-    @Column(name = "thoiDiemSwapThietBi", index = "21")
-    private String thoiDiemSwapThietBi;
+    @Column(name = "ngayCungCapThietBi", index = "20")
+    private String ngayCungCapThietBi;
+    @Column(name = "ngaySwapThietBi", index = "21")
+    private String ngaySwapThietBi;
     @Column(name = "ghiChu", index = "22")
     private String ghiChu;
     @Column(name = "note", index = "23")
@@ -245,21 +245,23 @@ public class TramDuAnPTMExcel {
         this.chungLoaiAnten = chungLoaiAnten;
     }
 
-    public String getThoiDiemCungCapThietBi() {
-        return thoiDiemCungCapThietBi;
+    public String getNgayCungCapThietBi() {
+        return ngayCungCapThietBi;
     }
 
-    public void setThoiDiemCungCapThietBi(String thoiDiemCungCapThietBi) {
-        this.thoiDiemCungCapThietBi = thoiDiemCungCapThietBi;
+    public void setNgayCungCapThietBi(String ngayCungCapThietBi) {
+        this.ngayCungCapThietBi = ngayCungCapThietBi;
     }
 
-    public String getThoiDiemSwapThietBi() {
-        return thoiDiemSwapThietBi;
+    public String getNgaySwapThietBi() {
+        return ngaySwapThietBi;
     }
 
-    public void setThoiDiemSwapThietBi(String thoiDiemSwapThietBi) {
-        this.thoiDiemSwapThietBi = thoiDiemSwapThietBi;
+    public void setNgaySwapThietBi(String ngaySwapThietBi) {
+        this.ngaySwapThietBi = ngaySwapThietBi;
     }
+
+    
 
     
 }

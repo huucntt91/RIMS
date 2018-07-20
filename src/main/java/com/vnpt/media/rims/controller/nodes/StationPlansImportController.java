@@ -641,9 +641,9 @@ public class StationPlansImportController {
                 cell = row.createCell(20);
                 cell.setCellValue(item.getChungLoaiAnten());
                 cell = row.createCell(21);
-                cell.setCellValue(item.getThoiDiemCungCapThietBi());
+                cell.setCellValue(item.getNgayCungCapThietBi());
                 cell = row.createCell(22);
-                cell.setCellValue(item.getThoiDiemSwapThietBi());
+                cell.setCellValue(item.getNgaySwapThietBi());
                 cell = row.createCell(23);
                 cell.setCellValue(item.getGhiChu());
             }
