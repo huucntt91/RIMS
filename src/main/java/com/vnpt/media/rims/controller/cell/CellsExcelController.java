@@ -10,19 +10,14 @@ import com.vnpt.media.rims.bean.Cell4GUpdateExcelModel;
 import com.vnpt.media.rims.bean.CellNewExcelBO;
 import com.vnpt.media.rims.bean.CellUpdateExcelNetModel;
 import com.vnpt.media.rims.bean.ExcelDeleteNodeBO;
-import com.vnpt.media.rims.bean.ImportBtsModel;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
 import com.vnpt.media.rims.common.utils.Convert;
-import static com.vnpt.media.rims.common.utils.Convert.resourceBundle;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.managerAdmin.BaseController;
-import com.vnpt.media.rims.facade.BangTanFacade;
-import com.vnpt.media.rims.facade.CategoriesFacade;
-import com.vnpt.media.rims.facade.CellGroupFacade;
 import com.vnpt.media.rims.facade.CellsFacade;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
 //import com.vnpt.media.rims.formbean.Cell2GList;
@@ -33,7 +28,6 @@ import com.vnpt.media.rims.formbean.TableFormCell4G;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,8 +37,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -538,7 +530,6 @@ public class CellsExcelController extends BaseController {
                             continue;
                         }
                         temp = cellsFacade.updateCell2gExcel(items.get(i), user.getId());
-//                    result.add(Convert.error2String(temp));
                         result.add(Convert.errorUpdateCell2G(temp));
                     }
                     LOGGER.info("user: {}, ip: {}, end updateCell2gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
