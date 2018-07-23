@@ -3,7 +3,7 @@
                monitorInterval="60">
     <properties>
         <property name="pattern">[%-5level] [%c{1}.%L] %d{yyyy-MM-dd HH:mm:ss.SSS} %m%n</property>
-        <property name="rims_log">../rims_test_log</property>
+        <property name="rims_log">../rims_log</property>
     </properties>
     <appenders>
 
