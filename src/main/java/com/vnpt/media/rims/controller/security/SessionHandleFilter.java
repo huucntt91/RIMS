@@ -48,9 +48,9 @@ public class SessionHandleFilter implements Filter {
         } else {
             if (USER_KEY != null) {
                 UserBO user = (UserBO) USER_KEY;
-                LOGGER.debug(user.listParam());
+//                LOGGER.debug(user.listParam());
             }
-            LOGGER.debug("url=" + url + ",USER_KEY=" + USER_KEY);
+//            LOGGER.debug("url=" + url + ",USER_KEY=" + USER_KEY);
             chain.doFilter(request, response);
         }
 

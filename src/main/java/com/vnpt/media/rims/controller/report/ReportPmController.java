@@ -54,7 +54,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "/reportPm")
 public class ReportPmController {
 
-    private static Logger logger = LogManager.getLogger(ReportTrafficTramController.class);
+    private static Logger logger = LogManager.getLogger(ReportPmController.class);
     private static final String LIST = "report/kpi/list";
 
     @Autowired
