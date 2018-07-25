@@ -498,9 +498,6 @@ public class CellsExcelController extends BaseController {
                 String temp;
                 LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
                 for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).getCode() == null || items.get(i).getCode().isEmpty()) {
-                        continue;
-                    }
                     temp = cellsFacade.updateCellNetRFExcel(items.get(i), user.getId(), cellNewExcelBO.getType());
                     result.add(temp);
                 }
