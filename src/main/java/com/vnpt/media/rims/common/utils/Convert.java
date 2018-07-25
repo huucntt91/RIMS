@@ -775,7 +775,7 @@ public class Convert {
             if (temp.equals("1") || temp.equals("2")) {
                 sb.append("Mã cell không tồn tại. ");
             } else if (temp.equals("3")) {
-                sb.append("Mã BTS không tồn tại. ");
+                sb.append("Mã BTS/NODEB/ENODEB không tồn tại hoặc trống. ");
             } else if (temp.equals("4")) {
                 sb.append("Ngày hoạt động không đúng định dạng. ");
             } else if (temp.equals("5")) {

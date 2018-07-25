@@ -37,6 +37,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +46,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +74,9 @@ public class CellsExcelController extends BaseController {
     private static final Logger LOGGER = LogManager.getLogger(CellsExcelController.class);
     private static final String LIST = "nodes/cell/cellList";
     private static final String FORM_NEW = "nodes/cells/cellNewExcel";
-    private static final String FORM_EDIT_2G = "nodes/cells/cell2gEditExcel";
+    private static final String FORM_EDIT_2G = "nodes/cells/cellEditExcel";
     private static final String FORM_DELETE = "nodes/cells/cellDeleteExcel";
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("locale/messages", new Locale("en"));
     @Autowired
     private MessageSource messageSource;
 
@@ -476,16 +479,11 @@ public class CellsExcelController extends BaseController {
     public String updateCell(ModelMap mm, @ModelAttribute(value = "cellNewExcelBO") CellNewExcelBO cellNewExcelBO,
             @RequestParam(value = "type", required = false) String type,
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
-
+        boolean resultCheckFile = false;
         try {
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-            File convFile = new File(cellNewExcelBO.getFile().getOriginalFilename());
+            File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
-            if (!convFile.getName().toLowerCase().endsWith(".xlsx")) {
-                attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "Hệ thống chỉ hỗ trợ file excel xlsx"));
-                return "redirect:/cellsExcel/update/init";
-            }
-
             // Quyen update ben NET 
             StringBuilder permisMenu = (StringBuilder) request.getSession().getAttribute(Constants.FUNCTION_KEY);
             if (permisMenu.toString().toUpperCase().contains("UPDATE_CELL_NET_EXCEL")) {
@@ -509,7 +507,7 @@ public class CellsExcelController extends BaseController {
                 LOGGER.info("user: {}, ip: {}, end updateCellNetRFExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
                 LOGGER.info("user: {}, ip: {}, call write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
                 LOGGER.debug("user: {}, ip: {}, Start Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                writeResult(convFile, result, "result_update_cell_net_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
+                writeResult(convFile, result, "result_update_cell_net_", response);
                 result.clear();
                 LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                 LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
@@ -524,17 +522,24 @@ public class CellsExcelController extends BaseController {
                     CellsFacade cellsFacade = new CellsFacade();
                     List<String> result = new ArrayList<>();
                     String temp;
+                    Integer[] checkRows = {1, 2};
+                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G.xlsx"), checkRows);
                     LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).getCode() == null || items.get(i).getCode().isEmpty()) {
-                            continue;
+                    for (Cell2GUpdateExcelModel item : items) {
+                        if (resultCheckFile) {
+                            item = (Cell2GUpdateExcelModel) StringUtils.trimObject(item);
+                            temp = cellsFacade.updateCell2gExcel(item, user.getId());
+                            if (temp == null || temp.isEmpty()) {
+                                temp = "OK";
+                            }
+                        } else {
+                            temp = resourceBundle.getString("cell.new.import.validate.file");
                         }
-                        temp = cellsFacade.updateCell2gExcel(items.get(i), user.getId());
-                        result.add(Convert.errorUpdateCell2G(temp));
+                        result.add(temp);
                     }
                     LOGGER.info("user: {}, ip: {}, end updateCell2gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
                     LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_2g_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
+                    writeResult(convFile, result, "result_update_cell_2g_", response);
                     result.clear();
                     LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                 }
@@ -548,17 +553,24 @@ public class CellsExcelController extends BaseController {
                     CellsFacade cellsFacade = new CellsFacade();
                     List<String> result = new ArrayList<>();
                     String temp;
+                    Integer[] checkRows = {1, 2};
+                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_3G.xlsx"), checkRows);
                     LOGGER.info("user: {}, ip: {}, call updateCell3gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).getCode() == null || items.get(i).getCode().isEmpty()) {
-                            continue;
+                    for (Cell3GUpdateExcelModel item : items) {
+                        if (resultCheckFile) {
+                            item = (Cell3GUpdateExcelModel) StringUtils.trimObject(item);
+                            temp = cellsFacade.updateCell3gExcel(item, user.getId());
+                            if (temp == null || temp.isEmpty()) {
+                                temp = "OK";
+                            }
+                        } else {
+                            temp = resourceBundle.getString("cell.new.import.validate.file");
                         }
-                        temp = cellsFacade.updateCell3gExcel(items.get(i), user.getId());
-                        result.add(Convert.errorUpdateCell2G(temp));
+                        result.add(temp);
                     }
                     LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
                     LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_3g_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
+                    writeResult(convFile, result, "result_update_cell_3g_", response);
                     result.clear();
                     LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                 } else if (cellNewExcelBO.getType().equals("7")) {
@@ -571,18 +583,24 @@ public class CellsExcelController extends BaseController {
                     CellsFacade cellsFacade = new CellsFacade();
                     List<String> result = new ArrayList<>();
                     String temp;
+                    Integer[] checkRows = {1, 2};
+                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G.xlsx"), checkRows);
                     LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).getCode() == null || items.get(i).getCode().isEmpty()) {
-                            continue;
+                    for (Cell4GUpdateExcelModel item : items) {
+                        if (resultCheckFile) {
+                            item = (Cell4GUpdateExcelModel) StringUtils.trimObject(item);
+                            temp = cellsFacade.updateCell4gExcel(item, user.getId());
+                            if (temp == null || temp.isEmpty()) {
+                                temp = "OK";
+                            }
+                        } else {
+                            temp = resourceBundle.getString("cell.new.import.validate.file");
                         }
-                        Cell4GUpdateExcelModel cell4g = (Cell4GUpdateExcelModel) StringUtils.trimObject(items.get(i));
-                        temp = cellsFacade.updateCell4gExcel(cell4g, user.getId());
-                        result.add(Convert.errorUpdateCell2G(temp));
+                        result.add(temp);
                     }
                     LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
                     LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_4g_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
+                    writeResult(convFile, result, "result_update_cell_4g_", response);
                     LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                     result.clear();
                 }
@@ -695,9 +713,15 @@ public class CellsExcelController extends BaseController {
     public File writeResult(File inputFile, List<String> temp, String name, HttpServletResponse response) {
         try {
             LOGGER.info("Write Result File Excel Update! Name file : {}", inputFile.getName());
-            XSSFWorkbook workbook;
+            Workbook workbook = null;
             try (FileInputStream fin = new FileInputStream(inputFile)) {
-                workbook = new XSSFWorkbook(fin);
+                if (inputFile.getName().endsWith(".xlsx")) {
+                    name = name + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+                    workbook = new XSSFWorkbook(fin);
+                } else if (inputFile.getName().endsWith(".xls")) {
+                    name = name + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xls";
+                    workbook = new HSSFWorkbook(fin);
+                }
                 Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
                 Cell cell;
                 Row row;
@@ -710,7 +734,7 @@ public class CellsExcelController extends BaseController {
                     cell.setCellValue(temp.get(i));
                 }
             }
-            File file = new File(name);
+            File file = new File(StringUtils.getFolderTemp() + File.separator + name);
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 workbook.write(fos);
             }
