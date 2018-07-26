@@ -11,6 +11,8 @@ import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
+import static com.vnpt.media.rims.common.utils.Convert.resourceBundle;
+import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.managerAdmin.BaseController;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
@@ -24,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +40,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -95,37 +100,32 @@ public class ExcelTramQHController extends BaseController {
         try {
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
             logger.info("user: {}, ip: {},mem: {}, them tram quy hoach", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-            File convFile = new File(groupContactForm.getFile().getOriginalFilename());
+            File convFile = new File(StringUtils.getFolderTemp() + File.separator + groupContactForm.getFile().getOriginalFilename());
             groupContactForm.getFile().transferTo(convFile);
             StationPlansFacade face = new StationPlansFacade();
             logger.info("user: {}, ip: {},mem: {}, them tram quy hoach, read file: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), convFile.getName());
             List<RegTramQuyHoachExcel> items = ExOM.mapFromExcel(convFile)
                     .to(RegTramQuyHoachExcel.class)
-                    .map(3);
-
-            List<RegTramQuyHoachExcel> temp = new ArrayList<RegTramQuyHoachExcel>();
+                    .mapSheet(0, 3);
+            boolean resultCheckFile = false;
+            Integer[] checkRows = {1, 2, 3};
+            resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "MaudangkymamQH.xlsx"), checkRows);
             logger.info("user: {}, ip: {},mem: {}, them tram quy hoach, check database items: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), items.size());
             for (RegTramQuyHoachExcel item : items) {
-                if (item.getTenTramQH() == null || item.getTenTramQH().trim().equals("")) {
-                    continue;
+                if (resultCheckFile) {
+                    String output = face.addtramQHExcel(item, String.valueOf(user.getId()));
+                    item.setNote(StringUtils.errorRegTramQuyHoach(output));
+                } else {
+                    item.setNote(resourceBundle.getString("cell.new.import.validate.file"));
                 }
-                String output = face.addtramQHExcel(item, String.valueOf(user.getId()));
-//                
-//                
-//                
-                item.setNote(StringUtils.errorRegTramQuyHoach(output));
-                temp.add(item);
             }
 
             String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
-            String fileName = "result_reg_tram_quy_hoach.xls";
-            File fileTemplate = new File(dataDirectory + File.separator + fileName);
             logger.info("user: {}, ip: {},mem: {}, them tram quy hoach, write items: {} to excel ", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), items.size());
-            File fileResult = writeAddTramQuyHoach(fileTemplate, temp);
+            File fileResult = writeAddTramQuyHoach(new File(dataDirectory + File.separator + "result_reg_tram_quy_hoach.xls"), items);
             if (fileResult.exists()) {
                 response.setContentType("application/excel");
-                fileName = "result_reg_tram_quy_hoach.xls";
-                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileResult.getName());
                 try {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
                     response.getOutputStream().flush();
@@ -149,8 +149,15 @@ public class ExcelTramQHController extends BaseController {
         try {
 
             FileInputStream fin = new FileInputStream(fileTemplate);
-            HSSFWorkbook workbook = null;
-            workbook = new HSSFWorkbook(fin);
+            String fileResult = "reg_tram_quy_hoach";
+            Workbook workbook = null;
+            if (fileTemplate.getName().endsWith(".xls")) {
+                workbook = new HSSFWorkbook(fin);
+                fileResult += DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xls";
+            } else if (fileTemplate.getName().endsWith(".xlsx")) {
+                workbook = new XSSFWorkbook(fin);
+                fileResult += DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            }
             Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
             Iterator<RegTramQuyHoachExcel> iterator = (Iterator<RegTramQuyHoachExcel>) temp.iterator();
             Cell cell = null;
@@ -196,7 +203,7 @@ public class ExcelTramQHController extends BaseController {
                 cell.setCellValue(item.getNgaypheduyetTTC());
             }
             fin.close();
-            File file = new File("reg_tram_quy_hoach.xlsx");
+            File file = new File(StringUtils.getFolderTemp() + File.separator + fileResult);
             FileOutputStream fos = new FileOutputStream(file);
             workbook.write(fos);
             fos.close();

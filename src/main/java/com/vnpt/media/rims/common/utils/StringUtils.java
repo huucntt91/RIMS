@@ -2197,50 +2197,54 @@ public class StringUtils {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("locale/messages", new Locale("en"));
         String output = "";
         if (str == null || str == "-1") {
-            return "Lỗi";
+            return "Lỗi hệ thống";
         }
         if (str.equals("0")) {
             return "OK";
         } else {
             str = str.substring(0, str.length() - 1);
             for (String item : str.split(",")) {
-                switch (item) {
-                    case "2":
-                        output += "Mã tỉnh không tồn tại | ";
-                        break;
-                    case "1":
-                        output += "Loại công nghệ không tồn tại | ";
-                        break;
-                    case "3":
-                        output += "Băng tần không tồn tại | ";
-                        break;
-                    case "4":
-                        output += "Chương trình PT CSHT không tồn tại | ";
-                        break;
-                    case "5":
-                        output += "Trạng thái csht không tồn tại | ";
-                        break;
-                    case "6":
-                        output += "Đơn vị phê duyệt không tồn tại | ";
-                        break;
-                    case "7":
-                        output += "Ngày phê duyệt không đúng định dạng dd/mm/yyyy | ";
-                        break;
-                    case "8":
-                        output += "Năm khởi tạo không đúng định dạng dd/mm/yyyy | ";
-                        break;
-                    case "9":
-                        output += "Latitude không đúng kiểu số | ";
-                        break;
-                    case "10":
-                        output += "Longitude không đúng kiểu số | ";
-                        break;
-                    case "11":
-                        output += "Tên quy hoạch đã tồn tại | ";
-                        break;
-                    case "QH0014":
-                        output += resourceBundle.getString("buildling.validate.long.lat") + " | ";
-                        break;
+                if (isNumeric(item)) {
+                    switch (item) {
+                        case "2":
+                            output += "Mã tỉnh không tồn tại | ";
+                            break;
+                        case "1":
+                            output += "Loại công nghệ không tồn tại | ";
+                            break;
+                        case "3":
+                            output += "Băng tần không tồn tại | ";
+                            break;
+                        case "4":
+                            output += "Chương trình PT CSHT không tồn tại | ";
+                            break;
+                        case "5":
+                            output += "Trạng thái csht không tồn tại | ";
+                            break;
+                        case "6":
+                            output += "Đơn vị phê duyệt không tồn tại | ";
+                            break;
+                        case "7":
+                            output += "Ngày phê duyệt không đúng định dạng dd/mm/yyyy | ";
+                            break;
+                        case "8":
+                            output += "Năm khởi tạo không đúng định dạng dd/mm/yyyy | ";
+                            break;
+                        case "9":
+                            output += "Latitude không đúng kiểu số | ";
+                            break;
+                        case "10":
+                            output += "Longitude không đúng kiểu số | ";
+                            break;
+                        case "11":
+                            output += "Tên quy hoạch đã tồn tại | ";
+                            break;
+                        case "QH0014":
+                            output += resourceBundle.getString("buildling.validate.long.lat") + " | ";
+                            break;
+                    }
+                } else {
+                    output += item + ", ";
                 }
             }
         }

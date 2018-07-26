@@ -14,6 +14,7 @@ import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
+import static com.vnpt.media.rims.common.utils.Convert.resourceBundle;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.managerAdmin.BaseController;
@@ -190,20 +191,26 @@ public class ExcelUpdateTramQHController extends BaseController {
             String folderTemp = StringUtils.getFolderTemp();
             File convFile = new File(folderTemp + File.separator + importFile.getFile().getOriginalFilename());
             importFile.getFile().transferTo(convFile);
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
             logger.info("user: {}, ip: {}, mem: {},  start reading file excel", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
             items = ExOM.mapFromExcel(convFile)
                     .to(TramQuyHoachUpdateCshtNguonDc.class)
                     .mapSheet(0, 3);
             logger.info("user: {}, ip: {}, mem: {},  start checking database, size: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), items.size());
+            boolean resultCheckFile = false;
+            Integer[] checkRows = {1, 2, 3};
+            resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "update_qh_tinh.xlsx"), checkRows);
             for (TramQuyHoachUpdateCshtNguonDc item : items) {
-                if (item.getMaTramQH() != null && !item.getMaTramQH().isEmpty()) {
+                if (resultCheckFile) {
                     item = (TramQuyHoachUpdateCshtNguonDc) StringUtils.trimObject(item);
                     String result = TramQHFacade.excelUpdateCshtNguonDc(item, String.valueOf(user.getId()), String.valueOf(user.getDonViId()), tinhTpIds);
                     item.setResult(StringUtils.errorMessUpdateTramQH(result));
+                } else {
+                    item.setResult(resourceBundle.getString("cell.new.import.validate.file"));
                 }
             }
             logger.info("user: {}, ip: {},mem: {},  start writting file excel, size: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), items.size());
-            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+
             File fileTemplate = new File(dataDirectory + File.separator + "update_qh_tinh_result.xlsx");
             File fileResult = writeUpdateCshtNguonDc(fileTemplate, folderTemp, items);
             if (fileResult.exists()) {
@@ -248,9 +255,6 @@ public class ExcelUpdateTramQHController extends BaseController {
             //header
             while (iterator.hasNext()) {
                 TramQuyHoachUpdateCshtNguonDc item = iterator.next();
-                if (item.getMaTramQH() == null || item.getMaTramQH().isEmpty()) {
-                    continue;
-                }
                 row = sheet.createRow(rowIndex++);
                 CellStyle style = sheet.getWorkbook().createCellStyle();
                 row.setRowStyle(style);
