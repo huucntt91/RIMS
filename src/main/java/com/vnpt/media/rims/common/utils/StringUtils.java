@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -2204,7 +2205,7 @@ public class StringUtils {
         } else {
             str = str.substring(0, str.length() - 1);
             for (String item : str.split(",")) {
-                if (isNumeric(item)) {
+                if (isNumeric(item.trim())) {
                     switch (item) {
                         case "2":
                             output += "Mã tỉnh không tồn tại | ";
@@ -2328,194 +2329,198 @@ public class StringUtils {
         } else {
             str = str.substring(0, str.length() - 1);
             for (String item : str.split(",")) {
-                switch (item.trim()) {
+                if (StringUtils.isNumeric(item.trim())) {
+                    switch (item.trim()) {
 
-                    case "-1":
-                        output += "Lỗi cập nhật | ";
-                        break;
-                    case "0":
-                        output += "Không có quyền cập nhật | ";
-                        break;
-                    case "1":
-                        output += "Mã trạm quy hoạch không tồn tại | ";
-                        break;
-                    case "2":
-                        output += "Mã quy hoạch tỉnh không tồn tại | ";
-                        break;
-                    case "3":
-                        output += "Tên trạm quy hoạch không được rỗng | ";
-                        break;
-                    case "4":
-                        output += "Loại công nghệ không tồn tại | ";
-                        break;
-                    case "5":
-                        output += "Băng tần không tồn tại | ";
-                        break;
-                    case "6":
-                        output += "Chương trình PT CSHT không tồn tại | ";
-                        break;
-                    case "7":
-                        output += "Trạng thái csht không tồn tại | ";
-                        break;
-                    case "8":
-                        output += "Đơn vị phê duyệt không tồn tại | ";
-                        break;
-                    case "9":
-                        output += "Số hiểu văn bản không được rỗng | ";
-                        break;
-                    case "10":
-                        output += "Ngày phê duyệt không được rỗng | ";
-                        break;
-                    case "13":
-                        output += "Năm khởi tạo không được rỗng | ";
-                        break;
-                    case "14":
-                        output += "Đơn vị điều chỉnh không tồn tại | ";
-                        break;
-                    case "15":
-                        output += "Đơn vị chịu trách nhiệm không tồn tại | ";
-                        break;
-                    case "16":
-                        output += "Nguồn thiết bị không tồn tại | ";
-                        break;
-                    case "17":
-                        output += "Thời điểm đáp ứng dự kiễn không được rỗng | ";
-                        break;
-                    case "18":
-                        output += "Công nghệ đáp ứng không tồn tại | ";
-                        break;
-                    case "19":
-                        output += "Chủng loại thiết bị không được rỗng | ";
-                        break;
-                    case "20":
-                        output += "Đơn vị trách nhiệm cơ sở hạ tầng không tồn tại | ";
-                        break;
-                    case "21":
-                        output += "Cách xây cơ sở hạ tầng không tồn tại | ";
-                        break;
-                    case "22":
-                        output += "Loại đất không tồn tại | ";
-                        break;
-                    case "23":
-                        output += "Loại cột anten không tồn tại | ";
-                        break;
-                    case "24":
-                        output += "Phương thức truyền dẫn không tồn tại | ";
-                        break;
-                    case "25":
-                        output += "Giao diện truyền dẫn GE không tồn tại | ";
-                        break;
-                    case "26":
-                        output += "Giao diện truyền dẫn FE không tồn tại | ";
-                        break;
-                    case "27":
-                        output += "Đơn vị trách nhiệm nguồn dc không tồn tại | ";
-                        break;
-                    case "28":
-                        output += "Tủ nguồn không tồn tại | ";
-                        break;
-                    case "29":
-                        output += "Loại tủ nguồn không tồn tại | ";
-                        break;
-                    case "30":
-                        output += "Băng tần anten1 không tồn tại | ";
-                        break;
-                    case "31":
-                        output += "Cấu hình port1 không tồn tại | ";
-                        break;
-                    case "32":
-                        output += "Băng tần anten2 không tồn tại | ";
-                        break;
-                    case "33":
-                        output += "Cấu hình port2 không tồn tại | ";
-                        break;
-                    case "34":
-                        output += "Băng tần anten3 không tồn tại | ";
-                        break;
-                    case "35":
-                        output += "Cấu hình port3 không tồn tại | ";
-                        break;
-                    case "36":
-                        output += "Đơn vị chịu trách nhiệm anten không tồn tại | ";
-                        break;
-                    case "37":
-                        output += "Loại anten1 không tồn tại | ";
-                        break;
-                    case "38":
-                        output += "Loại anten2 không tồn tại | ";
-                        break;
-                    case "39":
-                        output += "Loại antent3 không tồn tại | ";
-                        break;
-                    case "40":
-                        output += "Lỗi cập nhật nhóm thông tin chung | ";
-                        break;
-                    case "41":
-                        output += "Lỗi cập nhật nhóm cam kết thiết bị | ";
-                        break;
-                    case "42":
-                        output += "Lỗi cập nhật nhóm cơ sở hạ tầng | ";
-                        break;
-                    case "43":
-                        output += "Lỗi cập nhật nhóm nguồn anten | ";
-                        break;
-                    case "44":
-                        output += "Lỗi cập nhật nhóm nguồn anten | ";
-                        break;
-                    case "45":
-                        output += "Quận/huyện không tồn tại hoặc không thuộc Tỉnh/TP| ";
-                        break;
-                    case "46":
-                        output += "Phường/xã không tồn tại hoặc không thuộc Quận/Huyện| ";
-                        break;
-                    case "47":
-                        output += "Loại nhà trạm không tồn tại | ";
-                        break;
-                    case "48":
-                        output += "Tỉnh/TP không tồn tại | ";
-                        break;
-                    case "QH001":
-                        output += resourceBundle.getString("qh.error.qh001") + " | ";
-                        break;
-                    case "QH002":
-                        output += resourceBundle.getString("qh.error.qh002") + " | ";
-                        break;
-                    case "QH003":
-                        output += resourceBundle.getString("qh.error.qh003") + " | ";
-                        break;
-                    case "QH004":
-                        output += resourceBundle.getString("qh.error.qh004") + " | ";
-                        break;
-                    case "QH005":
-                        output += resourceBundle.getString("qh.error.qh005") + " | ";
-                        break;
-                    case "QH006":
-                        output += resourceBundle.getString("qh.error.qh006") + " | ";
-                        break;
-                    case "QH007":
-                        output += resourceBundle.getString("qh.error.qh007") + " | ";
-                        break;
-                    case "QH008":
-                        output += resourceBundle.getString("qh.error.qh008") + " | ";
-                        break;
-                    case "QH009":
-                        output += resourceBundle.getString("qh.error.qh009") + " | ";
-                        break;
-                    case "QH0010":
-                        output += resourceBundle.getString("qh.error.qh0010") + " | ";
-                        break;
-                    case "QH0011":
-                        output += resourceBundle.getString("qh.error.qh0011") + " | ";
-                        break;
-                    case "QH0012":
-                        output += resourceBundle.getString("qh.error.qh0012") + " | ";
-                        break;
-                    case "QH0013":
-                        output += resourceBundle.getString("qh.error.qh0013") + " | ";
-                        break;
-                    case "QH0014":
-                        output += resourceBundle.getString("buildling.validate.long.lat") + " | ";
-                        break;
+                        case "-1":
+                            output += "Lỗi cập nhật | ";
+                            break;
+                        case "0":
+                            output += "Không có quyền cập nhật | ";
+                            break;
+                        case "1":
+                            output += "Mã trạm quy hoạch không tồn tại | ";
+                            break;
+                        case "2":
+                            output += "Mã quy hoạch tỉnh không tồn tại | ";
+                            break;
+                        case "3":
+                            output += "Tên trạm quy hoạch không được rỗng | ";
+                            break;
+                        case "4":
+                            output += "Loại công nghệ không tồn tại | ";
+                            break;
+                        case "5":
+                            output += "Băng tần không tồn tại | ";
+                            break;
+                        case "6":
+                            output += "Chương trình PT CSHT không tồn tại | ";
+                            break;
+                        case "7":
+                            output += "Trạng thái csht không tồn tại | ";
+                            break;
+                        case "8":
+                            output += "Đơn vị phê duyệt không tồn tại | ";
+                            break;
+                        case "9":
+                            output += "Số hiểu văn bản không được rỗng | ";
+                            break;
+                        case "10":
+                            output += "Ngày phê duyệt không được rỗng | ";
+                            break;
+                        case "13":
+                            output += "Năm khởi tạo không được rỗng | ";
+                            break;
+                        case "14":
+                            output += "Đơn vị điều chỉnh không tồn tại | ";
+                            break;
+                        case "15":
+                            output += "Đơn vị chịu trách nhiệm không tồn tại | ";
+                            break;
+                        case "16":
+                            output += "Nguồn thiết bị không tồn tại | ";
+                            break;
+                        case "17":
+                            output += "Thời điểm đáp ứng dự kiễn không được rỗng | ";
+                            break;
+                        case "18":
+                            output += "Công nghệ đáp ứng không tồn tại | ";
+                            break;
+                        case "19":
+                            output += "Chủng loại thiết bị không được rỗng | ";
+                            break;
+                        case "20":
+                            output += "Đơn vị trách nhiệm cơ sở hạ tầng không tồn tại | ";
+                            break;
+                        case "21":
+                            output += "Cách xây cơ sở hạ tầng không tồn tại | ";
+                            break;
+                        case "22":
+                            output += "Loại đất không tồn tại | ";
+                            break;
+                        case "23":
+                            output += "Loại cột anten không tồn tại | ";
+                            break;
+                        case "24":
+                            output += "Phương thức truyền dẫn không tồn tại | ";
+                            break;
+                        case "25":
+                            output += "Giao diện truyền dẫn GE không tồn tại | ";
+                            break;
+                        case "26":
+                            output += "Giao diện truyền dẫn FE không tồn tại | ";
+                            break;
+                        case "27":
+                            output += "Đơn vị trách nhiệm nguồn dc không tồn tại | ";
+                            break;
+                        case "28":
+                            output += "Tủ nguồn không tồn tại | ";
+                            break;
+                        case "29":
+                            output += "Loại tủ nguồn không tồn tại | ";
+                            break;
+                        case "30":
+                            output += "Băng tần anten1 không tồn tại | ";
+                            break;
+                        case "31":
+                            output += "Cấu hình port1 không tồn tại | ";
+                            break;
+                        case "32":
+                            output += "Băng tần anten2 không tồn tại | ";
+                            break;
+                        case "33":
+                            output += "Cấu hình port2 không tồn tại | ";
+                            break;
+                        case "34":
+                            output += "Băng tần anten3 không tồn tại | ";
+                            break;
+                        case "35":
+                            output += "Cấu hình port3 không tồn tại | ";
+                            break;
+                        case "36":
+                            output += "Đơn vị chịu trách nhiệm anten không tồn tại | ";
+                            break;
+                        case "37":
+                            output += "Loại anten1 không tồn tại | ";
+                            break;
+                        case "38":
+                            output += "Loại anten2 không tồn tại | ";
+                            break;
+                        case "39":
+                            output += "Loại antent3 không tồn tại | ";
+                            break;
+                        case "40":
+                            output += "Lỗi cập nhật nhóm thông tin chung | ";
+                            break;
+                        case "41":
+                            output += "Lỗi cập nhật nhóm cam kết thiết bị | ";
+                            break;
+                        case "42":
+                            output += "Lỗi cập nhật nhóm cơ sở hạ tầng | ";
+                            break;
+                        case "43":
+                            output += "Lỗi cập nhật nhóm nguồn anten | ";
+                            break;
+                        case "44":
+                            output += "Lỗi cập nhật nhóm nguồn anten | ";
+                            break;
+                        case "45":
+                            output += "Quận/huyện không tồn tại hoặc không thuộc Tỉnh/TP| ";
+                            break;
+                        case "46":
+                            output += "Phường/xã không tồn tại hoặc không thuộc Quận/Huyện| ";
+                            break;
+                        case "47":
+                            output += "Loại nhà trạm không tồn tại | ";
+                            break;
+                        case "48":
+                            output += "Tỉnh/TP không tồn tại | ";
+                            break;
+                        case "QH001":
+                            output += resourceBundle.getString("qh.error.qh001") + " | ";
+                            break;
+                        case "QH002":
+                            output += resourceBundle.getString("qh.error.qh002") + " | ";
+                            break;
+                        case "QH003":
+                            output += resourceBundle.getString("qh.error.qh003") + " | ";
+                            break;
+                        case "QH004":
+                            output += resourceBundle.getString("qh.error.qh004") + " | ";
+                            break;
+                        case "QH005":
+                            output += resourceBundle.getString("qh.error.qh005") + " | ";
+                            break;
+                        case "QH006":
+                            output += resourceBundle.getString("qh.error.qh006") + " | ";
+                            break;
+                        case "QH007":
+                            output += resourceBundle.getString("qh.error.qh007") + " | ";
+                            break;
+                        case "QH008":
+                            output += resourceBundle.getString("qh.error.qh008") + " | ";
+                            break;
+                        case "QH009":
+                            output += resourceBundle.getString("qh.error.qh009") + " | ";
+                            break;
+                        case "QH0010":
+                            output += resourceBundle.getString("qh.error.qh0010") + " | ";
+                            break;
+                        case "QH0011":
+                            output += resourceBundle.getString("qh.error.qh0011") + " | ";
+                            break;
+                        case "QH0012":
+                            output += resourceBundle.getString("qh.error.qh0012") + " | ";
+                            break;
+                        case "QH0013":
+                            output += resourceBundle.getString("qh.error.qh0013") + " | ";
+                            break;
+                        case "QH0014":
+                            output += resourceBundle.getString("buildling.validate.long.lat") + " | ";
+                            break;
+                    }
+                } else {
+                    output += item + ", ";
                 }
             }
         }
@@ -2625,25 +2630,30 @@ public class StringUtils {
 
             Sheet sheetTemplate = workbookTemplate.getSheetAt(0);
             boolean flag = false;
-            if (checkRows != null) {
+            if (checkRows != null && sheetImport != null && sheetTemplate != null) {
                 for (Integer r : checkRows) {
-                    Iterator rowImport = sheetImport.getRow(r - 1).cellIterator();
-                    Iterator rowTemplate = sheetTemplate.getRow(r - 1).cellIterator();
                     int i = 0;
-                    while (rowImport.hasNext()) {
-
-                        Cell cell = (Cell) rowImport.next();
-                        cell.setCellType(Cell.CELL_TYPE_STRING);
-                        if (cell.getStringCellValue() != null && !cell.getStringCellValue().isEmpty()) {
-                            i++;
+                    int j = 0;
+                    Row rowImport = sheetImport.getRow(r - 1);
+                    if (rowImport != null) {
+                        Iterator importIterator = rowImport.cellIterator();
+                        while (importIterator.hasNext()) {
+                            Cell cell = (Cell) importIterator.next();
+                            cell.setCellType(Cell.CELL_TYPE_STRING);
+                            if (cell.getStringCellValue() != null && !cell.getStringCellValue().isEmpty()) {
+                                i++;
+                            }
                         }
                     }
-                    int j = 0;
-                    while (rowTemplate.hasNext()) {
-                        Cell cell = (Cell) rowTemplate.next();
-                        cell.setCellType(Cell.CELL_TYPE_STRING);
-                        if (cell.getStringCellValue() != null && !cell.getStringCellValue().isEmpty()) {
-                            j++;
+                    Row rowTemplate = sheetTemplate.getRow(r - 1);
+                    if (rowTemplate != null) {
+                        Iterator templateIterator = rowTemplate.cellIterator();
+                        while (templateIterator.hasNext()) {
+                            Cell cell = (Cell) templateIterator.next();
+                            cell.setCellType(Cell.CELL_TYPE_STRING);
+                            if (cell.getStringCellValue() != null && !cell.getStringCellValue().isEmpty()) {
+                                j++;
+                            }
                         }
                     }
                     if (j == i) {

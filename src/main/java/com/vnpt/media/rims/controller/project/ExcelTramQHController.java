@@ -135,7 +135,6 @@ public class ExcelTramQHController extends BaseController {
                 }
             }
             attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, "Cập nhật thành công. Bạn check kết quả file download đi kèm"));
-
             logger.info("user: {}, ip: {},mem: {}, them tram quy hoach ket thuc", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
