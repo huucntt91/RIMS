@@ -197,7 +197,7 @@ public class ExcelUpdateTramQHController extends BaseController {
                     .to(TramQuyHoachUpdateCshtNguonDc.class)
                     .mapSheet(0, 3);
             logger.info("user: {}, ip: {}, mem: {},  start checking database, size: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), items.size());
-            boolean resultCheckFile = false;
+            boolean resultCheckFile;
             Integer[] checkRows = {1, 2, 3};
             resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "update_qh_tinh.xlsx"), checkRows);
             for (TramQuyHoachUpdateCshtNguonDc item : items) {
@@ -439,16 +439,22 @@ public class ExcelUpdateTramQHController extends BaseController {
             items = ExOM.mapFromExcel(convFile)
                     .to(TramQuyHoachUpdatePtm.class)
                     .mapSheet(0, 3);
+            boolean resultCheckFile;
+            Integer[] checkRows = {1, 2, 3};
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+            resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "update_qh_ptm.xlsx"), checkRows);
             logger.info("user: {}, ip:{}, start check database: {}", user.getUsername(), request.getRemoteAddr(), items.size());
             for (TramQuyHoachUpdatePtm item : items) {
-                if (item.getMaTramQH() != null && !item.getMaTramQH().isEmpty()) {
+                if (resultCheckFile) {
                     item = (TramQuyHoachUpdatePtm) StringUtils.trimObject(item);
                     String result = TramQHFacade.updateQhPtm(item, String.valueOf(user.getId()), tinhTpIds);
                     item.setResult(StringUtils.errorMessUpdateTramQH(result));
+                } else {
+                    item.setResult(resourceBundle.getString("cell.new.import.validate.file"));
                 }
             }
             logger.info("user: {}, ip:{}, start write excel: {}", user.getUsername(), request.getRemoteAddr(), items.size());
-            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+
             File fileTemplate = new File(dataDirectory + File.separator + "update_qh_ptm_result.xlsx");
             File fileResult = writeUpdateQhPtm(fileTemplate, folderTemp, items);
             if (fileResult.exists()) {
@@ -507,9 +513,17 @@ public class ExcelUpdateTramQHController extends BaseController {
                 cell = row.createCell(5);
                 cell.setCellValue(item.getNamKhoiTao());
                 cell = row.createCell(6);
-                cell.setCellValue(Double.parseDouble(item.getLongitude()));
+                if (StringUtils.isNumeric(item.getLongitude())) {
+                    cell.setCellValue(Double.parseDouble(item.getLongitude()));
+                } else {
+                    cell.setCellValue(item.getLongitude());
+                }
                 cell = row.createCell(7);
-                cell.setCellValue(Double.parseDouble(item.getLatitude()));
+                if (StringUtils.isNumeric(item.getLatitude())) {
+                    cell.setCellValue(Double.parseDouble(item.getLatitude()));
+                } else {
+                    cell.setCellValue(item.getLatitude());
+                }
                 cell = row.createCell(8);
                 cell.setCellValue(item.getLoaiCongNghe());
                 cell = row.createCell(9);
@@ -577,15 +591,19 @@ public class ExcelUpdateTramQHController extends BaseController {
             items = ExOM.mapFromExcel(convFile)
                     .to(TramQuyHoachUpdateQlda.class)
                     .mapSheet(0, 3);
+            boolean resultCheckFile;
+            Integer[] checkRows = {1, 2, 3};
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+            resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "update_qh_qlda.xlsx"), checkRows);
             for (TramQuyHoachUpdateQlda item : items) {
-                if (item.getMaTramQH() != null && !item.getMaTramQH().isEmpty()) {
+                if (resultCheckFile) {
                     item = (TramQuyHoachUpdateQlda) StringUtils.trimObject(item);
                     String result = TramQHFacade.updateQhQlda(item, String.valueOf(user.getId()), tinhTpIds);
                     item.setResult(StringUtils.errorMessUpdateTramQH(result));
+                } else {
+                    item.setResult(resourceBundle.getString("cell.new.import.validate.file"));
                 }
             }
-
-            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
 
             File fileTemplate = new File(dataDirectory + File.separator + "update_qh_qlda_result.xlsx");
             File fileResult = writeUpdateQhQlda(fileTemplate, folderTemp, items);
@@ -695,16 +713,21 @@ public class ExcelUpdateTramQHController extends BaseController {
             items = ExOM.mapFromExcel(convFile)
                     .to(TramQuyHoachUpdateNetx.class)
                     .mapSheet(0, 3);
+            boolean resultCheckFile;
+            Integer[] checkRows = {1, 2, 3};
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+            resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "update_qh_netx.xlsx"), checkRows);
             logger.info("user: {}, ip:{}, start checking database, size {}", user.getUsername(), request.getRemoteAddr(), items.size());
             for (TramQuyHoachUpdateNetx item : items) {
-                if (item.getMaTramQH() != null && !item.getMaTramQH().isEmpty()) {
+                if (resultCheckFile) {
                     item = (TramQuyHoachUpdateNetx) StringUtils.trimObject(item);
                     String result = TramQHFacade.updateQhNetx(item, String.valueOf(user.getId()), permisson);
                     item.setResult(StringUtils.errorMessUpdateTramQH(result));
+                } else {
+                    item.setResult(resourceBundle.getString("cell.new.import.validate.file"));
                 }
             }
             logger.info("user: {}, ip:{}, start writting excel,zise {}", user.getUsername(), request.getRemoteAddr(), items.size());
-            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
             File fileTemplate = new File(dataDirectory + File.separator + "update_qh_netx_result.xlsx");
             File fileResult = writeUpdateQhNetx(fileTemplate, folderTemp, items);
             if (fileResult.exists()) {

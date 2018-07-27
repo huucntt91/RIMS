@@ -2596,7 +2596,11 @@ public class StringUtils {
     //kiem tra xem co phai so ko
     public static boolean isNumeric(String str) {
         try {
-            double d = Double.parseDouble(str);
+            if (str != null && !str.isEmpty()) {
+                double d = Double.parseDouble(str);
+            } else {
+                return false;
+            }
         } catch (NumberFormatException nfe) {
             return false;
         }

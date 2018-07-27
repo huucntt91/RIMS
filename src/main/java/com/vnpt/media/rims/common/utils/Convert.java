@@ -378,7 +378,7 @@ public class Convert {
                         output += "Không tồn tại thiêt bị!, ";
                         break;
                     case "6":
-                        output += "Không tồn tại loại trạm, ";
+                        output += "Không tồn tại loại cell, ";
                         break;
                     case "7":
                         output += "no_of_carrier không đúng kiểu số!, ";
@@ -471,7 +471,7 @@ public class Convert {
                         output += "Không tồn tại thiêt bị! ";
                         break;
                     case "6":
-                        output += "Không tồn tại loại trạm. ";
+                        output += "Không tồn tại loại cell. ";
                         break;
                     case "7":
                         output += "no_of_carrier không đúng kiểu số! ";
@@ -564,7 +564,7 @@ public class Convert {
                         output += "Không tồn tại thiêt bị! ";
                         break;
                     case "6":
-                        output += "Không tồn tại loại trạm. ";
+                        output += "Không tồn tại loại cell. ";
                         break;
                     case "7":
                         output += "no_of_carrier không đúng kiểu số! ";
