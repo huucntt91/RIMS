@@ -297,6 +297,9 @@ public class Convert {
                     case "10":
                         output += resourceBundle.getString("tram.systemname.exist");
                         break;
+                    case "11":
+                        output += "Ngày hoạt động không được lớn hơn ngày hiện tại";
+                        break;    
                     case "cell.new.import.0001":
                         output += resourceBundle.getString("cell.new.import.0001") + ", ";
                         break;
@@ -386,6 +389,9 @@ public class Convert {
                     case "8":
                         output += "Ngày hoạt động không đúng định dạng dd/MM/yyyy!, ";
                         break;
+                    case "81":
+                        output += "Ngày hoạt động không được lớn hơn ngày hiện tại ";
+                        break;    
                     case "9":
                         output += "TAC không đúng kiểu số!, ";
                         break;
@@ -479,6 +485,9 @@ public class Convert {
                     case "8":
                         output += "Ngày hoạt động không đúng định dạng dd/MM/yyyy! ";
                         break;
+                    case "81":
+                        output += "Ngày hoạt động không được lớn hơn ngày hiện tại ";
+                        break;    
                     case "9":
                         output += "Cặp LAC và CI đã tồn tại! ";
                         break;
@@ -572,6 +581,9 @@ public class Convert {
                     case "8":
                         output += "Ngày hoạt động không đúng định dạng dd/MM/yyyy! ";
                         break;
+                    case "81":
+                        output += "Ngày hoạt động không được lớn hơn ngày hiện tại ";
+                        break;    
                     case "9":
                         output += "Cặp LAC và CI đã tồn tại! ";
                         break;
