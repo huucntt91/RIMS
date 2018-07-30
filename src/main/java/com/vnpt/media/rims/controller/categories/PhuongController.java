@@ -28,16 +28,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.vnpt.media.rims.bean.TinhBO;
 import com.vnpt.media.rims.bean.PhuongXaBO;
+import com.vnpt.media.rims.bean.UserBO;
+import com.vnpt.media.rims.common.Constants;
+import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
 import com.vnpt.media.rims.common.utils.StringUtils;
+import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.facade.CategoriesFacade;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.util.FileCopyUtils;
 /**
  *
  * @author VNP
@@ -252,6 +270,130 @@ public class PhuongController {
         Map referenceData = new HashMap();
         CategoriesFacade facade = new CategoriesFacade();
         return facade.findAllTinh("");
+    }
+    
+    @RequestMapping(value = "/reportPhuongXa", method = RequestMethod.GET)
+    public void reportPhuongXa(HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(value = "tinhTpId", required = false) String tinhTpId,
+            @RequestParam(value = "quanHuyenId", required = false) String quanHuyenId) {
+        List<PhuongXaBO> datas =null;
+        try {
+            
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+            String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+            tinhTpId = tinhTpId == null ? String.join(",", tinhManager) : tinhTpId.replace("null", "");
+            quanHuyenId = quanHuyenId == null ? "" : quanHuyenId.replace("null", "");
+           
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+            try{
+                datas = CategoriesFacade.reportPhuongXa(tinhTpId, quanHuyenId);
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+            } 
+            File fileResult = writeTrafficTram(datas);
+
+
+            if (fileResult.exists()) {
+                response.setContentType("application/excel");
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileResult.getName());
+                try {
+                    FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
+                    response.getOutputStream().flush();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } catch (ServiceException e) {
+            logger.error(e.getMessage(), e);
+        }
+        finally{
+            if (datas != null) {
+            datas.clear();
+            }
+        }
+    }
+
+    private File writeTrafficTram(List<PhuongXaBO> datas) {
+        File result = null;
+        FileOutputStream fos = null;
+        SXSSFWorkbook workbook = null;
+        try {
+
+                result = new File("DanhMucPhuongXa.xlsx");
+
+
+//            FileInputStream fin = new FileInputStream(fileTemplate);
+            workbook  = new SXSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Sheet 1");
+            CellStyle style;
+            DataFormat format = workbook.createDataFormat();
+            style = workbook.createCellStyle();
+            style.setDataFormat(format.getFormat("0.00000"));
+            if (datas != null) {
+                int rowIndex = 1;
+                Cell cell = null;
+                Row row = null;
+                
+                Font font = sheet.getWorkbook().createFont();
+                font.setFontHeightInPoints((short) 10);
+                font.setFontName("Arial");
+                font.setColor(IndexedColors.BLACK.getIndex());
+                font.setBold(true);
+                font.setItalic(false);
+                CellStyle styleHeader = sheet.getWorkbook().createCellStyle();
+                styleHeader.setFont(font);
+                styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+                styleHeader.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+                styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            
+                row = sheet.createRow(0);
+                cell = row.createCell(0);
+                cell.setCellValue("Tên Tỉnh");
+                cell.setCellStyle(styleHeader);
+                
+                cell = row.createCell(1);
+                cell.setCellValue("Quận/Huyện");
+                cell.setCellStyle(styleHeader);
+                
+                cell = row.createCell(2);
+                cell.setCellValue("Phường xã");
+                cell.setCellStyle(styleHeader);
+
+            
+                for (PhuongXaBO it : datas) {
+                    row = sheet.createRow(rowIndex++);
+
+                    cell = row.createCell(0);
+                    cell.setCellValue(it.getTenTinh()== null ? "" : it.getTenTinh());
+
+                    cell = row.createCell(1);
+                    cell.setCellValue(it.getTenQuanHuyen()== null ? "" : it.getTenQuanHuyen());
+
+                    cell = row.createCell(2);
+                    cell.setCellValue(it.getTenPhuongXa()== null ? "" : it.getTenPhuongXa());
+                                                                      
+                }
+            }
+
+            fos = new FileOutputStream(result);
+            workbook.write(fos);
+
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+
+            try {
+                if (workbook != null) {
+                    workbook.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+        return result;
     }
     
 

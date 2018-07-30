@@ -1374,9 +1374,13 @@ public class BuildingController {
             File convFile = new File(cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
 
-            List<KiemDinhNetExcel> items = ExOM.mapFromExcel(convFile)
+//            List<KiemDinhNetExcel> items = ExOM.mapFromExcel(convFile)
+//                    .to(KiemDinhNetExcel.class)
+//                    .map(2);
+            List<KiemDinhNetExcel> items = ExOM.mapFromExcel(convFile) 
                     .to(KiemDinhNetExcel.class)
-                    .map(2);
+                    .mapSheet(0, 2);
+            
             CellsFacade cellsFacade = new CellsFacade();
             List<String> result = new ArrayList<>();
             String temp;

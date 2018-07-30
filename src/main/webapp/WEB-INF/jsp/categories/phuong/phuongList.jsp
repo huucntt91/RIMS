@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%@include file="../../include/header.jsp"%>
 <section class="content-header">
@@ -10,10 +10,12 @@
         Quản lý Phường/Xã
     </h1>
     <ol class="breadcrumb">
-
-        <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/phuong/preAdd'" >
-            <span><i class="fa fa-fw fa-plus"></i>Thêm Phường Xã</span> 
-        </button>
+        <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'ADD_PHUONGXA')}">
+           <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/phuong/preAdd'" >
+                <span><i class="fa fa-fw fa-plus"></i>Thêm Phường Xã</span> 
+            </button>
+        </c:if>
+        
 
     </ol>
 </section>
@@ -56,6 +58,9 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                        
+                        <button type="button" class="btn btn-primary"onclick="location.href = '<%=request.getContextPath()%>/phuong/reportPhuongXa?tinhTpId='+ $('#tinhTpId').val()+ '&quanHuyenId=' + $('#quanHuyenId').val()"> <spring:message code="admin.common.export.excel" /></button>
+                                                                                                                                                                            
                     </div>
                 </form:form>
             </div>

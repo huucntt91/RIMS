@@ -18,6 +18,7 @@ public class PhuongXaBO {
     private long quanHuyenId;
     private String tenPhuongXa;
     private String tenQuanHuyen;
+    private String tenTinh;
 
     /**
      * @return the phuongXaId
@@ -82,6 +83,15 @@ public class PhuongXaBO {
     public void setTenQuanHuyen(String tenQuanHuyen) {
         this.tenQuanHuyen = tenQuanHuyen;
     }
+
+    public String getTenTinh() {
+        return tenTinh;
+    }
+
+    public void setTenTinh(String tenTinh) {
+        this.tenTinh = tenTinh;
+    }
+    
 
     public String listParam() {
         try {

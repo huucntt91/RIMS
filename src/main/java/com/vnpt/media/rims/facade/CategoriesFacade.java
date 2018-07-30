@@ -35,6 +35,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -42,6 +44,7 @@ import java.util.ArrayList;
  */
 public class CategoriesFacade {
 
+    private static final String RIMS_DS = ResourceBundle.getBundle("config", Locale.getDefault()).getString("RIMS_DS");
     private Logger logger = LogManager.getLogger(CategoriesFacade.class);
     private DAOFactory factory = null;
     private final String DB_ADMIN = "rims_web";
@@ -1030,5 +1033,59 @@ public class CategoriesFacade {
         }
         return numResult;
     }
+ 
+    public static List<PhuongXaBO> reportPhuongXa(String tinhTpId, 
+                                                       String quanHuyenId) throws ServiceException {
+        CallableStatement cstmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        List<PhuongXaBO> ar = null;
+        try {
+            String sql = "begin ?:=pkg_tinh.fc_export_exels_phuongxa(?,?); end;";
+            ar = new ArrayList<>();
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cstmt.setString(2, tinhTpId);
+            cstmt.setString(3, quanHuyenId);
+
+            cstmt.executeQuery();
+            rs = (ResultSet) cstmt.getObject(1);
+            while (rs.next()) {
+                PhuongXaBO record = new PhuongXaBO();
+                  record.setTenTinh(rs.getString("ten_tinh_tp"));
+                  record.setTenQuanHuyen(rs.getString("ten_quan_huyen"));
+                  record.setTenPhuongXa(rs.getString("ten_phuong_xa"));
+                  
+                ar.add(record);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+        return ar;
+    }
+    
 
 }
