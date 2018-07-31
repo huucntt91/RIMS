@@ -122,6 +122,7 @@
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/reportBadCellWeek/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/reportCiIub/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/reportPm/*" />
+    <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/reportCSHT/*" />
     <!--<mapping exclude="true" decorator="/decorators/dashboardtheme" path="/autoEmail/*" />-->
     <!-- 
    <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/login/*" />
