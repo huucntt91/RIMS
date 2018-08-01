@@ -90,8 +90,11 @@
             </div>
         </div>
         <!-- /.box-body -->
+    </div>
+    <ol class="breadcrumb">
 
-    </div>                
+
+    </ol>
 
     <div id="tabs" class="tab-content">
         <div class="row">
@@ -102,6 +105,11 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive">
+                        <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/reportCSHT/exportExcel?khuvucId=' + $('#khuvucId').val()
+                                        + '&tinhTpId=' + $('#tinhTpId').val() + '&quanHuyenId=' + $('#quanHuyenId').val() + '&phuongXaId=' + $('#phuongXaId').val() + '&buildingCode=' + $('#buildingCode').val()
+                                        + '&buildingName=' + $('#buildingName').val()" >
+                            <span>  <img  width="17" src="${pageContext.request.contextPath}/resources/img/excel.png" alt=""/>Xuất Excel</span> 
+                        </button>
                         <div id="tablePagingId">
 
                             <table id="table0" class="table table-bordered table-hover">
@@ -142,215 +150,215 @@
 <%@include file="../../include/footer.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/plugins/daterangepicker/bootstrap-datepicker.min.js"></script>
 <script>
-                    $(document).ready(function () {
+                            $(document).ready(function () {
 
-                        // Highlight selected row
-                        $(".indenter").each(function () {
-                            $(this).css('background-image', $(this).find('a').css('background-image'));
-                        });
+                                // Highlight selected row
+                                $(".indenter").each(function () {
+                                    $(this).css('background-image', $(this).find('a').css('background-image'));
+                                });
 
 //                                                          
-                        $('#tinhTpId').multiselect(({
-                            maxHeight: 300,
-                            buttonWidth: '300px',
-                            enableFiltering: true,
-                            includeSelectAllOption: true,
-                            onChange: function (element, checked) {
-                            }
-                        }));
-
-                        $('#quanHuyenId').multiselect(({
-                            maxHeight: 300,
-                            buttonWidth: '300px',
-                            enableFiltering: true,
-                            includeSelectAllOption: true,
-                            onChange: function (element, checked) {
-                            }
-                        }));
-
-                        $('#phuongXaId').multiselect(({
-                            maxHeight: 300,
-                            buttonWidth: '300px',
-                            enableFiltering: true,
-                            includeSelectAllOption: true,
-                            onChange: function (element, checked) {
-                            }
-                        }));
-                        $('#khuvucId').multiselect(({
-                            maxHeight: 300,
-                            buttonWidth: '300px',
-                            enableFiltering: true,
-                            includeSelectAllOption: true,
-                            onChange: function (element, checked) {
-                            }
-                        }));
-
-                        if ($('#khuvucId').val() != null && $('#khuvucId').val() != '') {
-                            getTinhTp();
-                        }
-                        if ($('#tinhTpIds').val() != null && $('#tinhTpIds').val() != '') {
-                            getListHuyen();
-                        }
-
-                        if ($('#quanHuyenIds').val() != null && $("#quanHuyenId").val() != '') {
-                            getListPhuongXa();
-                        }
-                        var table0 = $("#table0").DataTable({
-                            //disable global search
-                            //"searching": false,
-                            searchDelay: 1000,
-                            "pageLength": 10,
-                            dom: 'Bfrtip',
-                            buttons: [
-                                'copy', 'csv', 'excel', 'pdf', 'print'],
-                            "serverSide": true,
-                            ajax: '${pageContext.request.contextPath}/reportCSHT/search',
-                            //dinh nghia cac cloumn giong voi cloumn trả về trong database
-                            "columns": [
-                                {"name": "stt", "orderable": false, "searchable": false},
-                                {"name": "ma_building"},
-                                {"name": "building_name"},
-                                {"name": "ma_node"},
-                                {"name": "management_name"},
-                                {"name": "ten_tren_he_thong"},
-                                {"name": "ne_type"},
-                                {"name": "khu_vuc", "orderable": false, "visible": false},
-                                {"name": "tinhtp_id", "orderable": false, "visible": false},
-                                {"name": "ten_tinh_tp"},
-                                {"name": "quanhuyen_id", "orderable": false, "visible": false},
-                                {"name": "ten_quan_huyen"},
-                                {"name": "phuongxa_id", "orderable": false, "visible": false},
-                                {"name": "ten_phuong_xa"},
-                                {"name": "longitude"},
-                                {"name": "latitude"},
-                                {"name": "accreditation_code"},
-                                {"name": "accre_start_date"},
-                                {"name": "accre_end_date"}
-
-                            ],
-
-                            "zeroRecords": "Không có dữ liệu được tìm thấy",
-                            "language": {
-                                "url": "${pageContext.request.contextPath}/resources/js/plugins/datatables/vi.json"
-                            }
-                        });
-                        search();
-                    });
-                    function getTinhTp() {
-                        var id = $("#khuvucId").val();
-                        var tinhTpIds = $("#tinhTpIds").val();
-                        $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
-                            var html = '';
-                            if (data.length > 0) {
-                                data.forEach(function (data) {
-                                    var htmlx = '<option value="' + data.tinhTpId + '" ';
-                                    if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
-                                        htmlx += ' selected="selected" ';
+                                $('#tinhTpId').multiselect(({
+                                    maxHeight: 300,
+                                    buttonWidth: '300px',
+                                    enableFiltering: true,
+                                    includeSelectAllOption: true,
+                                    onChange: function (element, checked) {
                                     }
-                                    htmlx += '>' + data.tenTinhTp + '</option>';
-                                    html += htmlx;
+                                }));
+
+                                $('#quanHuyenId').multiselect(({
+                                    maxHeight: 300,
+                                    buttonWidth: '300px',
+                                    enableFiltering: true,
+                                    includeSelectAllOption: true,
+                                    onChange: function (element, checked) {
+                                    }
+                                }));
+
+                                $('#phuongXaId').multiselect(({
+                                    maxHeight: 300,
+                                    buttonWidth: '300px',
+                                    enableFiltering: true,
+                                    includeSelectAllOption: true,
+                                    onChange: function (element, checked) {
+                                    }
+                                }));
+                                $('#khuvucId').multiselect(({
+                                    maxHeight: 300,
+                                    buttonWidth: '300px',
+                                    enableFiltering: true,
+                                    includeSelectAllOption: true,
+                                    onChange: function (element, checked) {
+                                    }
+                                }));
+
+                                if ($('#khuvucId').val() != null && $('#khuvucId').val() != '') {
+                                    getTinhTp();
+                                }
+                                if ($('#tinhTpIds').val() != null && $('#tinhTpIds').val() != '') {
+                                    getListHuyen();
+                                }
+
+                                if ($('#quanHuyenIds').val() != null && $("#quanHuyenId").val() != '') {
+                                    getListPhuongXa();
+                                }
+                                var table0 = $("#table0").DataTable({
+                                    //disable global search
+                                    //"searching": false,
+                                    searchDelay: 1000,
+                                    "pageLength": 10,
+                                    dom: 'Bfrtip',
+                                    buttons: [
+                                        'copy', 'csv', 'excel', 'pdf', 'print'],
+                                    "serverSide": true,
+                                    ajax: '${pageContext.request.contextPath}/reportCSHT/search',
+                                    //dinh nghia cac cloumn giong voi cloumn trả về trong database
+                                    "columns": [
+                                        {"name": "stt", "orderable": false, "searchable": false},
+                                        {"name": "ma_building"},
+                                        {"name": "building_name"},
+                                        {"name": "ma_node"},
+                                        {"name": "management_name"},
+                                        {"name": "ten_tren_he_thong"},
+                                        {"name": "ne_type"},
+                                        {"name": "khu_vuc", "orderable": false, "visible": false},
+                                        {"name": "tinhtp_id", "orderable": false, "visible": false},
+                                        {"name": "ten_tinh_tp"},
+                                        {"name": "quanhuyen_id", "orderable": false, "visible": false},
+                                        {"name": "ten_quan_huyen"},
+                                        {"name": "phuongxa_id", "orderable": false, "visible": false},
+                                        {"name": "ten_phuong_xa"},
+                                        {"name": "longitude"},
+                                        {"name": "latitude"},
+                                        {"name": "accreditation_code"},
+                                        {"name": "accre_start_date"},
+                                        {"name": "accre_end_date"}
+
+                                    ],
+
+                                    "zeroRecords": "Không có dữ liệu được tìm thấy",
+                                    "language": {
+                                        "url": "${pageContext.request.contextPath}/resources/js/plugins/datatables/vi.json"
+                                    }
+                                });
+                                search();
+                            });
+                            function getTinhTp() {
+                                var id = $("#khuvucId").val();
+                                var tinhTpIds = $("#tinhTpIds").val();
+                                $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
+                                    var html = '';
+                                    if (data.length > 0) {
+                                        data.forEach(function (data) {
+                                            var htmlx = '<option value="' + data.tinhTpId + '" ';
+                                            if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
+                                                htmlx += ' selected="selected" ';
+                                            }
+                                            htmlx += '>' + data.tenTinhTp + '</option>';
+                                            html += htmlx;
+                                        });
+                                    }
+                                    $('#tinhTpId').html(html);
+                                    $('#tinhTpId').multiselect('rebuild');
                                 });
                             }
-                            $('#tinhTpId').html(html);
-                            $('#tinhTpId').multiselect('rebuild');
-                        });
-                    }
-                    function getListHuyen(tinh)
-                    {
-                        var id = $("#tinhTpId").val();
-                        if (id === null) {
-                            id = $("#tinhTpIds").val();
-                        }
-                        var quanHuyenIds = $("#quanHuyenIds").val();
-                        $.get("${pageContext.request.contextPath}/mane/getQuanHuyen?tinhTpId=" + id, function (data) {
-                            var html = '';
-                            if (data.length > 0) {
-                                data.forEach(function (data) {
-                                    var htmlx = '<option value="' + data.quanHuyenId + '" ';
-                                    if (quanHuyenIds.indexOf(data.quanHuyenId) > -1) {
-                                        htmlx += ' selected="selected" ';
+                            function getListHuyen(tinh)
+                            {
+                                var id = $("#tinhTpId").val();
+                                if (id === null) {
+                                    id = $("#tinhTpIds").val();
+                                }
+                                var quanHuyenIds = $("#quanHuyenIds").val();
+                                $.get("${pageContext.request.contextPath}/mane/getQuanHuyen?tinhTpId=" + id, function (data) {
+                                    var html = '';
+                                    if (data.length > 0) {
+                                        data.forEach(function (data) {
+                                            var htmlx = '<option value="' + data.quanHuyenId + '" ';
+                                            if (quanHuyenIds.indexOf(data.quanHuyenId) > -1) {
+                                                htmlx += ' selected="selected" ';
+                                            }
+                                            htmlx += '>' + data.tenQuanHuyen + '</option>';
+                                            html += htmlx;
+                                        });
                                     }
-                                    htmlx += '>' + data.tenQuanHuyen + '</option>';
-                                    html += htmlx;
+                                    $('#quanHuyenId').html(html);
+                                    $('#quanHuyenId').multiselect('rebuild');
                                 });
                             }
-                            $('#quanHuyenId').html(html);
-                            $('#quanHuyenId').multiselect('rebuild');
-                        });
-                    }
 
-                    function getListPhuongXa()
-                    {
-                        var id = $("#quanHuyenId").val();
-                        if (id === null) {
-                            id = $("#quanHuyenIds").val();
-                        }
-                        if (id == null || id == '') {
-                            return;
-                        }
-                        var phuongXaIds = $("#phuongXaIds").val();
-                        $.get("${pageContext.request.contextPath}/mane/getPhuongXa?quanHuyenId=" + id, function (data) {
-                            var html = '';
-                            if (data.length > 0) {
-                                data.forEach(function (data) {
-                                    var htmlx = '<option value="' + data.phuongXaId + '" ';
-                                    if (phuongXaIds.indexOf(data.phuongXaId) > -1) {
-                                        htmlx += ' selected="selected" ';
+                            function getListPhuongXa()
+                            {
+                                var id = $("#quanHuyenId").val();
+                                if (id === null) {
+                                    id = $("#quanHuyenIds").val();
+                                }
+                                if (id == null || id == '') {
+                                    return;
+                                }
+                                var phuongXaIds = $("#phuongXaIds").val();
+                                $.get("${pageContext.request.contextPath}/mane/getPhuongXa?quanHuyenId=" + id, function (data) {
+                                    var html = '';
+                                    if (data.length > 0) {
+                                        data.forEach(function (data) {
+                                            var htmlx = '<option value="' + data.phuongXaId + '" ';
+                                            if (phuongXaIds.indexOf(data.phuongXaId) > -1) {
+                                                htmlx += ' selected="selected" ';
+                                            }
+                                            htmlx += '>' + data.tenPhuongXa + '</option>';
+                                            html += htmlx;
+                                        });
                                     }
-                                    htmlx += '>' + data.tenPhuongXa + '</option>';
-                                    html += htmlx;
+                                    $('#phuongXaId').html(html);
+                                    $('#phuongXaId').multiselect('rebuild');
                                 });
                             }
-                            $('#phuongXaId').html(html);
-                            $('#phuongXaId').multiselect('rebuild');
-                        });
-                    }
-                    function  search() {
-                        var table0 = $('#table0').DataTable();
-                        table0.columns(1).search($('#buildingCode').val());
-                        table0.columns(2).search($('#buildingName').val());
+                            function  search() {
+                                var table0 = $('#table0').DataTable();
+                                table0.columns(1).search($('#buildingCode').val());
+                                table0.columns(2).search($('#buildingName').val());
 
-                        var temp1 = "";
-                        $('#khuvucId :selected').each(function (i, selected) {
-                            if (temp1 == "") {
-                                temp1 = temp1 + $(selected).val();
-                            } else {
-                                temp1 = temp1 + "," + $(selected).val();
-                            }
-                        });
-                        table0.columns(7).search(temp1);
-                        var temp = "";
-                        $('#tinhTpId :selected').each(function (i, selected) {
-                            if (temp == "") {
-                                temp = temp + $(selected).val();
-                            } else {
-                                temp = temp + "," + $(selected).val();
-                            }
-                        });
-                        table0.columns(8).search(temp);
+                                var temp1 = "";
+                                $('#khuvucId :selected').each(function (i, selected) {
+                                    if (temp1 == "") {
+                                        temp1 = temp1 + $(selected).val();
+                                    } else {
+                                        temp1 = temp1 + "," + $(selected).val();
+                                    }
+                                });
+                                table0.columns(7).search(temp1);
+                                var temp = "";
+                                $('#tinhTpId :selected').each(function (i, selected) {
+                                    if (temp == "") {
+                                        temp = temp + $(selected).val();
+                                    } else {
+                                        temp = temp + "," + $(selected).val();
+                                    }
+                                });
+                                table0.columns(8).search(temp);
 
-                        temp = "";
-                        $('#quanHuyenId :selected').each(function (i, selected) {
-                            if (temp == "") {
-                                temp = temp + $(selected).val();
-                            } else {
-                                temp = temp + "," + $(selected).val();
+                                temp = "";
+                                $('#quanHuyenId :selected').each(function (i, selected) {
+                                    if (temp == "") {
+                                        temp = temp + $(selected).val();
+                                    } else {
+                                        temp = temp + "," + $(selected).val();
+                                    }
+                                });
+                                table0.columns(10).search(temp);
+                                //
+                                temp = "";
+                                $('#phuongXaId :selected').each(function (i, selected) {
+                                    if (temp == "") {
+                                        temp = temp + $(selected).val();
+                                    } else {
+                                        temp = temp + "," + $(selected).val();
+                                    }
+                                });
+                                table0.columns(12).search(temp);
+                                //vẽ bảng
+                                table0.draw();
+                                $('#btnSearch').attr("disabled", false);
                             }
-                        });
-                        table0.columns(10).search(temp);
-                        //
-                        temp = "";
-                        $('#phuongXaId :selected').each(function (i, selected) {
-                            if (temp == "") {
-                                temp = temp + $(selected).val();
-                            } else {
-                                temp = temp + "," + $(selected).val();
-                            }
-                        });
-                        table0.columns(12).search(temp);
-                        //vẽ bảng
-                        table0.draw();
-                        $('#btnSearch').attr("disabled", false);
-                    }
 </script>
 

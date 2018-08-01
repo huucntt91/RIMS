@@ -6,19 +6,20 @@
 package com.vnpt.media.rims.controller.report;
 
 import com.google.gson.Gson;
+import com.vnpt.media.rims.bean.ProjectStationBO;
 import com.vnpt.media.rims.bean.ReportTrafficTinhBO;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.ContentDataTableItem;
 import com.vnpt.media.rims.common.Function;
-import com.vnpt.media.rims.dao.DAOFactory;
+import com.vnpt.media.rims.common.utils.DateTimeUtils;
+import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.exception.DAOException;
 import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.facade.CategoriesFacade;
 import com.vnpt.media.rims.facade.ReportCSHTFacade;
 import com.vnpt.media.rims.facade.ReportFacade;
 import com.vnpt.media.rims.formbean.ReportCSHT;
-import com.vnpt.media.rims.transaction.ITransaction;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,8 +29,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
@@ -41,8 +44,10 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -119,11 +124,9 @@ public class ReportCSHTController {
             String pList = "";
             ArrayList<String> ar_name = new ArrayList<>();
             ArrayList<String> ar_search_value = new ArrayList<>();
-            //bổ sung phân quyền vào điều kiện tìm kiếm
-//            ar_name.add("tinhtp_id");
-//            ar_search_value.add(tinhManagers);
+            
             String columnPermisson = "";
-           // duyệt tất cả các tham số truyền vào request
+            // duyệt tất cả các tham số truyền vào request
             for (Enumeration items = request.getParameterNames(); items.hasMoreElements();) {
                 String param_name = (String) items.nextElement();
                 String param_value = request.getParameter(param_name);
@@ -146,6 +149,14 @@ public class ReportCSHTController {
                     ar_search_value.add(param_value);
                 }
                 pList += param_name + "=" + param_value + ",";
+            }
+            //bổ sung phân quyền vào điều kiện tìm kiếm
+            Integer index =  ar_name.indexOf("tinhtp_id");
+            if(index !=null){
+                String temp = ar_search_value.get(index);
+                if(temp == null || temp.isEmpty()){
+                    ar_search_value.set(index, tinhManagers);
+                }
             }
             //            
             int total_column = ar_name.size();
@@ -221,87 +232,43 @@ public class ReportCSHTController {
 
     }
 
-    @RequestMapping(value = "/reportTrafficTinh", method = RequestMethod.GET)
-    public void reportTrafficTinh(HttpServletRequest request,
+    @RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
+    public void exportExcel(HttpServletRequest request,
             HttpServletResponse response,
-            @RequestParam(value = "techType", required = false) String techType,
-            @RequestParam(value = "timeType", required = false) String timeType,
-            @RequestParam(value = "fromDate", required = false) String fromDate,
-            @RequestParam(value = "toDate", required = false) String toDate,
-            @RequestParam(value = "fromWeek", required = false) String fromWeek,
-            @RequestParam(value = "toWeek", required = false) String toWeek,
-            @RequestParam(value = "fromMonth", required = false) String fromMonth,
-            @RequestParam(value = "toMonth", required = false) String toMonth,
-            @RequestParam(value = "fromYear", required = false) String fromYear,
-            @RequestParam(value = "toYear", required = false) String toYear,
-            @RequestParam(value = "tinhTpId", required = false) String tinhTpId,
-            @RequestParam(value = "khuvucId", required = false) String khuvucId) {
-        List<ReportTrafficTinhBO> datas = null;
+            @RequestParam(value = "tinhTpId", required = false) String tinhTpIds,
+            @RequestParam(value = "khuvucId", required = false) String khuvucIds,
+            @RequestParam(value = "quanHuyenId", required = false) String quanHuyenIds,
+            @RequestParam(value = "phuongXaId", required = false) String phuongXaIds,
+            @RequestParam(value = "buildingCode", required = false) String buildingCode,
+            @RequestParam(value = "buildingName", required = false) String buildingName) {
+        List<ReportCSHT> data = null;
         try {
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-            logger.info("user: {}, ip: {}, end reportTrafficTinh...", user.getUsername(), request.getRemoteAddr());
             String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
-            tinhTpId = tinhTpId == null ? String.join(",", tinhManager) : tinhTpId.replace("null", "");
-            khuvucId = khuvucId == null ? "" : khuvucId.replace("null", "");
+            String tinhManagers = String.join(",", tinhManager);
 
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            Calendar calendar = Calendar.getInstance();
-            Calendar calendar1 = Calendar.getInstance();
-            Calendar calendar2 = Calendar.getInstance();
-            Calendar calendar3 = Calendar.getInstance();
-
-            int weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
-            int monthOfYear = calendar.get(Calendar.MONTH);
-            int year = calendar.get(Calendar.YEAR);
-            String date = dateFormat.format(calendar.getTime());
-
-            //lay tu ngay den ngay khi chon tuan
-            calendar.set(Calendar.YEAR, Integer.parseInt(fromYear));
-            calendar.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(fromWeek));
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-
-            String fromDateWeek = dateFormat.format(calendar.getTime());
-
-            calendar1.set(Calendar.YEAR, Integer.parseInt(toYear));
-            calendar1.set(Calendar.WEEK_OF_YEAR, Integer.parseInt(toWeek) + 1);
-            calendar1.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-
-            String toDateWeek = dateFormat.format(calendar1.getTime());
-
-            //lay tu ngay den ngay khi chon thang
-            calendar2.set(Calendar.YEAR, Integer.parseInt(fromYear));
-            calendar2.set(Calendar.MONTH, Integer.parseInt(fromMonth) - 1);
-            calendar2.set(Calendar.DAY_OF_MONTH, 1);
-
-            String fromDateMonth = dateFormat.format(calendar2.getTime());
-
-            calendar3.set(Calendar.YEAR, Integer.parseInt(toYear));
-            calendar3.set(Calendar.MONTH, Integer.parseInt(toMonth) - 1);
-            calendar3.set(Calendar.DAY_OF_MONTH, calendar3.getActualMaximum(Calendar.DATE));
-
-            String toDateMonth = dateFormat.format(calendar3.getTime());
-
+            if (khuvucIds != null && khuvucIds.equalsIgnoreCase("null")) {
+                khuvucIds = null;
+            }
+            if (tinhTpIds != null && tinhTpIds.equalsIgnoreCase("null")) {
+                tinhTpIds = null;
+            }
+            if (quanHuyenIds != null && quanHuyenIds.equalsIgnoreCase("null")) {
+                quanHuyenIds = null;
+            }
+            if (phuongXaIds != null && phuongXaIds.equalsIgnoreCase("null")) {
+                phuongXaIds = null;
+            }
+            //neu user search theo tinh tp thi search theo gia tri nguoi dung chon
+            if (tinhTpIds != null && !tinhTpIds.isEmpty()) {
+                tinhManagers = tinhTpIds;
+            }
+            logger.info("user: {}, ip: {},mem: {} function 'exportExcel' buildingCode:{}, buildingName:{}, khuVucIds:{}, tinhTpIds:{}, quanHuyenIds:{}, phuongXaIds:{}, permisson:{}",
+                    user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), buildingCode, buildingName, khuvucIds, tinhTpIds, quanHuyenIds, phuongXaIds, tinhManagers);
             String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
-            try {
-                logger.info("user: {}, ip: {},techType:{}, timeType:{}, khuvucId:{}, tinhTpId:{}, fromDate:{}, toDate:{}, fromDateWeek:{}, toDateWeek:{}, fromDateMonth:{}, toDateMonth:{}, before get data reportTrafficTinh...", user.getUsername(), request.getRemoteAddr(), techType, timeType, khuvucId, tinhTpId, fromDate, toDate, fromDateWeek, toDateWeek, fromDateMonth, toDateMonth);
-                logger.debug("start get data reportTrafficTinh {}", Function.getInfoMemory());
-                datas = ReportFacade.reportTrafficTinh(techType, timeType, khuvucId, tinhTpId, fromDate, toDate, fromDateWeek, toDateWeek, fromDateMonth, toDateMonth);
-                logger.info("user: {}, ip: {}, size:{},techType:{}, timeType:{}, khuvucId:{}, tinhTpId:{}, fromDate:{}, toDate:{}, fromDateWeek:{}, toDateWeek:{}, fromDateMonth:{}, toDateMonth:{}, count data reportTrafficTinh...", user.getUsername(), request.getRemoteAddr(), datas.size(), techType, timeType, khuvucId, tinhTpId, fromDate, toDate, fromDateWeek, toDateWeek, fromDateMonth, toDateMonth);
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-            }
-
-            File fileResult = null;
-            if (techType.equals("2")) {
-                fileResult = writeReportTrafficTinh(dataDirectory + "/BaoCaoTrafficMucTinh2G.xlsx", datas, techType);
-            }
-            if (techType.equals("3")) {
-                fileResult = writeReportTrafficTinh(dataDirectory + "/BaoCaoTrafficMucTinh3G.xlsx", datas, techType);
-            }
-            if (techType.equals("4")) {
-                fileResult = writeReportTrafficTinh(dataDirectory + "/BaoCaoTrafficMucTinh4G.xlsx", datas, techType);
-            }
-
+            data = ReportCSHTFacade.exportExcel(khuvucIds, tinhManagers, quanHuyenIds, phuongXaIds, buildingCode, buildingName);
+            logger.info("user: {}, ip: {},mem: {}, function 'exportExcel'  {} ban ghi", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), data.size());
+            File fileResult = writeExportExcel(dataDirectory + "/TempBaoCaoCSHT.xlsx", data);
             if (fileResult.exists()) {
                 response.setContentType("application/excel");
                 response.addHeader("Content-Disposition", "attachment; filename=" + fileResult.getName());
@@ -309,133 +276,62 @@ public class ReportCSHTController {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    logger.error(ex.getMessage(), ex);
                 }
             }
-            logger.debug("end get data reportTrafficTinh {}", Function.getInfoMemory());
-            logger.info("user: {}, ip: {}, end reportTrafficTinh...", user.getUsername(), request.getRemoteAddr());
-        } catch (ServiceException e) {
+            logger.info("user: {}, ip: {},mem: {}, function 'exportExcel' end", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         } finally {
-            if (datas != null) {
-                datas.clear();
+            if (data != null) {
+                data.clear();
             }
         }
-
     }
 
-    private File writeReportTrafficTinh(String fileTemplate, List<ReportTrafficTinhBO> datas, String techType) {
+    private File writeExportExcel(String fileTemplate, List<ReportCSHT> datas) {
         File result = null;
         FileOutputStream fos = null;
-        SXSSFWorkbook workbook = null;
+        Workbook workbook = null;
         try {
-            if (techType.equals("2")) {
-                result = new File("BaoCaoTrafficMucTinh2G.xlsx");
-            }
-            if (techType.equals("3")) {
-                result = new File("BaoCaoTrafficMucTinh3G.xlsx");
-            }
-            if (techType.equals("4")) {
-                result = new File("BaoCaoTrafficMucTinh4G.xlsx");
-            }
-
-//            FileInputStream fin = new FileInputStream(fileTemplate);
-            workbook = new SXSSFWorkbook();
-            Sheet sheet = workbook.createSheet("Sheet 1");
-            CellStyle style;
-            DataFormat format = workbook.createDataFormat();
-            style = workbook.createCellStyle();
-            style.setDataFormat(format.getFormat("0.00000"));
+            result = new File(StringUtils.getFolderTemp() + File.separator + "CSHT" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx");
+            FileInputStream fin = new FileInputStream(fileTemplate);
+            workbook = new XSSFWorkbook(fin);
+            Sheet sheet = workbook.getSheetAt(0);
             if (datas != null) {
-                int rowIndex = 1;
+                int rowIndex = 3;
                 Cell cell = null;
                 Row row = null;
-
-                Font font = sheet.getWorkbook().createFont();
-                font.setFontHeightInPoints((short) 10);
-                font.setFontName("Arial");
-                font.setColor(IndexedColors.BLACK.getIndex());
-                font.setBold(true);
-                font.setItalic(false);
-                CellStyle styleHeader = sheet.getWorkbook().createCellStyle();
-                styleHeader.setFont(font);
-                styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
-                styleHeader.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
-                styleHeader.setFillPattern(CellStyle.SOLID_FOREGROUND);
-
-                row = sheet.createRow(0);
-                cell = row.createCell(0);
-                cell.setCellValue("Thời gian");
-                cell.setCellStyle(styleHeader);
-
-                cell = row.createCell(1);
-                cell.setCellValue("Tỉnh");
-                cell.setCellStyle(styleHeader);
-
-                if (techType.equals("2")) {
-                    cell = row.createCell(2);
-                    cell.setCellValue("Traffic 2G CS [Erl]");
-                    cell.setCellStyle(styleHeader);
-
-                    cell = row.createCell(3);
-                    cell.setCellValue("Traffic 2G PS [MB]");
-                    cell.setCellStyle(styleHeader);
-                }
-                if (techType.equals("3")) {
-                    cell = row.createCell(2);
-                    cell.setCellValue("CS_Total Traffic [Erl]");
-                    cell.setCellStyle(styleHeader);
-
-                    cell = row.createCell(3);
-                    cell.setCellValue("PS_Total Traffic [GB]");
-                    cell.setCellStyle(styleHeader);
-                }
-                if (techType.equals("4")) {
-                    cell = row.createCell(2);
-                    cell.setCellValue("4G PS_Total Traffic [GB]");
-                    cell.setCellStyle(styleHeader);
-                }
-
-                for (ReportTrafficTinhBO it : datas) {
+                for (ReportCSHT it : datas) {
                     row = sheet.createRow(rowIndex++);
-
                     cell = row.createCell(0);
-                    cell.setCellValue(it.getDate() == null ? "" : it.getDate());
-
+                    cell.setCellValue(it.getBuildingCode());
                     cell = row.createCell(1);
-                    cell.setCellValue(it.getProvinceName() == null ? "" : it.getProvinceName());
-
-                    if (techType.equals("2") || techType.equals("3")) {
-                        cell = row.createCell(2);
-                        double a;
-                        if (it.getTraffic2g3gCs() == null || it.getTraffic2g3gCs().isEmpty()) {
-                            a = 0;
-                        } else {
-                            a = Double.parseDouble(it.getTraffic2g3gCs());
-                        }
-                        cell.setCellValue(a);
-                        cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
-                        cell = row.createCell(3);
-                        double b;
-                        if (it.getTraffic2g3g4gPs() == null || it.getTraffic2g3g4gPs().isEmpty()) {
-                            b = 0;
-                        } else {
-                            b = Double.parseDouble(it.getTraffic2g3g4gPs());
-                        }
-                        cell.setCellValue(b);
-                        cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
-                    }
-                    if (techType.equals("4")) {
-                        cell = row.createCell(2);
-                        double c;
-                        if (it.getTraffic2g3g4gPs() == null || it.getTraffic2g3g4gPs().isEmpty()) {
-                            c = 0;
-                        } else {
-                            c = Double.parseDouble(it.getTraffic2g3g4gPs());
-                        }
-                        cell.setCellValue(c);
-                        cell.setCellType(XSSFCell.CELL_TYPE_NUMERIC);
-                    }
+                    cell.setCellValue(it.getBuildingName());
+                    cell = row.createCell(2);
+                    cell.setCellValue(it.getNodeCode());
+                    cell = row.createCell(3);
+                    cell.setCellValue(it.getManagementName());
+                    cell = row.createCell(4);
+                    cell.setCellValue(it.getSystemName());
+                    cell = row.createCell(5);
+                    cell.setCellValue(it.getType());
+                    cell = row.createCell(6);
+                    cell.setCellValue(it.getProvinceName());
+                    cell = row.createCell(7);
+                    cell.setCellValue(it.getDistrictName());
+                    cell = row.createCell(8);
+                    cell.setCellValue(it.getWardName());
+                    cell = row.createCell(9);
+                    cell.setCellValue(it.getLongitude());
+                    cell = row.createCell(10);
+                    cell.setCellValue(it.getLatitude());
+                    cell = row.createCell(11);
+                    cell.setCellValue(it.getAccreditationCode());
+                    cell = row.createCell(12);
+                    cell.setCellValue(it.getAccreStartDate());
+                    cell = row.createCell(13);
+                    cell.setCellValue(it.getAccreEndDate());
 
                 }
             }
@@ -452,12 +348,11 @@ public class ReportCSHTController {
                     workbook.close();
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                logger.error(ex.getMessage(), ex);
             }
 
         }
 
         return result;
     }
-
 }
