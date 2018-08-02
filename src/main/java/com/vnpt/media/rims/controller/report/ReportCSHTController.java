@@ -6,8 +6,6 @@
 package com.vnpt.media.rims.controller.report;
 
 import com.google.gson.Gson;
-import com.vnpt.media.rims.bean.ProjectStationBO;
-import com.vnpt.media.rims.bean.ReportTrafficTinhBO;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.ContentDataTableItem;
@@ -15,38 +13,26 @@ import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.exception.DAOException;
-import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.facade.CategoriesFacade;
 import com.vnpt.media.rims.facade.ReportCSHTFacade;
-import com.vnpt.media.rims.facade.ReportFacade;
 import com.vnpt.media.rims.formbean.ReportCSHT;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormat;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -72,14 +58,6 @@ public class ReportCSHTController {
 
     @Autowired
     private MessageSource messageSource;
-
-    @ModelAttribute("khuvucList")
-    public List findAllKhuVuc(HttpServletRequest request) {
-        CategoriesFacade facade = new CategoriesFacade();
-        String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
-        return facade.findAllKhuVuc(String.join(",", tinhManager));
-    }
-
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     public String init(
             @RequestParam(value = "tinhTpId", required = false) String tinhTpId,

@@ -23,14 +23,10 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Khu vực</label>
+                        <label  class=" input-group-addon">Khu vực</label>
                         <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
-                            <c:forEach var="tinhBO" items="${khuvucList}">
-                                <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
-                                                                                            value="${tinhBO.id}"  
-                                                                                            >${tinhBO.name}</option>
-                            </c:forEach>
-                        </select>                                  
+                        </select>                
+                        <input type="hidden" value="${khuvucIds}" id="khuvucIds"/>
                     </div>
                 </div>
             </div>
@@ -156,8 +152,8 @@
                                 $(".indenter").each(function () {
                                     $(this).css('background-image', $(this).find('a').css('background-image'));
                                 });
-
-//                                                          
+                                getArea();
+//                                                               
                                 $('#tinhTpId').multiselect(({
                                     maxHeight: 300,
                                     buttonWidth: '300px',
@@ -244,6 +240,24 @@
                                 });
                                 search();
                             });
+                            function getArea() {
+                                var khuVucIds = $("#khuvucIds").val();
+                                $.get("${pageContext.request.contextPath}/mane/getArea", function (data) {
+                                    var html = '';
+                                    if (data.length > 0) {
+                                        data.forEach(function (data) {
+                                            var htmlx = '<option value="' + data.id + '" ';
+                                            if (khuVucIds.indexOf(data.id) > -1) {
+                                                htmlx += ' selected="selected" ';
+                                            }
+                                            htmlx += '>' + data.name + '</option>';
+                                            html += htmlx;
+                                        });
+                                    }
+                                    $('#khuvucId').html(html);
+                                    $('#khuvucId').multiselect('rebuild');
+                                });
+                            }
                             function getTinhTp() {
                                 var id = $("#khuvucId").val();
                                 var tinhTpIds = $("#tinhTpIds").val();

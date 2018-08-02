@@ -8,6 +8,7 @@ package com.vnpt.media.rims.controller.broadband;
 import com.vnpt.media.rims.bean.DongTbiBO;
 import com.vnpt.media.rims.bean.EthernetBcBO;
 import com.vnpt.media.rims.bean.HuyenBO;
+import com.vnpt.media.rims.bean.KhuvucBO;
 import com.vnpt.media.rims.bean.ManEInfoBO;
 import com.vnpt.media.rims.bean.ModuleQuangBcBO;
 import com.vnpt.media.rims.bean.NodeBO;
@@ -95,6 +96,24 @@ public class ManeController {
             CategoriesFacade facade = new CategoriesFacade();
             String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
             return facade.findAllKhuVuc(String.join(",", tinhManager));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "/getArea", method = RequestMethod.GET,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String getArea(ModelMap mm,
+            HttpServletRequest request) throws IOException {
+        List<KhuvucBO> list;
+        try {
+            CategoriesFacade facade = new CategoriesFacade();
+            String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+            list = facade.findAllKhuVuc(String.join(",", tinhManager));
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(list);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -646,7 +665,7 @@ public class ManeController {
                     workbook.close();
                 }
             } catch (IOException ex) {
-                logger.error(ex.getMessage(),ex);
+                logger.error(ex.getMessage(), ex);
             }
 
         }
@@ -738,7 +757,7 @@ public class ManeController {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException ex) {
-                    logger.error(ex.getMessage(),ex);
+                    logger.error(ex.getMessage(), ex);
                 }
             }
         } catch (ServiceException e) {
@@ -830,7 +849,7 @@ public class ManeController {
                     workbook.close();
                 }
             } catch (IOException ex) {
-                logger.error(ex.getMessage(),ex);
+                logger.error(ex.getMessage(), ex);
             }
 
         }
@@ -919,7 +938,7 @@ public class ManeController {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException ex) {
-                    logger.error(ex.getMessage(),ex);
+                    logger.error(ex.getMessage(), ex);
                 }
             }
         } catch (ServiceException e) {
@@ -996,7 +1015,7 @@ public class ManeController {
                     workbook.close();
                 }
             } catch (IOException ex) {
-                logger.error(ex.getMessage(),ex);
+                logger.error(ex.getMessage(), ex);
             }
 
         }
@@ -1084,7 +1103,7 @@ public class ManeController {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException ex) {
-                    logger.error(ex.getMessage(),ex);
+                    logger.error(ex.getMessage(), ex);
                 }
             }
         } catch (ServiceException e) {
@@ -1167,7 +1186,7 @@ public class ManeController {
                     workbook.close();
                 }
             } catch (IOException ex) {
-                logger.error(ex.getMessage(),ex);
+                logger.error(ex.getMessage(), ex);
             }
 
         }
