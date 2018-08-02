@@ -2154,9 +2154,18 @@ public class StringUtils {
                     case "89":
                         output += "Không có quyền cập nhật trạm này | ";
                         break;
-                    case "QH0014":
-                        output += resourceBundle.getString("buildling.validate.long.lat") + " | ";
+                    case "91":
+                        output += "Latitude không đúng vị trí | ";
                         break;
+                    case "92":
+                        output += "Latitude không đúng kiểu số | ";
+                        break;
+                    case "93":
+                        output += "Longitude không đúng vị trí | ";
+                        break;
+                    case "94":
+                        output += "Longitude không đúng kiểu số | ";
+                        break;    
 
                 }
             }
