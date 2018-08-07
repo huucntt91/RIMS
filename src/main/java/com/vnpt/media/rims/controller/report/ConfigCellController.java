@@ -5,27 +5,36 @@
  */
 package com.vnpt.media.rims.controller.report;
 
+import com.google.gson.Gson;
 import com.vnpt.media.rims.bean.BtsReportBO;
 import com.vnpt.media.rims.bean.Cell2GReportBO;
 import com.vnpt.media.rims.bean.FilterReportBO;
 import com.vnpt.media.rims.bean.NodeBReportBO;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
+import com.vnpt.media.rims.common.ContentDataTableItem;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.Page;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.managerAdmin.BaseController;
-import com.vnpt.media.rims.facade.LogMenuFacade;
+import com.vnpt.media.rims.exception.DAOException;
+import com.vnpt.media.rims.facade.ReportCSHTFacade;
+import com.vnpt.media.rims.facade.ReportCellConfigFacade;
 import com.vnpt.media.rims.facade.ReportFacade;
+import com.vnpt.media.rims.formbean.Cell2GConfig;
+import com.vnpt.media.rims.formbean.Cell3GConfig;
+import com.vnpt.media.rims.formbean.Cell4GConfig;
 import com.vnpt.media.rims.formbean.FilterForm;
-import com.vnpt.media.rims.formbean.ReportConfigForm;
+import com.vnpt.media.rims.formbean.ReportCSHT;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -38,12 +47,14 @@ import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -62,238 +73,287 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 
-@RequestMapping(value = "/report/configCell")
+@RequestMapping(value = "/configCell")
 public class ConfigCellController extends BaseController {
 
     private static final Logger LOGGER = LogManager.getLogger(ConfigCellController.class);
+    private static String CELL_CONFIG = "report/cauhinhthietbi/cell_config";
 
 //    @ModelAttribute("filterReportList")
 //    public List findFilterReport() {
 //        ReportFacade facade = new ReportFacade();
 //        return facade.findFilterReport();
 //    }
+//    @RequestMapping(value = "/init", method = RequestMethod.GET)
+//    public String init(Locale locale, ModelMap mm, HttpServletRequest request) {
+//        // log user request menu
+//        UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+//        LogMenuFacade.logMenu(String.valueOf(user.getId()), request.getRemoteAddr(), "Báo cáo cấu hình thiết bị");
+//        // end log
+//
+//        mm.put("configForm", new ReportConfigForm());
+//        ReportFacade facade = new ReportFacade();
+//        mm.put("filterReportList", facade.findFilterReport(0));
+//        mm.put("filterForm", new FilterForm());
+//        return "report/cauhinhthietbi/list";
+//    }
     @RequestMapping(value = "/init", method = RequestMethod.GET)
-    public String init(Locale locale, ModelMap mm, HttpServletRequest request) {
+    public String config(Locale locale, ModelMap mm, HttpServletRequest request) {
         // log user request menu
-        UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-        LogMenuFacade.logMenu(String.valueOf(user.getId()), request.getRemoteAddr(), "Báo cáo cấu hình thiết bị");
-        // end log
-
-        mm.put("configForm", new ReportConfigForm());
-        ReportFacade facade = new ReportFacade();
-        mm.put("filterReportList", facade.findFilterReport(0));
-        mm.put("filterForm", new FilterForm());
-        return "report/cauhinhthietbi/list";
+        return CELL_CONFIG;
     }
 
-    @RequestMapping(value = "/changeObject", method = RequestMethod.POST)
-    public String changeObject(ModelMap mm, HttpServletRequest request,
-            @RequestParam(value = "type", required = false) String type) {
-        UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-        ReportFacade facade = new ReportFacade();
-        List<FilterReportBO> list = new ArrayList<>();
-        try {
-            LOGGER.info("user: {}, ip: {}, call findFilterReport({})", user.getUsername(), request.getRemoteAddr(), type);
-            list = facade.findFilterReport(Integer.valueOf(type));
-            LOGGER.info("user: {}, ip: {}, end findFilterReport: {}", user.getUsername(), request.getRemoteAddr(), list.size());
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-
-        mm.put("filterReportList", list);
-        mm.put("filterForm", new FilterForm());
-        mm.put("type", type);
-        return "report/cauhinhthietbi/list";
-    }
-
-    @RequestMapping(value = "/changeColumn/{columnId}", method = RequestMethod.GET,
-            produces = "text/plain;charset=utf-8")
+    @RequestMapping(value = "/search", method = RequestMethod.POST,
+            produces = "application/json; charset=UTF-8")
     public @ResponseBody
-    String changeColumn(ModelMap mm, @PathVariable(value = "columnId") String columnId, RedirectAttributes attr, Locale locale) throws Exception {
-//        logger.debug("Reset password user action");
-        StringBuilder xmlAjax = new StringBuilder();
-        xmlAjax.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+    String search(HttpServletRequest request) {
         try {
-//            UserBO userBO = new ManagerAdminFacade().findByUserId(columnId.trim());
-//            new ManagerAdminFacade().resetPassword(userBO);
-            xmlAjax.append("<responseCode>00</responseCode>");
-        } catch (Exception e) {
-//            logger.error("Exception : ", e);
-            xmlAjax.append("<responseCode>01</responseCode>");
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+            logger.info("user: {}, ip: {},mem: {}, searchCell2G", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            String[] tinhManagerArr = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+            String tinhManagers = String.join(",", tinhManagerArr);
+            logger.debug("tinhManagers: {}", tinhManagers);
+            int draw = -1;
+            String prs_start_record = "";
+            String prs_length_page = "";
+            String prs_global_search = "";
+            String prs_list_column_name = "";
+            String prs_list_column_search = "";
+            String prs_column_to_sort = "";
+            String param_sort_column = "";
+            String prs_sort_direction = "";
+            String pList = "";
+            ArrayList<String> ar_name = new ArrayList<>();
+            ArrayList<String> ar_search_value = new ArrayList<>();
+            String neTypeId = "5";
 
-            return xmlAjax.toString();
-        }
-        return xmlAjax.toString();
-    }
-
-    @RequestMapping(value = "/addFilter", method = RequestMethod.GET)
-    public String addFilter(ModelMap mm, HttpServletRequest request,
-            @RequestParam(value = "type", required = false) String type,
-            //            @RequestParam(value = "listFilterForm", required = false) List<FilterForm> listFilterForm,
-            @Valid @ModelAttribute(value = "filterForm") FilterForm filterForm) {
-        ReportFacade facade = new ReportFacade();
-
-        if (filterForm.getListFilterForm() == null) {
-            filterForm.setListFilterForm(new ArrayList<FilterForm>());
-        }
-        String id = "1";
-        try {
-            id = DateTimeUtils.getSysdate("yyyyMMddHHmmss");
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        filterForm.getListFilterForm().add(new FilterForm(id, filterForm.getColumn(), filterForm.getDataType(),
-                filterForm.getOperator(), filterForm.getValue_(), filterForm.getDescription()));
-        mm.put("filterReportList", facade.findFilterReport(Integer.valueOf(type)));
-        mm.put("type", type);
-        mm.put("filterForm", filterForm);
-        return "report/cauhinhthietbi/list";
-    }
-
-    @RequestMapping(value = "/addFilter", method = RequestMethod.GET, params = {"changeColumn"})
-    public String changeColumn(ModelMap mm, HttpServletRequest request,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "page", required = false) String page,
-            @Valid @ModelAttribute(value = "filterForm") FilterForm filterForm) {
-
-        ReportFacade facade = new ReportFacade();
-        mm.put("filterReportList", facade.findFilterReport(Integer.valueOf(type)));
-        mm.put("type", type);
-
-        int dataType = facade.findDataType(type, filterForm.getColumn());
-        filterForm.setDataType("" + dataType);
-        filterForm.setValue_(null);
-        mm.put("dataType", dataType);
-        return "report/cauhinhthietbi/list";
-    }
-
-    @RequestMapping(value = "/addFilter", method = RequestMethod.GET, params = {"search"})
-    public String search(ModelMap mm, HttpServletRequest request,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "page", required = false) String page,
-            @Valid @ModelAttribute(value = "filterForm") FilterForm filterForm) {
-        UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-        ReportFacade facade = new ReportFacade();
-        mm.put("filterReportList", facade.findFilterReport(Integer.valueOf(type)));
-        mm.put("type", type);
-
-        // paging
-        page = page == null ? "1" : page;
-        Integer pageInt;
-        try {
-            pageInt = Integer.parseInt(page);
-        } catch (Exception ex) {
-            pageInt = 1;
-        }
-        String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
-        FilterForm filter = new FilterForm();
-        if (tinhManager != null && tinhManager.length > 0) {
-
-            filter.setColumn("building.TINHTP_ID");
-            filter.setOperator("IN");
-            filter.setValue_("(" + String.join(",", tinhManager) + ")");
-
-            List<FilterForm> listFilter = new ArrayList<FilterForm>();
-            //slistFilter.addAll(filterForm.getListFilterForm());
-            listFilter.add(filter);
-            if (filterForm != null && filterForm.getListFilterForm() != null) {
-                for (int i = 0; i < filterForm.getListFilterForm().size(); i++) {
-                    listFilter.add(filterForm.getListFilterForm().get(i));
+            // duyệt tất cả các tham số truyền vào request
+            for (Enumeration items = request.getParameterNames(); items.hasMoreElements();) {
+                String param_name = (String) items.nextElement();
+                String param_value = request.getParameter(param_name);
+                if (param_name.equals("draw")) {
+                    draw = Integer.parseInt(param_value);
+                } else if (param_name.startsWith("order") && param_name.contains("column")) {
+                    param_sort_column = param_value;
+                    prs_column_to_sort = param_value;
+                } else if (param_name.startsWith("order") && param_name.contains("dir")) {
+                    prs_sort_direction = param_value;
+                } else if (param_name.equals("start")) {
+                    prs_start_record = String.valueOf(Integer.parseInt(param_value) + 1);
+                } else if (param_name.equals("length")) {
+                    prs_length_page = param_value;
+                } else if (param_name.equals("search[value]")) {
+                    prs_global_search = param_value;
+                } else if (param_name.startsWith("columns") && param_name.contains("name")) {
+                    ar_name.add(param_value);
+                } else if (param_name.startsWith("columns") && param_name.contains("search") && param_name.contains("value")) {
+                    ar_search_value.add(param_value);
+                }
+                pList += param_name + "=" + param_value + ",";
+            }
+            //bổ sung phân quyền vào điều kiện tìm kiếm
+            Integer index = ar_name.indexOf("tinhtp_id");
+            if (index != null) {
+                String temp = ar_search_value.get(index);
+                if (temp == null || temp.isEmpty()) {
+                    ar_search_value.set(index, tinhManagers);
                 }
             }
-            filter.setListFilterForm(listFilter);
-        }
-
-        int totalRows;
-        try {
-            totalRows = facade.getTotalCell2GReport(type, filter);
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            totalRows = 0;
-        }
-        Page objPage = new Page();
-
-        int numPerPage = Constants.NUMBER_FOR_PAGING;
-        int totalPages = 0;
-
-        if (totalRows % numPerPage == 0) {
-            totalPages = (int) totalRows / numPerPage;
-        } else {
-            totalPages = (int) totalRows / numPerPage + 1;
-        }
-        if (totalRows == 0) {
-            totalPages = 0;
-        }
-
-        if (pageInt < 1) {
-            pageInt = 1;
-        } else if (pageInt > totalPages && totalPages > 0) {
-            pageInt = totalPages;
-        }
-
-        objPage.setTotalPages(totalPages);
-        objPage.setTotalRows(totalRows);
-        objPage.setDestPage(pageInt);
-        objPage.setDirection(1);
-        objPage.setSubject("Quản lý Nodes");
-        mm.addAttribute("pageInfo", objPage);
-
-        int startRow = 0, endRow = 0;
-        if (pageInt > 1) {
-            startRow = ((pageInt - 1) * (numPerPage) + 1);
-            endRow = (pageInt * (numPerPage));
-        } else if (pageInt == 1) {
-            startRow = 1;
-            endRow = Constants.NUMBER_FOR_PAGING;
-        }
-        mm.put("startRow", startRow);
-
-        List<?> temp = null;
-        try {
-            LOGGER.info("user: {}, ip: {}, call cell2GReport({},{},{},{})", user.getUsername(), request.getRemoteAddr(), type, filter, startRow, endRow);
-            temp = facade.cell2GReport(type, filter, String.valueOf(startRow), String.valueOf(endRow));
-            LOGGER.info("user: {}, ip: {}, done cell2GReport: {}", user.getUsername(), request.getRemoteAddr(), temp.size());
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-        mm.put("searchs", filterForm);
-
-        mm.put("type", type);
-        if (type.equals("5") || type.equals("6")) {
-            List<Cell2GReportBO> list = (List<Cell2GReportBO>) temp;
-            mm.put("list", list);
-        } else if (type.equals("2")) {
-            List<BtsReportBO> list = (List<BtsReportBO>) temp;
-
-            mm.put("list", list);
-        } else if (type.equals("3")) {
-            List<NodeBReportBO> list = (List<NodeBReportBO>) temp;
-            mm.put("list", list);
-        }
-        return "report/cauhinhthietbi/list";
-    }
-
-    @RequestMapping(value = "/addFilter", method = RequestMethod.GET, params = {"removeFilter"})
-    public String removeFilter(ModelMap mm, HttpServletRequest request,
-            @RequestParam(value = "type", required = false) String type,
-            @RequestParam(value = "page", required = false) String page,
-            @RequestParam(value = "id", required = false) String id,
-            @Valid @ModelAttribute(value = "filterForm") FilterForm filterForm) {
-
-        ReportFacade facade = new ReportFacade();
-        mm.put("filterReportList", facade.findFilterReport(Integer.valueOf(type)));
-        mm.put("type", type);
-        ArrayList<FilterForm> temp = new ArrayList<FilterForm>();
-        for (int i = 0; i < filterForm.getListFilterForm().size(); i++) {
-            if (!filterForm.getListFilterForm().get(i).getId().equals(id)) {
-                temp.add(filterForm.getListFilterForm().get(i));
+            //
+            index = ar_name.indexOf("ne_type_id");
+            if (index != null) {
+                neTypeId = ar_search_value.get(index);
+                ar_search_value.set(index, "");
             }
+
+            int total_column = ar_name.size();
+            for (int i = 0; i < total_column; i++) {
+                String name = ar_name.get(i);
+                String value = ar_search_value.get(i);
+                // update tên cột sorting
+                if (!param_sort_column.equals("0")) {
+                    if (Integer.parseInt(param_sort_column) == i) {
+                        prs_column_to_sort = ar_name.get(i);
+                    }
+                }
+                // check xem cột đó có giá trị cần search ko
+                if (!value.isEmpty()) {
+                    prs_list_column_name = prs_list_column_name + ";" + name;
+                    prs_list_column_search = prs_list_column_search + ";" + value;
+                }
+            }
+            String[] recordsTotal = new String[1];
+            String[] recordsFiltered = new String[1];
+            List list = null;
+            try {
+                logger.debug("prs_start_record :{}, prs_length_page:{}, prs_global_search:{}, prs_list_column_name:{}, prs_list_column_search:{}, prs_column_to_sort:{}, prs_sort_direction:{} ",
+                        prs_start_record, prs_length_page, prs_global_search, prs_list_column_name, prs_list_column_search, prs_column_to_sort, prs_sort_direction);
+                list = ReportCellConfigFacade.search(prs_start_record, prs_length_page,
+                        prs_global_search, prs_list_column_name, prs_list_column_search, prs_column_to_sort,
+                        prs_sort_direction, recordsTotal, recordsFiltered, neTypeId);
+                
+            } catch (DAOException ex) {
+                logger.error(ex.getMessage(), ex);
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+            // chuyển list  thành list String
+            List<List<String>> data = new ArrayList();
+            if (list != null) {
+                logger.info("user: {}, ip: {},mem: {}, list: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(),list.size());
+                for (int i = 0; i < list.size(); i++) {
+                    ArrayList<String> ls = new ArrayList();
+                    if (neTypeId.equalsIgnoreCase("5")) {
+                        Cell2GConfig item = (Cell2GConfig) list.get(i);
+                        // thứ tự phải khớp với thứ tự của các cột trong table của trang jsp
+                        ls.add(String.valueOf(i + 1));
+                        ls.add(neTypeId);
+                        ls.add(item.getNodeCode());
+                        ls.add(item.getManagementUnit());
+                        ls.add(item.getVendorName());
+                        ls.add(item.getBuildingCode());
+                        ls.add(item.getAreaId());
+                        ls.add(item.getProvinceId());
+                        ls.add(item.getProvinceName());
+                        ls.add(item.getDistrictId());
+                        ls.add(item.getDistrictName());
+                        ls.add(item.getLatitude());
+                        ls.add(item.getLongitude());
+                        ls.add(item.getSiteType());
+                        ls.add(item.getParentCode());
+                        ls.add(item.getProjectCode());
+                        ls.add(item.getBscName());
+                        ls.add(item.getManagementName());
+                        ls.add(item.getSystemName());
+                        ls.add(item.getLac());
+                        ls.add(item.getCi());
+                        ls.add(item.getFrequencyBand());
+                        ls.add(item.getBcch());
+                        ls.add(item.getBsic());
+                        ls.add(item.getTch());
+                        ls.add(item.getTrxConfig());
+                        ls.add(item.getCellType());
+                        ls.add(item.getAzimuth());
+                        ls.add(item.getMechanicalTilt());
+                        ls.add(item.getElectricalTilt());
+                        ls.add(item.getTotalTilt());
+                        ls.add(item.getAntennaType());
+                        ls.add(item.getAntennaHigh());
+                        ls.add(item.getChungAnten());
+                        ls.add(item.getBosterTma());
+                        ls.add(item.getSpecialCoverage());
+                        ls.add(item.getAntennaGain());
+                        ls.add(item.getStatus());
+                        ls.add(item.getNote());
+                    } else if (neTypeId.equalsIgnoreCase("6")) {
+                        Cell3GConfig item = (Cell3GConfig) list.get(i);
+                        // thứ tự phải khớp với thứ tự của các cột trong table của trang jsp
+                        ls.add(String.valueOf(i + 1));
+                        ls.add(neTypeId);
+                        ls.add(item.getNodeCode());
+                        ls.add(item.getManagementUnit());
+                        ls.add(item.getVendorName());
+                        ls.add(item.getBuildingCode());
+                        ls.add(item.getAreaId());
+                        ls.add(item.getProvinceId());
+                        ls.add(item.getProvinceName());
+                        ls.add(item.getDistrictId());
+                        ls.add(item.getDistrictName());
+                        ls.add(item.getLatitude());
+                        ls.add(item.getLongitude());
+                        ls.add(item.getSiteType());
+                        ls.add(item.getParentCode());
+                        ls.add(item.getProjectCode());
+                        ls.add(item.getRncName());
+                        ls.add(item.getManagementName());
+                        ls.add(item.getSystemName());
+                        ls.add(item.getLac());
+                        ls.add(item.getCi());
+                        ls.add(item.getRac());
+                        ls.add(item.getFrequencyBand());
+                        ls.add(item.getDlUarfcn());
+                        ls.add(item.getDlPsc());
+                        ls.add(item.getCpichPower());
+                        ls.add(item.getTotalPower());
+                        ls.add(item.getMaxPower());
+                        ls.add(item.getOamIp());
+                        ls.add(item.getServiceIp());
+                        ls.add(item.getCellType());
+                        ls.add(item.getAzimuth());
+                        ls.add(item.getMechanicalTilt());
+                        ls.add(item.getElectricalTilt());
+                        ls.add(item.getTotalTilt());
+                        ls.add(item.getAntennaType());
+                        ls.add(item.getAntennaHigh());
+                        ls.add(item.getChungAnten());
+                        ls.add(item.getNoOfCarrier());
+                        ls.add(item.getBosterTma());
+                        ls.add(item.getSpecialCoverage());
+                        ls.add(item.getReason());
+                        ls.add(item.getAntennaGain());
+                        ls.add(item.getStatus());
+                        ls.add(item.getNote());
+                    }
+                    else if (neTypeId.equalsIgnoreCase("7")) {
+                        Cell4GConfig item = (Cell4GConfig) list.get(i);
+                        // thứ tự phải khớp với thứ tự của các cột trong table của trang jsp
+                        ls.add(String.valueOf(i + 1));
+                        ls.add(neTypeId);
+                        ls.add(item.getNodeCode());
+                        ls.add(item.getManagementUnit());
+                        ls.add(item.getVendorName());
+                        ls.add(item.getBuildingCode());
+                        ls.add(item.getAreaId());
+                        ls.add(item.getProvinceId());
+                        ls.add(item.getProvinceName());
+                        ls.add(item.getDistrictId());
+                        ls.add(item.getDistrictName());
+                        ls.add(item.getLatitude());
+                        ls.add(item.getLongitude());
+                        ls.add(item.getSiteType());
+                        ls.add(item.getParentCode());
+                        ls.add(item.getEnodebId());
+                        ls.add(item.getProjectCode());
+                        ls.add(item.getManagementName());
+                        ls.add(item.getSystemName());
+                        ls.add(item.getCi());
+                        ls.add(item.getFrequencyBand());
+                        ls.add(item.getUarfcn());
+                        ls.add(item.getBandWidth());
+                        ls.add(item.getPci());
+                        ls.add(item.getTac());
+                        ls.add(item.getLcrid());
+                        ls.add(item.getOamIp());
+                        ls.add(item.getServiceIp());
+                        ls.add(item.getCellType());
+                        ls.add(item.getHoanCanhRaDoi());
+                        ls.add(item.getAzimuth());
+                        ls.add(item.getMechanicalTilt());
+                        ls.add(item.getElectricalTilt());
+                        ls.add(item.getTotalTilt());
+                        ls.add(item.getAntennaType());
+                        ls.add(item.getAntennaHigh());
+                        ls.add(item.getChungAnten());
+                        ls.add(item.getNoOfCarrier());
+                        ls.add(item.getBosterTma());
+                        ls.add(item.getSpecialCoverage());
+                        ls.add(item.getReason());
+                        ls.add(item.getAntennaGain());
+                        ls.add(item.getStatus());
+                        ls.add(item.getNote());
+                    }
+                    data.add(ls);
+                }
+            }
+            // chuyển thành object json
+            ContentDataTableItem responseObj = new ContentDataTableItem(draw, recordsTotal[0], recordsFiltered[0], data);
+            Gson gson = new Gson();
+            logger.info("user: {}, ip: {},mem: {} end", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            return gson.toJson(responseObj);
+        } catch (DAOException | NumberFormatException e) {
+            logger.error(e.getMessage(), e);
         }
-        filterForm.setListFilterForm(temp);
-        mm.put("filterReportList", facade.findFilterReport(Integer.valueOf(type)));
-        mm.put("type", type);
-        mm.put("filterForm", filterForm);
-        return "report/cauhinhthietbi/list";
+        return null;
     }
 
     @RequestMapping(value = "/addFilter", method = RequestMethod.GET, params = {"export"})
@@ -1565,4 +1625,724 @@ public class ConfigCellController extends BaseController {
             logger.error(e.getMessage(), e);
         }
     }
+
+    @RequestMapping(value = "/exportExcel", method = RequestMethod.GET)
+    public void exportExcel(HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(value = "tinhTpId", required = false) String tinhTpIds,
+            @RequestParam(value = "khuvucId", required = false) String khuvucIds,
+            @RequestParam(value = "quanHuyenId", required = false) String quanHuyenIds,
+//            @RequestParam(value = "phuongXaId", required = false) String phuongXaIds,
+            @RequestParam(value = "neTypeId", required = false) String neTypeId
+    ) {
+        List data = null;
+        try {
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+            String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+            String tinhManagers = String.join(",", tinhManager);
+
+            if (khuvucIds != null && khuvucIds.equalsIgnoreCase("null")) {
+                khuvucIds = null;
+            }
+            if (tinhTpIds != null && tinhTpIds.equalsIgnoreCase("null")) {
+                tinhTpIds = null;
+            }
+            if (quanHuyenIds != null && quanHuyenIds.equalsIgnoreCase("null")) {
+                quanHuyenIds = null;
+            }
+//            if (phuongXaIds != null && phuongXaIds.equalsIgnoreCase("null")) {
+//                phuongXaIds = null;
+//            }
+            //neu user search theo tinh tp thi search theo gia tri nguoi dung chon
+            if (tinhTpIds != null && !tinhTpIds.isEmpty()) {
+                tinhManagers = tinhTpIds;
+            }
+            logger.info("user: {}, ip: {},mem: {} function 'exportExcel' neTypeId:{} khuVucIds:{}, tinhTpIds:{}, quanHuyenIds:{}, phuongXaIds:{}, permisson:{}",
+                    user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), neTypeId, khuvucIds, tinhTpIds, quanHuyenIds, null, tinhManagers);
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+
+            data = ReportCellConfigFacade.exportExcel(khuvucIds, tinhManagers, quanHuyenIds, null, neTypeId);
+            logger.info("user: {}, ip: {},mem: {}, function 'exportExcel'  {} ban ghi", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), data == null ? 0 : data.size());
+            File fileResult = writeExportExcel(dataDirectory, data, neTypeId);
+            if (fileResult.exists()) {
+                response.setContentType("application/excel");
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileResult.getName());
+                try {
+                    FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
+                    response.getOutputStream().flush();
+                } catch (IOException ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+            }
+            logger.info("user: {}, ip: {},mem: {}, function 'exportExcel' end", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (data != null) {
+                data.clear();
+            }
+        }
+    }
+
+    private File writeExportExcel(String folderTemplate, List datas, String neTypeId) {
+        File result = null;
+        FileOutputStream fos = null;
+        SXSSFWorkbook workbook = null;
+        XSSFWorkbook wbTemp = null;
+        FileInputStream fin = null;
+        try {
+
+            if (neTypeId.equalsIgnoreCase("5")) {
+                result = new File(StringUtils.getFolderTemp() + File.separator + "Config2G" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx");
+//                fin = new FileInputStream(folderTemplate + File.separator + "TempBaoCaoConfigCell2G.xlsx");
+            } else if (neTypeId.equalsIgnoreCase("6")) {
+                result = new File(StringUtils.getFolderTemp() + File.separator + "Config3G" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx");
+//                fin = new FileInputStream(folderTemplate + File.separator + "TempBaoCaoConfigCell3G.xlsx");
+            } else if (neTypeId.equalsIgnoreCase("7")) {
+                result = new File(StringUtils.getFolderTemp() + File.separator + "Config4G" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx");
+//                fin = new FileInputStream(folderTemplate + File.separator + "TempBaoCaoConfigCell4G.xlsx");
+            }
+
+            workbook = new SXSSFWorkbook(1000);
+            XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            Sheet sheet = workbook.createSheet(neTypeId);
+            int rowIndex = 1;
+            Cell cell = null;
+            Row row = null;
+
+            if (datas != null) {
+                if (neTypeId.equalsIgnoreCase("5")) {
+                    //tao title excel
+                    row = sheet.createRow(0);
+                    cell = row.createCell(0);
+                    cell.setCellValue("STT");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(1);
+                    cell.setCellValue("Mã Node");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(2);
+                    cell.setCellValue("Đơn vị quản lý");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(3);
+                    cell.setCellValue("Thiết bị");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(4);
+                    cell.setCellValue("Mã CSHT");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(5);
+                    cell.setCellValue("Tỉnh/TP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(6);
+                    cell.setCellValue("Quận/Huyện");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(7);
+                    cell.setCellValue("Latitude");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(8);
+                    cell.setCellValue("Longitude");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(9);
+                    cell.setCellValue("Loại trạm");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(10);
+                    cell.setCellValue("Mã BTS");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(11);
+                    cell.setCellValue("Mã trạm dự án");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(12);
+                    cell.setCellValue("BSC");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(13);
+                    cell.setCellValue("Tên cell (Tên cho quản lý)");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(14);
+                    cell.setCellValue("Tên trên hệ thống");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(15);
+                    cell.setCellValue("Lac");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(16);
+                    cell.setCellValue("Ci");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(17);
+                    cell.setCellValue("Băng tần");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(18);
+                    cell.setCellValue("Bcch");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(19);
+                    cell.setCellValue("bsic");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(20);
+                    cell.setCellValue("Tch");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(21);
+                    cell.setCellValue("TrxConfig");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(22);
+                    cell.setCellValue("Cell Type");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(23);
+                    cell.setCellValue("Azimuth");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(24);
+                    cell.setCellValue("MechanicalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(25);
+                    cell.setCellValue("ElectricalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(26);
+                    cell.setCellValue("TotalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(27);
+                    cell.setCellValue("AntennaType");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(28);
+                    cell.setCellValue("AntennaHigh");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(29);
+                    cell.setCellValue("Chung Anten");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(30);
+                    cell.setCellValue("BosterTma");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(31);
+                    cell.setCellValue("SpecialCoverage");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(32);
+                    cell.setCellValue("AntennaGain");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(33);
+                    cell.setCellValue("Trạng thái");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(34);
+                    cell.setCellValue("Note");
+                    cell.setCellStyle(style);
+                    for (int i = 0; i < datas.size(); i++) {
+                        Cell2GConfig it = (Cell2GConfig) datas.get(i);
+                        row = sheet.createRow(rowIndex++);
+                        cell = row.createCell(0);
+                        cell.setCellValue(i + 1);
+                        cell = row.createCell(1);
+                        cell.setCellValue(it.getNodeCode() == null ? "" : it.getNodeCode());
+                        cell = row.createCell(2);
+                        cell.setCellValue(it.getManagementUnit() == null ? "" : it.getManagementUnit());
+                        cell = row.createCell(3);
+                        cell.setCellValue(it.getVendorName() == null ? "" : it.getVendorName());
+                        cell = row.createCell(4);
+                        cell.setCellValue(it.getBuildingCode() == null ? "" : it.getBuildingCode());
+                        cell = row.createCell(5);
+                        cell.setCellValue(it.getProvinceName() == null ? "" : it.getProvinceName());
+                        cell = row.createCell(6);
+                        cell.setCellValue(it.getDistrictName() == null ? "" : it.getDistrictName());
+                        cell = row.createCell(7);
+                        cell.setCellValue(it.getLatitude() == null ? "" : it.getLatitude());
+                        cell = row.createCell(8);
+                        cell.setCellValue(it.getLongitude() == null ? "" : it.getLongitude());
+                        cell = row.createCell(9);
+                        cell.setCellValue(it.getSiteType() == null ? "" : it.getSiteType());
+                        cell = row.createCell(10);
+                        cell.setCellValue(it.getParentCode() == null ? "" : it.getParentCode());
+                        cell = row.createCell(11);
+                        cell.setCellValue(it.getProjectCode() == null ? "" : it.getProjectCode());
+                        cell = row.createCell(12);
+                        cell.setCellValue(it.getBscName() == null ? "" : it.getBscName());
+                        cell = row.createCell(13);
+                        cell.setCellValue(it.getManagementName() == null ? "" : it.getManagementName());
+                        cell = row.createCell(14);
+                        cell.setCellValue(it.getSystemName() == null ? "" : it.getSystemName());
+                        cell = row.createCell(15);
+                        cell.setCellValue(it.getLac() == null ? "" : it.getLac());
+                        cell = row.createCell(16);
+                        cell.setCellValue(it.getCi() == null ? "" : it.getCi());
+                        cell = row.createCell(17);
+                        cell.setCellValue(it.getFrequencyBand() == null ? "" : it.getFrequencyBand());
+                        cell = row.createCell(18);
+                        cell.setCellValue(it.getBcch() == null ? "" : it.getBcch());
+                        cell = row.createCell(19);
+                        cell.setCellValue(it.getBsic() == null ? "" : it.getBsic());
+                        cell = row.createCell(20);
+                        cell.setCellValue(it.getTch() == null ? "" : it.getTch());
+                        cell = row.createCell(21);
+                        cell.setCellValue(it.getTrxConfig() == null ? "" : it.getTrxConfig());
+                        cell = row.createCell(22);
+                        cell.setCellValue(it.getCellType() == null ? "" : it.getCellType());
+                        cell = row.createCell(23);
+                        cell.setCellValue(it.getAzimuth() == null ? "" : it.getAzimuth());
+                        cell = row.createCell(24);
+                        cell.setCellValue(it.getMechanicalTilt() == null ? "" : it.getMechanicalTilt());
+                        cell = row.createCell(25);
+                        cell.setCellValue(it.getElectricalTilt() == null ? "" : it.getElectricalTilt());
+                        cell = row.createCell(26);
+                        cell.setCellValue(it.getTotalTilt() == null ? "" : it.getTotalTilt());
+                        cell = row.createCell(27);
+                        cell.setCellValue(it.getAntennaType() == null ? "" : it.getAntennaType());
+                        cell = row.createCell(28);
+                        cell.setCellValue(it.getAntennaHigh() == null ? "" : it.getAntennaHigh());
+                        cell = row.createCell(29);
+                        cell.setCellValue(it.getChungAnten() == null ? "" : it.getChungAnten());
+                        cell = row.createCell(30);
+                        cell.setCellValue(it.getBosterTma() == null ? "" : it.getBosterTma());
+                        cell = row.createCell(31);
+                        cell.setCellValue(it.getSpecialCoverage() == null ? "" : it.getSpecialCoverage());
+                        cell = row.createCell(32);
+                        cell.setCellValue(it.getAntennaGain() == null ? "" : it.getAntennaGain());
+                        cell = row.createCell(33);
+                        cell.setCellValue(it.getStatus() == null ? "" : it.getStatus());
+                        cell = row.createCell(34);
+                        cell.setCellValue(it.getNote() == null ? "" : it.getNote());
+                    }
+                } else if (neTypeId.equalsIgnoreCase("6")) {
+                    row = sheet.createRow(0);
+                    cell = row.createCell(0);
+                    cell.setCellValue("STT");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(1);
+                    cell.setCellValue("Mã Node");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(2);
+                    cell.setCellValue("Đơn vị quản lý");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(3);
+                    cell.setCellValue("Thiết bị");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(4);
+                    cell.setCellValue("Mã CSHT");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(5);
+                    cell.setCellValue("Tỉnh/TP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(6);
+                    cell.setCellValue("Quận/Huyện");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(7);
+                    cell.setCellValue("Latitude");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(8);
+                    cell.setCellValue("Longitude");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(9);
+                    cell.setCellValue("Loại trạm");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(10);
+                    cell.setCellValue("Mã NODEB");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(11);
+                    cell.setCellValue("Mã trạm dự án");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(12);
+                    cell.setCellValue("RNC");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(13);
+                    cell.setCellValue("Tên cell (Tên cho quản lý)");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(14);
+                    cell.setCellValue("Tên trên hệ thống");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(15);
+                    cell.setCellValue("Lac");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(16);
+                    cell.setCellValue("Ci");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(17);
+                    cell.setCellValue("RAC");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(18);
+                    cell.setCellValue("Băng tần");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(19);
+                    cell.setCellValue("DL_UARFCN");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(20);
+                    cell.setCellValue("dlPsc");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(21);
+                    cell.setCellValue("DC_support");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(22);
+                    cell.setCellValue("cpichPower");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(23);
+                    cell.setCellValue("totalPower");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(24);
+                    cell.setCellValue("maxPower");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(25);
+                    cell.setCellValue("OAM IP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(26);
+                    cell.setCellValue("Service IP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(27);
+                    cell.setCellValue("Cell Type");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(28);
+                    cell.setCellValue("Azimuth");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(29);
+                    cell.setCellValue("MechanicalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(30);
+                    cell.setCellValue("ElectricalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(31);
+                    cell.setCellValue("TotalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(32);
+                    cell.setCellValue("AntennaType");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(33);
+                    cell.setCellValue("AntennaHigh");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(34);
+                    cell.setCellValue("Chung Anten");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(35);
+                    cell.setCellValue("noOfCarrier");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(36);
+                    cell.setCellValue("BosterTma");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(37);
+                    cell.setCellValue("SpecialCoverage");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(38);
+                    cell.setCellValue("Lý do");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(39);
+                    cell.setCellValue("AntennaGain");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(40);
+                    cell.setCellValue("Trạng thái");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(41);
+                    cell.setCellValue("Note");
+                    cell.setCellStyle(style);
+                    for (int i = 0; i < datas.size(); i++) {
+                        Cell3GConfig it = (Cell3GConfig) datas.get(i);
+                        row = sheet.createRow(rowIndex++);
+                        cell = row.createCell(0);
+                        cell.setCellValue(i + 1);
+                        cell = row.createCell(1);
+                        cell.setCellValue(it.getNodeCode() == null ? "" : it.getNodeCode());
+                        cell = row.createCell(2);
+                        cell.setCellValue(it.getManagementUnit() == null ? "" : it.getManagementUnit());
+                        cell = row.createCell(3);
+                        cell.setCellValue(it.getVendorName() == null ? "" : it.getVendorName());
+                        cell = row.createCell(4);
+                        cell.setCellValue(it.getBuildingCode() == null ? "" : it.getBuildingCode());
+                        cell = row.createCell(5);
+                        cell.setCellValue(it.getProvinceName() == null ? "" : it.getProvinceName());
+                        cell = row.createCell(6);
+                        cell.setCellValue(it.getDistrictName() == null ? "" : it.getDistrictName());
+                        cell = row.createCell(7);
+                        cell.setCellValue(it.getLatitude() == null ? "" : it.getLatitude());
+                        cell = row.createCell(8);
+                        cell.setCellValue(it.getLongitude() == null ? "" : it.getLongitude());
+                        cell = row.createCell(9);
+                        cell.setCellValue(it.getSiteType() == null ? "" : it.getSiteType());
+                        cell = row.createCell(10);
+                        cell.setCellValue(it.getParentCode() == null ? "" : it.getParentCode());
+                        cell = row.createCell(11);
+                        cell.setCellValue(it.getProjectCode() == null ? "" : it.getProjectCode());
+                        cell = row.createCell(12);
+                        cell.setCellValue(it.getRncName() == null ? "" : it.getRncName());
+                        cell = row.createCell(13);
+                        cell.setCellValue(it.getManagementName() == null ? "" : it.getManagementName());
+                        cell = row.createCell(14);
+                        cell.setCellValue(it.getSystemName() == null ? "" : it.getSystemName());
+                        cell = row.createCell(15);
+                        cell.setCellValue(it.getLac() == null ? "" : it.getLac());
+                        cell = row.createCell(16);
+                        cell.setCellValue(it.getCi() == null ? "" : it.getCi());
+                        cell = row.createCell(17);
+                        cell.setCellValue(it.getRac() == null ? "" : it.getRac());
+                        cell = row.createCell(18);
+                        cell.setCellValue(it.getFrequencyBand() == null ? "" : it.getFrequencyBand());
+                        cell = row.createCell(19);
+                        cell.setCellValue(it.getDlUarfcn() == null ? "" : it.getDlUarfcn());
+                        cell = row.createCell(20);
+                        cell.setCellValue(it.getDlPsc() == null ? "" : it.getDlPsc());
+                        cell = row.createCell(21);
+                        cell.setCellValue(it.getDcSupport() == null ? "" : it.getDcSupport());
+                        cell = row.createCell(22);
+                        cell.setCellValue(it.getCpichPower() == null ? "" : it.getCpichPower());
+                        cell = row.createCell(23);
+                        cell.setCellValue(it.getTotalPower() == null ? "" : it.getTotalPower());
+                        cell = row.createCell(24);
+                        cell.setCellValue(it.getMaxPower() == null ? "" : it.getMaxPower());
+                        cell = row.createCell(25);
+                        cell.setCellValue(it.getOamIp() == null ? "" : it.getOamIp());
+                        cell = row.createCell(26);
+                        cell.setCellValue(it.getServiceIp() == null ? "" : it.getServiceIp());
+                        cell = row.createCell(27);
+                        cell.setCellValue(it.getCellType() == null ? "" : it.getCellType());
+                        cell = row.createCell(28);
+                        cell.setCellValue(it.getAzimuth() == null ? "" : it.getAzimuth());
+                        cell = row.createCell(29);
+                        cell.setCellValue(it.getMechanicalTilt() == null ? "" : it.getMechanicalTilt());
+                        cell = row.createCell(30);
+                        cell.setCellValue(it.getElectricalTilt() == null ? "" : it.getElectricalTilt());
+                        cell = row.createCell(31);
+                        cell.setCellValue(it.getTotalTilt() == null ? "" : it.getTotalTilt());
+                        cell = row.createCell(32);
+                        cell.setCellValue(it.getAntennaType() == null ? "" : it.getAntennaType());
+                        cell = row.createCell(33);
+                        cell.setCellValue(it.getAntennaHigh() == null ? "" : it.getAntennaHigh());
+                        cell = row.createCell(34);
+                        cell.setCellValue(it.getChungAnten() == null ? "" : it.getChungAnten());
+                        cell = row.createCell(35);
+                        cell.setCellValue(it.getNoOfCarrier() == null ? "" : it.getNoOfCarrier());
+                        cell = row.createCell(36);
+                        cell.setCellValue(it.getBosterTma() == null ? "" : it.getBosterTma());
+                        cell = row.createCell(37);
+                        cell.setCellValue(it.getSpecialCoverage() == null ? "" : it.getSpecialCoverage());
+                        cell = row.createCell(38);
+                        cell.setCellValue(it.getReason() == null ? "" : it.getReason());
+                        cell = row.createCell(39);
+                        cell.setCellValue(it.getAntennaGain() == null ? "" : it.getAntennaGain());
+                        cell = row.createCell(40);
+                        cell.setCellValue(it.getStatus() == null ? "" : it.getStatus());
+                        cell = row.createCell(41);
+                        cell.setCellValue(it.getNote() == null ? "" : it.getNote());
+                    }
+                } else if (neTypeId.equalsIgnoreCase("7")) {
+                    row = sheet.createRow(0);
+                    cell = row.createCell(0);
+                    cell.setCellValue("STT");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(1);
+                    cell.setCellValue("Mã Node");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(2);
+                    cell.setCellValue("Đơn vị quản lý");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(3);
+                    cell.setCellValue("Thiết bị");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(4);
+                    cell.setCellValue("Mã CSHT");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(5);
+                    cell.setCellValue("Tỉnh/TP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(6);
+                    cell.setCellValue("Quận/Huyện");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(7);
+                    cell.setCellValue("Latitude");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(8);
+                    cell.setCellValue("Longitude");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(9);
+                    cell.setCellValue("Loại trạm");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(10);
+                    cell.setCellValue("Mã ENODEB");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(11);
+                    cell.setCellValue("ENODEB ID");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(12);
+                    cell.setCellValue("Mã trạm dự án");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(13);
+                    cell.setCellValue("Tên cell (Tên cho quản lý)");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(14);
+                    cell.setCellValue("Tên trên hệ thống");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(15);
+                    cell.setCellValue("Ci");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(16);
+                    cell.setCellValue("Băng tần");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(17);
+                    cell.setCellValue("Bandwidth");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(18);
+                    cell.setCellValue("UARFCN");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(19);
+                    cell.setCellValue("Pci");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(20);
+                    cell.setCellValue("tac");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(21);
+                    cell.setCellValue("lcrid");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(22);
+                    cell.setCellValue("OAM IP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(23);
+                    cell.setCellValue("Service IP");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(24);
+                    cell.setCellValue("Cell Type");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(25);
+                    cell.setCellValue("Azimuth");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(26);
+                    cell.setCellValue("MechanicalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(27);
+                    cell.setCellValue("ElectricalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(28);
+                    cell.setCellValue("TotalTilt");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(29);
+                    cell.setCellValue("AntennaType");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(30);
+                    cell.setCellValue("AntennaHigh");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(31);
+                    cell.setCellValue("Chung Anten");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(32);
+                    cell.setCellValue("noOfCarrier");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(33);
+                    cell.setCellValue("BosterTma");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(34);
+                    cell.setCellValue("SpecialCoverage");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(35);
+                    cell.setCellValue("Lý do");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(36);
+                    cell.setCellValue("AntennaGain");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(37);
+                    cell.setCellValue("Trạng thái");
+                    cell.setCellStyle(style);
+                    cell = row.createCell(38);
+                    cell.setCellValue("Note");
+                    cell.setCellStyle(style);
+                    for (int i = 0; i < datas.size(); i++) {
+                        Cell4GConfig it = (Cell4GConfig) datas.get(i);
+                        row = sheet.createRow(rowIndex++);
+                        cell = row.createCell(0);
+                        cell.setCellValue(i + 1);
+                        cell = row.createCell(1);
+                        cell.setCellValue(it.getNodeCode() == null ? "" : it.getNodeCode());
+                        cell = row.createCell(2);
+                        cell.setCellValue(it.getManagementUnit() == null ? "" : it.getManagementUnit());
+                        cell = row.createCell(3);
+                        cell.setCellValue(it.getVendorName() == null ? "" : it.getVendorName());
+                        cell = row.createCell(4);
+                        cell.setCellValue(it.getBuildingCode() == null ? "" : it.getBuildingCode());
+                        cell = row.createCell(5);
+                        cell.setCellValue(it.getProvinceName() == null ? "" : it.getProvinceName());
+                        cell = row.createCell(6);
+                        cell.setCellValue(it.getDistrictName() == null ? "" : it.getDistrictName());
+                        cell = row.createCell(7);
+                        cell.setCellValue(it.getLatitude() == null ? "" : it.getLatitude());
+                        cell = row.createCell(8);
+                        cell.setCellValue(it.getLongitude() == null ? "" : it.getLongitude());
+                        cell = row.createCell(9);
+                        cell.setCellValue(it.getSiteType() == null ? "" : it.getSiteType());
+                        cell = row.createCell(10);
+                        cell.setCellValue(it.getParentCode() == null ? "" : it.getParentCode());
+                        cell = row.createCell(11);
+                        cell.setCellValue(it.getEnodebId() == null ? "" : it.getEnodebId());
+                        cell = row.createCell(12);
+                        cell.setCellValue(it.getProjectCode() == null ? "" : it.getProjectCode());
+                        cell = row.createCell(13);
+                        cell.setCellValue(it.getManagementName() == null ? "" : it.getManagementName());
+                        cell = row.createCell(14);
+                        cell.setCellValue(it.getSystemName() == null ? "" : it.getSystemName());
+                        cell = row.createCell(15);
+                        cell.setCellValue(it.getCi() == null ? "" : it.getCi());
+                        cell = row.createCell(16);
+                        cell.setCellValue(it.getFrequencyBand() == null ? "" : it.getFrequencyBand());
+                        cell = row.createCell(17);
+                        cell.setCellValue(it.getBandWidth() == null ? "" : it.getBandWidth());
+                        cell = row.createCell(18);
+                        cell.setCellValue(it.getUarfcn() == null ? "" : it.getUarfcn());
+                        cell = row.createCell(19);
+                        cell.setCellValue(it.getPci() == null ? "" : it.getPci());
+                        cell = row.createCell(20);
+                        cell.setCellValue(it.getTac() == null ? "" : it.getTac());
+                        cell = row.createCell(21);
+                        cell.setCellValue(it.getLcrid() == null ? "" : it.getLcrid());
+                        cell = row.createCell(22);
+                        cell.setCellValue(it.getOamIp() == null ? "" : it.getOamIp());
+                        cell = row.createCell(23);
+                        cell.setCellValue(it.getServiceIp() == null ? "" : it.getServiceIp());
+                        cell = row.createCell(24);
+                        cell.setCellValue(it.getCellType() == null ? "" : it.getCellType());
+                        cell = row.createCell(25);
+                        cell.setCellValue(it.getAzimuth() == null ? "" : it.getAzimuth());
+                        cell = row.createCell(26);
+                        cell.setCellValue(it.getMechanicalTilt() == null ? "" : it.getMechanicalTilt());
+                        cell = row.createCell(27);
+                        cell.setCellValue(it.getElectricalTilt() == null ? "" : it.getElectricalTilt());
+                        cell = row.createCell(28);
+                        cell.setCellValue(it.getTotalTilt() == null ? "" : it.getTotalTilt());
+                        cell = row.createCell(29);
+                        cell.setCellValue(it.getAntennaType() == null ? "" : it.getAntennaType());
+                        cell = row.createCell(30);
+                        cell.setCellValue(it.getAntennaHigh() == null ? "" : it.getAntennaHigh());
+                        cell = row.createCell(31);
+                        cell.setCellValue(it.getChungAnten() == null ? "" : it.getChungAnten());
+                        cell = row.createCell(32);
+                        cell.setCellValue(it.getNoOfCarrier() == null ? "" : it.getNoOfCarrier());
+                        cell = row.createCell(33);
+                        cell.setCellValue(it.getBosterTma() == null ? "" : it.getBosterTma());
+                        cell = row.createCell(34);
+                        cell.setCellValue(it.getSpecialCoverage() == null ? "" : it.getSpecialCoverage());
+                        cell = row.createCell(35);
+                        cell.setCellValue(it.getReason() == null ? "" : it.getReason());
+                        cell = row.createCell(36);
+                        cell.setCellValue(it.getAntennaGain() == null ? "" : it.getAntennaGain());
+                        cell = row.createCell(37);
+                        cell.setCellValue(it.getStatus() == null ? "" : it.getStatus());
+                        cell = row.createCell(38);
+                        cell.setCellValue(it.getNote() == null ? "" : it.getNote());
+                    }
+                }
+
+            }
+
+            fos = new FileOutputStream(result);
+            workbook.write(fos);
+            if (SXSSFWorkbook.class.equals(workbook.getClass())) {
+                SXSSFWorkbook wb = (SXSSFWorkbook) workbook;
+                wb.dispose();
+            }
+            fos.flush();
+            fos.close();
+
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+
+            try {
+                if (fos != null) {
+                    fos.flush();
+                    fos.close();
+                }
+            } catch (IOException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+
+        }
+
+        return result;
+    }
+
 }
+

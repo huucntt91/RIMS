@@ -1,10 +1,6 @@
 package com.vnpt.media.rims.facade;
 
-import com.vnpt.media.rims.bean.BuildingBO;
-import com.vnpt.media.rims.bean.BuildingExportBO;
-import com.vnpt.media.rims.formbean.RegCSHTExcel;
 import com.vnpt.media.rims.formbean.ReportCSHT;
-import com.vnpt.media.rims.formbean.UpdateCSHTExcel;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;

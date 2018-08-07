@@ -30,6 +30,7 @@
                                 <option  <c:if test='${type == "-1"}' > selected </c:if>  value="-1">--- Chọn đối tượng ---</option>
                                 <option <c:if test='${type == "5"}' > selected </c:if>  value="5">--- Cell 2G ---</option>
                                 <option <c:if test='${type == "6"}' > selected </c:if>  value="6">--- Cell 3G ---</option>
+                                <option <c:if test='${type == "8"}' > selected </c:if>  value="8">--- Cell 4G ---</option>
                                 <option <c:if test='${type == "2"}' > selected </c:if>  value="2">--- BTS ---</option>
                                 <option <c:if test='${type == "3"}' > selected </c:if>  value="3">--- NodeB ---</option>                            
                                 </select>  
