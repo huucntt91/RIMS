@@ -554,7 +554,7 @@ public class CellsDAO extends GenericDAO implements ICells {
         Connection conn = null;
         try {
             conn = this.getConnection();
-            String querySql = "{? = call PKG_CELL.fn_update_cell_2g_excel(?,?,?,?,?,?,?,?,?,?"
+            String querySql = "{? = call PKG_CELL.fn_update_cell_2g_excel(?,?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?) }";
@@ -565,6 +565,8 @@ public class CellsDAO extends GenericDAO implements ICells {
             vars.add(permission);
             vars.add(cell2gRegForm.getCode());
             vars.add(cell2gRegForm.getBtsCode());
+            vars.add(cell2gRegForm.getMaCsht());
+            vars.add(cell2gRegForm.getCellType());
             vars.add(cell2gRegForm.getTen_cell());
 
             vars.add(cell2gRegForm.getHoanCanhRaDoi());
@@ -586,7 +588,7 @@ public class CellsDAO extends GenericDAO implements ICells {
             vars.add(cell2gRegForm.getAntennaType());
             vars.add(cell2gRegForm.getAntennaGain());
             vars.add(cell2gRegForm.getNhomCell());
-            vars.add(cell2gRegForm.getCellType());
+            
             vars.add(cell2gRegForm.getVnpCode());
             vars.add(cell2gRegForm.getNgaydangky());
             vars.add(cell2gRegForm.getNgaycapphep());
@@ -660,7 +662,7 @@ public class CellsDAO extends GenericDAO implements ICells {
         Connection conn = null;
         try {
             conn = this.getConnection();
-            String querySql = "{? = call PKG_CELL.fn_update_cell_3g_excel(?,?,?,?,?,?,?,?,?,?"
+            String querySql = "{? = call PKG_CELL.fn_update_cell_3g_excel(?,?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?) }";
@@ -672,6 +674,8 @@ public class CellsDAO extends GenericDAO implements ICells {
             vars.add(permission);
             vars.add(cell3gRegForm.getCode());
             vars.add(cell3gRegForm.getBtsCode());
+            vars.add(cell3gRegForm.getMaCsht());
+            vars.add(cell3gRegForm.getCellType());
             vars.add(cell3gRegForm.getTen_cell());
             vars.add(cell3gRegForm.getHoanCanhRaDoi());
             vars.add(cell3gRegForm.getNgayHoatDong());
@@ -692,7 +696,7 @@ public class CellsDAO extends GenericDAO implements ICells {
             vars.add(cell3gRegForm.getAntennaGain());
             vars.add(cell3gRegForm.getNhomCell());
 
-            vars.add(cell3gRegForm.getCellType());
+            
             vars.add(cell3gRegForm.getNgaydangky());
             vars.add(cell3gRegForm.getNgaycapphep());
             vars.add(cell3gRegForm.getElectricalTitl());
@@ -729,7 +733,7 @@ public class CellsDAO extends GenericDAO implements ICells {
         Connection conn = null;
         try {
             conn = this.getConnection();
-            String querySql = "{? = call PKG_CELL.fn_update_cell_4g_excel(?,?,?,?,?,?,?,?,?,?"
+            String querySql = "{? = call PKG_CELL.fn_update_cell_4g_excel(?,?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
                     + ",?,?,?,?,?,?,?) }";
@@ -741,6 +745,8 @@ public class CellsDAO extends GenericDAO implements ICells {
             vars.add(permission);
             vars.add(cell4gRegForm.getCode());
             vars.add(cell4gRegForm.getBtsCode());
+            vars.add(cell4gRegForm.getMaCsht());
+            vars.add(cell4gRegForm.getCellType());
             vars.add(cell4gRegForm.getTen_cell());
             vars.add(cell4gRegForm.getHoanCanhRaDoi());
             vars.add(cell4gRegForm.getNgayHoatDong());
@@ -761,7 +767,7 @@ public class CellsDAO extends GenericDAO implements ICells {
             vars.add(cell4gRegForm.getAntennaGain());
             vars.add(cell4gRegForm.getNhomCell());
 
-            vars.add(cell4gRegForm.getCellType());
+            
             vars.add(cell4gRegForm.getNgaydangky());
             vars.add(cell4gRegForm.getNgaycapphep());
             vars.add(cell4gRegForm.getElectricalTilt());

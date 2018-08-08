@@ -18,75 +18,78 @@ public class Cell3GUpdateExcelModel {
     private String code;
     @Column(name = "ma bts", index = "2")
     private String btsCode;
-    @Column(name = "Ten cell", index = "3")
-    private String ten_cell;
-    @Column(name = "hoan canh ra doi", index = "4")
-    private String hoanCanhRaDoi;
-    @Column(name = "Ngay hoat dong", index = "5")
-    private String ngayHoatDong;
-    @Column(name = "ten tren he thong", index = "6")
-    private String tenTrenHeThong;
-    @Column(name = "Lac", index = "7")
-    private String lac;
-    @Column(name = "ci", index = "8")
-    private String ci;
-    @Column(name = "loaicongnghe", index = "9")
-    private String loaiCN;
-    @Column(name = "frequency band", index = "10")
-    private String frequenctyBand;
-    @Column(name = "Ten thiet bi", index = "11")
-    private String tenThietBi;
-    @Column(name = "Ten tram", index = "12")
-    private String tenTram;
-    @Column(name = "ngaypheduyet", index = "13")
-    private String ngaypheduyet;
-    @Column(name = "ly do", index = "14")
-    private String lydo;
-    @Column(name = "azimuth", index = "15")
-    private String azimuth;
-    @Column(name = "mechanicalTilt", index = "16")
-    private String mechanicalTilt;
-    @Column(name = "total tilt", index = "17")
-    private String totalTilt;
-    @Column(name = "antennaHigh", index = "18")
-    private String antennaHigh;
-    @Column(name = "antennaType", index = "19")
-    private String antennaType;
-    @Column(name = "antennaGain", index = "20")
-    private String antennaGain;
-    @Column(name = "nhomCell", index = "21")
-    private String nhomCell;
-    @Column(name = "cellType", index = "22")
+    @Column(name = "ma csht", index = "3")
+    private String maCsht;
+    @Column(name = "cellType", index = "4")
     private String cellType;
-    @Column(name = "ngaydangky", index = "23")
+    @Column(name = "Ten cell", index = "5")
+    private String ten_cell;
+    @Column(name = "hoan canh ra doi", index = "6")
+    private String hoanCanhRaDoi;
+    @Column(name = "Ngay hoat dong", index = "7")
+    private String ngayHoatDong;
+    @Column(name = "ten tren he thong", index = "8")
+    private String tenTrenHeThong;
+    @Column(name = "Lac", index = "9")
+    private String lac;
+    @Column(name = "ci", index = "10")
+    private String ci;
+    @Column(name = "loaicongnghe", index = "11")
+    private String loaiCN;
+    @Column(name = "frequency band", index = "12")
+    private String frequenctyBand;
+    @Column(name = "Ten thiet bi", index = "13")
+    private String tenThietBi;
+    @Column(name = "Ten tram", index = "14")
+    private String tenTram;
+    @Column(name = "ngaypheduyet", index = "15")
+    private String ngaypheduyet;
+    @Column(name = "ly do", index = "16")
+    private String lydo;
+    @Column(name = "azimuth", index = "17")
+    private String azimuth;
+    @Column(name = "mechanicalTilt", index = "18")
+    private String mechanicalTilt;
+    @Column(name = "total tilt", index = "19")
+    private String totalTilt;
+    @Column(name = "antennaHigh", index = "20")
+    private String antennaHigh;
+    @Column(name = "antennaType", index = "21")
+    private String antennaType;
+    @Column(name = "antennaGain", index = "22")
+    private String antennaGain;
+    @Column(name = "nhomCell", index = "23")
+    private String nhomCell;
+    
+    @Column(name = "ngaydangky", index = "24")
     private String ngaydangky;
-    @Column(name = "ngaycapphep", index = "24")
+    @Column(name = "ngaycapphep", index = "25")
     private String ngaycapphep;
-    @Column(name = "electricalTitl", index = "25")
+    @Column(name = "electricalTitl", index = "26")
     private String electricalTitl;
-    @Column(name = "antennaModel", index = "26")
+    @Column(name = "antennaModel", index = "27")
     private String antennaModel;
-    @Column(name = "antennaParttern", index = "27")
+    @Column(name = "antennaParttern", index = "28")
     private String antennaParttern;
-    @Column(name = "noOfCarrier", index = "28")
+    @Column(name = "noOfCarrier", index = "29")
     private String noOfCarrier;
 //		Lý do			TOTALPOWER	MAX POWER	Tên NgQL	SDT NgQLy
 
-    @Column(name = "bosterTma", index = "29")
+    @Column(name = "bosterTma", index = "30")
     private String bosterTma;
-    @Column(name = "specialCoverage", index = "30")
+    @Column(name = "specialCoverage", index = "31")
     private String specialCoverage;
-    @Column(name = "DL_PSC", index = "31")
+    @Column(name = "DL_PSC", index = "32")
     private String DL_PSC;
-    @Column(name = "CPICH_POWER", index = "32")
+    @Column(name = "CPICH_POWER", index = "33")
     private String CPICH_POWER;
-    @Column(name = "totalPower", index = "33")
+    @Column(name = "totalPower", index = "34")
     private String totalPower;
-    @Column(name = "maxPower", index = "34")
+    @Column(name = "maxPower", index = "35")
     private String maxPower;
-    @Column(name = "tenNgQL", index = "35")
+    @Column(name = "tenNgQL", index = "36")
     private String tenNgQL;
-    @Column(name = "sdtNgQL", index = "36")
+    @Column(name = "sdtNgQL", index = "37")
     private String sdtNgQL;
 
     public Cell3GUpdateExcelModel() {
@@ -386,6 +389,14 @@ public class Cell3GUpdateExcelModel {
 
     public void setSdtNgQL(String sdtNgQL) {
         this.sdtNgQL = sdtNgQL;
+    }
+
+    public String getMaCsht() {
+        return maCsht;
+    }
+
+    public void setMaCsht(String maCsht) {
+        this.maCsht = maCsht;
     }
 
 }
