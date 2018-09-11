@@ -189,7 +189,17 @@
 
     <link href="${pageContext.request.contextPath}/resources/css/spectrum.css" rel="stylesheet" type="text/css"/>
     <script src="${pageContext.request.contextPath}/resources/js/spectrum.js" type="text/javascript"></script>
-    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106468556-7"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'UA-106468556-7');
+            gtag('set', {'user_id': '<%=request.getRemoteUser()%>}'); 
+        </script>
 
 </head>
 <body>

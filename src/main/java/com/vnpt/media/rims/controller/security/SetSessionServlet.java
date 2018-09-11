@@ -56,6 +56,7 @@ public class SetSessionServlet extends HttpServlet {
             }
             request.getSession().setAttribute(Constants.FUNCTION_KEY, tempFunction);
             request.getSession().setAttribute(Constants.USER_KEY, t);
+            
             String[] provincePermission = null;
             try {
                 provincePermission = adminFacade.findListTinhByUserId(String.valueOf(t.getId()));
@@ -77,6 +78,7 @@ public class SetSessionServlet extends HttpServlet {
             ManagerAdminFacade adminFacade = new ManagerAdminFacade();
             UserBO userBO = adminFacade.findByUserName(username);
             request.getSession().setAttribute("fullname", userBO.getFullname());
+            request.getSession().setAttribute("email", userBO.getEmail());
             request.getSession().setAttribute("userBO", userBO);
             menuList = adminFacade.getChildrenMenuByUserId("0", null, userBO, null);
             for (MenuBO menu : menuList) {
