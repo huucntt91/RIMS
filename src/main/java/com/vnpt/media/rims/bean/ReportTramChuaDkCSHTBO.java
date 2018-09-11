@@ -20,6 +20,7 @@ public class ReportTramChuaDkCSHTBO{
     private String loaiTram;
     private String provinceId;
     private String provinceName;
+    private String tenTrenHeThong;
 
     public String getNodeId() {
         return nodeId;
@@ -75,6 +76,14 @@ public class ReportTramChuaDkCSHTBO{
 
     public void setProvinceName(String provinceName) {
         this.provinceName = provinceName;
+    }
+
+    public String getTenTrenHeThong() {
+        return tenTrenHeThong;
+    }
+
+    public void setTenTrenHeThong(String tenTrenHeThong) {
+        this.tenTrenHeThong = tenTrenHeThong;
     }
     
     

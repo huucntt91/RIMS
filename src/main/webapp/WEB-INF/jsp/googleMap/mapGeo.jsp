@@ -438,7 +438,8 @@
                 </div>
                 <div id="map" class="map">
                     <div id="gmap" class="fill"></div>
-                    <div style="margin-left: -112px;" id="olmap" class="fill"></div>
+                    <!-- <div style="margin-left: -200px;" id="olmap" class="fill"></div>-->
+                    <div id="olmap" class="fill"></div>
                     <div class="maximize_divNav">
                         <div class="maximizeNav"></div>
                     </div>
@@ -897,16 +898,17 @@
         }));
         var arrLayer = {};
         function init() {
+        // xet true để bật công cụ (bản đồ, vệ tinh) lên
         gmap = new google.maps.Map(document.getElementById('gmap'), {
         center: {lat: 16.672373, lng: 106.842041},
                 zoom: 6,
-                disableDefaultUI: true,
+                disableDefaultUI: false,
                 keyboardShortcuts: false,
                 draggable: false,
                 disableDoubleClickZoom: true,
                 scrollwheel: false,
                 streetViewControl: false,
-                mapTypeControl: true
+                mapTypeControl: false
             
         });
        
@@ -1100,6 +1102,7 @@
                 zoom: 6
         });
         // dong bo luon he truc toa do
+//        tú béo định bỏ chỗ dưới này chứ gì? anh thử bỏ rồi nó còn lệch hơn
         var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
         gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
         view.on('change:center', function () {
@@ -1713,9 +1716,11 @@
         }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
         if($("#tinhTpId").val().indexOf(',') == -1){
-            //alert($("#tinhTpId").val().indexOf(','));
+            alert($("#tinhTpId").val().indexOf(','));
+//            alert(1)
             map.getView().setCenter(ol.proj.transform([results[0].geometry.location.lng(), results[0].geometry.location.lat()], 'EPSG:4326', 'EPSG:3857'));
             map.getView().setZoom(15);
+//            alert(2)
         }
         //map.setCenter(results[0].geometry.location);
         if ($("#phuongXaId").val() !== '')
@@ -1768,6 +1773,20 @@
             if($("#tinhTpId").val().indexOf(',') == -1){
                 getCountNode();
             }
+//        enable ket qua tim kiem khi dung filter
+        $('#bts').iCheck('check');
+        bts_layer.setVisible(true);
+        $('#nodeb').iCheck('check');
+        nodeb_layer.setVisible(true);
+        $('#enodeb').iCheck('check');
+        enodeb_layer.setVisible(true);
+        $('#cell2g').iCheck('check');
+        cell2g_layer.setVisible(true);
+        $('#cell3g').iCheck('check');
+        cell3g_layer.setVisible(true);
+        $('#cell4g').iCheck('check');
+        cell4g_layer.setVisible(true);
+//        enable ket qua tim kiem khi dung filter end            
         }
         }
 

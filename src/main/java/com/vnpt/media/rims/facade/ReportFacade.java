@@ -1430,6 +1430,7 @@ public class ReportFacade {
                   record.setTenNode(rs.getString("TEN_BTS"));
                   record.setLoaiTram(rs.getString("TEN_LOAI_TRAM"));
                   record.setProvinceName(rs.getString("TEN_TINH_TP"));
+                  record.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
                   
                 ar.add(record);
             }
@@ -1494,6 +1495,7 @@ public class ReportFacade {
                   record.setTenNode(rs.getString("TEN_BTS"));
                   record.setLoaiTram(rs.getString("TEN_LOAI_TRAM"));
                   record.setProvinceName(rs.getString("TEN_TINH_TP"));
+                  record.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
                   
                 ar.add(record);
             }

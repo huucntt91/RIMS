@@ -55,15 +55,20 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                        <c:if test="${type==1}">
+                            <c:if test="${type==1}">
                             <li><a href="${pageContext.request.contextPath}/cellExcelImport/files/Template_CAPNHAT_CELL">Biểu mẫu cập nhật cell</a></li>
                             </c:if>
                             <c:if test="${type==2}">
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_SITE.xlsx">Biểu mẫu cập nhật BTS/NODEB/ENODEB</a></li>
+                                <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_BTS_EXCEL')}">
+                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_SITE.xlsx">Biểu mẫu cập nhật BTS/NODEB/ENODEB</a></li>
+                                </c:if>
+                                <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CSHT_BTS_TINH_EXCEL')}">
+                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_SITE_CSHT.xlsx">Biểu mẫu map CSHT vào BTS/NODEB/ENODEB</a></li>
+                                </c:if>
                             </c:if>
-                    </ul>
-                </div>
-            </ol>
+                        </ul>
+                    </div>
+                </ol>
         </div>
         <section class="content">            
             <div class="row">
@@ -77,33 +82,21 @@
                                    enctype="multipart/form-data">
                             <div class="box-body" >
                                 <div class="form-group">
-                                    <!--                                    <div class="col-xs-5">
-                                                                            <div class="input-group">                                
-                                                                                <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn đối tượng</label>
-                                                                                <select  id="type" name="type"class="form-control"  >
-                                                                                    <option value="1"
-                                    <c:if test="${type==1}"> selected    </c:if>
-                                        >--- Cell 2G/ 3G/ 4G ---</option>                                                        
-                                    <option value="2" <c:if test="${type==2}"> selected    </c:if>>--- BTS/ NODEB/ ENODEB ---</option>                                                
-                            </select>
-                        </div>
-                    </div>-->
                                         <div class="col-xs-4">                                    
                                             <div class="input-group">                                
-                                                <input type="hidden" value="${type}" name="type"/>
-                                            <!--                                            <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn file import</label>-->
-                                            <form:input type="file" path="file"  id="BSbtndanger" value="${groupContactForm.name}"/>
+                                                    <input type="hidden" value="${type}" name="type"/>
+                                                <!--                                            <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn file import</label>-->
+                                                <form:input type="file" path="file"  id="BSbtndanger" value="${groupContactForm.name}"/>
 
+                                                <script>
+                                                    $('#BSbtndanger').filestyle({
+                                                        buttonName: 'btn-info',
+                                                        buttonText: ' Chọn File import'
+                                                    });
+                                                </script>
 
-                                            <script>
-                                                $('#BSbtndanger').filestyle({
-                                                    buttonName: 'btn-info',
-                                                    buttonText: ' Chọn File import'
-                                                });
-                                            </script>
-
-                                        </div>
-                                    </div>                                   
+                                            </div>
+                                        </div>                                   
 
                                     <div class="col-xs-8" >
 

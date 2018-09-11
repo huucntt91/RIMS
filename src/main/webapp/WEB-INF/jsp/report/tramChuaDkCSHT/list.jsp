@@ -74,7 +74,8 @@
                                 <tr>		
                                     <th>STT</th>
                                     <th>Mã trạm</th>
-                                    <th>Tên trạm</th>
+                                    <th>Tên quản lý</th>
+                                    <th>Tên trên hệ thống</th>
                                     <th>Loại trạm</th>
                                     <th>Tên tỉnh</th>                                                                                               
                                 </tr>
@@ -86,6 +87,7 @@
                                         <td>${startRow + status.index}</td>
                                         <td>${it.maNode}</td>
                                         <td>${it.tenNode}</td>
+                                        <td>${it.tenTrenHeThong}</td>
                                         <td>${it.loaiTram}</td>
                                         <td>${it.provinceName}</td>                                        
                                     </tr>

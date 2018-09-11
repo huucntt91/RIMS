@@ -481,34 +481,35 @@ public class CellsExcelController extends BaseController {
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
         boolean resultCheckFile = false;
         try {
-            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);            
             File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
+
             // Quyen update ben NET 
             StringBuilder permisMenu = (StringBuilder) request.getSession().getAttribute(Constants.FUNCTION_KEY);
-            if (permisMenu.toString().toUpperCase().contains("UPDATE_CELL_NET_EXCEL")) {
-                List<CellUpdateExcelNetModel> items = ExOM.mapFromExcel(convFile)
-                        .to(CellUpdateExcelNetModel.class)
-                        .mapSheet(0, 2);
-                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
-                mm.addAttribute("classAtrr", classAtrr);
-                CellsFacade cellsFacade = new CellsFacade();
-                List<String> result = new ArrayList<>();
-                String temp;
-                LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
-                for (int i = 0; i < items.size(); i++) {
-                    temp = cellsFacade.updateCellNetRFExcel(items.get(i), user.getId(), cellNewExcelBO.getType());
-                    result.add(temp);
-                }
-                LOGGER.info("user: {}, ip: {}, end updateCellNetRFExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                LOGGER.info("user: {}, ip: {}, call write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
-                LOGGER.debug("user: {}, ip: {}, Start Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                writeResult(convFile, result, "result_update_cell_net_", response);
-                result.clear();
-                LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
-            } else {
+//            if (permisMenu.toString().toUpperCase().contains("UPDATE_CELL_NET_EXCEL")) {
+//                List<CellUpdateExcelNetModel> items = ExOM.mapFromExcel(convFile)
+//                        .to(CellUpdateExcelNetModel.class)
+//                        .mapSheet(0, 2);
+//                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+//                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+//                mm.addAttribute("classAtrr", classAtrr);
+//                CellsFacade cellsFacade = new CellsFacade();
+//                List<String> result = new ArrayList<>();
+//                String temp;
+//                LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
+//                for (int i = 0; i < items.size(); i++) {
+//                    temp = cellsFacade.updateCellNetRFExcel(items.get(i), user.getId(), cellNewExcelBO.getType());
+//                    result.add(temp);
+//                }
+//                LOGGER.info("user: {}, ip: {}, end updateCellNetRFExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+//                LOGGER.info("user: {}, ip: {}, call write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
+//                LOGGER.debug("user: {}, ip: {}, Start Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+//                writeResult(convFile, result, "result_update_cell_net_", response);
+//                result.clear();
+//                LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+//                LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
+//            } else {
                 if (cellNewExcelBO.getType().equals("5")) {
                     List<Cell2GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
                             .to(Cell2GUpdateExcelModel.class)
@@ -540,7 +541,7 @@ public class CellsExcelController extends BaseController {
                     result.clear();
                     LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                 }
-                if (cellNewExcelBO.getType().equals("6")) {
+                else if (cellNewExcelBO.getType().equals("6")) {
                     List<Cell3GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
                             .to(Cell3GUpdateExcelModel.class)
                             .mapSheet(0, 2);
@@ -601,7 +602,72 @@ public class CellsExcelController extends BaseController {
                     LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                     result.clear();
                 }
+//            }
+        } catch (Exception e) {
+            String message = StringUtils.captureStackTrace(e);
+            if (StringUtils.hasText(message)) {
+                if (message.contains("java.io.FileNotFoundException")) {
+                    attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "File import không tồn tại"));
+                } else {
+                    LOGGER.error(e.getMessage(), e);
+                }
+            } else {
+                LOGGER.error(e.getMessage(), e);
             }
+        }
+        return "redirect:/cellsExcel/update/init";
+    }
+    
+    @RequestMapping(value = "/update/updateExcelRF", method = RequestMethod.POST)
+    public String updateCellRF(ModelMap mm, @ModelAttribute(value = "cellNewExcelBO") CellNewExcelBO cellNewExcelBO,
+            @RequestParam(value = "type", required = false) String type,
+            BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
+        boolean resultCheckFile = false;
+        try {
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);            
+            File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
+            cellNewExcelBO.getFile().transferTo(convFile);
+
+            // Quyen update ben NET 
+            StringBuilder permisMenu = (StringBuilder) request.getSession().getAttribute(Constants.FUNCTION_KEY);
+              
+                    List<CellUpdateExcelNetModel> items = ExOM.mapFromExcel(convFile)
+                        .to(CellUpdateExcelNetModel.class)
+                        .mapSheet(0, 2);
+                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+                    mm.addAttribute("classAtrr", classAtrr);
+                    CellsFacade cellsFacade = new CellsFacade();
+                    List<String> result = new ArrayList<>();
+                    String temp;
+                    Integer[] checkRows = {1, 2};
+                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_NET.xlsx"), checkRows);
+                    LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
+                    for (CellUpdateExcelNetModel item : items) {
+                        if (resultCheckFile) {
+                            item = (CellUpdateExcelNetModel) StringUtils.trimObject(item);
+                            temp = cellsFacade.updateCellNetRFExcel(item, user.getId(),cellNewExcelBO.getType());
+                            if (temp == null || temp.isEmpty()) {
+                                temp = "OK";
+                            }
+                        } else {
+                            temp = resourceBundle.getString("cell.new.import.validate.file");
+                        }
+                        result.add(temp);
+                    }
+//                    for (int i = 0; i < items.size(); i++) {
+//                        temp = cellsFacade.updateCellNetRFExcel(items.get(i), user.getId(), cellNewExcelBO.getType());
+//                        result.add(temp);
+//                    }
+                    LOGGER.info("user: {}, ip: {}, end updateCellNetRFExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                    LOGGER.info("user: {}, ip: {}, call write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
+                    LOGGER.debug("user: {}, ip: {}, Start Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                    writeResult(convFile, result, "result_update_cell_net_", response);
+                    result.clear();
+                    LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                    LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
+                
+//            }
         } catch (Exception e) {
             String message = StringUtils.captureStackTrace(e);
             if (StringUtils.hasText(message)) {

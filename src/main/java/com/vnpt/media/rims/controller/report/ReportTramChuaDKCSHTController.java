@@ -215,14 +215,18 @@ public class ReportTramChuaDKCSHTController {
                 cell.setCellStyle(styleHeader);
                 
                 cell = row.createCell(1);
-                cell.setCellValue("Tên trạm");
+                cell.setCellValue("Tên quản lý");
                 cell.setCellStyle(styleHeader);
                 
                 cell = row.createCell(2);
-                cell.setCellValue("Loại trạm");
+                cell.setCellValue("Tên trên hệ thống");
                 cell.setCellStyle(styleHeader);
                 
                 cell = row.createCell(3);
+                cell.setCellValue("Loại trạm");
+                cell.setCellStyle(styleHeader);
+                
+                cell = row.createCell(4);
                 cell.setCellValue("Tên tỉnh");
                 cell.setCellStyle(styleHeader);
                 
@@ -234,11 +238,14 @@ public class ReportTramChuaDKCSHTController {
                     
                     cell = row.createCell(1);
                     cell.setCellValue(it.getTenNode()== null ? "" : it.getTenNode());
-
+                    
                     cell = row.createCell(2);
+                    cell.setCellValue(it.getTenTrenHeThong()== null ? "" : it.getTenTrenHeThong());
+
+                    cell = row.createCell(3);
                     cell.setCellValue(it.getLoaiTram()== null ? "" : it.getLoaiTram());
                         
-                    cell = row.createCell(3);
+                    cell = row.createCell(4);
                     cell.setCellValue(it.getProvinceName()== null ? "" : it.getProvinceName());
 
                 }
