@@ -1,4 +1,3 @@
-
 <%@page import="com.vnpt.media.rims.bean.UserBO"%>
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -9,7 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>RIMS</title>
+        <title>Cổng ứng dụng VNPT OSS</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- bootstrap 3.0.2 -->
         <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -19,13 +18,15 @@
         <link href="${pageContext.request.contextPath}/resources/css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="${pageContext.request.contextPath}/resources/css/AdminLTE.css" rel="stylesheet" type="text/css" />
+       
         <!-- jQuery 2.0.2 -->
         <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-1.10.1.min.js"></script> 
         <!-- Bootstrap -->
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js" type="text/javascript"></script>
         <!-- AdminLTE App -->
         <script src="${pageContext.request.contextPath}/resources/js/AdminLTE/app.js" type="text/javascript"></script>
-
+        
+        <link href="${pageContext.request.contextPath}/resources/css/rims.css" rel="stylesheet" type="text/css" />
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106468556-7"></script>
@@ -42,46 +43,69 @@
     <body>
         <div class="container" >
             <div class="row" >
-                <div class="col-lg-4">
-                    <p>
-                        <a href="https://oss.vnpt.vn/home" class="btn btn-sq-lg btn-primary">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            RIMS
+                <div class="col-md-12">
+                    <h2 class="title portalTitle"><i class="fa fa-building-o"></i> Ứng dụng điều hành VNPT</h2>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                 <a href="https://oss.vnpt.vn/home" class="btn btn-sq-lg btn-primary logoIcon">
+                                    <i class="fa fa-desktop fa-3x"></i><br/>
+                                    <h4>Hệ thống RIMS</h4>
                         </a>
-                        <a href="https://dhtt2.vinaphone.vn:8889/pm1/" class="btn btn-sq-lg btn-success">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            PM 2G,3G NEW
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                 <a href="https://dhtt2.vinaphone.vn:8889/pm1/" class="btn btn-sq-lg logoIcon btn-success">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống PM 2G, 3G NEW</h4>
                         </a>
-                        <a href="http://10.156.8.41:8889/pm4g/login" class="btn btn-sq-lg btn-info">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            PM 4G
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                  <a href="http://10.156.8.41:8889/pm4g/login" class="btn btn-sq-lg logoIcon btn-info">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống PM 4G</h4>
                         </a>
-                        <a href="http://clm.vinaphone.vn/" class="btn btn-sq-lg btn-warning">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            PM 2G,3G OLD
+                        </div>
+                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                  <a href="http://clm.vinaphone.vn/" class="btn btn-sq-lg logoIcon btn-warning">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống PM 2G, 3G OLD</h4>
                         </a>
-                        <a href="http://10.156.8.42/kpi/dashboard/" class="btn btn-sq-lg btn-danger">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            PM TOOL NEW
+                        </div>
+                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                  <a href="http://10.156.8.42/kpi/dashboard/" class="btn btn-sq-lg logoIcon btn-danger">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống PM tool new</h4>
                         </a>
-                        <a href="http://dhtt2.vinaphone.vn:8888/fm/login" class="btn btn-sq-lg btn-danger">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            FM NEW
+                        </div>
+                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                  <a href="http://dhtt2.vinaphone.vn:8888/fm/login" class="btn btn-sq-lg logoIcon btn-danger">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống FM new</h4>
                         </a>
-                        <a href="http://dhtt.vinaphone.vn/" class="btn btn-sq-lg btn-danger">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            FM OLD
+                        </div>
+                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                  <a href="http://dhtt.vinaphone.vn/" class="btn btn-sq-lg logoIcon btn-danger">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống FM old</h4>
                         </a>
-                        <a href="https://csm.vnpt.vn/" class="btn btn-sq-lg btn-danger">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            CMS
+                        </div>
+                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                  <a href="https://csm.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống CMS</h4>
                         </a>
-                        <a href="http://mnp.vnpt.vn/" class="btn btn-sq-lg btn-danger">
-                            <i class="fa fa-user fa-5x"></i><br/>
-                            NMP
+                        </div>
+                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
+                                 
+                        <a href="http://mnp.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
+                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <h4>Hệ thống NMP</h4>
                         </a>
-                    </p>
+                        </div>
+                        
+                      
+                    </div>
                 </div>
+               
             </div>
         </div>
     </body>
