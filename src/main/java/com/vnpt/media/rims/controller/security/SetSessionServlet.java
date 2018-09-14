@@ -28,8 +28,8 @@ public class SetSessionServlet extends HttpServlet {
             LOGGER.debug("Redirect:" + request.getContextPath() + "/noreg");
             response.sendRedirect(request.getContextPath() + "/noreg");
         } else {
-            LOGGER.debug("Redirect:" + request.getContextPath() + "/home");
-            response.sendRedirect(request.getContextPath() + "/home");
+            LOGGER.debug("Redirect:" + request.getContextPath() + "");
+            response.sendRedirect(request.getContextPath() + "");
         }
     }
 

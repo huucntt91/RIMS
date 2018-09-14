@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <sitemesh>
-     
+     <mapping decorator="/decorators/portaltheme" path="/" />
     <mapping decorator="/decorators/dashboardtheme" path="/*" />
+    
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/ajax/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/login*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/map2a" />

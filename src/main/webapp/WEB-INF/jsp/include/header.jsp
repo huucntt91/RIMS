@@ -84,7 +84,7 @@
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
-
+                                <li><a href="https://oss.vnpt.vn"><i class="fa fa-home"></i></a></li>    
                                 <!-- User Account: style can be found in dropdown.less -->
                                 <%
                                     String fullname = (String) request.getSession().getAttribute("fullname");

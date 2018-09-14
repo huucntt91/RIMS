@@ -51,7 +51,7 @@
     </head>
     <body>
         <section class="content">                        
-            Xin chào : <%=request.getRemoteUser()%>
+            Xin chào1 : <%=request.getRemoteUser()%>
         </section>
         <!--biểu đồ thể hiện số lượng file các omc download được -->
         <div id="chart1" ></div>

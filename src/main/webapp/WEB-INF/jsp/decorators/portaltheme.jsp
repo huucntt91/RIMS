@@ -25,7 +25,7 @@
         <div class="page_top" id="header">
             <div class="container header_div">
                 <div class="header_info hidden-sm hidden-xs">
-                    <span id="lblName">Hệ thống quản lý tài nguyên mạng VNPT<br>Resource Inventory Management System - RIMS</span>
+                    <span id="lblName">Cổng thông tin ứng dụng VNPT-OSS</span>
                     <br />
                     <span id="lblPhone"></span>
                 </div>
@@ -42,8 +42,8 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="${pageContext.request.contextPath}">
-                            <span id="lblVersion">RIMS</span>
+                        <a class="navbar-brand" href="https://oss.vnpt.vn">
+                            <span id="lblVersion"> </span>
                         </a>
                     </div>
                     <div class="collapse navbar-collapse">
@@ -52,28 +52,9 @@
                                     <a href="https://oss.vnpt.vn" ><i class="fa fa-home"></i></a>
                                 
                             </li>
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <%
-                                String fullname = (String) request.getSession().getAttribute("fullname");
-                                if (fullname == null || fullname.equals("null") || fullname.equals("")) {
-                                    response.sendRedirect(request.getContextPath() + "/SetSessionServlet");
-                                }
-
-                                String data = (String) request.getSession().getAttribute(Constants.MENU_KEY);
-                            %>
-                            <%=data%>
+                           
                             
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hỗ trợ <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="https://oss.vnpt.vn/media/HDSD_RIMS.pdf">Hướng dẫn sử dụng</a>
-                                    </li>
-                                      <li>
-                                        <a href="https://oss.vnpt.vn/media/VNPT-OSS-RIMS_Trainning.pdf">Slide đào tạo hướng dẫn sử dụng</a>
-                                    </li>
-                                </ul> 
-                            </li>
+                            
                               
                         </ul>
                         <ul class="nav navbar-nav navbar-right">

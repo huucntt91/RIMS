@@ -34,7 +34,14 @@ public class LoginController {
 
     private static Logger logger = LogManager.getLogger(LoginController.class);
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/portal"}, method = RequestMethod.GET)
+    public String portal(ModelMap model, HttpServletRequest request) {
+        model.addAttribute("user", getPrincipal(request));
+        //load du lieu cho omc - chart
+       
+        return "portal";
+    }
+    @RequestMapping(value = { "/home"}, method = RequestMethod.GET)
     public String homePage(ModelMap model, HttpServletRequest request) {
         model.addAttribute("user", getPrincipal(request));
         //load du lieu cho omc - chart
@@ -148,7 +155,6 @@ public class LoginController {
 
         return "welcome";
     }
-
     @RequestMapping(value = {"/noreg"}, method = RequestMethod.GET)
     public String noReg(ModelMap model, HttpServletRequest request) {
         return "noreg";
