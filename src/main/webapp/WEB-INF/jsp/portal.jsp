@@ -43,60 +43,70 @@
     <body>
         <div class="container" >
             <div class="row" >
+                <div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#homeApp" aria-controls="home" role="tab" data-toggle="tab"><span class="title portalTitle"><i class="fa fa-building-o"></i> Ứng dụng điều hành VNPT</span></a></li>
+    <li role="presentation"><a href="#documentApp" aria-controls="profile" role="tab" data-toggle="tab"><span  class="title portalTitle">Tài liệu hướng dẫn</span></a></li>
+  </ul>
+  <br>
+  <!-- Tab panes -->
+  <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="homeApp">
                 <div class="col-md-12">
-                    <h2 class="title portalTitle"><i class="fa fa-building-o"></i> Ứng dụng điều hành VNPT</h2>
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                 <a href="https://oss.vnpt.vn/home" class="btn btn-sq-lg btn-primary logoIcon">
+                                 <a target="_blank" href="https://oss.vnpt.vn/home" class="btn btn-sq-lg btn-primary logoIcon">
                                     <i class="fa fa-desktop fa-3x"></i><br/>
                                     <h4>Hệ thống RIMS</h4>
                         </a>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                 <a href="https://dhtt2.vinaphone.vn:8889/pm1/" class="btn btn-sq-lg logoIcon btn-success">
+                                 <a target="_blank" href="https://dhtt2.vinaphone.vn:8889/pm1/" class="btn btn-sq-lg logoIcon btn-success">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống PM 2G, 3G NEW</h4>
                         </a>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                  <a href="http://10.156.8.41:8889/pm4g/login" class="btn btn-sq-lg logoIcon btn-info">
+                                  <a target="_blank" href="http://10.156.8.41:8889/pm4g/login" class="btn btn-sq-lg logoIcon btn-info">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống PM 4G</h4>
                         </a>
                         </div>
                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                  <a href="http://clm.vinaphone.vn/" class="btn btn-sq-lg logoIcon btn-warning">
+                                  <a target="_blank" href="http://clm.vinaphone.vn/" class="btn btn-sq-lg logoIcon btn-warning">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống PM 2G, 3G OLD</h4>
                         </a>
                         </div>
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                  <a href="http://10.156.8.42/kpi/dashboard/" class="btn btn-sq-lg logoIcon btn-danger">
+                              <a target="_blank" href="http://10.156.8.42/kpi/dashboard/" class="btn btn-sq-lg logoIcon btn-danger">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống PM tool new</h4>
                         </a>
                         </div>
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                  <a href="http://dhtt2.vinaphone.vn:8888/fm/login" class="btn btn-sq-lg logoIcon btn-danger">
-                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                                  <a target="_blank" href="http://dhtt2.vinaphone.vn:8888/fm/login" class="btn btn-sq-lg logoIcon btn-danger">
+                            <i class="fa  fa-rss fa-3x"></i><br/>
                             <h4>Hệ thống FM new</h4>
                         </a>
                         </div>
                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
                                   <a href="http://dhtt.vinaphone.vn/" class="btn btn-sq-lg logoIcon btn-danger">
-                            <i class="fa  fa-desktop fa-3x"></i><br/>
+                            <i class="fa  fa-rss fa-3x"></i><br/>
                             <h4>Hệ thống FM old</h4>
                         </a>
                         </div>
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                  <a href="https://csm.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
+                                  <a target="_blank" href="https://csm.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống CMS</h4>
                         </a>
                         </div>
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
                                  
-                        <a href="http://mnp.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
+                        <a target="_blank" href="http://mnp.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống NMP</h4>
                         </a>
@@ -106,6 +116,27 @@
                     </div>
                 </div>
                
+      </div>
+      <div role="tabpanel" class="tab-pane" id="documentApp">
+          <h5 class="userGuileTitle col-md-12">I.Hệ thống RIMS</h5>
+          <ul class="col-md-12">
+              <li class="col-md-12 userGuileItem " ><a target="_blank" href="/RIMS/resources/userguides/HDSD_RIMS.pdf">1. Tài liệu hướng dẫn sử dụng RIMS</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank" href="/RIMS/resources/userguides/VNPT-OSS-RIMS_Trainning.pdf">2. Slide đào tạo hướng dẫn sử dụng</a></li>
+          </ul>
+            <h5 class="userGuileTitle col-md-12">II.Hệ thống PM</h5>
+          <ul class="col-md-12">
+              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_PM_v1.0">1. Tài liệu hướng dẫn sử dụng PM</a></li>
+          </ul>
+            <h5 class="userGuileTitle col-md-12">III.Hệ thống FM</h5>
+          <ul class="col-md-12">
+              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_FM_v1.0">1. Tài liệu hướng dẫn sử dụng FM</a></li>
+          </ul>
+      </div>
+    
+  </div>
+
+</div>
+              
             </div>
         </div>
     </body>
