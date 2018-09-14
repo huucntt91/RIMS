@@ -20,11 +20,10 @@ and open the template in the editor.
     padding-top: 20px;
 }
 .portalTitle{
-    padding: 10px 10px 10px 0px;
-    border-bottom: 1px dashed #aaa;
-    margin-bottom:10px;
+   
       font-size: 25px;
-      margin-top: -10px;
+      background-color: transparent;
+      
 }
 .appLogo{
 }
@@ -32,4 +31,19 @@ and open the template in the editor.
     font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
+}
+#documentApp ul li
+{
+    list-style: none;
+    padding: 10px 0px;
+}
+.userGuileTitle{
+    font-size: 23px;
+    color: #0000FF;
+    margin: 0px;
+    padding: 10px;
+}
+.userGuileItem ,.userGuileItem a{
+    font-size: 18px;
+    color: #0000FF;
 }
