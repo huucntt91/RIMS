@@ -125,11 +125,11 @@
           </ul>
             <h5 class="userGuileTitle col-md-12">II.Hệ thống PM</h5>
           <ul class="col-md-12">
-              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_PM_v1.0">1. Tài liệu hướng dẫn sử dụng PM</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_PM_v1.0.pdf">1. Tài liệu hướng dẫn sử dụng PM</a></li>
           </ul>
             <h5 class="userGuileTitle col-md-12">III.Hệ thống FM</h5>
           <ul class="col-md-12">
-              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_FM_v1.0">1. Tài liệu hướng dẫn sử dụng FM</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_FM_v1.0.pdf">1. Tài liệu hướng dẫn sử dụng FM</a></li>
           </ul>
       </div>
     
