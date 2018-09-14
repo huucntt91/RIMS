@@ -78,13 +78,13 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="${pageContext.request.contextPath}">
-                                <span id="lblVersion">RIMS</span>
+                            <a class="navbar-brand" href="https://oss.vnpt.vn">
+                                <span id="lblVersion"><i class="fa fa-home"></i></span>
                             </a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
-                                <li><a href="https://oss.vnpt.vn"><i class="fa fa-home"></i></a></li>    
+                                <li><a href="${pageContext.request.contextPath}/home">RIMS</a></li>    
                                 <!-- User Account: style can be found in dropdown.less -->
                                 <%
                                     String fullname = (String) request.getSession().getAttribute("fullname");
