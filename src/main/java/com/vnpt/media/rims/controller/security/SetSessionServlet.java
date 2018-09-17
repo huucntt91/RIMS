@@ -29,7 +29,11 @@ public class SetSessionServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/noreg");
         } else {
             LOGGER.debug("Redirect:" + request.getContextPath() + "");
-            response.sendRedirect(request.getContextPath() + "");
+            if (request.getContextPath() == null || request.getContextPath().isEmpty()) {
+                response.sendRedirect("https://oss.vnpt.vn/");
+            } else {
+                response.sendRedirect(request.getContextPath() + "");
+            }
         }
     }
 
@@ -56,7 +60,7 @@ public class SetSessionServlet extends HttpServlet {
             }
             request.getSession().setAttribute(Constants.FUNCTION_KEY, tempFunction);
             request.getSession().setAttribute(Constants.USER_KEY, t);
-            
+
             String[] provincePermission = null;
             try {
                 provincePermission = adminFacade.findListTinhByUserId(String.valueOf(t.getId()));

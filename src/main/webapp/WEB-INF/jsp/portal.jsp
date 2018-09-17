@@ -109,16 +109,16 @@
       <div role="tabpanel" class="tab-pane" id="documentApp">
           <h5 class="userGuileTitle col-md-12">I.Hệ thống RIMS</h5>
           <ul class="col-md-12">
-              <li class="col-md-12 userGuileItem " ><a target="_blank" href="/RIMS/resources/userguides/HDSD_RIMS.pdf">1. Tài liệu hướng dẫn sử dụng RIMS</a></li>
-              <li class="col-md-12 userGuileItem " ><a target="_blank" href="/RIMS/resources/userguides/VNPT-OSS-RIMS_Trainning.pdf">2. Slide đào tạo hướng dẫn sử dụng</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank" href="/resources/userguides/HDSD_RIMS.pdf">1. Tài liệu hướng dẫn sử dụng RIMS</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank" href="/resources/userguides/VNPT-OSS-RIMS_Trainning.pdf">2. Slide đào tạo hướng dẫn sử dụng</a></li>
           </ul>
             <h5 class="userGuileTitle col-md-12">II.Hệ thống PM</h5>
           <ul class="col-md-12">
-              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_PM_v1.0.pdf">1. Tài liệu hướng dẫn sử dụng PM</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/resources/userguides/HDSD_VNP-3GTOOL2_PM_v1.0.pdf">1. Tài liệu hướng dẫn sử dụng PM</a></li>
           </ul>
             <h5 class="userGuileTitle col-md-12">III.Hệ thống FM</h5>
           <ul class="col-md-12">
-              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/RIMS/resources/userguides/HDSD_VNP-3GTOOL2_FM_v1.0.pdf">1. Tài liệu hướng dẫn sử dụng FM</a></li>
+              <li class="col-md-12 userGuileItem " ><a target="_blank"  href="/resources/userguides/HDSD_VNP-3GTOOL2_FM_v1.0.pdf">1. Tài liệu hướng dẫn sử dụng FM</a></li>
           </ul>
       </div>
     
