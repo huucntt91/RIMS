@@ -28,17 +28,6 @@
         
         <link href="${pageContext.request.contextPath}/resources/css/rims.css" rel="stylesheet" type="text/css" />
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106468556-7"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'UA-106468556-7');
-                    gtag('set', {'user_id': '<%=request.getRemoteUser()%>}');
-        </script>
     </head>
     <body>
         <div class="container" >
@@ -101,7 +90,7 @@
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
                                   <a target="_blank" href="https://csm.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
-                            <h4>Hệ thống CMS</h4>
+                            <h4>Hệ thống CSM</h4>
                         </a>
                         </div>
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">

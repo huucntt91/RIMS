@@ -23,6 +23,118 @@ public class Cell3G implements Serializable{
     private Long ci;
     private String dlpsc;
     private String freq;
+    String cellCode;
+    String checkDate;
+    String fileName;
+    String freqBand;
+    String cpichPower;
+    String totalPower;
+    String maxPower;
+    String rac;
+    String dlUarfcn;
+    String dcSupport;
+    String oamIp;
+    String serviceIp;
+
+    public String getRac() {
+        return rac;
+    }
+
+    public void setRac(String rac) {
+        this.rac = rac;
+    }
+
+    public String getDlUarfcn() {
+        return dlUarfcn;
+    }
+
+    public void setDlUarfcn(String dlUarfcn) {
+        this.dlUarfcn = dlUarfcn;
+    }
+
+    public String getDcSupport() {
+        return dcSupport;
+    }
+
+    public void setDcSupport(String dcSupport) {
+        this.dcSupport = dcSupport;
+    }
+
+    public String getOamIp() {
+        return oamIp;
+    }
+
+    public void setOamIp(String oamIp) {
+        this.oamIp = oamIp;
+    }
+
+    public String getServiceIp() {
+        return serviceIp;
+    }
+
+    public void setServiceIp(String serviceIp) {
+        this.serviceIp = serviceIp;
+    }
+    
+
+    public String getCpichPower() {
+        return cpichPower;
+    }
+
+    public void setCpichPower(String cpichPower) {
+        this.cpichPower = cpichPower;
+    }
+
+    public String getTotalPower() {
+        return totalPower;
+    }
+
+    public void setTotalPower(String totalPower) {
+        this.totalPower = totalPower;
+    }
+
+    public String getMaxPower() {
+        return maxPower;
+    }
+
+    public void setMaxPower(String maxPower) {
+        this.maxPower = maxPower;
+    }
+    
+
+    public String getCellCode() {
+        return cellCode;
+    }
+
+    public void setCellCode(String cellCode) {
+        this.cellCode = cellCode;
+    }
+
+    public String getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(String checkDate) {
+        this.checkDate = checkDate;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFreqBand() {
+        return freqBand;
+    }
+
+    public void setFreqBand(String freqBand) {
+        this.freqBand = freqBand;
+    }
+    
+    
 
     public String getVendor() {
         return vendor;

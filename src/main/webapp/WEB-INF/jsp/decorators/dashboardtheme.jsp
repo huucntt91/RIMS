@@ -18,7 +18,17 @@
             z-index: 1;
         }
     </style>
-
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106468556-7"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'UA-106468556-7');
+            gtag('set', {'user_id': '<%=request.getRemoteUser()%>}'); 
+        </script>
 </head>
 <body>
     <div class="page-wrap">

@@ -2165,7 +2165,7 @@ public class StringUtils {
                         break;
                     case "94":
                         output += "Longitude không đúng kiểu số | ";
-                        break;    
+                        break;
 
                 }
             }
@@ -2596,6 +2596,17 @@ public class StringUtils {
                 folder.mkdirs();
             }
             return folderTemp;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    // lay ra thu muc chua file template
+    public static String getString(String key) {
+        try {
+            ResourceBundle resourceBundle = ResourceBundle.getBundle("config",Locale.getDefault());
+            return resourceBundle.getString(key);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

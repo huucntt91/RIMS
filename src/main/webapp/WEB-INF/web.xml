@@ -147,7 +147,7 @@
     <servlet>
         <servlet-name>data-report-servlet</servlet-name>
         <servlet-class>
-            com.vnpt.media.rims.controller.report.DataReportServlet
+            com.vnpt.media.rims.job.QuartServlet
         </servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet> 

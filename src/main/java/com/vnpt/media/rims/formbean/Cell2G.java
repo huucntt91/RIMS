@@ -25,6 +25,56 @@ public class Cell2G implements Serializable{
     private String bcch;
     private String frequency;
     private String config;
+    String tch;
+    String checkDate;
+    String trxConfig;
+    String fileName;
+    String cellCode;
+    String vendor;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getCellCode() {
+        return cellCode;
+    }
+
+    public void setCellCode(String cellCode) {
+        this.cellCode = cellCode;
+    }
+    
+
+    public String getTrxConfig() {
+        return trxConfig;
+    }
+
+    public void setTrxConfig(String trxConfig) {
+        this.trxConfig = trxConfig;
+    }
+    
+    
+
+    public String getTch() {
+        return tch;
+    }
+
+    public void setTch(String tch) {
+        this.tch = tch;
+    }
+
+    public String getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(String checkDate) {
+        this.checkDate = checkDate;
+    }
+    
 
     public String getVendor() {
         return Vendor;
