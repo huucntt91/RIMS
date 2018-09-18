@@ -31,6 +31,35 @@ public class Cell2G implements Serializable{
     String fileName;
     String cellCode;
     String vendor;
+    String cell_id_ocs;
+    String lacStr;
+    String ciStr;
+
+    public String getCell_id_ocs() {
+        return cell_id_ocs;
+    }
+
+    public void setCell_id_ocs(String cell_id_ocs) {
+        this.cell_id_ocs = cell_id_ocs;
+    }
+
+    public String getLacStr() {
+        return lacStr;
+    }
+
+    public void setLacStr(String lacStr) {
+        this.lacStr = lacStr;
+    }
+
+    public String getCiStr() {
+        return ciStr;
+    }
+
+    public void setCiStr(String ciStr) {
+        this.ciStr = ciStr;
+    }
+    
+    
 
     public String getFileName() {
         return fileName;

@@ -72,18 +72,29 @@ public class AutoMailJob implements Job {
             ServletContext servletContext = (ServletContext) jec.getMergedJobDataMap().get("servletContext");
             String toAddress = StringUtils.getString("to_address_lac_ci");
             String subject = StringUtils.getString("subject_lac_ci");
-            String message = StringUtils.getString("message_lac_ci");
+            String message ="";
             ArrayList<String> attachFiles = new ArrayList<>();
             String folderTemp = StringUtils.getFolderTemp();
             String dataDirectory = servletContext.getRealPath("/WEB-INF/excel-templates/");
+            //gui mail nhung cell 2G trung LAC-CI tren inventory
             String fileName2G = "Cell2G_Duplicate_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            message += "Danh sách Cell2G trùng LAC-CI: ".concat(fileName2G).concat(" \n");
             List cell2G = AutoMailFacade.findCell2G();
             writeDuplicateLacCi(fileName2G, new File(dataDirectory + File.separator + "CELL2G_Duplicate_LacCi.xlsx"), folderTemp, cell2G);
             attachFiles.add(folderTemp + File.separator + fileName2G);
+            //gui mail nhung cell 3G trung LAC-CI tren inventory
             String fileName3G = "Cell3G_Duplicate_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            message += "Danh sách Cell3G trùng LAC-CI: ".concat(fileName3G).concat(" \n");
             List cell3G = AutoMailFacade.findCell3G();
             writeDuplicateLacCi(fileName3G, new File(dataDirectory + File.separator + "CELL3G_Duplicate_LacCi.xlsx"), folderTemp, cell3G);
             attachFiles.add(folderTemp + File.separator + fileName3G);
+            //gui mail canh bao nhung cell co tren SMRS va khong co tren Inventory
+            String fileNameSmrsInventory = "SMRS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            message += "Danh sách Cell có trên SMRS và không có trên Inventory: ".concat(fileNameSmrsInventory).concat(" \n");
+            List smrsInventory = AutoMailFacade.findSmrsInventory();
+            writeCellSmrsInventory(fileNameSmrsInventory, new File(dataDirectory + File.separator + "SMRS_INVENTORY.xlsx"), folderTemp, smrsInventory);
+            attachFiles.add(folderTemp + File.separator + fileNameSmrsInventory);
+            //send mail
             sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, toAddress, subject, message, attachFiles);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -197,6 +208,46 @@ public class AutoMailJob implements Job {
         }
     }
 
+    /*
+    ghi danh sach nhung cell tren SMRS và không có trên Inventory
+     */
+    private void writeCellSmrsInventory(String fileName, File fileTemplate, String folderTemp, List<?> temp) {
+        try {
+            FileInputStream fin = new FileInputStream(fileTemplate);
+            XSSFWorkbook workbook = null;
+            workbook = new XSSFWorkbook(fin);
+            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
+
+            Cell cell = null;
+            Row row = null;
+            int rowIndex = 2;
+            Iterator<Cell2G> iterator = (Iterator<Cell2G>) temp.iterator();
+            while (iterator.hasNext()) {
+                Cell2G item = iterator.next();
+                row = sheet.createRow(rowIndex++);
+                CellStyle style = sheet.getWorkbook().createCellStyle();
+                row.setRowStyle(style);
+                cell = row.createCell(0);
+                cell.setCellValue(rowIndex - 3);
+                cell = row.createCell(1);
+                cell.setCellValue(item.getLacStr());
+                cell = row.createCell(2);
+                cell.setCellValue(item.getCiStr());
+                cell = row.createCell(3);
+                cell.setCellValue(item.getCell_id_ocs());
+            }
+            fin.close();
+            File file = new File(folderTemp + File.separator + fileName);
+            FileOutputStream fos = new FileOutputStream(file);
+            workbook.write(fos);
+            fos.close();
+            workbook.close();
+
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
     private void sendEmailWithAttachments(String host, String port,
             String userName, String password, String toAddress,
             String subject, String message, ArrayList<String> attachFiles)
@@ -228,7 +279,7 @@ public class AutoMailJob implements Job {
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toAddress, false));
         // creates message part
         MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent(message, "text/html; charset=UTF-8");
+        messageBodyPart.setContent(message, "text/plain; charset=UTF-8");
         // creates multi-part
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);

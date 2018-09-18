@@ -5,16 +5,12 @@
  */
 package com.vnpt.media.rims.facade;
 
-import com.vnpt.media.rims.bean.ActionLogBO;
-import com.vnpt.media.rims.bean.ManEInfoBO;
-import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.formbean.Cell2G;
 import com.vnpt.media.rims.formbean.Cell3G;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -120,6 +116,51 @@ public class AutoMailFacade {
                 item.setDcSupport(rs.getString("dc_support"));
                 item.setOamIp(rs.getString("oam_ip"));
                 item.setServiceIp(rs.getString("service_ip"));
+                result.add(item);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cs != null) {
+                try {
+                    cs.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return result;
+    }
+
+    public static List findSmrsInventory() {
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        List result = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=pkg_auto_email.pima_compare_inventory; end;";
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cs.executeQuery();
+            rs = (ResultSet) cs.getObject(1);
+            result = new ArrayList<>();
+            while (rs.next()) {
+                Cell2G item = new Cell2G();
+                item.setLacStr(rs.getString("lac"));
+                item.setCiStr(rs.getString("ci"));
+                item.setCell_id_ocs(rs.getString("cell_id_ocs"));
                 result.add(item);
             }
         } catch (Exception ex) {
