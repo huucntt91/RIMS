@@ -20,6 +20,7 @@
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/tunguon/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/dv/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/nodes/*" />
+    <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/nodes1/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/bcll/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/cell/comment/*/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/cell/preUpdate/*/*" />

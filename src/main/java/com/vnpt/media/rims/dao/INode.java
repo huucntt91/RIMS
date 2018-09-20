@@ -8,6 +8,7 @@ import com.vnpt.media.rims.bean.ClassAttributeBO;
 import com.vnpt.media.rims.bean.ExcelBtsUpdateBO;
 import com.vnpt.media.rims.bean.ExcelCellUpdateBO;
 import com.vnpt.media.rims.bean.ExcelDeleteNodeBO;
+import com.vnpt.media.rims.bean.FilterMapBO;
 import com.vnpt.media.rims.bean.ImportBtsModel;
 import com.vnpt.media.rims.bean.ImportCellModel;
 import com.vnpt.media.rims.bean.NodeBO;
@@ -154,4 +155,14 @@ public interface INode extends IGeneric {
     public int approveAllBuilding(ApproveAllForm approveForm, Long userUpdate) throws ServiceException;
     
     public int fn_check_name_system(Integer prn_node_id, String prn_name_system, Integer prn_ne_type_id) throws ServiceException;
+    
+    public List<FilterMapBO> findFilterMap(String objectId) throws DAOException;
+    
+    public int getTotalDetailNode(String name, String khuvucId, String tinhId, String quanId, String phuongId, String neTypeId, String venderId, String statusList, String strFilter) throws ServiceException;
+
+    public List<?> findAllDetailNode(String nodeId, String startRow, String endRow, String code,
+            String khuvucId, String tinhTpId, String quanHuyenId, String phuongXaId,
+            String neTypeId, String thietBiId, String status, String strFilter) throws DAOException;
+
 }
+ 

@@ -1462,4 +1462,57 @@ public class NodesFacade {
             return 0;
         }
     }
+    
+    public List<FilterMapBO> findFilterMap(String objectId) {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            INode i = factory.getNodeDAO();
+            trans.connectionType(DB_ADMIN);
+            i.setTransaction(trans);
+            return i.findFilterMap(objectId);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+    
+    public int getTotalDetailNode(String name, String khuvucId, String tinhId, String quanId, String phuongId, String neTypeId, String venderId, String statusList, String strFilter) throws ServiceException {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            INode i = factory.getNodeDAO();
+            trans.connectionType(DB_ADMIN);
+            i.setTransaction(trans);
+            return i.getTotalDetailNode(name, khuvucId, tinhId, quanId, phuongId, neTypeId, venderId, statusList, strFilter);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+    
+    public List<?> findAllDetailNode(String nodeId, String startRow, String endRow, String code,
+            String khuvucId, String tinhTpId, String quanHuyenId, String phuongXaId,
+            String neTypeId, String thietBiId, String status, String strFilter) {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            INode i = factory.getNodeDAO();
+            trans.connectionType(DB_ADMIN);
+            i.setTransaction(trans);
+            return i.findAllDetailNode(nodeId, startRow, endRow, code, khuvucId, tinhTpId, quanHuyenId, phuongXaId,
+                    neTypeId, thietBiId, status, strFilter);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+    
+    
 }

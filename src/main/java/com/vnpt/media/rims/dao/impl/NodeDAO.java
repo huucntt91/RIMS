@@ -3036,5 +3036,463 @@ public class NodeDAO extends GenericDAO implements INode {
         }
         return 0;
     }
+    
+    @Override
+    public List<FilterMapBO> findFilterMap(String objectId) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = this.getConnection();
+            String querySql = "{? = call PKG_MAP.fc_filter_map(?) }";
+//       
+
+            List<Object> vars = new Vector<Object>();
+            vars.add(objectId);
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+
+            List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
+                @Override
+                public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    FilterMapBO item = new FilterMapBO();
+                    item.setId(rs.getLong("id"));
+                    item.setType(rs.getString("TYPE"));
+                    item.setColumnName(rs.getString("COLUMN_NAME"));
+//                    item.setColumnId(rs.getString("COLUMN_NAME"));
+                    item.setColumnId(rs.getString("ALIAS") + "." + item.getColumnName());
+                    item.setDataType(rs.getInt("DATA_TYPE"));
+                    item.setDescription(rs.getString("DESCRIPTION"));
+                    return item;
+                }
+            }, vars);
+
+            return (List<FilterMapBO>) list;
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+    
+    @Override
+
+    public int getTotalDetailNode(String name, String khuvucId, String tinhId, String quanId, String phuongId, String neTypeId, String venderId, String statusList, String strFilter) throws ServiceException {
+        Connection conn = null;
+        try {
+            conn = this.getConnection();
+            String querySql = "";
+            if (neTypeId.equals("2")) //BTS
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_bts(?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("3")) //nodeb
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_nodeb(?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("8")) //enodeb
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_enodeb(?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("5")) //cell2g
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_cell2g(?,?,?,?,?,?,?,?,?) }";
+
+            } else if (neTypeId.equals("6")) //cell3g
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_cell3g(?,?,?,?,?,?,?,?,?) }";
+
+            } else if (neTypeId.equals("7")) //cell4g
+            {
+
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_cell4g(?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("11")) //bsc rnc
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_total_detail_bsc_rnc(?,?,?,?,?,?,?,?,?) }";
+            }
+
+            List<Object> vars = new Vector<Object>();
+            vars.add(name);
+            vars.add(khuvucId);
+            vars.add(tinhId);
+            vars.add(quanId);
+            vars.add(phuongId);
+            vars.add(neTypeId);
+            vars.add(venderId);
+            vars.add(statusList);
+            vars.add(strFilter);
+
+            DbSql sqlTemplate = new DbSql(conn);
+            int count = Integer.parseInt(sqlTemplate.runProc(querySql, vars));
+            return count;
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+    
+    
+    @Override
+
+    public List<?> findAllDetailNode(String nodeId, String startRow, String endRow, String code,
+            String khuvucId, String tinhTpId, String quanHuyenId, String phuongXaId,
+            String neTypeId, String thietBiId, String status, String strFilter) throws DAOException {
+        Connection conn = null;
+        String querySql = "";
+        try {
+            conn = this.getConnection();
+            if (neTypeId.equals("2")) //BTS
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_bts(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("3")) //nodeb
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_nodeb(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("8")) //enodeb
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_enodeb(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("5")) //cell
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_cell2g(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("6")) //cell
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_cell3g(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("7")) //cell
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_cell4g(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            } else if (neTypeId.equals("11")) //bsc rnc
+            {
+                querySql = "{? = call PKG_NODE_SEARCH.fc_find_all_detail_bsc_rnc(?,?,?,?,?,?,?,?,?,?,?,?) }";
+            }
+//       
+
+            List<Object> vars = new Vector<Object>();
+            vars.add(nodeId);
+            vars.add(startRow);
+            vars.add(endRow);
+            vars.add(code);
+            vars.add(khuvucId);
+            vars.add(tinhTpId);
+            vars.add(quanHuyenId);
+            vars.add(phuongXaId);
+            vars.add(neTypeId);
+            vars.add(thietBiId);
+            vars.add(status);
+            vars.add(strFilter);
+
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+
+            List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
+                @Override
+                public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    String neTypeId = rs.getString("ne_type_id");
+
+                    if (neTypeId.equals("2") || neTypeId.equals("3") || neTypeId.equals("8")) //BTS
+                    {
+                        BTSInfoBO item = new BTSInfoBO();
+                        item.setId(rs.getLong("node_id"));
+                        item.setNeTypeId(rs.getLong("ne_type_id"));
+                        item.setCode(rs.getString("ma_node"));
+                        item.setMaNodeCha(rs.getString("ma_node_cha"));
+                        item.setNodeChaId(rs.getLong("node_cha_id"));
+
+                        item.setDonViId(rs.getLong("DONVI_ID"));
+                        item.setCodeBuilding(rs.getString("ma_building"));
+                        item.setBuildingId(rs.getLong("building_id"));
+                        item.setTenNeType(rs.getString("ten_loai_ne"));
+
+                        item.setTenThietBi(rs.getString("ten_thiet_bi"));
+                        item.setDonViName(rs.getString("ten_don_vi"));
+                        item.setAddress(rs.getString("DIA_CHI"));
+                        item.setLat(rs.getString("Latitude"));
+                        item.setLon(rs.getString("Longitude"));
+                        item.setTenNgQLy(rs.getString("TEN_NG_QLY"));
+                        item.setSDTQLy(rs.getString("SDT_NG_QLY"));
+
+                        item.setThietBiId(rs.getLong("thiet_bi_id"));
+                        item.setLoaiTramId(rs.getLong("loai_tram_id"));
+                        item.setTrangThaiHDId(rs.getLong("trang_thai_hd_id"));
+                        item.setTrangThaiQLId(rs.getLong("trang_thai_ql_id"));
+
+                        if (neTypeId.equals("2")) {
+                            item.setName(rs.getString("TEN_BTS"));
+                        } else if (neTypeId.equals("3")) {
+                            item.setName(rs.getString("TEN_NODEB"));
+                        } else if (neTypeId.equals("8")) {
+                            item.setName(rs.getString("TEN_ENODEB"));
+                        }
+                        item.setHoanCanhRaDoi(rs.getString("hoan_canh_ra_doi"));
+                        item.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
+                        item.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
+                        item.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
+                        item.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
+                        item.setCauHinh(rs.getString("cau_hinh"));
+                        item.setCauHinhPortId(rs.getLong("cau_hinh_port_id"));
+                        if (!neTypeId.equals("8")) {
+                            item.setCosite2G3GType(rs.getInt("COSITE_2G_3G_TYPE"));
+                            item.setMaCosite(rs.getString("MA_COSITE_2G_3G"));
+                        }
+
+                        item.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
+                        item.setTenBSCRNC(rs.getString("TEN_BSC_RNC"));
+                        item.setTenBSCRNCQL(rs.getString("TEN_BSC_RNC_QL"));
+                        if (neTypeId.equals("3") || neTypeId.equals("8")) //BTS
+                        {
+                            item.setdCHSPDA42M(rs.getString("DC_HSDPA_42M"));
+
+                            if (neTypeId.equals("8")) {
+                                item.setmSCMSS(rs.getString("MSC_MSS"));
+                                item.setsGSN(rs.getString("SGSN"));
+                                item.setEnodebId(rs.getString("enodeb_id"));
+
+                            }
+                        }
+                        item.setFilterUser(rs.getString("FILTER_USER"));
+                        item.setFrequencyBand(rs.getString("FREQUENCY_BAND"));
+                        item.setBangTanId(rs.getLong("BANG_TAN_ID"));
+
+                        item.setCodeTramDA(rs.getString("ma_tram_da"));
+                        item.setTramDAId(rs.getLong("TRAM_DU_AN_ID"));
+                        item.setStatus(rs.getInt("STATUS"));
+                        item.setUserInsert(rs.getLong("USER_INSERT"));
+
+                        item.setTenQuan(rs.getString("ten_quan_huyen"));
+                        item.setTenPhuong(rs.getString("ten_phuong_xa"));
+                        item.setTrangThaiMayNo(rs.getString("trang_thai_dat_may_no"));
+                        return item;
+
+                    } else if (neTypeId.equals("5") || neTypeId.equals("6") || neTypeId.equals("7")) {
+                        NodeBO nodebo = new NodeBO();
+                        nodebo.setId(rs.getLong("id"));
+
+                        nodebo.setCode(rs.getString("ma_node"));
+                        nodebo.setTenNgQLy(rs.getString("TEN_NG_QLY"));
+                        nodebo.setSDTQLy(rs.getString("SDT_NG_QLY"));
+                        nodebo.setDonViName(rs.getString("ten_don_vi"));
+                        nodebo.setNodeChaId(rs.getLong("node_cha_id"));
+                        nodebo.setTenThietBi(rs.getString("ten_thiet_bi"));
+                        nodebo.setThietBiId(rs.getLong("thiet_bi_id"));
+
+                        nodebo.setCodeBuilding(rs.getString("ma_building"));
+                        nodebo.setNeTypeId(rs.getLong("ne_type_id"));
+                        nodebo.setTenNeType(rs.getString("ten_loai_ne"));
+                        nodebo.setLoaiTramId(rs.getLong("loai_tram_id"));
+
+                        nodebo.setTenLoaiTram(rs.getString("ten_loai_tram"));
+                        nodebo.setTenTrangThaiHD(rs.getString("ten_trangthai_hd"));
+
+                        nodebo.setTenTrangThaiQL(rs.getString("ten_trangthai_ql"));
+
+                        nodebo.setNote(rs.getString("note"));
+                        nodebo.setMaNodeCha(rs.getString("ma_node_cha"));
+                        nodebo.setCodeTramDA(rs.getString("ma_tram_da"));
+                        nodebo.setUserInsert(rs.getLong("user_insert"));
+                        nodebo.setBuildingId(rs.getLong("building_id"));
+                        nodebo.setStatus(rs.getInt("status"));
+
+                        if (neTypeId.equals("7")) //cell4g
+                        {
+                            OmcCell4gInfoBO omc = new OmcCell4gInfoBO(nodebo);
+                            omc.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
+                            omc.setLac(rs.getLong("lac"));
+                            omc.setCi(rs.getLong("ci"));
+                            omc.setTenBangTan(rs.getString("FREQUENCY_BAND"));
+                            omc.setPci(rs.getString("pci"));
+                            omc.setTac(rs.getString("tac"));
+                            omc.setLcrid(rs.getString("lcrid"));
+
+                            omc.setCellType(rs.getLong("CELL_TYPE"));
+                            omc.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
+                            omc.setHoanCanhRaDoi(rs.getString("HOAN_CANH_RA_DOI"));
+                            omc.setTenCell(rs.getString("TEN_CELL"));
+
+                            omc.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
+                            omc.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
+                            omc.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
+                            Long setAzimuth = rs.getLong("AZIMUTH");
+                            omc.setAzimuth(rs.wasNull() ? null : setAzimuth);
+
+//                            omc.setAzimuth(rs.getLong("AZIMUTH"));
+//                            omc.setMechanicalTilt(rs.getLong("MECHANICAL_TILT"));
+                            Long setMechanicalTilt = rs.getLong("MECHANICAL_TILT");
+                            omc.setMechanicalTilt(rs.wasNull() ? null : setMechanicalTilt);
+
+//                            omc.setElectricalTilt(rs.getLong("ELECTRICAL_TILT"));
+                            Long setElectricalTilt = rs.getLong("ELECTRICAL_TILT");
+                            omc.setElectricalTilt(rs.wasNull() ? null : setElectricalTilt);
+
+                            omc.setTotalTilt(rs.getLong("TOTAL_TILT"));
+                            omc.setAntennaType(rs.getLong("ANTENNA_TYPE"));
+                            omc.setAntennaName(rs.getString("ten_loai_anten"));
+                            omc.setAntennaModel(rs.getString("ANTENNA_MODEL"));
+                            omc.setAntennaPattern(rs.getString("ANTENNA_PATTERN"));
+                            omc.setAntennaHigh(rs.getLong("ANTENNA_HIGH"));
+                            omc.setNoOfCarrier(rs.getLong("no_of_carrier"));
+                            omc.setBosterTma(rs.getString("BOSTER_TMA"));
+                            omc.setSpecialCoverage(rs.getString("SPECIAL_COVERAGE"));
+                            omc.setListCellGroupId(rs.getString("list_group_id"));
+                            omc.setLyDo(rs.getString("ly_do"));
+                            omc.setAntennaGain(rs.getString("ANTENNA_GAIN"));
+                            omc.setEnodebId(rs.getString("enodeb_id"));
+                            omc.setLat(rs.getString("Latitude"));
+                            omc.setLon(rs.getString("Longitude"));
+                            omc.setBangTanId(rs.getLong("bang_tan_id"));
+                            return omc;
+                        } else if (neTypeId.equals("5")) //cell
+                        {
+                            OmcCell2gInfoBO omc = new OmcCell2gInfoBO(nodebo);
+                            omc.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
+                            omc.setLac(rs.getLong("lac"));
+                            omc.setCi(rs.getLong("ci"));
+                            omc.setTenBangTan(rs.getString("FREQUENCY_BAND"));
+                            Long bcch = rs.getLong("bcch");
+                            omc.setBcch(rs.wasNull() ? null : bcch);
+
+                            omc.setBsic(rs.getString("bsic"));
+                            omc.setTch(rs.getString("tch"));
+                            omc.setTrxConfig(rs.getString("trx_config"));
+                            //info
+                            omc.setCellType(rs.getLong("CELL_TYPE"));
+                            omc.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
+                            omc.setHoanCanhRaDoi(rs.getString("HOAN_CANH_RA_DOI"));
+                            omc.setTenCell(rs.getString("TEN_CELL"));
+                            omc.setVnpCode(rs.getString("VNP_CODE"));
+                            omc.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
+                            omc.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
+                            omc.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
+//                            omc.setAzimuth(rs.getLong("AZIMUTH"));
+                            Long setAzimuth = rs.getLong("AZIMUTH");
+                            omc.setAzimuth(rs.wasNull() ? null : setAzimuth);
+
+//                            omc.setMechanicalTilt(rs.getLong("MECHANICAL_TILT"));
+                            Long setMechanicalTilt = rs.getLong("MECHANICAL_TILT");
+                            omc.setMechanicalTilt(rs.wasNull() ? null : setMechanicalTilt);
+
+//                            omc.setElectricalTilt(rs.getLong("ELECTRICAL_TILT"));
+                            Long setElectricalTilt = rs.getLong("ELECTRICAL_TILT");
+                            omc.setElectricalTilt(rs.wasNull() ? null : setElectricalTilt);
+
+//                            omc.setTotalTilt(rs.getLong("TOTAL_TILT"));
+                            Long setTotalTilt = rs.getLong("TOTAL_TILT");
+                            omc.setTotalTilt(rs.wasNull() ? null : setTotalTilt);
+
+//                            omc.setAntennaType(rs.getLong("ANTENNA_TYPE"));
+                            Long setAntennaType = rs.getLong("ANTENNA_TYPE");
+                            omc.setAntennaType(rs.wasNull() ? null : setAntennaType);
+
+                            omc.setAntennaName(rs.getString("ten_loai_anten"));
+
+                            omc.setAntennaModel(rs.getString("ANTENNA_MODEL"));
+                            omc.setAntennaPattern(rs.getString("ANTENNA_PATTERN"));
+//                            omc.setAntennaHigh(rs.getLong("ANTENNA_HIGH"));
+                            Long setAntennaHigh = rs.getLong("ANTENNA_HIGH");
+                            omc.setAntennaHigh(rs.wasNull() ? null : setAntennaHigh);
+
+                            omc.setBosterTma(rs.getString("BOSTER_TMA"));
+                            omc.setSpecialCoverage(rs.getString("SPECIAL_COVERAGE"));
+                            omc.setAntennaGain(rs.getString("ANTENNA_GAIN"));
+                            omc.setListCellGroupId(rs.getString("list_group_id"));
+                            omc.setLat(rs.getString("Latitude"));
+                            omc.setLon(rs.getString("Longitude"));
+                            omc.setBangTanId(rs.getLong("bang_tan_id"));
+                            return omc;
+
+                        } else if (neTypeId.equals("6")) //cell
+                        {
+                            OmcCell3gInfoBO omc = new OmcCell3gInfoBO(nodebo);
+                            omc.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
+                            omc.setLac(rs.getLong("lac"));
+                            omc.setCi(rs.getLong("ci"));
+                            omc.setTenBangTan(rs.getString("FREQUENCY_BAND"));
+                            omc.setDlPsc(rs.getString("dl_psc"));
+                            omc.setCpichPower(rs.getString("cpich_power"));
+                            omc.setTotalPower(rs.getString("total_power"));
+                            omc.setMaxPower(rs.getString("max_power"));
+                            omc.setCellType(rs.getLong("CELL_TYPE"));
+                            omc.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
+                            omc.setHoanCanhRaDoi(rs.getString("HOAN_CANH_RA_DOI"));
+                            omc.setTenCell(rs.getString("TEN_CELL"));
+
+                            omc.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
+                            omc.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
+                            omc.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
+                            omc.setAzimuth(rs.getLong("AZIMUTH"));
+                            omc.setMechanicalTilt(rs.getLong("MECHANICAL_TILT"));
+                            omc.setElectricalTilt(rs.getLong("ELECTRICAL_TILT"));
+                            omc.setTotalTilt(rs.getLong("TOTAL_TILT"));
+                            omc.setAntennaType(rs.getLong("ANTENNA_TYPE"));
+                            omc.setAntennaName(rs.getString("ten_loai_anten"));
+                            omc.setAntennaModel(rs.getString("ANTENNA_MODEL"));
+                            omc.setAntennaPattern(rs.getString("ANTENNA_PATTERN"));
+                            omc.setAntennaHigh(rs.getLong("ANTENNA_HIGH"));
+                            omc.setNoOfCarrier(rs.getLong("NO_OF_CARRIER"));
+                            omc.setBosterTma(rs.getString("BOSTER_TMA"));
+                            omc.setSpecialCoverage(rs.getString("SPECIAL_COVERAGE"));
+                            omc.setListCellGroupId(rs.getString("list_group_id"));
+                            omc.setLyDo(rs.getString("LY_DO"));
+                            omc.setAntennaGain(rs.getString("ANTENNA_GAIN"));
+                            omc.setLat(rs.getString("Latitude"));
+                            omc.setLon(rs.getString("Longitude"));
+                            omc.setBangTanId(rs.getLong("bang_tan_id"));
+                            return omc;
+
+                        }
+                    } else if (neTypeId.equals("11")) //BSC RNC
+                    {
+                        BSCRNCInfoBO item = new BSCRNCInfoBO();
+                        item.setId(rs.getLong("node_id"));
+                        item.setNeTypeId(rs.getLong("ne_type_id"));
+                        item.setCode(rs.getString("ma_node"));
+                        item.setMaNodeCha(rs.getString("ma_node_cha"));
+                        item.setDonViId(rs.getLong("DONVI_ID"));
+                        item.setCodeBuilding(rs.getString("ma_building"));
+                        item.setBuildingId(rs.getLong("building_id"));
+                        item.setTenNeType(rs.getString("ten_loai_ne"));
+                        item.setTenThietBi(rs.getString("ten_thiet_bi"));
+                        item.setDonViName(rs.getString("ten_don_vi"));
+                        item.setAddress(rs.getString("DIA_CHI"));
+                        item.setLat(rs.getFloat("Latitude"));
+                        item.setLon(rs.getFloat("Longitude"));
+                        item.setTenNgQLy(rs.getString("TEN_NG_QLY"));
+                        item.setSDTQLy(rs.getString("SDT_NG_QLY"));
+
+                        item.setThietBiId(rs.getLong("thiet_bi_id"));
+                        item.setLoaiTramId(rs.getLong("loai_tram_id"));
+                        item.setTrangThaiHDId(rs.getLong("trang_thai_hd_id"));
+                        item.setTrangThaiQLId(rs.getLong("trang_thai_ql_id"));
+
+                        item.setName(rs.getString("TEN_BSC_RNC"));
+                        item.setHoanCanhRaDoi(rs.getString("hoan_canh_ra_doi"));
+                        item.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
+                        item.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
+                        item.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
+                        item.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
+                        item.setTypeBSCRNC(rs.getString("TYPE_BSC_RNC"));
+
+                        return item;
+                    }
+                    return null;
+                }
+            }, vars);
+//            
+            return (List<NodeBO>) list;
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+    
+    
+    
 
 }
