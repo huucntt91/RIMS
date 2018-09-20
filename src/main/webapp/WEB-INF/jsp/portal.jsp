@@ -97,7 +97,7 @@
                                  
                         <a target="_blank" href="http://mnp.vnpt.vn/" class="btn btn-sq-lg btn-danger logoIcon">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
-                            <h4>Hệ thống NMP</h4>
+                            <h4>Hệ thống MNP</h4>
                         </a>
                         </div>
                         
