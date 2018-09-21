@@ -961,7 +961,7 @@ public class BuildingController {
                     cell.setCellValue(item.getDiaChi());
                     cell = row.createCell(8);
                     DecimalFormat f = new DecimalFormat("0.000000");
-                    if (item.getLat() == null && StringUtils.isNumeric(item.getLat())) {
+                    if (item.getLat() != null && StringUtils.isNumeric(item.getLat())) {
                         try {
                             cell.setCellValue(f.format(Double.parseDouble(item.getLat())));
                         } catch (NumberFormatException e) {
@@ -973,7 +973,7 @@ public class BuildingController {
                     }
 
                     cell = row.createCell(9);
-                    if (item.getLon() == null && StringUtils.isNumeric(item.getLon())) {
+                    if (item.getLon() != null && StringUtils.isNumeric(item.getLon())) {
                         try {
                             cell.setCellValue(f.format(Double.parseDouble(item.getLon())));
                         } catch (NumberFormatException e) {
