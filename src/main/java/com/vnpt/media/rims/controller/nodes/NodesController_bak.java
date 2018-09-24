@@ -59,11 +59,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.util.FileCopyUtils;
 
 @Controller
-@RequestMapping(value = "/nodes1")
-public class NodesControllerSearchNew {
+@RequestMapping(value = "/nodes_bak")
+public class NodesController_bak {
 
-    private static final Logger LOGGER = LogManager.getLogger(NodesControllerSearchNew.class);
-    private static final String LIST = "nodes/list/list_1";
+    private static final Logger LOGGER = LogManager.getLogger(NodesController_bak.class);
+    private static final String LIST = "nodes/list/list";
     private static final String FORM = "nodes/node/new";
     private static final String ADDTRAM = "nodes/tram/tramNew";
     private static final String LIST_BLACK_POINT = "nodes/blackPoint/list";
@@ -104,7 +104,6 @@ public class NodesControllerSearchNew {
             @RequestParam(value = "phuongXaId", required = false) String phuongXaId,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
-            @RequestParam(value = "strFilter", required = false) String strFilter,
             ModelMap mm, HttpServletRequest request) {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
         LOGGER.info("user: {}, ip: {}, danh sach doi tuong init : {} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, status, khuvucId);
@@ -120,7 +119,6 @@ public class NodesControllerSearchNew {
         quanHuyenId = quanHuyenId == null ? "" : quanHuyenId;
         phuongXaId = phuongXaId == null ? "" : phuongXaId;
         khuvucId = khuvucId == null ? "" : khuvucId;
-        strFilter = strFilter == null ? "" : strFilter;
 
         code = code == null ? "" : code;
         String neType = neTypeId == null ? "2" : neTypeId;
@@ -129,7 +127,7 @@ public class NodesControllerSearchNew {
         NodesFacade facade = new NodesFacade();
         int totalRows;
         try {
-            totalRows = neTypeId == null ? 0 : facade.getTotalDetailNode(code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status, strFilter);
+            totalRows = neTypeId == null ? 0 : facade.getTotalDetail(code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             totalRows = 0;
@@ -178,9 +176,9 @@ public class NodesControllerSearchNew {
             try {
                 LOGGER.info("user: {}, ip: {}, call findAllDetail({},{},{},{},{},{},{},{},{},{})", user.getUsername(), request.getRemoteAddr(), startRow, endRow, code,
                         khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
-                list = nodesFacade.findAllDetailNode("", String.valueOf(startRow),
+                list = nodesFacade.findAllDetail("", String.valueOf(startRow),
                         String.valueOf(endRow), code,
-                        khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status, strFilter);
+                        khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
                 LOGGER.info("user: {}, ip: {}, done findAllDetail: {}", user.getUsername(), request.getRemoteAddr(), list.size());
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
@@ -227,7 +225,6 @@ public class NodesControllerSearchNew {
         mm.put("startRow", startRow);
         mm.put("status", status);
         mm.put("userId", user.getId());
-        mm.put("strFilter", strFilter);
         mm.put("approveForm", new ApproveForm());
 
         ArrayList<DMCellGroupBO> listCellGroup = CellGroupFacade.fc_find_all("");
@@ -948,18 +945,4 @@ public class NodesControllerSearchNew {
         }
         return null;
     }
-//    trunglk_start_search_new
-    
-    @RequestMapping(value = "/fillAttrObject/{id}", method = RequestMethod.GET,
-            produces = "application/json;charset=utf-8")
-    public @ResponseBody
-    String fillAttrObject(@PathVariable(value = "id") String id, ModelMap mm,
-            HttpServletRequest request) throws IOException {
-        NodesFacade facade = new NodesFacade();
-        ObjectMapper mapper = new ObjectMapper();
-        //Object to JSON in String
-        return mapper.writeValueAsString(facade.findFilterMap(id));
-    }
-    
-//    trunglk_end_search_new
 }
