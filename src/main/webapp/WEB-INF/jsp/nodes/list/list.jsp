@@ -1483,6 +1483,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                     </div>
                     <div style="display: none">
                         <select id="numberOption"> 
+                            <option value="=">=</option>
                             <option value=">">></option>
                             <option value=">=">>=</option>
                             <option value="<"><</option>
@@ -1945,6 +1946,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         else if (logic == "NOT NULL")
                 str += " IS NOT NULL ";
         // toan tu
+        else if (logic == "=")
+                str += " = " + value;
         else if (logic == "<")
                 str += " < " + value;
         else if (logic == "<=")
