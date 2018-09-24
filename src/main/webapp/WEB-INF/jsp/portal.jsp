@@ -52,9 +52,9 @@
                         </a>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                                 <a target="_blank" href="https://dhtt2.vinaphone.vn:8889/pm1/" class="btn btn-sq-lg logoIcon btn-success">
+                                 <a target="_blank" href="http://10.156.8.42" class="btn btn-sq-lg logoIcon btn-success">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
-                            <h4>Hệ thống PM 2G, 3G NEW</h4>
+                            <h4>Hệ thống PM 2G,3G,4G NEW</h4>
                         </a>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
@@ -67,12 +67,6 @@
                                   <a target="_blank" href="http://clm.vinaphone.vn/" class="btn btn-sq-lg logoIcon btn-warning">
                             <i class="fa  fa-desktop fa-3x"></i><br/>
                             <h4>Hệ thống PM 2G, 3G OLD</h4>
-                        </a>
-                        </div>
-                          <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
-                              <a target="_blank" href="http://10.156.8.42/kpi/dashboard/" class="btn btn-sq-lg logoIcon btn-danger">
-                            <i class="fa  fa-desktop fa-3x"></i><br/>
-                            <h4>Hệ thống PM tool new</h4>
                         </a>
                         </div>
                           <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 appLogo">
