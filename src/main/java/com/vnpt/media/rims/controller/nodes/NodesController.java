@@ -104,6 +104,7 @@ public class NodesController {
             @RequestParam(value = "phuongXaId", required = false) String phuongXaId,
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
+            @RequestParam(value = "strFilter", required = false) String strFilter,
             ModelMap mm, HttpServletRequest request) {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
         LOGGER.info("user: {}, ip: {}, danh sach doi tuong init : {} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, status, khuvucId);
@@ -119,6 +120,7 @@ public class NodesController {
         quanHuyenId = quanHuyenId == null ? "" : quanHuyenId;
         phuongXaId = phuongXaId == null ? "" : phuongXaId;
         khuvucId = khuvucId == null ? "" : khuvucId;
+        strFilter = strFilter == null ? "" : strFilter;
 
         code = code == null ? "" : code;
         String neType = neTypeId == null ? "2" : neTypeId;
@@ -127,7 +129,7 @@ public class NodesController {
         NodesFacade facade = new NodesFacade();
         int totalRows;
         try {
-            totalRows = neTypeId == null ? 0 : facade.getTotalDetail(code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
+            totalRows = neTypeId == null ? 0 : facade.getTotalDetailNode(code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status, strFilter);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             totalRows = 0;
@@ -176,9 +178,9 @@ public class NodesController {
             try {
                 LOGGER.info("user: {}, ip: {}, call findAllDetail({},{},{},{},{},{},{},{},{},{})", user.getUsername(), request.getRemoteAddr(), startRow, endRow, code,
                         khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
-                list = nodesFacade.findAllDetail("", String.valueOf(startRow),
+                list = nodesFacade.findAllDetailNode("", String.valueOf(startRow),
                         String.valueOf(endRow), code,
-                        khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
+                        khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status, strFilter);
                 LOGGER.info("user: {}, ip: {}, done findAllDetail: {}", user.getUsername(), request.getRemoteAddr(), list.size());
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
@@ -225,6 +227,7 @@ public class NodesController {
         mm.put("startRow", startRow);
         mm.put("status", status);
         mm.put("userId", user.getId());
+        mm.put("strFilter", strFilter);
         mm.put("approveForm", new ApproveForm());
 
         ArrayList<DMCellGroupBO> listCellGroup = CellGroupFacade.fc_find_all("");
@@ -945,4 +948,18 @@ public class NodesController {
         }
         return null;
     }
+//    trunglk_start_search_new
+    
+    @RequestMapping(value = "/fillAttrObject/{id}", method = RequestMethod.GET,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String fillAttrObject(@PathVariable(value = "id") String id, ModelMap mm,
+            HttpServletRequest request) throws IOException {
+        NodesFacade facade = new NodesFacade();
+        ObjectMapper mapper = new ObjectMapper();
+        //Object to JSON in String
+        return mapper.writeValueAsString(facade.findFilterMap(id));
+    }
+    
+//    trunglk_end_search_new
 }

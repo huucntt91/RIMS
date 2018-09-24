@@ -3057,7 +3057,7 @@ public class NodeDAO extends GenericDAO implements INode {
                     item.setType(rs.getString("TYPE"));
                     item.setColumnName(rs.getString("COLUMN_NAME"));
 //                    item.setColumnId(rs.getString("COLUMN_NAME"));
-                    item.setColumnId(rs.getString("ALIAS") + "." + item.getColumnName());
+                    item.setColumnId(rs.getInt("DATA_TYPE")+rs.getString("ALIAS") + "." + item.getColumnName());
                     item.setDataType(rs.getInt("DATA_TYPE"));
                     item.setDescription(rs.getString("DESCRIPTION"));
                     return item;
@@ -3263,6 +3263,7 @@ public class NodeDAO extends GenericDAO implements INode {
                         item.setTenQuan(rs.getString("ten_quan_huyen"));
                         item.setTenPhuong(rs.getString("ten_phuong_xa"));
                         item.setTrangThaiMayNo(rs.getString("trang_thai_dat_may_no"));
+                        item.setTenLoaiTram(rs.getString("ten_loai_tram"));
                         return item;
 
                     } else if (neTypeId.equals("5") || neTypeId.equals("6") || neTypeId.equals("7")) {

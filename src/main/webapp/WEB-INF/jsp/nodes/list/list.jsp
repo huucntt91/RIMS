@@ -36,7 +36,7 @@
                     <h3 class="box-title"><spring:message code="admin.common.search" /></h3>
                 </div>
                 <form:form method="GET" id="frm_search">
-                    <div class="box-body">
+                    <div class="box-body" id ="boxSearch">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <select name="neTypeId" id="neTypeId" class="form-control"> >
@@ -145,22 +145,30 @@
                                     <label class=" input-group-addon">Phường/Xã</label>
                                     <select multiple="multiple" name="phuongXaId" id="phuongXaId" class="form-control"> 
                                     </select>
-                                    <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>        
+                                    <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>     
+                                    <input type="hidden" name="strFilter" value="${strFilter}"  id="strFilter" />
                                 </div>
                             </div>
                         </div>
 
                         <div class="clearfix" ></div>
-
-
+                        <div class="col-md-4"> 
+                            <div class="form-group">
+                                <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
+                                
+                            </div>
+                        </div>    
+                        <div class="clearfix" ></div>
 
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                        <button type="button" class="btn btn-primary" onclick="filter()"><spring:message code="admin.common.search" /></button>
                         <button type="button" id="export" class="btn btn-primary" disabled="disabled"
                                 data-toggle="modal" data-target="#exportExcel"   onclick="exportExcel();">Export excel</button>
                     </div>
+                    
+                        
                 </form:form>
             </div>
         </div>
@@ -462,7 +470,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             </c:if>
 
                                             <td>${item.tenThietBi}</td>
-                                            <td>${item.loaiTramId}</td>
+                                            <td>${item.tenLoaiTram}</td>
                                             <td>${item.cauHinh}</td>
                                             <td><c:choose>
                                                     <c:when test="${item.trangThaiMayNo == 'CĐ'}">                                                            
@@ -1424,7 +1432,73 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         </div>                 
     </div>
 </section>
+<div id="addFiller" style="display: none">
+                        <div class="groupFilter">
+                            <div class="col-md-2">                            
+                                <div class="form-group">
+                                    <select name="objectFill"  class="form-control objectFill"  onchange="changeObjectFill(this)">
+                                        <option value="-1">Chọn Object</option>
+                                        <option value="2">BTS</option>
+                                        <option value="3">NodeB</option>
+                                        <option value="8">eNodeB</option>
+                                        <option value="5">Cell2G</option>
+                                        <option value="6">Cell3G</option>
+                                        <option value="7">Cell4G</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">                            
+                                <div class="form-group">
+                                    <select name="column"  class="form-control column"  onchange="changeAtrColum(this)">
+                                        <option value="-1">Chọn thuộc tính</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="filterType" class="form-control filterType"> 
+                                        <option value="Contains">Contains</option>
+                                        <option value="Not contains">Not contains</option>
+                                        <option value="startWith">startWith</option>
+                                        <option value="endWith">endWith</option>
+                                        <option value="NULL">NULL</option>
+                                        <option value="NOT NULL">NOT NULL</option>
+                                    </select>  
+                                </div>
+                            </div>                        
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input  name="value" class="form-control value_" placeholder="Giá trị" required="true"                        
+                                            type="text" value=" "/>                
 
+                                </div>
+                            </div>  
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button type="button" onclick="removeText(this)" class="btn btn-danger">Remove (-)</button>    
+                                </div>
+                            </div>
+                            <div class="clearfix" ></div>
+                        </div>
+                    </div>
+                    <div style="display: none">
+                        <select id="numberOption"> 
+                            <option value=">">></option>
+                            <option value=">=">>=</option>
+                            <option value="<"><</option>
+                            <option value="<="><=</option>
+                            <option value="NULL">NULL</option>
+                            <option value="NOT NULL">NOT NULL</option>
+                        </select> 
+                        <select id="varcharOption"> 
+                            <option value="Contains">Contains</option>
+                            <option value="Not contains">Not contains</option>
+                            <option value="startWith">startWith</option>
+                            <option value="endWith">endWith</option>
+                            <option value="NULL">NULL</option>
+                            <option value="NOT NULL">NOT NULL</option>
+                        </select> 
+                    </div>
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -1523,137 +1597,152 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
 <script src="${pageContext.request.contextPath}/resources/js/fileSaver.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/js/tableexport.js" type="text/javascript"></script>
 <script>
-                                                function myPM(code, tenNeType) {
-                                                    $("#myPM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup?vnpCode=' + code + '&nodeType=' + tenNeType});
-                                                }
+    $(document).ready(function () {
 
-                                                function myFM(code, tenNeType) {
-                                                    $("#myFM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup_fm?vnpCode=' + code + '&nodeType=' + tenNeType});
-                                                }
-                                                function regOff(nodeId, code, type) {
+        if ($("#quanHuyenId").val() != '')
+            getListPhuongXa(${quanHuyenId});
+        $('#example1 tbody').on('click', 'tr', function () {
+            if ($(this).hasClass('selected')) {
+                //$(this).removeClass('selected');
+            } else {
+            $('#example1 tbody').find('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+            }
+            var node_id = $(this).find('.node_id').val();
+            var type_id = $(this).find('.type_id').val();
+            viewDetail(node_id, type_id);
+        });
+        
+//        var where = ' AND 1 = 1 ';
+//        var neTypeId = $("#neTypeId").val();
+//        // check addfilter
+//        var listObjectFill = "";
+//        $("#boxSearch .groupFilter").each(function (i) {
+//        listObjectFill += $(this).find('.objectFill').val() + ",";
+//        where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+//        });
+//        if (listObjectFill.length > 0)
+//        {
+//        if (listObjectFill.indexOf(neTypeId + ",") == - 1)
+//                where = " AND 1 = 2 ";
+//        }
+//        where = EscapeCommasSemiColons(where);
+//        alert(where)
+    });
+                                                
+    function myPM(code, tenNeType) {
+        $("#myPM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup?vnpCode=' + code + '&nodeType=' + tenNeType});
+    }
 
-                                                    var status =<%=Constants.NE_REG_OFF%>;
+    function myFM(code, tenNeType) {
+        $("#myFM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup_fm?vnpCode=' + code + '&nodeType=' + tenNeType});
+    }
+    
+    function regOff(nodeId, code, type) {
 
-
-                                                    $("#myModalLabel").html('Đăng ký off node ' + code);
-                                                    $(".modal-body #status").val(status);
-                                                    $(".modal-body #nodeId").val(nodeId);
-                                                    $(".modal-body #type").val(type);
-
-                                                }
-
-                                                //lay ra danh sach tinhtp theo khu vuc
-                                                function getTinhTp() {
-                                                    var id = $("#khuvucId").val();
-                                                    var tinhTpIds = $("#tinhTpIds").val();
-                                                    $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
-                                                        var html = '';
-                                                        if (data.length > 0) {
-                                                            data.forEach(function (data) {
-                                                                var htmlx = '<option value="' + data.tinhTpId + '" ';
-                                                                if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
-                                                                    htmlx += ' selected="selected" ';
-                                                                }
-                                                                htmlx += '>' + data.tenTinhTp + '</option>';
-                                                                html += htmlx;
-                                                            });
-                                                        }
-                                                        $('#tinhTpId').html(html);
-                                                        $('#tinhTpId').multiselect('rebuild');
-                                                    });
-                                                }
-                                                function getListHuyen(tinh)
-                                                {
-                                                    var id = $("#tinhTpId").val();
-                                                    if (id === null) {
-                                                        id = $("#tinhTpIds").val();
-                                                    }
-                                                    var quanHuyenIds = $("#quanHuyenIds").val();
-                                                    $.get("${pageContext.request.contextPath}/mane/getQuanHuyen?tinhTpId=" + id, function (data) {
-                                                        var html = '';
-                                                        if (data.length > 0) {
-                                                            data.forEach(function (data) {
-                                                                var htmlx = '<option value="' + data.quanHuyenId + '" ';
-                                                                if (quanHuyenIds.indexOf(data.quanHuyenId) > -1) {
-                                                                    htmlx += ' selected="selected" ';
-                                                                }
-                                                                htmlx += '>' + data.tenQuanHuyen + '</option>';
-                                                                html += htmlx;
-                                                            });
-                                                        }
-                                                        $('#quanHuyenId').html(html);
-                                                        $('#quanHuyenId').multiselect('rebuild');
-                                                    });
-                                                }
-
-                                                function getListPhuongXa(huyen)
-                                                {
-                                                    var id = $("#quanHuyenId").val();
-                                                    if (id === null) {
-                                                        id = $("#quanHuyenIds").val();
-                                                    }
-                                                    if (id == null || id == '') {
-                                                        return;
-                                                    }
-                                                    var phuongXaIds = $("#phuongXaIds").val();
-                                                    $.get("${pageContext.request.contextPath}/mane/getPhuongXa?quanHuyenId=" + id, function (data) {
-                                                        var html = '';
-                                                        if (data.length > 0) {
-                                                            data.forEach(function (data) {
-                                                                var htmlx = '<option value="' + data.phuongXaId + '" ';
-                                                                if (phuongXaIds.indexOf(data.phuongXaId) > -1) {
-                                                                    htmlx += ' selected="selected" ';
-                                                                }
-                                                                htmlx += '>' + data.tenPhuongXa + '</option>';
-                                                                html += htmlx;
-                                                            });
-                                                        }
-                                                        $('#phuongXaId').html(html);
-                                                        $('#phuongXaId').multiselect('rebuild');
-                                                    });
-                                                }
+        var status =<%=Constants.NE_REG_OFF%>;
 
 
-                                                function getNodeLink(id, code)
-                                                {
-                                                    $('#mynodes').text(code);
-                                                    $("#myModal iframe").prop({'src': '${pageContext.request.contextPath}/nodes/getNodeLink/' + id});
-                                                }
+        $("#myModalLabel").html('Đăng ký off node ' + code);
+        $(".modal-body #status").val(status);
+        $(".modal-body #nodeId").val(nodeId);
+        $(".modal-body #type").val(type);
 
-                                                $(document).ready(function () {
+    }
 
-                                                    //$('.navbar-btn').click();
-//        var tinhId = $("#tinhTpId").val();
-                                                    if ($("#quanHuyenId").val() != '')
-                                                        getListPhuongXa(${quanHuyenId});
-                                                    $('#example1 tbody').on('click', 'tr', function () {
-                                                        if ($(this).hasClass('selected')) {
-                                                            //$(this).removeClass('selected');
-                                                        } else {
-                                                            $('#example1 tbody').find('tr.selected').removeClass('selected');
-                                                            $(this).addClass('selected');
-                                                        }
-                                                        var node_id = $(this).find('.node_id').val();
-                                                        var type_id = $(this).find('.type_id').val();
-                                                        viewDetail(node_id, type_id);
+    //lay ra danh sach tinhtp theo khu vuc
+    function getTinhTp() {
+        var id = $("#khuvucId").val();
+        var tinhTpIds = $("#tinhTpIds").val();
+        $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
+        var html = '';
+        if (data.length > 0) {
+            data.forEach(function (data) {
+            var htmlx = '<option value="' + data.tinhTpId + '" ';
+            if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
+                htmlx += ' selected="selected" ';
+                }
+                htmlx += '>' + data.tenTinhTp + '</option>';
+                html += htmlx;
+            });
+        }
+        $('#tinhTpId').html(html);
+        $('#tinhTpId').multiselect('rebuild');
+        });
+    }
+    function getListHuyen(tinh)
+        {
+            var id = $("#tinhTpId").val();
+            if (id === null) {
+                id = $("#tinhTpIds").val();
+            }
+            var quanHuyenIds = $("#quanHuyenIds").val();
+            $.get("${pageContext.request.contextPath}/mane/getQuanHuyen?tinhTpId=" + id, function (data) {
+                var html = '';
+                if (data.length > 0) {
+                    data.forEach(function (data) {
+                        var htmlx = '<option value="' + data.quanHuyenId + '" ';
+                        if (quanHuyenIds.indexOf(data.quanHuyenId) > -1) {
+                            htmlx += ' selected="selected" ';
+                        }
+                        htmlx += '>' + data.tenQuanHuyen + '</option>';
+                        html += htmlx;
+                    });
+                }
+                $('#quanHuyenId').html(html);
+                $('#quanHuyenId').multiselect('rebuild');
+            });
+        }
 
-                                                    });
+    function getListPhuongXa(huyen)
+        {
+            var id = $("#quanHuyenId").val();
+            if (id === null) {
+                id = $("#quanHuyenIds").val();
+            }
+            if (id == null || id == '') {
+                return;
+            }
+            var phuongXaIds = $("#phuongXaIds").val();
+                $.get("${pageContext.request.contextPath}/mane/getPhuongXa?quanHuyenId=" + id, function (data) {
+                var html = '';
+                if (data.length > 0) {
+                    data.forEach(function (data) {
+                        var htmlx = '<option value="' + data.phuongXaId + '" ';
+                        if (phuongXaIds.indexOf(data.phuongXaId) > -1) {
+                            htmlx += ' selected="selected" ';
+                        }
+                            htmlx += '>' + data.tenPhuongXa + '</option>';
+                            html += htmlx;
+                    });
+                }
+                $('#phuongXaId').html(html);
+                $('#phuongXaId').multiselect('rebuild');
+            });
+        }
 
-                                                });
-                                                function viewDetail(id, type) {
-                                                    var linkDetail = '${pageContext.request.contextPath}/nodes/view/' + type + '/' + id;
 
-                                                    if (type == 5 || type == 6 || type == 7) {
-                                                        linkDetail = '${pageContext.request.contextPath}/cell/detail/' + id + '/' + type;
+        function getNodeLink(id, code)
+            {
+                $('#mynodes').text(code);
+                $("#myModal iframe").prop({'src': '${pageContext.request.contextPath}/nodes/getNodeLink/' + id});
+            }
 
-                                                    } else if (type == 2 || type == 3 || type == 8) {
-                                                        linkDetail = '${pageContext.request.contextPath}/nodes/detail/' + id + '/' + type
+                                                
+        function viewDetail(id, type) {
+            var linkDetail = '${pageContext.request.contextPath}/nodes/view/' + type + '/' + id;
 
-                                                    }
+            if (type == 5 || type == 6 || type == 7) {
+                linkDetail = '${pageContext.request.contextPath}/cell/detail/' + id + '/' + type;
+
+            } else if (type == 2 || type == 3 || type == 8) {
+                linkDetail = '${pageContext.request.contextPath}/nodes/detail/' + id + '/' + type
+
+            }
 //        $.get(linkDetail, function(data) {
 //            $('#detailDiv').html(data);
 //        });
-                                                }
+        }
 </script>
 <script>
     $(document).ready(function () {
@@ -1801,13 +1890,122 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         var statusList = $('#status').val() == null ? '' : $('#status').val();
         var nameSearch = $('#code').val() == null ? '' : $('#code').val();
         var u = '${userId}';      
-        var urlDownload = '${API_RIMS}/exportdsdt?ne_type=' + ne_type + '&ne_id=' + neTypeId + '&start_row=&end_row=&node_id=&name=' + nameSearch + '&list_khuvuc_id=' + khuVuc + '&list_tinh_id=' + tinhTp + '&list_quan_id=' + quanHuyen + '&list_phuong_id=' + phuongXa + '&vender_id=' + vender + '&status_list=' + statusList + '&list_column=' + listColumn + '&u=' + u;
+        var filterSearch = $('#strFilter').val() == null ? '' : $('#strFilter').val();
+        var urlDownload = '${API_RIMS}/exportdsdt?ne_type=' + ne_type + '&ne_id=' + neTypeId + '&start_row=&end_row=&node_id=&name=' + nameSearch + '&list_khuvuc_id=' + khuVuc + '&list_tinh_id=' + tinhTp + '&list_quan_id=' + quanHuyen + '&list_phuong_id=' + phuongXa + '&vender_id=' + vender + '&status_list=' + statusList + '&list_column=' + listColumn + '&u=' + u + '&filterSearch='+ filterSearch.replace(/%/gi, "%25");
         $('input[type="checkbox"]').iCheck('uncheck');
         $("#export").prop('disabled', true);
         window.location.href = urlDownload;
     }
     
+    function afterText() {
+        $('#boxSearch').append($('#addFiller').html());
+        return false;
+        }
     
+    function changeObjectFill(that){
+        $.get("${pageContext.request.contextPath}/nodes/fillAttrObject/" + $(that).val(), function (data) {
+        var html = '<option value="">Chọn thuộc tính</option>';
+        if (data.length > 0) {
+        data.forEach(function (entry) {
+        var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
+        html += htmlx;
+        });
+        $(that).parents('.groupFilter').find('.column').html(html);
+        };
+        });
+        }
+    
+    function changeAtrColum(that)
+        {
+            var colum = $(that).val();
+            var i = colum.substring(0, 1);
+            if (i == 0) {
+            $(that).parents('.groupFilter').find('.filterType').html($('#varcharOption').html());
+            } else if (i == 1) {
+            $(that).parents('.groupFilter').find('.filterType').html($('#numberOption').html());
+            }
+        }
+    
+    function convertQueryFilter(neTypeId, type, colum, logic, value)
+        {
+        value = value.trim();
+        var str = " ";
+        if (type == neTypeId)
+        {
+        // logic
+        str += " AND " + colum.substring(1);
+        if (logic == "Contains")
+                str += " like '%" + value + "%'";
+        else if (logic == "startWith")
+                str += " like '" + value + "%'";
+        else if (logic == "endWith")
+                str += " like '%" + value + "'";
+        else if (logic == "NULL")
+                str += " IS NULL ";
+        else if (logic == "NOT NULL")
+                str += " IS NOT NULL ";
+        // toan tu
+        else if (logic == "<")
+                str += " < " + value;
+        else if (logic == "<=")
+                str += " <= " + value;
+        else if (logic == ">")
+                str += " > " + value;
+        else if (logic == ">=")
+                str += " >= " + value;
+        }
+        return str;
+        }
+    
+    function filter(){
+        var checkValue = false;
+        $("#boxSearch .groupFilter").each(function (i) {
+            if($(this).find('.filterType').val().trim() != 'NULL' && $(this).find('.filterType').val().trim() != 'NOT NULL'){
+                if($(this).find('.value_').val().trim() == ''){
+                    checkValue = true;
+                }
+            }
+//            if (($(this).find('.value_').val().trim() == '' 
+//                    && $(this).find('.filterType').val().trim() != 'NULL')
+//                ||
+//                    ($(this).find('.value_').val().trim() == '' 
+//                            && $(this).find('.filterType').val().trim() != 'NOT NULL')) {
+//                checkValue = true;
+//            }
+        });
+        if (checkValue){
+            alert('Bạn phải nhập dữ liệu cho filter');
+            return;
+        }else{
+            var where = ' AND 1 = 1 ';
+            var neTypeId = $("#neTypeId").val();
+            // check addfilter
+            var listObjectFill = "";
+            $("#boxSearch .groupFilter").each(function (i) {
+            listObjectFill += $(this).find('.objectFill').val() + ",";
+            where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+            });
+            if (listObjectFill.length > 0)
+            {
+            if (listObjectFill.indexOf(neTypeId + ",") == - 1)
+                    where = " AND 1 = 2 ";
+            }
+    //        where = EscapeCommasSemiColons(where);
+            document.getElementById("strFilter").value = where;
+            
+            document.getElementById("frm_search").submit();
+        }
+        
+    }
+    function removeText(that) {
+        $(that).parents('.groupFilter').remove();
+        }
+        
+    function EscapeCommasSemiColons(input){
+        var output=input.replaceAll(",", "\\,"); //replace all the commas
+        output=output.replaceAll(";", "\\;"); //replace all the SemiColons
+        return output;
+    }    
 </script>
 
 
