@@ -147,6 +147,12 @@
                                     </select>
                                     <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>     
                                     <input type="hidden" name="strFilter" value="${strFilter}"  id="strFilter" />
+                                    <input type="hidden" name="objectFill1" value="${objectFill}"  id="objectFill1" />
+                                    <input type="hidden" name="column1" value="${column}"  id="column1" />
+                                    <input type="hidden" name="filterType1" value="${filterType}"  id="filterType1" />
+                                    <input type="hidden" name="value1" value="${value}"  id="value1" />
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
@@ -1436,7 +1442,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                         <div class="groupFilter">
                             <div class="col-md-2">                            
                                 <div class="form-group">
-                                    <select name="objectFill"  class="form-control objectFill"  onchange="changeObjectFill(this)">
+                                    <select name="objectFill" id="objectFill_stt"  class="form-control objectFill"  onchange="changeObjectFill(this)">
                                         <option value="-1">Chọn Object</option>
                                         <option value="2">BTS</option>
                                         <option value="3">NodeB</option>
@@ -1449,14 +1455,14 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                             </div>
                             <div class="col-md-3">                            
                                 <div class="form-group">
-                                    <select name="column"  class="form-control column"  onchange="changeAtrColum(this)">
+                                    <select name="column" id="column_stt"  class="form-control column"  onchange="changeAtrColum(this)">
                                         <option value="-1">Chọn thuộc tính</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select name="filterType" class="form-control filterType"> 
+                                    <select name="filterType" id="filterType_stt"  class="form-control filterType"> 
                                         <option value="Contains">Contains</option>
                                         <option value="Not contains">Not contains</option>
                                         <option value="startWith">startWith</option>
@@ -1468,8 +1474,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                             </div>                        
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <input  name="value" class="form-control value_" placeholder="Giá trị" required="true"                        
-                                            type="text" value=" "/>                
+                                    <input  name="value" id="value_stt" class="form-control value_" placeholder="Giá trị" required="true"                        
+                                            type="text" value=""/>                
 
                                 </div>
                             </div>  
@@ -1613,22 +1619,34 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             var type_id = $(this).find('.type_id').val();
             viewDetail(node_id, type_id);
         });
+        if($("#objectFill1").val() != ''){
+            var arrObjectFill = $("#objectFill1").val().split(",");
+            var arrColumn = $("#column1").val().split(",");
+            console.log('nhu cut: '+ $("#column1").val());
+            var arrFilterType = $("#filterType1").val().split(",");
+            var arrValue = $("#value1").val().split(",");
+//            oFormObject = document.forms['frm_search'];
+
+            for(var i=0; i<arrObjectFill.length; i++){
+                afterText();
+//                alert(arrValue[i]);
+                $('#objectFill_' + i).val(arrObjectFill[i]);
+                changeDefaultObjectFill(arrObjectFill[i],i,arrColumn[i]);
+                changeDefaultAtrColum(i,arrColumn[i],arrFilterType[i]);
+                //$('#column_' + i).val(arrColumn[i]);
+                //$('#filterType_' + i).val(arrFilterType[i]);
+                $('#value_' + i).val(arrValue[i]);
+//                oFormObject.elements["objectFill"].value = arrObjectFill[i];
+//                changeObjectFill(${neTypeId});
+//                oFormObject.elements["column"].value = arrColumn[i];
+//                oFormObject.elements["filterType"].value = arrFilterType[i];
+//                oFormObject.elements["value"].value = arrValue[i];
+
+            }
+
+//            alert($("#objectFill1").val() + '----' +$("#column1").val() + '----' +$("#filterType1").val() + '----'+$("#value1").val());
+        }
         
-//        var where = ' AND 1 = 1 ';
-//        var neTypeId = $("#neTypeId").val();
-//        // check addfilter
-//        var listObjectFill = "";
-//        $("#boxSearch .groupFilter").each(function (i) {
-//        listObjectFill += $(this).find('.objectFill').val() + ",";
-//        where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
-//        });
-//        if (listObjectFill.length > 0)
-//        {
-//        if (listObjectFill.indexOf(neTypeId + ",") == - 1)
-//                where = " AND 1 = 2 ";
-//        }
-//        where = EscapeCommasSemiColons(where);
-//        alert(where)
     });
                                                 
     function myPM(code, tenNeType) {
@@ -1899,7 +1917,9 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
     }
     
     function afterText() {
-        $('#boxSearch').append($('#addFiller').html());
+        var count = $('#boxSearch').find('.groupFilter').length;
+        var htmlFillter = $('#addFiller').html().replaceAll('stt',count);
+        $('#boxSearch').append(htmlFillter);
         return false;
         }
     
@@ -1915,6 +1935,20 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         };
         });
         }
+    function changeDefaultObjectFill(type,i,value_colum){
+        $.get("${pageContext.request.contextPath}/nodes/fillAttrObject/" + type, function (data) {
+        var html = '<option value="">Chọn thuộc tính</option>';
+        if (data.length > 0) {
+        data.forEach(function (entry) {
+        var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
+        html += htmlx;
+        });
+        $('#column_' + i).html(html);
+        console.log(value_colum + ',' + i);
+        $('#column_' + i).val(value_colum);
+        };
+        });
+        }
     
     function changeAtrColum(that)
         {
@@ -1926,7 +1960,16 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             $(that).parents('.groupFilter').find('.filterType').html($('#numberOption').html());
             }
         }
-    
+    function changeDefaultAtrColum(i,value_colum, value_atrr_colum)
+        {
+            var j = value_colum.substring(0, 1);
+            if (j == 0) {
+            $('#filterType_' + i).html($('#varcharOption').html());
+            } else if (j == 1) {
+            $('#filterType_' + i).html($('#numberOption').html());
+            }
+            $('#filterType_' + i).val(value_atrr_colum);          
+        }
     function convertQueryFilter(neTypeId, type, colum, logic, value)
         {
         value = value.trim();
@@ -1937,6 +1980,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         str += " AND " + colum.substring(1);
         if (logic == "Contains")
                 str += " like '%" + value + "%'";
+        else if (logic == "Not contains")
+                str += " not like '%" + value + "%'";    
         else if (logic == "startWith")
                 str += " like '" + value + "%'";
         else if (logic == "endWith")
@@ -1968,19 +2013,12 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                     checkValue = true;
                 }
             }
-//            if (($(this).find('.value_').val().trim() == '' 
-//                    && $(this).find('.filterType').val().trim() != 'NULL')
-//                ||
-//                    ($(this).find('.value_').val().trim() == '' 
-//                            && $(this).find('.filterType').val().trim() != 'NOT NULL')) {
-//                checkValue = true;
-//            }
         });
         if (checkValue){
             alert('Bạn phải nhập dữ liệu cho filter');
             return;
         }else{
-            var where = ' AND 1 = 1 ';
+            var where = ' ';
             var neTypeId = $("#neTypeId").val();
             // check addfilter
             var listObjectFill = "";
@@ -1996,6 +2034,11 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
     //        where = EscapeCommasSemiColons(where);
             document.getElementById("strFilter").value = where;
             
+//            var htmlString = $("#boxSearch .groupFilter").html();
+//            document.getElementById('addFiller');
+//            document.getElementById("divFilter").value = htmlString;
+//            alert(htmlString);
+             
             document.getElementById("frm_search").submit();
         }
         
@@ -2008,7 +2051,11 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         var output=input.replaceAll(",", "\\,"); //replace all the commas
         output=output.replaceAll(";", "\\;"); //replace all the SemiColons
         return output;
-    }    
+    }
+    String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+    };
 </script>
 
 

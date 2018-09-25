@@ -38,6 +38,7 @@ import com.vnpt.media.rims.facade.ManagerAdminFacade;
 import com.vnpt.media.rims.formbean.ApproveAllForm;
 import com.vnpt.media.rims.formbean.ApproveForm;
 import com.vnpt.media.rims.formbean.CellNewForm;
+import com.vnpt.media.rims.formbean.FilterObject;
 import com.vnpt.media.rims.formbean.NeLinkForm;
 import java.io.IOException;
 import java.util.HashMap;
@@ -105,6 +106,11 @@ public class NodesController {
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             @RequestParam(value = "strFilter", required = false) String strFilter,
+//            @RequestParam(value = "filterObject", required = false) List<FilterObject> filterObject,
+            @RequestParam(value = "objectFill", required = false) String objectFill,
+            @RequestParam(value = "column", required = false) String column,
+            @RequestParam(value = "filterType", required = false) String filterType,
+            @RequestParam(value = "value", required = false) String value,
             ModelMap mm, HttpServletRequest request) {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
         LOGGER.info("user: {}, ip: {}, danh sach doi tuong init : {} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, status, khuvucId);
@@ -116,11 +122,18 @@ public class NodesController {
         } catch (Exception ex) {
             pageInt = 1;
         }
+       
+         
         tinhTpId = tinhTpId == null ? String.join(",", tinhManager) : tinhTpId;
         quanHuyenId = quanHuyenId == null ? "" : quanHuyenId;
         phuongXaId = phuongXaId == null ? "" : phuongXaId;
         khuvucId = khuvucId == null ? "" : khuvucId;
         strFilter = strFilter == null ? "" : strFilter;
+        objectFill = objectFill == null ? "" : objectFill;
+        column = column == null ? "" : column;
+        filterType = filterType == null ? "" : filterType;
+        value = value == null ? "" : value;
+   
 
         code = code == null ? "" : code;
         String neType = neTypeId == null ? "2" : neTypeId;
@@ -228,6 +241,10 @@ public class NodesController {
         mm.put("status", status);
         mm.put("userId", user.getId());
         mm.put("strFilter", strFilter);
+        mm.put("objectFill", objectFill);   
+        mm.put("column", column);
+        mm.put("filterType", filterType);
+        mm.put("value", value);
         mm.put("approveForm", new ApproveForm());
 
         ArrayList<DMCellGroupBO> listCellGroup = CellGroupFacade.fc_find_all("");
