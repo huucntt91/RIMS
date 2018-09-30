@@ -39,7 +39,7 @@
                     <div class="box-body" id ="boxSearch">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <select name="neTypeId" id="neTypeId" class="form-control"> >
+                                <select name="neTypeId" id="neTypeId" class="form-control" onchange="removeTextAll()"> >
                                     <!--<option value="">--- Chọn NE TYPE ---</option>-->
                                     <c:forEach var="neBO" items="${neList}">
                                         <%--c:if test='${neBO.id != 9 && neBO.id != 10}'--%>
@@ -147,7 +147,7 @@
                                     </select>
                                     <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>     
                                     <input type="hidden" name="strFilter" value="${strFilter}"  id="strFilter" />
-                                    <input type="hidden" name="objectFill1" value="${objectFill}"  id="objectFill1" />
+                                    <!--<input type="hidden" name="objectFill1" value="${objectFill}"  id="objectFill1" />-->
                                     <input type="hidden" name="column1" value="${column}"  id="column1" />
                                     <input type="hidden" name="filterType1" value="${filterType}"  id="filterType1" />
                                     <input type="hidden" name="value1" value="${value}"  id="value1" />
@@ -161,8 +161,9 @@
                         <div class="col-md-4"> 
                             <div class="form-group">
                                 <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
-                                
+                                <button onclick="return removeTextAll()" class="btn btn-primary">Clear Filter (-)</button>
                             </div>
+                           
                         </div>    
                         <div class="clearfix" ></div>
 
@@ -208,6 +209,7 @@
                                             <c:if test="${neTypeId==8}">          
                                             <th>ENODEB ID</th>
                                             </c:if>
+                                        <th>Lý do</th>     
                                         <th>Ne Type</th> 
                                         <th>Mã BSC/RNC</th>
                                         <th>Mã trạm dự án</th>
@@ -440,6 +442,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <c:if test="${neTypeId==8}">          
                                                 <td>${item.enodebId}</td>
                                             </c:if>
+                                            <td>${item.note}</td>
                                             <td>${item.tenNeType}</td>
                                             <td>${item.maNodeCha}</td>
                                             <td>${item.codeTramDA}</td>
@@ -1439,73 +1442,73 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
     </div>
 </section>
 <div id="addFiller" style="display: none">
-                        <div class="groupFilter">
-                            <div class="col-md-2">                            
-                                <div class="form-group">
-                                    <select name="objectFill" id="objectFill_stt"  class="form-control objectFill"  onchange="changeObjectFill(this)">
-                                        <option value="-1">Chọn Object</option>
-                                        <option value="2">BTS</option>
-                                        <option value="3">NodeB</option>
-                                        <option value="8">eNodeB</option>
-                                        <option value="5">Cell2G</option>
-                                        <option value="6">Cell3G</option>
-                                        <option value="7">Cell4G</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">                            
-                                <div class="form-group">
-                                    <select name="column" id="column_stt"  class="form-control column"  onchange="changeAtrColum(this)">
-                                        <option value="-1">Chọn thuộc tính</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select name="filterType" id="filterType_stt"  class="form-control filterType"> 
-                                        <option value="Contains">Contains</option>
-                                        <option value="Not contains">Not contains</option>
-                                        <option value="startWith">startWith</option>
-                                        <option value="endWith">endWith</option>
-                                        <option value="NULL">NULL</option>
-                                        <option value="NOT NULL">NOT NULL</option>
-                                    </select>  
-                                </div>
-                            </div>                        
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <input  name="value" id="value_stt" class="form-control value_" placeholder="Giá trị" required="true"                        
-                                            type="text" value=""/>                
+    <div class="groupFilter">
+<!--        <div class="col-md-2">                            
+            <div class="form-group">
+                <select name="objectFill" id="objectFill_stt"  class="form-control objectFill"  onchange="changeObjectFill(this)">
+                    <option value="-1">Chọn Object</option>
+                    <option value="2">BTS</option>
+                    <option value="3">NodeB</option>
+                    <option value="8">eNodeB</option>
+                    <option value="5">Cell2G</option>
+                    <option value="6">Cell3G</option>
+                    <option value="7">Cell4G</option>
+                </select>
+            </div>
+        </div>-->
+        <div class="col-md-4">                            
+            <div class="form-group">
+                <select name="column" id="column_stt"  class="form-control column"  onchange="changeAtrColum(this)">
+                    <option value="-1">Chọn thuộc tính</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <select name="filterType" id="filterType_stt"  class="form-control filterType"> 
+                    <option value="Contains">Contains</option>
+                    <option value="Not contains">Not contains</option>
+                    <option value="startWith">startWith</option>
+                    <option value="endWith">endWith</option>
+                    <option value="NULL">NULL</option>
+                    <option value="NOT NULL">NOT NULL</option>
+                </select>  
+            </div>
+        </div>                        
+        <div class="col-md-4">
+            <div class="form-group">
+                <input  name="value" id="value_stt" class="form-control value_" placeholder="Giá trị" required="true"                        
+                        type="text" value=""/>                
 
-                                </div>
-                            </div>  
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <button type="button" onclick="removeText(this)" class="btn btn-danger">Remove (-)</button>    
-                                </div>
-                            </div>
-                            <div class="clearfix" ></div>
-                        </div>
-                    </div>
-                    <div style="display: none">
-                        <select id="numberOption"> 
-                            <option value="=">=</option>
-                            <option value=">">></option>
-                            <option value=">=">>=</option>
-                            <option value="<"><</option>
-                            <option value="<="><=</option>
-                            <option value="NULL">NULL</option>
-                            <option value="NOT NULL">NOT NULL</option>
-                        </select> 
-                        <select id="varcharOption"> 
-                            <option value="Contains">Contains</option>
-                            <option value="Not contains">Not contains</option>
-                            <option value="startWith">startWith</option>
-                            <option value="endWith">endWith</option>
-                            <option value="NULL">NULL</option>
-                            <option value="NOT NULL">NOT NULL</option>
-                        </select> 
-                    </div>
+            </div>
+        </div>  
+        <div class="col-md-2">
+            <div class="form-group">
+                <button type="button" onclick="removeText(this)" class="btn btn-danger">Remove (-)</button>    
+            </div>
+        </div>
+        <div class="clearfix" ></div>
+    </div>
+</div>
+<div style="display: none">
+    <select id="numberOption"> 
+        <option value="=">=</option>
+        <option value=">">></option>
+        <option value=">=">>=</option>
+        <option value="<"><</option>
+        <option value="<="><=</option>
+        <option value="NULL">NULL</option>
+        <option value="NOT NULL">NOT NULL</option>
+    </select> 
+    <select id="varcharOption"> 
+        <option value="Contains">Contains</option>
+        <option value="Not contains">Not contains</option>
+        <option value="startWith">startWith</option>
+        <option value="endWith">endWith</option>
+        <option value="NULL">NULL</option>
+        <option value="NOT NULL">NOT NULL</option>
+    </select> 
+</div>
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -1619,34 +1622,22 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             var type_id = $(this).find('.type_id').val();
             viewDetail(node_id, type_id);
         });
-        if($("#objectFill1").val() != ''){
-            var arrObjectFill = $("#objectFill1").val().split(",");
+        if($("#column1").val() != ''){
+//            var arrObjectFill = $("#objectFill1").val().split(",");
             var arrColumn = $("#column1").val().split(",");
             console.log('nhu cut: '+ $("#column1").val());
             var arrFilterType = $("#filterType1").val().split(",");
             var arrValue = $("#value1").val().split(",");
-//            oFormObject = document.forms['frm_search'];
 
-            for(var i=0; i<arrObjectFill.length; i++){
+            for(var i=0; i<arrColumn.length; i++){
                 afterText();
 //                alert(arrValue[i]);
-                $('#objectFill_' + i).val(arrObjectFill[i]);
-                changeDefaultObjectFill(arrObjectFill[i],i,arrColumn[i]);
+//                $('#objectFill_' + i).val(arrObjectFill[i]);
+                changeDefaultObjectFill($("#neTypeId").val(),i,arrColumn[i]);
                 changeDefaultAtrColum(i,arrColumn[i],arrFilterType[i]);
-                //$('#column_' + i).val(arrColumn[i]);
-                //$('#filterType_' + i).val(arrFilterType[i]);
                 $('#value_' + i).val(arrValue[i]);
-//                oFormObject.elements["objectFill"].value = arrObjectFill[i];
-//                changeObjectFill(${neTypeId});
-//                oFormObject.elements["column"].value = arrColumn[i];
-//                oFormObject.elements["filterType"].value = arrFilterType[i];
-//                oFormObject.elements["value"].value = arrValue[i];
-
             }
-
-//            alert($("#objectFill1").val() + '----' +$("#column1").val() + '----' +$("#filterType1").val() + '----'+$("#value1").val());
         }
-        
     });
                                                 
     function myPM(code, tenNeType) {
@@ -1920,6 +1911,18 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         var count = $('#boxSearch').find('.groupFilter').length;
         var htmlFillter = $('#addFiller').html().replaceAll('stt',count);
         $('#boxSearch').append(htmlFillter);
+        
+        $.get("${pageContext.request.contextPath}/nodes/fillAttrObject/" + $("#neTypeId").val(), function (data) {
+            var html = '<option value="">Chọn thuộc tính</option>';
+            if (data.length > 0) {
+                data.forEach(function (entry) {
+                    var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
+                    html += htmlx;
+                });
+                $('#column_' + count).html(html);
+            };
+        });
+        
         return false;
         }
     
@@ -1970,12 +1973,13 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             }
             $('#filterType_' + i).val(value_atrr_colum);          
         }
-    function convertQueryFilter(neTypeId, type, colum, logic, value)
+//    function convertQueryFilter(neTypeId, type, colum, logic, value)
+    function convertQueryFilter(neTypeId, colum, logic, value)
         {
         value = value.trim();
         var str = " ";
-        if (type == neTypeId)
-        {
+//        if (type == neTypeId)
+//        {
         // logic
         str += " AND " + colum.substring(1);
         if (logic == "Contains")
@@ -2001,7 +2005,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                 str += " > " + value;
         else if (logic == ">=")
                 str += " >= " + value;
-        }
+//        }
         return str;
         }
     
@@ -2023,22 +2027,18 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             // check addfilter
             var listObjectFill = "";
             $("#boxSearch .groupFilter").each(function (i) {
-            listObjectFill += $(this).find('.objectFill').val() + ",";
-            where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+//            listObjectFill += $(this).find('.objectFill').val() + ",";
+            where = where + convertQueryFilter(neTypeId,  $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+//            where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
             });
-            if (listObjectFill.length > 0)
-            {
-            if (listObjectFill.indexOf(neTypeId + ",") == - 1)
-                    where = " AND 1 = 2 ";
-            }
-    //        where = EscapeCommasSemiColons(where);
+//            if (listObjectFill.length > 0)
+//            {
+//            if (listObjectFill.indexOf(neTypeId + ",") == - 1)
+//                    where = " AND 1 = 2 ";
+//            }
+            where = EscapeCommasSemiColons(where);
             document.getElementById("strFilter").value = where;
             
-//            var htmlString = $("#boxSearch .groupFilter").html();
-//            document.getElementById('addFiller');
-//            document.getElementById("divFilter").value = htmlString;
-//            alert(htmlString);
-             
             document.getElementById("frm_search").submit();
         }
         
@@ -2046,12 +2046,18 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
     function removeText(that) {
         $(that).parents('.groupFilter').remove();
         }
+    
+    function removeTextAll() {
+        $("#boxSearch .groupFilter").remove();
+        return false;
+        }
         
     function EscapeCommasSemiColons(input){
         var output=input.replaceAll(",", "\\,"); //replace all the commas
         output=output.replaceAll(";", "\\;"); //replace all the SemiColons
         return output;
     }
+    
     String.prototype.replaceAll = function(search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, 'g'), replacement);

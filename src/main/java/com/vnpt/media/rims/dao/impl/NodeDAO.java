@@ -3264,6 +3264,7 @@ public class NodeDAO extends GenericDAO implements INode {
                         item.setTenPhuong(rs.getString("ten_phuong_xa"));
                         item.setTrangThaiMayNo(rs.getString("trang_thai_dat_may_no"));
                         item.setTenLoaiTram(rs.getString("ten_loai_tram"));
+                        item.setNote(rs.getString("note"));
                         return item;
 
                     } else if (neTypeId.equals("5") || neTypeId.equals("6") || neTypeId.equals("7")) {

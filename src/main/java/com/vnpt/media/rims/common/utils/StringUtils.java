@@ -2638,9 +2638,9 @@ public class StringUtils {
         Workbook workbookTemplate = null;
         try {
             finImport = new FileInputStream(fileImport);
-            if (fileImport.getName().endsWith(".xls")) {
+            if (fileImport.getName().endsWith(".xls") || fileImport.getName().endsWith(".XLS")) {
                 workbookImport = new HSSFWorkbook(finImport);
-            } else if (fileImport.getName().endsWith(".xlsx")) {
+            } else if (fileImport.getName().endsWith(".xlsx") || fileImport.getName().endsWith(".XLSX")) {
                 workbookImport = new XSSFWorkbook(finImport);
             }
             Sheet sheetImport = workbookImport.getSheetAt(0);

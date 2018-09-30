@@ -107,7 +107,7 @@ public class NodesController {
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             @RequestParam(value = "strFilter", required = false) String strFilter,
 //            @RequestParam(value = "filterObject", required = false) List<FilterObject> filterObject,
-            @RequestParam(value = "objectFill", required = false) String objectFill,
+//            @RequestParam(value = "objectFill", required = false) String objectFill,
             @RequestParam(value = "column", required = false) String column,
             @RequestParam(value = "filterType", required = false) String filterType,
             @RequestParam(value = "value", required = false) String value,
@@ -129,7 +129,7 @@ public class NodesController {
         phuongXaId = phuongXaId == null ? "" : phuongXaId;
         khuvucId = khuvucId == null ? "" : khuvucId;
         strFilter = strFilter == null ? "" : strFilter;
-        objectFill = objectFill == null ? "" : objectFill;
+//        objectFill = objectFill == null ? "" : objectFill;
         column = column == null ? "" : column;
         filterType = filterType == null ? "" : filterType;
         value = value == null ? "" : value;
@@ -241,7 +241,7 @@ public class NodesController {
         mm.put("status", status);
         mm.put("userId", user.getId());
         mm.put("strFilter", strFilter);
-        mm.put("objectFill", objectFill);   
+//        mm.put("objectFill", objectFill);   
         mm.put("column", column);
         mm.put("filterType", filterType);
         mm.put("value", value);

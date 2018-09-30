@@ -899,10 +899,10 @@ public class CellsExcelController extends BaseController {
             LOGGER.info("Write Result File Excel Update! Name file : {}", inputFile.getName());
             Workbook workbook = null;
             try (FileInputStream fin = new FileInputStream(inputFile)) {
-                if (inputFile.getName().endsWith(".xlsx")) {
+                if (inputFile.getName().endsWith(".xlsx") || inputFile.getName().endsWith(".XLSX")) {
                     name = name + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
                     workbook = new XSSFWorkbook(fin);
-                } else if (inputFile.getName().endsWith(".xls")) {
+                } else if (inputFile.getName().endsWith(".xls") || inputFile.getName().endsWith(".XLS")) {
                     name = name + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xls";
                     workbook = new HSSFWorkbook(fin);
                 }

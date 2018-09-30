@@ -390,4 +390,5 @@ public class BTSInfoBO extends NodeBO {
         this.trangThaiMayNo = trangThaiMayNo;
     }
 
+
 }
