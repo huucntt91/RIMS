@@ -29,32 +29,48 @@
         <!--highcharts -->
         <script src="${pageContext.request.contextPath}/resources/js/highcharts/highcharts.js" type="text/javascript"></script>
         <script src="${pageContext.request.contextPath}/resources/js/highcharts/exporting.js" type="text/javascript"></script>
-        
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.${pageContext.request.contextPath}/resources/js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        
-        
+
+
     </head>
     <body>
         <section class="content">                        
             Xin chào1 : <%=request.getRemoteUser()%>
         </section>
-        <!--biểu đồ thể hiện số lượng file các omc download được -->
-        <div id="chart1" ></div>
-        <!--biểu đồ thể hiện số parse được được -->
-        <div id="chart2"  ></div>
+        
+        <div class="row">
 
-        <!--biểu đồ thể hiện số parse được được -->
-        <div id="chart3"  ></div>
-
-        <!-- biểu đồ thể hiện data_audit -->
-        <div id="chart4"  ></div>
-
-
+            <!--biểu đồ thể hiện số parse được được -->
+            <div class="col-xs-18 col-sm-6 col-md-6">
+                <div class="thumbnail"> 
+                    <div id="chart2"  ></div>
+                </div>
+            </div>
+            <!--biểu đồ thể hiện số parse được được -->
+            <div class="col-xs-18 col-sm-6 col-md-6">
+                <div class="thumbnail"> 
+                    <div id="chart3"  ></div>
+                </div>
+            </div>
+            <!--biểu đồ thể hiện số parse được được -->
+            <div class="col-xs-18 col-sm-6 col-md-6">
+                <div class="thumbnail"> 
+                    <div id="chart4"  ></div>
+                </div>
+            </div>
+            <!--biểu đồ thể hiện số lượng file các omc download được -->
+            <div class="col-xs-18 col-sm-6 col-md-6">
+                <div class="thumbnail">  
+                    <div id="chart1" ></div>
+                </div>
+            </div>
+        </div>
 
         <script language="JavaScript">
             $(document).ready(function () {
@@ -69,7 +85,9 @@
             type: 'column'
             },
                     title: {
-                    text: 'Lượng file cấu hình download được'
+                    text: 'Lượng file cấu hình download được',
+                            verticalAlign: 'bottom',
+                            style: { "color": "#333333", "fontSize": "13px" }
                     },
                     xAxis: {
 
@@ -114,7 +132,10 @@
             Highcharts.chart('chart2', {
 
             title: {
-            text: 'Số lượng BTS parsing được từ file cấu hình'
+            text: 'Số lượng BTS parsing được từ file cấu hình',
+                    verticalAlign: 'bottom',
+                    style: { "color": "#333333", "fontSize": "13px" },
+                    
             },
                     xAxis: {
 
@@ -149,7 +170,9 @@
             Highcharts.chart('chart3', {
 
             title: {
-            text: 'Số lượng NODEB parsing được từ file cấu hình'
+            text: 'Số lượng NODEB parsing được từ file cấu hình',
+                    verticalAlign: 'bottom',
+                    style: { "color": "#333333", "fontSize": "13px" }
             },
                     xAxis: {
 
@@ -180,27 +203,26 @@
 
             });
             };
-            function buildChart4(){
+            function buildChart4() {
             Highcharts.chart('chart4', {
-            chart: {
-            zoomType: 'x'
+
+            title: {
+            text: 'Số lượng ENODEB parsing được từ file cấu hình',
+                    verticalAlign: 'bottom',
+                    style: { "color": "#333333", "fontSize": "13px" }
             },
-                    title: {
-                    text: 'Giám sát tiến trình Data Audit'
-                    },
-                    subtitle: {
-                    text: document.ontouchstart === undefined ?
-                            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-                    },
                     xAxis: {
+
                     categories: [
-            <c:forEach var="item" items="${chartDatas4}" >
-                    '<fmt:formatDate pattern="dd/MM/yyyy HH:mm:ss" value="${item.INSERT_DATE}" />',
-            </c:forEach>]
+            <c:forEach var="t" items="${dates}" >
+                    '${t}',
+            </c:forEach>
+                    ],
+                            crosshair: true
                     },
                     yAxis: {
                     title: {
-                    text: 'Giá trị'
+                    text: 'số lượng'
                     }
                     },
                     legend: {
@@ -208,22 +230,13 @@
                             align: 'right',
                             verticalAlign: 'middle'
                     },
-                    series: [{
-                    name: 'Có RIMS - Không có OMC',
-                            data: [<c:forEach var="item" items="${chartDatas4}" >
-                ${item.RI_Y_OMC_N},
-            </c:forEach>]
-                    }, {
-                    name: 'Thay đổi thông tin',
-                            data: [<c:forEach var="item" items="${chartDatas4}" >
-                ${item.RI_Y_OMC_Y},
-            </c:forEach>]
-                    }, {
-                    name: 'Không có RIMS - Có OMC',
-                            data: [<c:forEach var="item" items="${chartDatas4}" >
-                ${item.RI_N_OMC_Y},
-            </c:forEach>]
-                    }]
+                    series: [
+            <c:forEach var="chartData4" items="${chartDatas4}" >
+                    { name: '${chartData4.key}',
+                            data: ${chartData4.data}
+                    },
+            </c:forEach>
+                    ]
 
             });
             };

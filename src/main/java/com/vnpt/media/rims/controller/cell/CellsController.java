@@ -30,6 +30,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -474,7 +476,7 @@ public class CellsController extends BaseController {
             mm.put("action", "Update");
             return "nodes/cells/cellNewUpdate";
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(),e);
+            LOGGER.error(e.getMessage(), e);
             return "redirect:/node/init";
         }
     }
@@ -721,5 +723,24 @@ public class CellsController extends BaseController {
         } else {
             return "nodes/cells/cell4gDetail";
         }
+    }
+
+    /*
+    tu lac-ci tra ve json
+     */
+    @RequestMapping(value = "/findLocation", method = RequestMethod.POST,
+            produces = "application/json; charset=UTF-8")
+    public @ResponseBody
+    String findLocation(HttpServletRequest request,
+            @RequestParam(value = "lac", required = false) String lac,
+            @RequestParam(value = "ci", required = false) String ci) {
+        List list = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(list);
+        } catch (Exception e) {
+            //LOGGER.error(e,e.getMessage());
+        }
+        return null;
     }
 }

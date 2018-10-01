@@ -143,16 +143,35 @@ public class LoginController {
             logger.error(e.getMessage(), e);
         }
         model.put("chartDatas3", chartDatas3);
-
-        List<MonitoringJobAuditBO> chartDatas4 = null;
+        //loai du lieu bieu do parsing cell4g
+        parsings = null;
+        List<ChartData> chartDatas4 = new ArrayList<>();
         try {
-            DataAuditFacade facade = new DataAuditFacade();
-            chartDatas4 = facade.findMonitoringJobAudit("", startDate, currentDate);
-        } catch (ServiceException e) {
+            parsings = ChartFacade.fn_get_parsing("enodeb", "", dateToString(startDate, "dd/MM/yyyy HH:mm:ss"), dateToString(currentDate, "dd/MM/yyyy HH:mm:ss"));
+            if (parsings != null) {
+                for (String vendor : vendors) {
+                    ChartData chart = new ChartData();
+                    chart.setKey(vendor);
+                    List<Integer> data = new ArrayList<>();
+                    for (String date : dates) {
+                        int count = 0;
+
+                        for (ChartBO chartBO : parsings) {
+                            String temp = dateToString(chartBO.getDownload_time(), "dd/MM/yyyy");
+                            if (temp.equalsIgnoreCase(date) && chartBO.getVendor().equalsIgnoreCase(vendor)) {
+                                count = chartBO.getFile_num();
+                            }
+                        }
+                        data.add(count);
+                    }
+                    chart.setData(data);
+                    chartDatas4.add(chart);
+                }
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
         model.put("chartDatas4", chartDatas4);
-
         return "welcome";
     }
     @RequestMapping(value = {"/noreg"}, method = RequestMethod.GET)
