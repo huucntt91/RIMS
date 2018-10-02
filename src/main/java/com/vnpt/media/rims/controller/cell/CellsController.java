@@ -13,6 +13,7 @@ import com.vnpt.media.rims.common.utils.Convert;
 import com.vnpt.media.rims.common.utils.Page;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.managerAdmin.BaseController;
+import com.vnpt.media.rims.facade.ApiFacade;
 import com.vnpt.media.rims.facade.BangTanFacade;
 import com.vnpt.media.rims.facade.CategoriesFacade;
 import com.vnpt.media.rims.facade.CellGroupFacade;
@@ -725,22 +726,4 @@ public class CellsController extends BaseController {
         }
     }
 
-    /*
-    tu lac-ci tra ve json
-     */
-    @RequestMapping(value = "/findLocation", method = RequestMethod.POST,
-            produces = "application/json; charset=UTF-8")
-    public @ResponseBody
-    String findLocation(HttpServletRequest request,
-            @RequestParam(value = "lac", required = false) String lac,
-            @RequestParam(value = "ci", required = false) String ci) {
-        List list = null;
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(list);
-        } catch (Exception e) {
-            //LOGGER.error(e,e.getMessage());
-        }
-        return null;
-    }
 }

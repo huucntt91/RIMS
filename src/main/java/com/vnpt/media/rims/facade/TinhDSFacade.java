@@ -50,6 +50,8 @@ public class TinhDSFacade {
                 dvBO.setTenPhuongXa(rs.getString("ten_phuong_xa") == null ? "" : rs.getString("ten_phuong_xa"));
                 dvBO.setQuanHuyenId(rs.getLong("quanhuyen_id"));
                 dvBO.setTenQuanHuyen(rs.getString("ten_quan_huyen") == null ? "" : rs.getString("ten_quan_huyen"));
+                dvBO.setTinhTpId(rs.getString("tinhtp_id"));
+                dvBO.setTenTinh(rs.getString("ten_tinh_tp"));
                 arrayList.add(dvBO);
             }
             return arrayList;

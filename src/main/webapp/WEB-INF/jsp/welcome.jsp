@@ -41,7 +41,7 @@
     </head>
     <body>
         <section class="content">                        
-            Xin chào1 : <%=request.getRemoteUser()%>
+            Xin chào : <%=request.getRemoteUser()%>
         </section>
         
         <div class="row">

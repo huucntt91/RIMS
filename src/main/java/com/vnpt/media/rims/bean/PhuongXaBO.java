@@ -19,6 +19,17 @@ public class PhuongXaBO {
     private String tenPhuongXa;
     private String tenQuanHuyen;
     private String tenTinh;
+    private String tinhTpId;
+
+    public String getTinhTpId() {
+        return tinhTpId;
+    }
+
+    public void setTinhTpId(String tinhTpId) {
+        this.tinhTpId = tinhTpId;
+    }
+    
+    
 
     /**
      * @return the phuongXaId

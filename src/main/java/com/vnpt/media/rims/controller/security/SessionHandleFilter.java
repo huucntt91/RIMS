@@ -35,7 +35,10 @@ public class SessionHandleFilter implements Filter {
         HttpSession session = rq.getSession();
         String url = rq.getRequestURI();
         Object USER_KEY = session.getAttribute(Constants.USER_KEY);
-        if (url.toLowerCase().contains("resources/")) {
+        if (url.toLowerCase().contains("resources/") || url.contains("api")) {
+            /*
+            nhung truong hop nay thi bo qua filter
+             */
             chain.doFilter(request, response);
         } else if (USER_KEY == null && !url.endsWith("/SetSessionServlet") && !url.endsWith("/noreg") && !url.endsWith("/logout")) {
             if (USER_KEY != null) {

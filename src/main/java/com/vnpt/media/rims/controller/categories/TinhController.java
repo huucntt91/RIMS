@@ -5,7 +5,6 @@
  */
 package com.vnpt.media.rims.controller.categories;
 
-import com.vnpt.media.rims.controller.managerAdmin.*;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -29,9 +28,7 @@ import com.vnpt.media.rims.bean.TinhBO;
 import com.vnpt.media.rims.common.Message;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.vnpt.media.rims.facade.TinhDSFacade;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.codehaus.jackson.map.ObjectMapper;
 /**
@@ -208,5 +205,5 @@ public class TinhController {
  
     }
     
-
+   
 }
