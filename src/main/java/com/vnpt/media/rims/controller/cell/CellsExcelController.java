@@ -481,7 +481,7 @@ public class CellsExcelController extends BaseController {
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
         boolean resultCheckFile = false;
         try {
-            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);            
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
             File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
 
@@ -510,98 +510,97 @@ public class CellsExcelController extends BaseController {
 //                LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
 //                LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
 //            } else {
-                if (cellNewExcelBO.getType().equals("5")) {
-                    List<Cell2GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
-                            .to(Cell2GUpdateExcelModel.class)
-                            .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (Cell2GUpdateExcelModel item : items) {
-                        if (resultCheckFile) {
-                            item = (Cell2GUpdateExcelModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCell2gExcel(item, user.getId());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
+            if (cellNewExcelBO.getType().equals("5")) {
+                List<Cell2GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
+                        .to(Cell2GUpdateExcelModel.class)
+                        .mapSheet(0, 2);
+                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+                mm.addAttribute("classAtrr", classAtrr);
+                CellsFacade cellsFacade = new CellsFacade();
+                List<String> result = new ArrayList<>();
+                String temp;
+                Integer[] checkRows = {1, 2};
+                resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G.xlsx"), checkRows);
+                LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
+                for (Cell2GUpdateExcelModel item : items) {
+                    if (resultCheckFile) {
+                        item = (Cell2GUpdateExcelModel) StringUtils.trimObject(item);
+                        temp = cellsFacade.updateCell2gExcel(item, user.getId());
+                        if (temp == null || temp.isEmpty()) {
+                            temp = "OK";
                         }
-                        result.add(temp);
+                    } else {
+                        temp = resourceBundle.getString("cell.new.import.validate.file");
                     }
-                    LOGGER.info("user: {}, ip: {}, end updateCell2gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_2g_", response);
-                    result.clear();
-                    LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                    result.add(temp);
                 }
-                else if (cellNewExcelBO.getType().equals("6")) {
-                    List<Cell3GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
-                            .to(Cell3GUpdateExcelModel.class)
-                            .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("6"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_3G.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCell3gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (Cell3GUpdateExcelModel item : items) {
-                        if (resultCheckFile) {
-                            item = (Cell3GUpdateExcelModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCell3gExcel(item, user.getId());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
+                LOGGER.info("user: {}, ip: {}, end updateCell2gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                writeResult(convFile, result, "result_update_cell_2g_", response);
+                result.clear();
+                LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            } else if (cellNewExcelBO.getType().equals("6")) {
+                List<Cell3GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
+                        .to(Cell3GUpdateExcelModel.class)
+                        .mapSheet(0, 2);
+                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("6"));
+                mm.addAttribute("classAtrr", classAtrr);
+                CellsFacade cellsFacade = new CellsFacade();
+                List<String> result = new ArrayList<>();
+                String temp;
+                Integer[] checkRows = {1, 2};
+                resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_3G.xlsx"), checkRows);
+                LOGGER.info("user: {}, ip: {}, call updateCell3gExcel", user.getUsername(), request.getRemoteAddr());
+                for (Cell3GUpdateExcelModel item : items) {
+                    if (resultCheckFile) {
+                        item = (Cell3GUpdateExcelModel) StringUtils.trimObject(item);
+                        temp = cellsFacade.updateCell3gExcel(item, user.getId());
+                        if (temp == null || temp.isEmpty()) {
+                            temp = "OK";
                         }
-                        result.add(temp);
+                    } else {
+                        temp = resourceBundle.getString("cell.new.import.validate.file");
                     }
-                    LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_3g_", response);
-                    result.clear();
-                    LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                } else if (cellNewExcelBO.getType().equals("7")) {
-                    List<Cell4GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
-                            .to(Cell4GUpdateExcelModel.class)
-                            .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("7"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (Cell4GUpdateExcelModel item : items) {
-                        if (resultCheckFile) {
-                            item = (Cell4GUpdateExcelModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCell4gExcel(item, user.getId());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
-                        }
-                        result.add(temp);
-                    }
-                    LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_4g_", response);
-                    LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    result.clear();
+                    result.add(temp);
                 }
+                LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                writeResult(convFile, result, "result_update_cell_3g_", response);
+                result.clear();
+                LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            } else if (cellNewExcelBO.getType().equals("7")) {
+                List<Cell4GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
+                        .to(Cell4GUpdateExcelModel.class)
+                        .mapSheet(0, 2);
+                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("7"));
+                mm.addAttribute("classAtrr", classAtrr);
+                CellsFacade cellsFacade = new CellsFacade();
+                List<String> result = new ArrayList<>();
+                String temp;
+                Integer[] checkRows = {1, 2};
+                resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G.xlsx"), checkRows);
+                LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
+                for (Cell4GUpdateExcelModel item : items) {
+                    if (resultCheckFile) {
+                        item = (Cell4GUpdateExcelModel) StringUtils.trimObject(item);
+                        temp = cellsFacade.updateCell4gExcel(item, user.getId());
+                        if (temp == null || temp.isEmpty()) {
+                            temp = "OK";
+                        }
+                    } else {
+                        temp = resourceBundle.getString("cell.new.import.validate.file");
+                    }
+                    result.add(temp);
+                }
+                LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                writeResult(convFile, result, "result_update_cell_4g_", response);
+                LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                result.clear();
+            }
 //            }
         } catch (Exception e) {
             String message = StringUtils.captureStackTrace(e);
@@ -617,112 +616,111 @@ public class CellsExcelController extends BaseController {
         }
         return "redirect:/cellsExcel/update/init";
     }
-    
+
     @RequestMapping(value = "/update/updateCellCSHT", method = RequestMethod.POST)
     public String updateCellCSHT(ModelMap mm, @ModelAttribute(value = "cellNewExcelBO") CellNewExcelBO cellNewExcelBO,
             @RequestParam(value = "type", required = false) String type,
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
         boolean resultCheckFile = false;
         try {
-            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);            
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
             File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
 
             // Quyen update ben NET 
             StringBuilder permisMenu = (StringBuilder) request.getSession().getAttribute(Constants.FUNCTION_KEY);
 
-                if (cellNewExcelBO.getType().equals("5")) {
-                    List<Cell2GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
-                            .to(Cell2GUpdateExcelModel.class)
-                            .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G_CSHT.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (Cell2GUpdateExcelModel item : items) {
-                        if (resultCheckFile) {
-                            item = (Cell2GUpdateExcelModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCell2gExcel(item, user.getId());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
+            if (cellNewExcelBO.getType().equals("5")) {
+                List<Cell2GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
+                        .to(Cell2GUpdateExcelModel.class)
+                        .mapSheet(0, 2);
+                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+                mm.addAttribute("classAtrr", classAtrr);
+                CellsFacade cellsFacade = new CellsFacade();
+                List<String> result = new ArrayList<>();
+                String temp;
+                Integer[] checkRows = {1, 2};
+                resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G_CSHT.xlsx"), checkRows);
+                LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
+                for (Cell2GUpdateExcelModel item : items) {
+                    if (resultCheckFile) {
+                        item = (Cell2GUpdateExcelModel) StringUtils.trimObject(item);
+                        temp = cellsFacade.updateCell2gExcel(item, user.getId());
+                        if (temp == null || temp.isEmpty()) {
+                            temp = "OK";
                         }
-                        result.add(temp);
+                    } else {
+                        temp = resourceBundle.getString("cell.new.import.validate.file");
                     }
-                    LOGGER.info("user: {}, ip: {}, end updateCell2gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_2g_", response);
-                    result.clear();
-                    LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                    result.add(temp);
                 }
-                else if (cellNewExcelBO.getType().equals("6")) {
-                    List<Cell3GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
-                            .to(Cell3GUpdateExcelModel.class)
-                            .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("6"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_3G_CSHT.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCell3gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (Cell3GUpdateExcelModel item : items) {
-                        if (resultCheckFile) {
-                            item = (Cell3GUpdateExcelModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCell3gExcel(item, user.getId());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
+                LOGGER.info("user: {}, ip: {}, end updateCell2gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                writeResult(convFile, result, "result_update_cell_2g_", response);
+                result.clear();
+                LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 2G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            } else if (cellNewExcelBO.getType().equals("6")) {
+                List<Cell3GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
+                        .to(Cell3GUpdateExcelModel.class)
+                        .mapSheet(0, 2);
+                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("6"));
+                mm.addAttribute("classAtrr", classAtrr);
+                CellsFacade cellsFacade = new CellsFacade();
+                List<String> result = new ArrayList<>();
+                String temp;
+                Integer[] checkRows = {1, 2};
+                resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_3G_CSHT.xlsx"), checkRows);
+                LOGGER.info("user: {}, ip: {}, call updateCell3gExcel", user.getUsername(), request.getRemoteAddr());
+                for (Cell3GUpdateExcelModel item : items) {
+                    if (resultCheckFile) {
+                        item = (Cell3GUpdateExcelModel) StringUtils.trimObject(item);
+                        temp = cellsFacade.updateCell3gExcel(item, user.getId());
+                        if (temp == null || temp.isEmpty()) {
+                            temp = "OK";
                         }
-                        result.add(temp);
+                    } else {
+                        temp = resourceBundle.getString("cell.new.import.validate.file");
                     }
-                    LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_3g_", response);
-                    result.clear();
-                    LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                } else if (cellNewExcelBO.getType().equals("7")) {
-                    List<Cell4GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
-                            .to(Cell4GUpdateExcelModel.class)
-                            .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("7"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G_CSHT.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
-                    for (Cell4GUpdateExcelModel item : items) {
-                        if (resultCheckFile) {
-                            item = (Cell4GUpdateExcelModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCell4gExcel(item, user.getId());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
-                        }
-                        result.add(temp);
-                    }
-                    LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_4g_", response);
-                    LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    result.clear();
+                    result.add(temp);
                 }
+                LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                writeResult(convFile, result, "result_update_cell_3g_", response);
+                result.clear();
+                LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 3G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            } else if (cellNewExcelBO.getType().equals("7")) {
+                List<Cell4GUpdateExcelModel> items = ExOM.mapFromExcel(convFile)
+                        .to(Cell4GUpdateExcelModel.class)
+                        .mapSheet(0, 2);
+                ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("7"));
+                mm.addAttribute("classAtrr", classAtrr);
+                CellsFacade cellsFacade = new CellsFacade();
+                List<String> result = new ArrayList<>();
+                String temp;
+                Integer[] checkRows = {1, 2};
+                resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G_CSHT.xlsx"), checkRows);
+                LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
+                for (Cell4GUpdateExcelModel item : items) {
+                    if (resultCheckFile) {
+                        item = (Cell4GUpdateExcelModel) StringUtils.trimObject(item);
+                        temp = cellsFacade.updateCell4gExcel(item, user.getId());
+                        if (temp == null || temp.isEmpty()) {
+                            temp = "OK";
+                        }
+                    } else {
+                        temp = resourceBundle.getString("cell.new.import.validate.file");
+                    }
+                    result.add(temp);
+                }
+                LOGGER.info("user: {}, ip: {}, end updateCell3gExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+                LOGGER.debug("user: {}, ip: {}, call write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                writeResult(convFile, result, "result_update_cell_4g_", response);
+                LOGGER.debug("user: {}, ip: {}, end write Excel Update Cell 4G {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                result.clear();
+            }
 //            }
         } catch (Exception e) {
             String message = StringUtils.captureStackTrace(e);
@@ -738,56 +736,56 @@ public class CellsExcelController extends BaseController {
         }
         return "redirect:/cellsExcel/update/init";
     }
-    
+
     @RequestMapping(value = "/update/updateExcelRF", method = RequestMethod.POST)
     public String updateCellRF(ModelMap mm, @ModelAttribute(value = "cellNewExcelBO") CellNewExcelBO cellNewExcelBO,
             @RequestParam(value = "type", required = false) String type,
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
         boolean resultCheckFile = false;
         try {
-            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);            
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
             File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
 
             // Quyen update ben NET 
             StringBuilder permisMenu = (StringBuilder) request.getSession().getAttribute(Constants.FUNCTION_KEY);
-              
-                    List<CellUpdateExcelNetModel> items = ExOM.mapFromExcel(convFile)
-                        .to(CellUpdateExcelNetModel.class)
-                        .mapSheet(0, 2);
-                    ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-                    List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
-                    mm.addAttribute("classAtrr", classAtrr);
-                    CellsFacade cellsFacade = new CellsFacade();
-                    List<String> result = new ArrayList<>();
-                    String temp;
-                    Integer[] checkRows = {1, 2};
-                    resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_NET.xlsx"), checkRows);
-                    LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
-                    for (CellUpdateExcelNetModel item : items) {
-                        if (resultCheckFile) {
-                            item = (CellUpdateExcelNetModel) StringUtils.trimObject(item);
-                            temp = cellsFacade.updateCellNetRFExcel(item, user.getId(),cellNewExcelBO.getType());
-                            if (temp == null || temp.isEmpty()) {
-                                temp = "OK";
-                            }
-                        } else {
-                            temp = resourceBundle.getString("cell.new.import.validate.file");
-                        }
-                        result.add(temp);
+
+            List<CellUpdateExcelNetModel> items = ExOM.mapFromExcel(convFile)
+                    .to(CellUpdateExcelNetModel.class)
+                    .mapSheet(0, 2);
+            ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+            List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+            mm.addAttribute("classAtrr", classAtrr);
+            CellsFacade cellsFacade = new CellsFacade();
+            List<String> result = new ArrayList<>();
+            String temp;
+            Integer[] checkRows = {1, 2};
+            resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_NET.xlsx"), checkRows);
+            LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
+            for (CellUpdateExcelNetModel item : items) {
+                if (resultCheckFile) {
+                    item = (CellUpdateExcelNetModel) StringUtils.trimObject(item);
+                    temp = cellsFacade.updateCellNetRFExcel(item, user.getId(), cellNewExcelBO.getType());
+                    if (temp == null || temp.isEmpty()) {
+                        temp = "OK";
                     }
+                } else {
+                    temp = resourceBundle.getString("cell.new.import.validate.file");
+                }
+                result.add(temp);
+            }
 //                    for (int i = 0; i < items.size(); i++) {
 //                        temp = cellsFacade.updateCellNetRFExcel(items.get(i), user.getId(), cellNewExcelBO.getType());
 //                        result.add(temp);
 //                    }
-                    LOGGER.info("user: {}, ip: {}, end updateCellNetRFExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
-                    LOGGER.info("user: {}, ip: {}, call write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
-                    LOGGER.debug("user: {}, ip: {}, Start Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    writeResult(convFile, result, "result_update_cell_net_", response);
-                    result.clear();
-                    LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                    LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
-                
+            LOGGER.info("user: {}, ip: {}, end updateCellNetRFExcel {}", user.getUsername(), request.getRemoteAddr(), result.size());
+            LOGGER.info("user: {}, ip: {}, call write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
+            LOGGER.debug("user: {}, ip: {}, Start Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            writeResult(convFile, result, "result_update_cell_net_", response);
+            result.clear();
+            LOGGER.debug("user: {}, ip: {}, End Write Excel NET RF {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            LOGGER.info("user: {}, ip: {}, end write Excel Update Cell NET RF", user.getUsername(), request.getRemoteAddr());
+
 //            }
         } catch (Exception e) {
             String message = StringUtils.captureStackTrace(e);
@@ -910,12 +908,14 @@ public class CellsExcelController extends BaseController {
                 Cell cell;
                 Row row;
                 int rowIndex = 2;
+                CellStyle style = sheet.getWorkbook().createCellStyle();
                 for (int i = 0; i < temp.size(); i++) {
                     row = sheet.getRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(temp.get(i));
+                    if (row != null) {
+                        row.setRowStyle(style);
+                        cell = row.createCell(0);
+                        cell.setCellValue(temp.get(i));
+                    }
                 }
             }
             File file = new File(StringUtils.getFolderTemp() + File.separator + name);

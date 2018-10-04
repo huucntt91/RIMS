@@ -106,8 +106,8 @@ public class NodesController {
             @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             @RequestParam(value = "strFilter", required = false) String strFilter,
-//            @RequestParam(value = "filterObject", required = false) List<FilterObject> filterObject,
-//            @RequestParam(value = "objectFill", required = false) String objectFill,
+            //            @RequestParam(value = "filterObject", required = false) List<FilterObject> filterObject,
+            //            @RequestParam(value = "objectFill", required = false) String objectFill,
             @RequestParam(value = "column", required = false) String column,
             @RequestParam(value = "filterType", required = false) String filterType,
             @RequestParam(value = "value", required = false) String value,
@@ -122,8 +122,7 @@ public class NodesController {
         } catch (Exception ex) {
             pageInt = 1;
         }
-       
-         
+
         tinhTpId = tinhTpId == null ? String.join(",", tinhManager) : tinhTpId;
         quanHuyenId = quanHuyenId == null ? "" : quanHuyenId;
         phuongXaId = phuongXaId == null ? "" : phuongXaId;
@@ -133,7 +132,6 @@ public class NodesController {
         column = column == null ? "" : column;
         filterType = filterType == null ? "" : filterType;
         value = value == null ? "" : value;
-   
 
         code = code == null ? "" : code;
         String neType = neTypeId == null ? "2" : neTypeId;
@@ -603,10 +601,10 @@ public class NodesController {
         return "nodes/tram/tramEdit";
 //
     }
-    
+
     /*
     update tram bang form
-    */
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute(value = "model") BTSInfoBO model, ModelMap mm, Locale locale, RedirectAttributes attr, HttpServletRequest request) throws Exception {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
@@ -938,10 +936,12 @@ public class NodesController {
                 int rowIndex = 2;
                 for (int i = 0; i < temp.size(); i++) {
                     row = sheet.getRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(temp.get(i));
+                    if (row != null) {
+                        CellStyle style = sheet.getWorkbook().createCellStyle();
+                        row.setRowStyle(style);
+                        cell = row.createCell(0);
+                        cell.setCellValue(temp.get(i));
+                    }
                 }
             }
             File file = new File(name);
@@ -966,7 +966,7 @@ public class NodesController {
         return null;
     }
 //    trunglk_start_search_new
-    
+
     @RequestMapping(value = "/fillAttrObject/{id}", method = RequestMethod.GET,
             produces = "application/json;charset=utf-8")
     public @ResponseBody
@@ -977,6 +977,6 @@ public class NodesController {
         //Object to JSON in String
         return mapper.writeValueAsString(facade.findFilterMap(id));
     }
-    
+
 //    trunglk_end_search_new
 }

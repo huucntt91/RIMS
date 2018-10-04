@@ -1377,10 +1377,10 @@ public class BuildingController {
 //            List<KiemDinhNetExcel> items = ExOM.mapFromExcel(convFile)
 //                    .to(KiemDinhNetExcel.class)
 //                    .map(2);
-            List<KiemDinhNetExcel> items = ExOM.mapFromExcel(convFile) 
+            List<KiemDinhNetExcel> items = ExOM.mapFromExcel(convFile)
                     .to(KiemDinhNetExcel.class)
                     .mapSheet(0, 2);
-            
+
             CellsFacade cellsFacade = new CellsFacade();
             List<String> result = new ArrayList<>();
             String temp;
@@ -1418,11 +1418,12 @@ public class BuildingController {
                 for (int i = 0; i < temp.size(); i++) {
 
                     row = sheet.getRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-
-                    cell = row.createCell(0);
-                    cell.setCellValue(temp.get(i));
+                    if (row != null) {
+                        CellStyle style = sheet.getWorkbook().createCellStyle();
+                        row.setRowStyle(style);
+                        cell = row.createCell(0);
+                        cell.setCellValue(temp.get(i));
+                    }
                 }
             }
             File file = new File(name);

@@ -583,10 +583,10 @@ public class NodesController_bak {
         return "nodes/tram/tramEdit";
 //
     }
-    
+
     /*
     update tram bang form
-    */
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(@ModelAttribute(value = "model") BTSInfoBO model, ModelMap mm, Locale locale, RedirectAttributes attr, HttpServletRequest request) throws Exception {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
@@ -918,10 +918,12 @@ public class NodesController_bak {
                 int rowIndex = 2;
                 for (int i = 0; i < temp.size(); i++) {
                     row = sheet.getRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(temp.get(i));
+                    if (row != null) {
+                        CellStyle style = sheet.getWorkbook().createCellStyle();
+                        row.setRowStyle(style);
+                        cell = row.createCell(0);
+                        cell.setCellValue(temp.get(i));
+                    }
                 }
             }
             File file = new File(name);
