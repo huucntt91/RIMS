@@ -114,7 +114,7 @@ public class BuildingController {
     }
 
     @RequestMapping(value = "/init", method = RequestMethod.GET)
-    public String sublist(@RequestParam(value = "page", required = false) String page, @RequestParam(value = "code", required = false) String code,
+    public String init(@RequestParam(value = "page", required = false) String page, @RequestParam(value = "code", required = false) String code,
             @RequestParam(value = "tinhTpId", required = false) String tinhTpId,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             @RequestParam(value = "quanHuyenId", required = false) String quanHuyenId, @RequestParam(value = "phuongXaId", required = false) String phuongXaId,
@@ -200,16 +200,9 @@ public class BuildingController {
                 List<PhuTroBO> phuList = facade.findPhuTroBO(String.valueOf(item.getId()));
                 sub.setPhuTroBO(phuList);
                 List<NodeBO> tramList = facade.findNodeBOByBuilding(String.valueOf(item.getId()), "");
-                List<NodeBO> cellList = new ArrayList<>();
-                if (tramList != null && tramList.size() > 0) {
-                    for (int i = 0; i < tramList.size(); i++) {
-                        List<NodeBO> cell = facade.findNodeBOByBuilding("", String.valueOf(tramList.get(i).getId()));
-                        cellList.addAll(cell);
-                    }
-                }
+                List<NodeBO> cellList = facade.findCellByBuildingId(String.valueOf(item.getId()));
                 sub.setTram(tramList);
                 sub.setCell(cellList);
-
                 subList.add(sub);
             }
         } catch (Exception e) {
@@ -600,6 +593,9 @@ public class BuildingController {
         return "csht/excel/editCSHT";
     }
 
+    /*
+    khai bao vi tri bang excel
+     */
     @RequestMapping(value = "/khaibaoExcel", method = RequestMethod.POST)
     public void KhaiBaoExcel(HttpServletResponse response,
             ModelMap mm, @ModelAttribute(value = "groupContactForm") ImportNodeForm importFile,
@@ -656,6 +652,9 @@ public class BuildingController {
 
     }
 
+    /*
+    cap nhat vi tri bang excel
+     */
     @RequestMapping(value = "/CapNhapExcel", method = RequestMethod.POST)
     public void CapNhapExcel(HttpServletResponse response,
             ModelMap mm, @ModelAttribute(value = "groupContactForm") ImportNodeForm importFile,
@@ -733,173 +732,156 @@ public class BuildingController {
                     cell.setCellValue(item.getNote());
                     cell = row.createCell(1);
                     cell.setCellValue(item.getName());
-//
+//                  
                     cell = row.createCell(2);
-                    cell.setCellValue(item.getNgayHdCsht());
+                    cell.setCellValue(item.getPlanningCode());
 
                     cell = row.createCell(3);
-                    cell.setCellValue(item.getDonVi());
+                    cell.setCellValue(item.getNgayHdCsht());
 
                     cell = row.createCell(4);
-                    cell.setCellValue(item.getTinh());
+                    cell.setCellValue(item.getDonVi());
 
                     cell = row.createCell(5);
-                    cell.setCellValue(item.getQuanHuyen());
+                    cell.setCellValue(item.getTinh());
 
                     cell = row.createCell(6);
-                    cell.setCellValue(item.getXaPhuong());
+                    cell.setCellValue(item.getQuanHuyen());
 
                     cell = row.createCell(7);
+                    cell.setCellValue(item.getXaPhuong());
+
+                    cell = row.createCell(8);
                     cell.setCellValue(item.getDiaChi());
 
                     DecimalFormat f = new DecimalFormat("0.000000");
-                    cell = row.createCell(8);
-                    if (item.getLat() == null || item.getLat().isEmpty()) {
-                        cell.setCellValue("");
-                    } else {
-                        try {
-                            cell.setCellValue(f.format(Double.parseDouble(item.getLat())));
-                        } catch (NumberFormatException e) {
-                            cell.setCellValue("");
-                            LOGGER.error(e.getMessage(), e);
-                        }
-                    }
-
                     cell = row.createCell(9);
-                    if (item.getLon() == null || item.getLon().isEmpty()) {
-                        cell.setCellValue("");
+                    if (StringUtils.isNumeric(item.getLat())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getLat())));
                     } else {
-                        try {
-                            cell.setCellValue(f.format(Double.parseDouble(item.getLon())));
-                        } catch (NumberFormatException e) {
-                            cell.setCellValue("");
-                            LOGGER.error(e.getMessage(), e);
-                        }
+                        cell.setCellValue(item.getLat());
                     }
-
                     cell = row.createCell(10);
+                    if (StringUtils.isNumeric(item.getLon())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getLon())));
+                    } else {
+                        cell.setCellValue(item.getLon());
+                    }
+                    cell = row.createCell(11);
                     cell.setCellValue(item.getChungCsht());
 
-                    cell = row.createCell(11);
+                    cell = row.createCell(12);
                     cell.setCellValue(item.getLoaiCSHT());
 
-                    cell = row.createCell(12);
+                    cell = row.createCell(13);
                     cell.setCellValue(item.getLoaiTramCsht());
 
-                    cell = row.createCell(13);
+                    cell = row.createCell(14);
                     cell.setCellValue(item.getDoCaoAnTen());
 
-                    cell = row.createCell(14);
+                    cell = row.createCell(15);
                     cell.setCellValue(item.getDoCaoNhaDatAnTen());
 
-                    cell = row.createCell(15);
+                    cell = row.createCell(16);
                     cell.setCellValue(item.getLoaiCotAnTen());
 
-                    cell = row.createCell(16);
+                    cell = row.createCell(17);
                     cell.setCellValue(item.getNgayHDTuNguon());
 
-                    cell = row.createCell(17);
+                    cell = row.createCell(18);
                     cell.setCellValue(item.getLoaiTuNguon());
 
                     f = new DecimalFormat("0.0");
-                    cell = row.createCell(18);
-                    if (item.getDongCungCapTuNguon() == null || item.getDongCungCapTuNguon().isEmpty()) {
-                        cell.setCellValue("");
-                    } else {
-                        try {
-                            cell.setCellValue(item.getDongCungCapTuNguon() == null || item.getDongCungCapTuNguon().isEmpty() ? "" : f.format(Double.parseDouble(item.getDongCungCapTuNguon())));
-                        } catch (NumberFormatException e) {
-                            LOGGER.error(e.getMessage(), e);
-                            cell.setCellValue("");
-                        }
-                    }
-
                     cell = row.createCell(19);
+                    if (StringUtils.isNumeric(item.getDongCungCapTuNguon())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getDongCungCapTuNguon())));
+                    } else {
+                        cell.setCellValue(item.getDongCungCapTuNguon());
+                    }
+                    cell = row.createCell(20);
                     cell.setCellValue(item.getSoModuleTuNguon());
 
-                    cell = row.createCell(20);
+                    cell = row.createCell(21);
                     cell.setCellValue(item.getDongTieuThuTuNguon());
 
-                    cell = row.createCell(21);
+                    cell = row.createCell(22);
                     cell.setCellValue(item.getNgayHDTuNguon2());
 
-                    cell = row.createCell(22);
+                    cell = row.createCell(23);
                     cell.setCellValue(item.getLoaiTuNguon2());
 
-                    cell = row.createCell(23);
-                    if (item.getDongCungCapTuNguon2() == null || item.getDongCungCapTuNguon2().isEmpty()) {
-                        cell.setCellValue("");
-                    } else {
-                        try {
-                            cell.setCellValue(item.getDongCungCapTuNguon2() == null || item.getDongCungCapTuNguon2().isEmpty() ? "" : f.format(Double.parseDouble(item.getDongCungCapTuNguon2())));
-                        } catch (NumberFormatException e) {
-                            LOGGER.error(e.getMessage(), e);
-                            cell.setCellValue("");
-                        }
-                    }
-
                     cell = row.createCell(24);
+                    if (StringUtils.isNumeric(item.getDongCungCapTuNguon2())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getDongCungCapTuNguon2())));
+                    } else {
+                        cell.setCellValue(item.getDongCungCapTuNguon2());
+                    }
+                    cell = row.createCell(25);
                     cell.setCellValue(item.getSoModuleTuNguon2());
 
-                    cell = row.createCell(25);
+                    cell = row.createCell(26);
                     cell.setCellValue(item.getDongTieuThuTuNguon2());
 
-                    cell = row.createCell(26);
+                    cell = row.createCell(27);
                     cell.setCellValue(item.getNgayHDMayNo());
 
-                    cell = row.createCell(27);
+                    cell = row.createCell(28);
                     cell.setCellValue(item.getLoaiHinhMayNo());
 
-                    cell = row.createCell(28);
+                    cell = row.createCell(29);
                     cell.setCellValue(item.getLoatMayNo());
 
-                    cell = row.createCell(29);
-                    cell.setCellValue(item.getCongSuatMayNo() == null || item.getCongSuatMayNo().isEmpty() ? "" : f.format(Double.parseDouble(item.getCongSuatMayNo())));
-
                     cell = row.createCell(30);
-                    cell.setCellValue(item.getTrangThaiMayNo());
+                    if (StringUtils.isNumeric(item.getCongSuatMayNo())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getCongSuatMayNo())));
+                    } else {
+                        cell.setCellValue(item.getCongSuatMayNo());
+                    }
 
                     cell = row.createCell(31);
-                    cell.setCellValue(item.getNgayHDAccu());
+                    cell.setCellValue(item.getTrangThaiMayNo());
 
                     cell = row.createCell(32);
-                    cell.setCellValue(item.getLoaiAcQuy());
+                    cell.setCellValue(item.getNgayHDAccu());
+
                     cell = row.createCell(33);
-                    cell.setCellValue(item.getDungLuongAccu());
+                    cell.setCellValue(item.getLoaiAcQuy());
                     cell = row.createCell(34);
+                    cell.setCellValue(item.getDungLuongAccu());
+                    cell = row.createCell(35);
                     cell.setCellValue(item.getDienApAccu());
 
-                    cell = row.createCell(35);
-                    cell.setCellValue(item.getSlAccuBinh());
                     cell = row.createCell(36);
-                    cell.setCellValue(item.getThoigianHDSauMatDien());
+                    cell.setCellValue(item.getSlAccuBinh());
                     cell = row.createCell(37);
-                    cell.setCellValue(item.getNgayBaoDuongAccu());
+                    cell.setCellValue(item.getThoigianHDSauMatDien());
                     cell = row.createCell(38);
-                    cell.setCellValue(item.getNgayHDAccu2());
+                    cell.setCellValue(item.getNgayBaoDuongAccu());
                     cell = row.createCell(39);
-                    cell.setCellValue(item.getLoaiAcQuy2());
+                    cell.setCellValue(item.getNgayHDAccu2());
                     cell = row.createCell(40);
-                    cell.setCellValue(item.getDungLuongAccu2());
+                    cell.setCellValue(item.getLoaiAcQuy2());
                     cell = row.createCell(41);
-                    cell.setCellValue(item.getDienApAccu2());
+                    cell.setCellValue(item.getDungLuongAccu2());
                     cell = row.createCell(42);
-                    cell.setCellValue(item.getSlAccuBinh2());
+                    cell.setCellValue(item.getDienApAccu2());
                     cell = row.createCell(43);
-                    cell.setCellValue(item.getThoigianHDSauMatDien2());
+                    cell.setCellValue(item.getSlAccuBinh2());
                     cell = row.createCell(44);
-                    cell.setCellValue(item.getNgayBaoDuongAccu2());
+                    cell.setCellValue(item.getThoigianHDSauMatDien2());
                     cell = row.createCell(45);
-                    cell.setCellValue(item.getLoaiTruyenDan());
+                    cell.setCellValue(item.getNgayBaoDuongAccu2());
                     cell = row.createCell(46);
-                    cell.setCellValue(item.getGiaoDienTruyenDan());
+                    cell.setCellValue(item.getLoaiTruyenDan());
                     cell = row.createCell(47);
-                    cell.setCellValue(item.getDungLuongTruyenDan());
+                    cell.setCellValue(item.getGiaoDienTruyenDan());
                     cell = row.createCell(48);
-                    cell.setCellValue(item.getDienTroTiepDia());
+                    cell.setCellValue(item.getDungLuongTruyenDan());
                     cell = row.createCell(49);
-                    cell.setCellValue(item.getSlDieuHoa());
+                    cell.setCellValue(item.getDienTroTiepDia());
                     cell = row.createCell(50);
+                    cell.setCellValue(item.getSlDieuHoa());
+                    cell = row.createCell(51);
                     cell.setCellValue(item.getTongCSDieuHoa());
 
                 }
@@ -945,181 +927,149 @@ public class BuildingController {
                     cell = row.createCell(2);
                     cell.setCellValue(item.getName());
 //                  
-
                     cell = row.createCell(3);
-                    cell.setCellValue(item.getNgayHdCsht());
+                    cell.setCellValue(item.getPlanningCode());
+
                     cell = row.createCell(4);
+                    cell.setCellValue(item.getNgayHdCsht());
+                    cell = row.createCell(5);
                     cell.setCellValue(item.getDonViQl());
 
-                    cell = row.createCell(5);
+                    cell = row.createCell(6);
                     cell.setCellValue(item.getQuanHuyen());
 
-                    cell = row.createCell(6);
+                    cell = row.createCell(7);
                     cell.setCellValue(item.getXaPhuong());
 
-                    cell = row.createCell(7);
-                    cell.setCellValue(item.getDiaChi());
                     cell = row.createCell(8);
-                    DecimalFormat f = new DecimalFormat("0.000000");
-                    if (item.getLat() != null && StringUtils.isNumeric(item.getLat())) {
-                        try {
-                            cell.setCellValue(f.format(Double.parseDouble(item.getLat())));
-                        } catch (NumberFormatException e) {
-                            cell.setCellValue("");
-                            LOGGER.error(e.getMessage(), e);
-                        }
-                    } else {
-                        cell.setCellValue("");
-                    }
-
+                    cell.setCellValue(item.getDiaChi());
                     cell = row.createCell(9);
-                    if (item.getLon() != null && StringUtils.isNumeric(item.getLon())) {
-                        try {
-                            cell.setCellValue(f.format(Double.parseDouble(item.getLon())));
-                        } catch (NumberFormatException e) {
-                            cell.setCellValue("");
-                            LOGGER.error(e.getMessage(), e);
-                        }
+                    DecimalFormat f = new DecimalFormat("0.000000");
+                    if (StringUtils.isNumeric(item.getLat())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getLat())));
                     } else {
-                        cell.setCellValue("");
+                        cell.setCellValue(item.getLat());
                     }
-
                     cell = row.createCell(10);
+                    if (StringUtils.isNumeric(item.getLon())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getLon())));
+                    } else {
+                        cell.setCellValue(item.getLon());
+                    }
+                    cell = row.createCell(11);
                     cell.setCellValue(item.getChungCsht());
 
-                    cell = row.createCell(11);
+                    cell = row.createCell(12);
                     cell.setCellValue(item.getLoaiCSHT());
 
-                    cell = row.createCell(12);
+                    cell = row.createCell(13);
                     cell.setCellValue(item.getLoaiTramCsht());
 
-                    cell = row.createCell(13);
+                    cell = row.createCell(14);
                     cell.setCellValue(item.getDoCaoAnTen());
 
-                    cell = row.createCell(14);
+                    cell = row.createCell(15);
                     cell.setCellValue(item.getDoCaoNhaDatAnTen());
 
-                    cell = row.createCell(15);
+                    cell = row.createCell(16);
                     cell.setCellValue(item.getLoaiCotAnTen());
 
-                    cell = row.createCell(16);
+                    cell = row.createCell(17);
                     cell.setCellValue(item.getNgayHDTuNguon());
 
-                    cell = row.createCell(17);
+                    cell = row.createCell(18);
                     cell.setCellValue(item.getLoaiTuNguon());
 
-                    cell = row.createCell(18);
-                    f = new DecimalFormat("0.0");
-                    if (item.getDongCungCapTuNguon() == null || item.getDongCungCapTuNguon().isEmpty()) {
-                        cell.setCellValue("");
-                    } else if (!StationPlansImportController.isNumeric(item.getDongCungCapTuNguon())) {
-                        cell.setCellValue(item.getDongCungCapTuNguon());
-                    } else {
-                        try {
-                            cell.setCellValue(item.getDongCungCapTuNguon().equals("0") ? "0" : f.format(Double.parseDouble(item.getDongCungCapTuNguon())));
-                        } catch (NumberFormatException e) {
-                            LOGGER.error(e.getMessage(), e);
-                            cell.setCellValue("");
-                        }
-                    }
                     cell = row.createCell(19);
+                    f = new DecimalFormat("0.0");
+                    if (StringUtils.isNumeric(item.getDongCungCapTuNguon())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getDongCungCapTuNguon())));
+                    } else {
+                        cell.setCellValue(item.getDongCungCapTuNguon());
+                    }
+                    cell = row.createCell(20);
                     cell.setCellValue(item.getSoModuleTuNguon());
 
-                    cell = row.createCell(20);
+                    cell = row.createCell(21);
                     cell.setCellValue(item.getDongTieuThuTuNguon());
 
-                    cell = row.createCell(21);
+                    cell = row.createCell(22);
                     cell.setCellValue(item.getNgayHDTuNguon2());
 
-                    cell = row.createCell(22);
+                    cell = row.createCell(23);
                     cell.setCellValue(item.getLoaiTuNguon2());
 
-                    cell = row.createCell(23);
-                    if (item.getDongCungCapTuNguon2() == null || item.getDongCungCapTuNguon2().isEmpty()) {
-                        cell.setCellValue("");
-                    } else if (!StationPlansImportController.isNumeric(item.getDongCungCapTuNguon2())) {
-                        cell.setCellValue(item.getDongCungCapTuNguon2());
-                    } else {
-                        try {
-                            cell.setCellValue(item.getDongCungCapTuNguon2().equals("0") ? "0" : f.format(Double.parseDouble(item.getDongCungCapTuNguon2())));
-                        } catch (NumberFormatException e) {
-                            LOGGER.error(e.getMessage(), e);
-                            cell.setCellValue("");
-                        }
-                    }
                     cell = row.createCell(24);
+                    if (StringUtils.isNumeric(item.getDongCungCapTuNguon2())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getDongCungCapTuNguon2())));
+                    } else {
+                        cell.setCellValue(item.getDongCungCapTuNguon2());
+                    }
+                    cell = row.createCell(25);
                     cell.setCellValue(item.getSoModuleTuNguon2());
 
-                    cell = row.createCell(25);
+                    cell = row.createCell(26);
                     cell.setCellValue(item.getDongTieuThuTuNguon2());
 
-                    cell = row.createCell(26);
+                    cell = row.createCell(27);
                     cell.setCellValue(item.getNgayHDMayNo());
 
-                    cell = row.createCell(27);
+                    cell = row.createCell(28);
                     cell.setCellValue(item.getLoaiHinhMayNo());
 
-                    cell = row.createCell(28);
+                    cell = row.createCell(29);
                     cell.setCellValue(item.getLoatMayNo());
 
-                    cell = row.createCell(29);
-                    if (item.getCongSuatMayNo() == null || item.getCongSuatMayNo().isEmpty()) {
-                        cell.setCellValue("");
-                    } else if (!StationPlansImportController.isNumeric(item.getCongSuatMayNo())) {
-                        cell.setCellValue(item.getCongSuatMayNo());
-                    } else {
-                        try {
-                            cell.setCellValue(item.getCongSuatMayNo().equals("0") ? "0" : f.format(Double.parseDouble(item.getCongSuatMayNo())));
-                        } catch (NumberFormatException e) {
-                            LOGGER.error(e.getMessage(), e);
-                            cell.setCellValue("");
-                        }
-                    }
-
                     cell = row.createCell(30);
+                     if (StringUtils.isNumeric(item.getCongSuatMayNo())) {
+                        cell.setCellValue(f.format(Double.parseDouble(item.getCongSuatMayNo())));
+                    } else {
+                        cell.setCellValue(item.getCongSuatMayNo());
+                    }
+                    cell = row.createCell(31);
                     cell.setCellValue(item.getTrangThaiMayNo());
 
-                    cell = row.createCell(31);
+                    cell = row.createCell(32);
                     cell.setCellValue(item.getNgayHDAccu());
 
-                    cell = row.createCell(32);
-                    cell.setCellValue(item.getLoaiAcQuy());
                     cell = row.createCell(33);
-                    cell.setCellValue(item.getDungLuongAccu());
+                    cell.setCellValue(item.getLoaiAcQuy());
                     cell = row.createCell(34);
+                    cell.setCellValue(item.getDungLuongAccu());
+                    cell = row.createCell(35);
                     cell.setCellValue(item.getDienApAccu());
 
-                    cell = row.createCell(35);
-                    cell.setCellValue(item.getSlAccuBinh());
                     cell = row.createCell(36);
-                    cell.setCellValue(item.getThoigianHDSauMatDien());
+                    cell.setCellValue(item.getSlAccuBinh());
                     cell = row.createCell(37);
-                    cell.setCellValue(item.getNgayBaoDuongAccu());
+                    cell.setCellValue(item.getThoigianHDSauMatDien());
                     cell = row.createCell(38);
-                    cell.setCellValue(item.getNgayHDAccu2());
+                    cell.setCellValue(item.getNgayBaoDuongAccu());
                     cell = row.createCell(39);
-                    cell.setCellValue(item.getLoaiAcQuy2());
+                    cell.setCellValue(item.getNgayHDAccu2());
                     cell = row.createCell(40);
-                    cell.setCellValue(item.getDungLuongAccu2());
+                    cell.setCellValue(item.getLoaiAcQuy2());
                     cell = row.createCell(41);
-                    cell.setCellValue(item.getDienApAccu2());
+                    cell.setCellValue(item.getDungLuongAccu2());
                     cell = row.createCell(42);
-                    cell.setCellValue(item.getSlAccuBinh2());
+                    cell.setCellValue(item.getDienApAccu2());
                     cell = row.createCell(43);
-                    cell.setCellValue(item.getThoigianHDSauMatDien2());
+                    cell.setCellValue(item.getSlAccuBinh2());
                     cell = row.createCell(44);
-                    cell.setCellValue(item.getNgayBaoDuongAccu2());
+                    cell.setCellValue(item.getThoigianHDSauMatDien2());
                     cell = row.createCell(45);
-                    cell.setCellValue(item.getLoaiTruyenDan());
+                    cell.setCellValue(item.getNgayBaoDuongAccu2());
                     cell = row.createCell(46);
-                    cell.setCellValue(item.getGiaoDienTruyenDan());
+                    cell.setCellValue(item.getLoaiTruyenDan());
                     cell = row.createCell(47);
-                    cell.setCellValue(item.getDungLuongTruyenDan());
+                    cell.setCellValue(item.getGiaoDienTruyenDan());
                     cell = row.createCell(48);
-                    cell.setCellValue(item.getDienTroTiepDia());
+                    cell.setCellValue(item.getDungLuongTruyenDan());
                     cell = row.createCell(49);
-                    cell.setCellValue(item.getSlDieuHoa());
+                    cell.setCellValue(item.getDienTroTiepDia());
                     cell = row.createCell(50);
+                    cell.setCellValue(item.getSlDieuHoa());
+                    cell = row.createCell(51);
                     cell.setCellValue(item.getTongCSDieuHoa());
 
                 }
@@ -1180,27 +1130,30 @@ public class BuildingController {
                 cell.setCellValue(StringUtils.getValue(building.getBuildingName()));
 
                 cell = row.createCell(2);
-                cell.setCellValue(StringUtils.getValue(building.getNgayHdCsht()));
+                cell.setCellValue(building.getPlanningCode());
+
                 cell = row.createCell(3);
+                cell.setCellValue(StringUtils.getValue(building.getNgayHdCsht()));
+                cell = row.createCell(4);
                 cell.setCellValue(StringUtils.getValue(building.getTenDonViQL()));
 
-                cell = row.createCell(4);
+                cell = row.createCell(5);
                 cell.setCellValue(StringUtils.getValue(building.getTinh()));
 
-                cell = row.createCell(5);
+                cell = row.createCell(6);
                 cell.setCellValue(StringUtils.getValue(building.getQuan()));
 
-                cell = row.createCell(6);
+                cell = row.createCell(7);
                 cell.setCellValue(StringUtils.getValue(building.getNhomCSHT()));
 
-                cell = row.createCell(7);
+                cell = row.createCell(8);
                 cell.setCellValue(StringUtils.getValue(building.getXa()));
 
-                cell = row.createCell(8);
+                cell = row.createCell(9);
                 cell.setCellValue(StringUtils.getValue(building.getDiachi()));
 
                 DecimalFormat f = new DecimalFormat("0.000000");
-                cell = row.createCell(9);
+                cell = row.createCell(10);
                 if (building.getLongitude() == null || building.getLongitude().isEmpty()) {
                     cell.setCellValue("");
                 } else {
@@ -1212,7 +1165,7 @@ public class BuildingController {
                     }
                 }
 
-                cell = row.createCell(10);
+                cell = row.createCell(11);
                 if (building.getLatitude() == null || building.getLatitude().isEmpty()) {
                     cell.setCellValue("");
                 } else {
@@ -1223,131 +1176,131 @@ public class BuildingController {
                         LOGGER.error(e.getMessage(), e);
                     }
                 }
-                cell = row.createCell(11);
+                cell = row.createCell(12);
                 cell.setCellValue(StringUtils.getValue(building.getChungCSHT())); // chua lay duoc du lieu
 
-                cell = row.createCell(12);
+                cell = row.createCell(13);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiCSHT()));
 
-                cell = row.createCell(13);
+                cell = row.createCell(14);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiTramCSHT()));
 
-                cell = row.createCell(14);
+                cell = row.createCell(15);
                 cell.setCellValue(StringUtils.getValue(building.getDocaoAnTen()));
 
-                cell = row.createCell(15);
+                cell = row.createCell(16);
                 cell.setCellValue(StringUtils.getValue(building.getDoCaoNhaDatAnten()));
 
-                cell = row.createCell(16);
+                cell = row.createCell(17);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiCotAnten()));
 
-                cell = row.createCell(17);
+                cell = row.createCell(18);
                 cell.setCellValue(StringUtils.getValue(building.getNgayHDTuNguon()));
 
-                cell = row.createCell(18);
+                cell = row.createCell(19);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiTuNguonId()));
 
                 f = new DecimalFormat("0.0");
-                cell = row.createCell(19);
+                cell = row.createCell(20);
                 cell.setCellValue(StringUtils.getValue(building.getDongCungCapTuNguon()).equals("") ? "" : (StringUtils.getValue(building.getDongCungCapTuNguon()).equals("0") ? "0" : f.format(Double.parseDouble(StringUtils.getValue(building.getDongCungCapTuNguon())))));
 
-                cell = row.createCell(20);
+                cell = row.createCell(21);
                 cell.setCellValue(StringUtils.getValue(building.getSoModuleTuNguon()));
 
-                cell = row.createCell(21);
+                cell = row.createCell(22);
                 cell.setCellValue(StringUtils.getValue(building.getDongTieuThuTuNguon()));
 
                 //update tu nguon 2
-                cell = row.createCell(22);
+                cell = row.createCell(23);
                 cell.setCellValue(StringUtils.getValue(building.getNgayHDTuNguon2()));
 
-                cell = row.createCell(23);
+                cell = row.createCell(24);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiTuNguonId2()));
 
-                cell = row.createCell(24);
+                cell = row.createCell(25);
                 cell.setCellValue(StringUtils.getValue(building.getDongCungCapTuNguon2()).equals("") ? "" : (StringUtils.getValue(building.getDongCungCapTuNguon2()).equals("0") ? "0" : f.format(Double.parseDouble(StringUtils.getValue(building.getDongCungCapTuNguon2())))));
 
-                cell = row.createCell(25);
+                cell = row.createCell(26);
                 cell.setCellValue(StringUtils.getValue(building.getSoModuleTuNguon2()));
 
-                cell = row.createCell(26);
+                cell = row.createCell(27);
                 cell.setCellValue(StringUtils.getValue(building.getDongTieuThuTuNguon2()));
                 // end tu nguon 2
-                cell = row.createCell(27);
+                cell = row.createCell(28);
                 cell.setCellValue(StringUtils.getValue(building.getNgayHDMayNo()));
 
-                cell = row.createCell(28);
+                cell = row.createCell(29);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiHinhMayNo()));
 
-                cell = row.createCell(29);
+                cell = row.createCell(30);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiMayNoId()));
 
-                cell = row.createCell(30);
+                cell = row.createCell(31);
                 cell.setCellValue(StringUtils.getValue(building.getCongSuatMayNo()).equals("") ? "" : (StringUtils.getValue(building.getCongSuatMayNo()).equals("0") ? "0" : f.format(Double.parseDouble(StringUtils.getValue(building.getCongSuatMayNo())))));
 
-                cell = row.createCell(31);
+                cell = row.createCell(32);
                 cell.setCellValue(StringUtils.getValue(building.getMayNoCoDinhDiDong()));
 
-                cell = row.createCell(32);
+                cell = row.createCell(33);
                 cell.setCellValue(StringUtils.getValue(building.getNgayHDAccu()));
 
-                cell = row.createCell(33);
+                cell = row.createCell(34);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiAcQuyId()));
 
-                cell = row.createCell(34);
+                cell = row.createCell(35);
                 cell.setCellValue(StringUtils.getValue(building.getDungLuongAcc()));
 
-                cell = row.createCell(35);
+                cell = row.createCell(36);
                 cell.setCellValue(StringUtils.getValue(building.getDienApBinh()));
 
-                cell = row.createCell(36);
+                cell = row.createCell(37);
                 cell.setCellValue(StringUtils.getValue(building.getSoLuongAccuBinh()));
 
-                cell = row.createCell(37);
+                cell = row.createCell(38);
                 cell.setCellValue(StringUtils.getValue(building.getThoiGianHdSauMatDien()));
 
-                cell = row.createCell(38);
+                cell = row.createCell(39);
                 cell.setCellValue(StringUtils.getValue(building.getNgayBaoDuongAccu()));
 
                 //update accu 2
-                cell = row.createCell(39);
+                cell = row.createCell(40);
                 cell.setCellValue(StringUtils.getValue(building.getNgayHDAccu2()));
 
-                cell = row.createCell(40);
+                cell = row.createCell(41);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiAcQuyId2()));
 
-                cell = row.createCell(41);
+                cell = row.createCell(42);
                 cell.setCellValue(StringUtils.getValue(building.getDungLuongAcc2()));
 
-                cell = row.createCell(42);
+                cell = row.createCell(43);
                 cell.setCellValue(StringUtils.getValue(building.getDienApBinh2()));
 
-                cell = row.createCell(43);
+                cell = row.createCell(44);
                 cell.setCellValue(StringUtils.getValue(building.getSoLuongAccuBinh2()));
 
-                cell = row.createCell(44);
+                cell = row.createCell(45);
                 cell.setCellValue(StringUtils.getValue(building.getThoiGianHdSauMatDien2()));
 
-                cell = row.createCell(45);
+                cell = row.createCell(46);
                 cell.setCellValue(StringUtils.getValue(building.getNgayBaoDuongAccu2()));
                 //end accu2
 
-                cell = row.createCell(46);
+                cell = row.createCell(47);
                 cell.setCellValue(StringUtils.getValue(building.getLoaiTruyenDanId()));
 
-                cell = row.createCell(47);
+                cell = row.createCell(48);
                 cell.setCellValue(StringUtils.getValue(building.getGiaoDienTruyenDan()));
 
-                cell = row.createCell(48);
+                cell = row.createCell(49);
                 cell.setCellValue(StringUtils.getValue(building.getDuongLuongTruyenDan()));
 
-                cell = row.createCell(49);
+                cell = row.createCell(50);
                 cell.setCellValue(StringUtils.getValue(building.getDienTroTiepDia()));
 
-                cell = row.createCell(50);
+                cell = row.createCell(51);
                 cell.setCellValue(StringUtils.getValue(building.getSoLuongDieuHoa()));
 
-                cell = row.createCell(51);
+                cell = row.createCell(52);
                 cell.setCellValue(StringUtils.getValue(building.getTongCongSuatDieuHoa()));
 
             }

@@ -20,104 +20,116 @@ public class RegCSHTExcel {
     private String note;
     @Column(name = "name", index = "0")
     private String name;
-    @Column(name = "ngayHdCsht", index = "1")
+    @Column(name = "planningCode", index = "1")
+    private String planningCode;
+    @Column(name = "ngayHdCsht", index = "2")
     private String ngayHdCsht;
-    @Column(name = "donVi", index = "2")
+    @Column(name = "donVi", index = "3")
     private String donVi;
-    @Column(name = "tinh", index = "3")
+    @Column(name = "tinh", index = "4")
     private String tinh;
-    @Column(name = "quanHuyen", index = "4")
+    @Column(name = "quanHuyen", index = "5")
     private String quanHuyen;
-    @Column(name = "xaPhuong", index = "5")
+    @Column(name = "xaPhuong", index = "6")
     private String xaPhuong;
-    @Column(name = "diaChi", index = "6")
+    @Column(name = "diaChi", index = "7")
     private String diaChi;
-    @Column(name = "lat", index = "7")
+    @Column(name = "lat", index = "8")
     private String lat;
-    @Column(name = "lon", index = "8")
+    @Column(name = "lon", index = "9")
     private String lon;
-    @Column(name = "chungCsht", index = "9")
+    @Column(name = "chungCsht", index = "10")
     private String chungCsht;
-    @Column(name = "loaiCSHT", index = "10")
+    @Column(name = "loaiCSHT", index = "11")
     private String loaiCSHT;
-    @Column(name = "loaiTramCsht", index = "11")
+    @Column(name = "loaiTramCsht", index = "12")
     private String loaiTramCsht;
-    @Column(name = "doCaoAnTen", index = "12")
+    @Column(name = "doCaoAnTen", index = "13")
     private String doCaoAnTen;
-    @Column(name = "doCaoNhaDatAnTen", index = "13")
+    @Column(name = "doCaoNhaDatAnTen", index = "14")
     private String doCaoNhaDatAnTen;
-    @Column(name = "loaiCotAnTen", index = "14")
+    @Column(name = "loaiCotAnTen", index = "15")
     private String loaiCotAnTen;
-    @Column(name = "ngayHDTuNguon", index = "15")
+    @Column(name = "ngayHDTuNguon", index = "16")
     private String ngayHDTuNguon;
-    @Column(name = "loaiTuNguon", index = "16")
+    @Column(name = "loaiTuNguon", index = "17")
     private String loaiTuNguon;
-    @Column(name = "dongCungCapTuNguon", index = "17")
+    @Column(name = "dongCungCapTuNguon", index = "18")
     private String dongCungCapTuNguon;
-    @Column(name = "soModuleTuNguon", index = "18")
+    @Column(name = "soModuleTuNguon", index = "19")
     private String soModuleTuNguon;
-    @Column(name = "dongTieuThuTuNguon", index = "19")
+    @Column(name = "dongTieuThuTuNguon", index = "20")
     private String dongTieuThuTuNguon;
-    @Column(name = "ngayHDTuNguon2", index = "20")
+    @Column(name = "ngayHDTuNguon2", index = "21")
     private String ngayHDTuNguon2;
-    @Column(name = "loaiTuNguon2", index = "21")
+    @Column(name = "loaiTuNguon2", index = "22")
     private String loaiTuNguon2;
-    @Column(name = "dongCungCapTuNguon2", index = "22")
+    @Column(name = "dongCungCapTuNguon2", index = "23")
     private String dongCungCapTuNguon2;
-    @Column(name = "soModuleTuNguon2", index = "23")
+    @Column(name = "soModuleTuNguon2", index = "24")
     private String soModuleTuNguon2;
-    @Column(name = "dongTieuThuTuNguon2", index = "24")
+    @Column(name = "dongTieuThuTuNguon2", index = "25")
     private String dongTieuThuTuNguon2;
-    @Column(name = "ngayHDMayNo", index = "25")
+    @Column(name = "ngayHDMayNo", index = "26")
     private String ngayHDMayNo;
-    @Column(name = "loaiHinhMayNo", index = "26")
+    @Column(name = "loaiHinhMayNo", index = "27")
     private String loaiHinhMayNo;
-    @Column(name = "loatMayNo", index = "27")
+    @Column(name = "loatMayNo", index = "28")
     private String loatMayNo;
-    @Column(name = "congSuatMayNo", index = "28")
+    @Column(name = "congSuatMayNo", index = "29")
     private String congSuatMayNo;
-    @Column(name = "trangThaiMayNo", index = "29")
+    @Column(name = "trangThaiMayNo", index = "30")
     private String trangThaiMayNo;
-    @Column(name = "ngayHDAccu", index = "30")
+    @Column(name = "ngayHDAccu", index = "31")
     private String ngayHDAccu;
-    @Column(name = "loaiAcQuy", index = "31")
+    @Column(name = "loaiAcQuy", index = "32")
     private String loaiAcQuy;
-    @Column(name = "dungLuongAccu", index = "32")
+    @Column(name = "dungLuongAccu", index = "33")
     private String dungLuongAccu;
-    @Column(name = "dienApAccu", index = "33")
+    @Column(name = "dienApAccu", index = "34")
     private String dienApAccu;
-    @Column(name = "slAccuBinh", index = "34")
+    @Column(name = "slAccuBinh", index = "35")
     private String slAccuBinh;
-    @Column(name = "thoigianHDSauMatDien", index = "35")
+    @Column(name = "thoigianHDSauMatDien", index = "36")
     private String thoigianHDSauMatDien;
-    @Column(name = "ngayBaoDuongAccu", index = "36")
+    @Column(name = "ngayBaoDuongAccu", index = "37")
     private String ngayBaoDuongAccu;
-    @Column(name = "ngayHDAccu2", index = "37")
+    @Column(name = "ngayHDAccu2", index = "38")
     private String ngayHDAccu2;
-    @Column(name = "loaiAcQuy2", index = "38")
+    @Column(name = "loaiAcQuy2", index = "39")
     private String loaiAcQuy2;
-    @Column(name = "dungLuongAccu2", index = "39")
+    @Column(name = "dungLuongAccu2", index = "40")
     private String dungLuongAccu2;
-    @Column(name = "dienApAccu2", index = "40")
+    @Column(name = "dienApAccu2", index = "41")
     private String dienApAccu2;
-    @Column(name = "slAccuBinh2", index = "41")
+    @Column(name = "slAccuBinh2", index = "42")
     private String slAccuBinh2;
-    @Column(name = "thoigianHDSauMatDien2", index = "42")
+    @Column(name = "thoigianHDSauMatDien2", index = "43")
     private String thoigianHDSauMatDien2;
-    @Column(name = "ngayBaoDuongAccu2", index = "43")
+    @Column(name = "ngayBaoDuongAccu2", index = "44")
     private String ngayBaoDuongAccu2;
-    @Column(name = "loaiTruyenDan", index = "44")
+    @Column(name = "loaiTruyenDan", index = "45")
     private String loaiTruyenDan;
-    @Column(name = "giaoDienTruyenDan", index = "45")
+    @Column(name = "giaoDienTruyenDan", index = "46")
     private String giaoDienTruyenDan;
-    @Column(name = "dungLuongTruyenDan", index = "46")
+    @Column(name = "dungLuongTruyenDan", index = "47")
     private String dungLuongTruyenDan;
-    @Column(name = "dienTroTiepDia", index = "47")
+    @Column(name = "dienTroTiepDia", index = "48")
     private String dienTroTiepDia;
-    @Column(name = "slDieuHoa", index = "48")
+    @Column(name = "slDieuHoa", index = "49")
     private String slDieuHoa;
-    @Column(name = "tongCSDieuHoa", index = "49")
+    @Column(name = "tongCSDieuHoa", index = "50")
     private String tongCSDieuHoa;
+
+    public String getPlanningCode() {
+        return planningCode;
+    }
+
+    public void setPlanningCode(String planningCode) {
+        this.planningCode = planningCode;
+    }
+    
+    
 
     public String getNote() {
         return note;

@@ -26,6 +26,10 @@
                                     <input required type="text" class="form-control" name="code" placeholder="Tên CSHT" value="${model.name}" />
                                 </div>
                                 <div class="form-group">
+                                    <label for="planningCode">Mã quy hoạch vị trí</label>                                    
+                                    <input required type="text" id="planningCode" class="form-control" name="planningCode" placeholder="Mã quy hoạch vị trí" value="${model.planningCode}" />
+                                </div>   
+                                <div class="form-group">
                                     <label for="exampleInputEmail1">Địa chỉ</label>                                    
                                     <input required type="text" class="form-control" name="address" placeholder="Địa chỉ" value="${model.address}" />
                                 </div>   

@@ -871,7 +871,7 @@ public class CategoriesFacade {
             DatabaseUtils.close(trans);
         }
     }
-
+    //tim kiem tram theo building_id
     public List<NodeBO> findNodeBOByBuilding(String buildingId, String chaId) throws ServiceException {
         ITransaction trans = null;
         try {
@@ -880,6 +880,22 @@ public class CategoriesFacade {
             trans.connectionType(DB_ADMIN);
             i.setTransaction(trans);
             return i.findNodeById(buildingId, chaId);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+    //tim kiem cell theo building
+    public List<NodeBO> findCellByBuildingId(String buildingId) throws ServiceException {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            IBuilding i = factory.getBuildingDAO();
+            trans.connectionType(DB_ADMIN);
+            i.setTransaction(trans);
+            return i.findCellByBuildingId(buildingId);
         } catch (DAOException de) {
             logger.error("DAOException : ", de);
             throw new ServiceException(de);

@@ -150,6 +150,7 @@
                                     <th width="170">Type</th>
                                     <th width="140" >Mã</th>
                                     <th width="140">Tên CSHT</th>  
+                                    <th width="140">Mã quy hoạch vị trí</th>
                                     <th width="220">Địa chỉ</th> 
                                     <th>LATITUDE</th>
                                     <th>LONGITUDE</th> 
@@ -173,6 +174,7 @@
                                                 <img src="<%=request.getContextPath()%>/resources/img/equipment/maps-icon.png">
                                             </a>  </td>
                                         <td>${item.buildingBO.name}</td>
+                                        <td>${item.buildingBO.planningCode}</td>
                                         <td>${item.buildingBO.address}</td>
 
                                         <td>${item.buildingBO.lat}</td>

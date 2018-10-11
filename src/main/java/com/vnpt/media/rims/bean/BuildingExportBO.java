@@ -92,6 +92,17 @@ public class BuildingExportBO {
     private String ngayHdCsht;
     private String nhomCSHT;
     private String tenDonViQL;
+    String planningCode;
+
+    public String getPlanningCode() {
+        return planningCode;
+    }
+
+    public void setPlanningCode(String planningCode) {
+        this.planningCode = planningCode;
+    }
+    
+    
 
     public String getBuildingName() {
         return buildingName;

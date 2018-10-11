@@ -19,17 +19,16 @@ import com.vnpt.media.rims.dao.*;
 import com.vnpt.media.rims.jdbc.DbSql;
 
 public class BuildingDAO extends GenericDAO implements IBuilding {
-
+    
     private static Logger logger = LogManager.getLogger(BuildingDAO.class);
-
+    
     @Override
-    public List<BuildingBO> findAll(String startRow, String endRow, String id, String name, String khuvucId,String tinhId, String quanId, String phuongId) throws DAOException {
+    public List<BuildingBO> findAll(String startRow, String endRow, String id, String name, String khuvucId, String tinhId, String quanId, String phuongId) throws DAOException {
         Connection conn = null;
         try {
             conn = this.getConnection();
             String querySql = "{? = call PKG_BUILDING.fc_find_all(?,?,?,?,?,?,?,?) }";
 //       
-
 
             List<Object> vars = new Vector<Object>();
             vars.add(startRow);
@@ -40,9 +39,9 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             vars.add(tinhId);
             vars.add(quanId);
             vars.add(phuongId);
-
+            
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
-
+            
             List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
                 @Override
                 public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -63,10 +62,11 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     item.setName(rs.getString("building_name"));
                     item.setNhomCSHT(rs.getString("AREA_CLASSIFY_GROUP"));
                     item.setNgayHdCsht(rs.getString("infras_active_date"));
+                    item.setPlanningCode(rs.getString("planning_code"));
                     return item;
                 }
             }, vars);
-
+            
             return (List<BuildingBO>) list;
         } catch (ConnectionException e) {
             logger.error("ConnectionException :", e);
@@ -79,13 +79,13 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
     @Override
     public int modify(String action, BuildingBO item) throws DAOException {
         Connection conn = null;
         try {
             conn = this.getConnection();
-            String querySql = "{? = call PKG_BUILDING.fn_modify(?,?,?,?,?,?,?,?,?,?,?,?)}";
+            String querySql = "{? = call PKG_BUILDING.fn_modify(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
             if (item == null) {
                 return -1;
             }
@@ -106,16 +106,17 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             vars.add(item.getNhomCSHT());
             vars.add(item.getNgayHdCsht());
             vars.add(item.getUserId());
+            vars.add(item.getPlanningCode());
             //DbSql sqlTemplate = new DbSql(conn);
             //int count = Integer.parseInt(sqlTemplate.runProc(querySql, vars));
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
-            
+
 //            
 //            
             int count = sqlTemplate.executeUpdateFuncRet(querySql, vars).intValue();
-
+            
             return count;
-
+            
         } catch (ConnectionException e) {
             logger.error("ConnectionException :", e);
             throw new DAOException(e);
@@ -127,15 +128,14 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
     @Override
-    public int getTotalAll(String name,String khuvucId, String tinhId, String quanId, String phuongId) throws DAOException {
+    public int getTotalAll(String name, String khuvucId, String tinhId, String quanId, String phuongId) throws DAOException {
         Connection conn = null;
         try {
             conn = this.getConnection();
             String querySql = "{? = call PKG_BUILDING.fc_total_all(?,?,?,?,?) }";
 //       
-
 
             List<Object> vars = new Vector<Object>();
             vars.add(name);
@@ -157,7 +157,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
     @Override
     public List<BuildingBO> findBuildingLink(String id) throws DAOException {
         Connection conn = null;
@@ -166,11 +166,10 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             String querySql = "{? = call PKG_BUILDING.fc_buiding_links(?) }";
 //       
 
-
             List<Object> vars = new Vector<Object>();
             vars.add(id);
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
-
+            
             List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
                 @Override
                 public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -180,7 +179,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     return item;
                 }
             }, vars);
-
+            
             return (List<BuildingBO>) list;
         } catch (ConnectionException e) {
             logger.error("ConnectionException :", e);
@@ -193,7 +192,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
     @Override
     public List<PhuTroBO> findListPhuTroByBuidingId(String id) throws DAOException {
         Connection conn = null;
@@ -202,12 +201,11 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             String querySql = "{? = call PKG_BUILDING.fc_find_phutro(?) }";
 //       
 
-
             List<Object> vars = new Vector<Object>();
             vars.add(id);
-
+            
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
-
+            
             List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
                 @Override
                 public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -227,7 +225,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     item.setCongSuatMayNo(rs.getString("cong_suat_may_no"));
                     item.setNgayHDMayNo(rs.getDate("ngay_hd_may_no"));
                     item.setTrangThaiMayNo(rs.getString("trang_thai_dat_may_no"));
-
+                    
                     item.setLoaiTruyenDanId(rs.getLong("loai_truyen_dan_id"));
                     item.setTruyenDan(rs.getString("ten_loai_truyen_dan"));
                     item.setDungLuongTruyenDan(rs.getString("dung_luong_truyen_dan"));
@@ -242,12 +240,12 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     item.setDienTroTiepDia(rs.getString("dien_tro_tiep_dia"));
                     item.setChungCsht(rs.getString("chung_csht"));
                     item.setLoaiTramCsht(rs.getString("loai_tram_csht"));
-
+                    
                     item.setBuildingId(rs.getLong("building_id"));
                     return item;
                 }
             }, vars);
-
+            
             return (List<PhuTroBO>) list;
         } catch (ConnectionException e) {
             logger.error("ConnectionException :", e);
@@ -260,7 +258,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
     @Override
     public List<NodeBO> findNodeById(String buidingId, String chaId) throws DAOException {
         Connection conn = null;
@@ -269,13 +267,12 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             String querySql = "{? = call pkg_building.fc_find_node_by_id(?,?) }";
 //       
 
-
             List<Object> vars = new Vector<Object>();
             vars.add(buidingId);
             vars.add(chaId);
-
+            
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
-
+            
             List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
                 @Override
                 public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -297,7 +294,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     return item;
                 }
             }, vars);
-
+            
             return (List<NodeBO>) list;
         } catch (ConnectionException e) {
             logger.error("ConnectionException :", e);
@@ -310,7 +307,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
     @Override
     public List<NodeBO> findCellByBuildingId(String buidingId) throws DAOException {
         Connection conn = null;
@@ -319,12 +316,11 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             String querySql = "{? = call pkg_building.FIND_CELL_BY_ID(?) }";
 //       
 
-
             List<Object> vars = new Vector<Object>();
             vars.add(buidingId);
-
+            
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
-
+            
             List<?> list = sqlTemplate.queryFunction(querySql, new RowMapper() {
                 @Override
                 public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -346,7 +342,7 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     return item;
                 }
             }, vars);
-
+            
             return (List<NodeBO>) list;
         } catch (ConnectionException e) {
             logger.error("ConnectionException :", e);
@@ -359,5 +355,5 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
             throw new DAOException(e);
         }
     }
-
+    
 }

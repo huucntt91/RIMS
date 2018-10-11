@@ -98,6 +98,7 @@ public class ExcelCSHTFacade {
                 item.setNgayBaoDuongAccu2(rs.getString("NGAY_BAO_DUONG_ACCU2") == null ? "" : rs.getString("NGAY_BAO_DUONG_ACCU2"));
                 item.setNgayHdCsht(rs.getString("infras_active_date") == null ? "" : rs.getString("infras_active_date"));
                 item.setNhomCSHT(rs.getString("area_classify_group") == null ? "" : rs.getString("area_classify_group"));
+                item.setPlanningCode(rs.getString("planning_code"));
                 arrayList.add(item);
             }
             return arrayList;
@@ -159,7 +160,7 @@ public class ExcelCSHTFacade {
     }
 
     public static String excelAddCsht(RegCSHTExcel qh, String userId) {
-        LOGGER.info("excelAddCsht ({})",qh.listParam());
+        LOGGER.info("excelAddCsht ({})", qh.listParam());
         CallableStatement cs = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -169,7 +170,7 @@ public class ExcelCSHTFacade {
                     + "?,?,?,?,?,?,?,?,?,?,"
                     + "?,?,?,?,?,?,?,?,?,?,"
                     + "?,?,?,?,?,?,?,?,?,?,"
-                    + "?,?,?,?,?,?,?,?,?,?,"
+                    + "?,?,?,?,?,?,?,?,?,?,?,"
                     + "?); end;";
             cs = conn.prepareCall(sql);
             cs.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
@@ -224,6 +225,7 @@ public class ExcelCSHTFacade {
             cs.setString(50, qh.getSlDieuHoa());
             cs.setString(51, qh.getTongCSDieuHoa());
             cs.setString(52, userId);
+            cs.setString(53, qh.getPlanningCode());
             cs.executeQuery();
             return cs.getString(1);
         } catch (SQLException ex) {
@@ -254,7 +256,7 @@ public class ExcelCSHTFacade {
     }
 
     public static String excelUpdateCsht(UpdateCSHTExcel qh, String userId) {
-        LOGGER.info("UpdateCSHTExcel ({})",qh.listParam());
+        LOGGER.info("UpdateCSHTExcel ({})", qh.listParam());
         CallableStatement cs = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -264,14 +266,14 @@ public class ExcelCSHTFacade {
                     + "?,?,?,?,?,?,?,?,?,?,"
                     + "?,?,?,?,?,?,?,?,?,?,"
                     + "?,?,?,?,?,?,?,?,?,?,"
-                    + "?,?,?,?,?,?,?,?,?,?,?"
+                    + "?,?,?,?,?,?,?,?,?,?,?,?"
                     + "); end;";
             cs = conn.prepareCall(sql);
             cs.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
             cs.setString(2, qh.getCode());
             cs.setString(3, qh.getName());
             cs.setString(4, qh.getNgayHdCsht());
-             cs.setString(5, qh.getDonViQl());
+            cs.setString(5, qh.getDonViQl());
             cs.setString(6, qh.getQuanHuyen());
             cs.setString(7, qh.getXaPhuong());
             cs.setString(8, qh.getDiaChi());
@@ -319,6 +321,7 @@ public class ExcelCSHTFacade {
             cs.setString(50, qh.getSlDieuHoa());
             cs.setString(51, qh.getTongCSDieuHoa());
             cs.setString(52, userId);
+            cs.setString(53, qh.getPlanningCode());
             cs.executeQuery();
             return cs.getString(1);
         } catch (SQLException ex) {

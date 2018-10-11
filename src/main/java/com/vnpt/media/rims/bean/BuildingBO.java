@@ -32,6 +32,17 @@ public class BuildingBO {
     private String name;
     private String nhomCSHT;
     private String ngayHdCsht;
+    String planningCode;
+
+    public String getPlanningCode() {
+        return planningCode;
+    }
+
+    public void setPlanningCode(String planningCode) {
+        this.planningCode = planningCode;
+    }
+    
+    
     public BuildingBO() {
       
     }
