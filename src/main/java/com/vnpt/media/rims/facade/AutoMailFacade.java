@@ -291,4 +291,66 @@ public class AutoMailFacade {
         }
         return result;
     }
+
+    public static List rimsInventory(String ne_type_id) {
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        List result = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=pkg_auto_email.rims_compare_inventory(?); end;";
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cs.setString(2, ne_type_id);
+            cs.executeQuery();
+            rs = (ResultSet) cs.getObject(1);
+            result = new ArrayList<>();
+            while (rs.next()) {
+                if (ne_type_id.equalsIgnoreCase("5")) {
+                    Cell2G item = new Cell2G();
+                    item.setCellName(rs.getString("ten_tren_he_thong"));
+                    item.setLac(rs.getLong("lac"));
+                    item.setCi(rs.getLong("ci"));
+                    result.add(item);
+                } else if (ne_type_id.equalsIgnoreCase("6")) {
+                    Cell3G item = new Cell3G();
+                    item.setCellName(rs.getString("ten_tren_he_thong"));
+                    item.setLac(rs.getLong("lac"));
+                    item.setCi(rs.getLong("ci"));
+                    result.add(item);
+                } else if (ne_type_id.equalsIgnoreCase("7")) {
+                    Cell4G item = new Cell4G();
+                    item.setCell_name(rs.getString("ten_tren_he_thong"));
+                    item.setCi(rs.getString("ci"));
+                    item.setTac(rs.getString("tac"));
+                    item.setEnodeb_id(rs.getString("enodeb_id"));
+                    result.add(item);
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cs != null) {
+                try {
+                    cs.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return result;
+    }
 }

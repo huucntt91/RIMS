@@ -111,6 +111,25 @@ public class AutoMailJob implements Job {
             message += "- Số lượng Cell 4G có trên Inventory và không có trên Rims: ".concat(inventoryRims4G == null ? "" : String.valueOf(inventoryRims4G.size())).concat(" \t\n");
             writeInventoryRims(fileNameInventoryRims4G, new File(dataDirectory + File.separator + "Cell4G_Inventory_Rims.xlsx"), folderTemp, inventoryRims4G);
             attachFiles.add(folderTemp + File.separator + fileNameInventoryRims4G);
+            //gui mail canh bao nhung cell co tren rims khong tim thay tren inventory
+            String fileNameRimsInventory4G = "Cell4G_RIMS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            List rimsInventory4G = AutoMailFacade.rimsInventory("7");
+            message += "- Số lượng Cell 4G có trên Rims và không có trên Inventory: ".concat(rimsInventory4G == null ? "" : String.valueOf(rimsInventory4G.size())).concat(" \t\n");
+            writeRimsInventory(fileNameRimsInventory4G, new File(dataDirectory + File.separator + "Cell4G_Rims_Inventory.xlsx"), folderTemp, rimsInventory4G);
+            attachFiles.add(folderTemp + File.separator + fileNameRimsInventory4G);
+            //
+             String fileNameRimsInventory3G = "Cell3G_RIMS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            List rimsInventory3G = AutoMailFacade.rimsInventory("6");
+            message += "- Số lượng Cell 3G có trên Rims và không có trên Inventory: ".concat(rimsInventory3G == null ? "" : String.valueOf(rimsInventory3G.size())).concat(" \t\n");
+            writeRimsInventory(fileNameRimsInventory3G, new File(dataDirectory + File.separator + "Cell3G_Rims_Inventory.xlsx"), folderTemp, rimsInventory3G);
+            attachFiles.add(folderTemp + File.separator + fileNameRimsInventory3G);
+            //
+             String fileNameRimsInventory2G = "Cell2G_RIMS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            List rimsInventory2G = AutoMailFacade.rimsInventory("5");
+            message += "- Số lượng Cell 2G có trên Rims và không có trên Inventory: ".concat(rimsInventory2G == null ? "" : String.valueOf(rimsInventory2G.size())).concat(" \t\n");
+            writeRimsInventory(fileNameRimsInventory2G, new File(dataDirectory + File.separator + "Cell2G_Rims_Inventory.xlsx"), folderTemp, rimsInventory2G);
+            attachFiles.add(folderTemp + File.separator + fileNameRimsInventory2G);
+            
             //send mail
             sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, toAddress, subject, message, attachFiles);
         } catch (Exception e) {
@@ -401,6 +420,79 @@ public class AutoMailJob implements Job {
                     cell.setCellValue(item.getOam_ip());
                     cell = row.createCell(15);
                     cell.setCellValue(item.getService_ip());
+                }
+            }
+            fin.close();
+            File file = new File(folderTemp + File.separator + fileName);
+            FileOutputStream fos = new FileOutputStream(file);
+            workbook.write(fos);
+            fos.close();
+            workbook.close();
+
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    /*
+    ghi danh sach nhung cell tren inventory khong tim thay tren rims
+     */
+    private void writeRimsInventory(String fileName, File fileTemplate, String folderTemp, List<?> temp) {
+        try {
+            FileInputStream fin = new FileInputStream(fileTemplate);
+            XSSFWorkbook workbook = null;
+            workbook = new XSSFWorkbook(fin);
+            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
+
+            Cell cell = null;
+            Row row = null;
+            int rowIndex = 2;
+            if (fileName.contains("2G")) {
+                Iterator<Cell2G> iterator = (Iterator<Cell2G>) temp.iterator();
+                while (iterator.hasNext()) {
+                    Cell2G item = iterator.next();
+                    row = sheet.createRow(rowIndex++);
+                    CellStyle style = sheet.getWorkbook().createCellStyle();
+                    row.setRowStyle(style);
+                    cell = row.createCell(0);
+                    cell.setCellValue(item.getCellName());
+                    cell = row.createCell(1);
+                    cell.setCellValue(item.getLac());
+                    cell = row.createCell(2);
+                    cell.setCellValue(item.getCi());
+                    cell = row.createCell(3);
+                }
+            } else if (fileName.contains("3G")) {
+                Iterator<Cell3G> iterator = (Iterator<Cell3G>) temp.iterator();
+                while (iterator.hasNext()) {
+                    Cell3G item = iterator.next();
+                    row = sheet.createRow(rowIndex++);
+                    CellStyle style = sheet.getWorkbook().createCellStyle();
+                    row.setRowStyle(style);
+                    cell = row.createCell(0);
+                    cell.setCellValue(item.getCellName());
+                    cell = row.createCell(1);
+                    cell.setCellValue(item.getLac());
+                    cell = row.createCell(2);
+                    cell.setCellValue(item.getCi());
+                    cell = row.createCell(3);
+                }
+            } else if (fileName.contains("4G")) {
+                Iterator<Cell4G> iterator = (Iterator<Cell4G>) temp.iterator();
+                while (iterator.hasNext()) {
+                    Cell4G item = iterator.next();
+                    row = sheet.createRow(rowIndex++);
+                    CellStyle style = sheet.getWorkbook().createCellStyle();
+                    row.setRowStyle(style);
+                    cell = row.createCell(0);
+                    cell.setCellValue(item.getCell_name());
+                    cell = row.createCell(1);
+                    cell.setCellValue(item.getCi());
+                    cell = row.createCell(2);
+                    cell.setCellValue(item.getTac());
+                    cell = row.createCell(3);
+                    cell.setCellValue(item.getEnodeb_id());
+                    cell = row.createCell(4);
                 }
             }
             fin.close();
