@@ -124,6 +124,11 @@ public class ReportCellConfigFacade {
                     item.setAntennaGain(rs.getString("antenna_gain"));
                     item.setStatus(rs.getString("status"));
                     item.setNote(rs.getString("note"));
+                    item.setDlUarfcn(rs.getString("dl_uarfcn"));
+                    item.setRac(rs.getString("rac"));
+                    item.setDcSupport(rs.getString("dc_support"));
+                    item.setOamIp(rs.getString("oam_ip"));
+                    item.setServiceIp(rs.getString("service_ip"));
                     arrayList.add(item);
                 }
             } else if (neTypeId.equalsIgnoreCase("7")) {
@@ -163,7 +168,10 @@ public class ReportCellConfigFacade {
                     item.setSpecialCoverage(rs.getString("special_coverage"));
                     item.setAntennaGain(rs.getString("antenna_gain"));
                     item.setStatus(rs.getString("status"));
-                    item.setNote(rs.getString("note"));
+                    item.setBandWidth(rs.getString("bandwidth"));
+                    item.setUarfcn(rs.getString("uarfcn"));
+                    item.setOamIp(rs.getString("oam_ip"));
+                    item.setServiceIp(rs.getString("service_ip"));
                     arrayList.add(item);
                 }
             }
@@ -294,6 +302,11 @@ public class ReportCellConfigFacade {
                     item.setAntennaGain(rs.getString("antenna_gain"));
                     item.setStatus(rs.getString("status"));
                     item.setNote(rs.getString("note"));
+                    item.setDlUarfcn(rs.getString("dl_uarfcn"));
+                    item.setRac(rs.getString("rac"));
+                    item.setDcSupport(rs.getString("dc_support"));
+                    item.setOamIp(rs.getString("oam_ip"));
+                    item.setServiceIp(rs.getString("service_ip"));
                     arrayList.add(item);
                 }
             } else if (neTypeId.equalsIgnoreCase("7")) {
@@ -334,6 +347,10 @@ public class ReportCellConfigFacade {
                     item.setAntennaGain(rs.getString("antenna_gain"));
                     item.setStatus(rs.getString("status"));
                     item.setNote(rs.getString("note"));
+                    item.setBandWidth(rs.getString("bandwidth"));
+                    item.setUarfcn(rs.getString("uarfcn"));
+                    item.setOamIp(rs.getString("oam_ip"));
+                    item.setServiceIp(rs.getString("service_ip"));
                     arrayList.add(item);
                 }
             }

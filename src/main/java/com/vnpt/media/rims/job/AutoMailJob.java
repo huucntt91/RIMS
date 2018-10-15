@@ -78,19 +78,19 @@ public class AutoMailJob implements Job {
             //gui mail nhung cell 2G trung LAC-CI tren inventory
             String fileName2G = "Cell2G_Duplicate_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
             List cell2G = AutoMailFacade.findCell2G();
-            message += "- Số lượng Cell2G trùng LAC-CI: ".concat(cell2G == null ? "" : String.valueOf(cell2G.size())).concat(" \t\n");
+            message += "- Số lượng Cell2G trùng LAC-CI trên Inventory: ".concat(cell2G == null ? "" : String.valueOf(cell2G.size())).concat(" \t\n");
             writeDuplicateLacCi(fileName2G, new File(dataDirectory + File.separator + "CELL2G_Duplicate_LacCi.xlsx"), folderTemp, cell2G);
             attachFiles.add(folderTemp + File.separator + fileName2G);
             //gui mail nhung cell 3G trung LAC-CI tren inventory
             String fileName3G = "Cell3G_Duplicate_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
             List cell3G = AutoMailFacade.findCell3G();
-            message += "- Số lượng Cell3G trùng LAC-CI: ".concat(cell3G == null ? "" : String.valueOf(cell3G.size())).concat(" \t\n");
+            message += "- Số lượng Cell3G trùng LAC-CI trên Inventory: ".concat(cell3G == null ? "" : String.valueOf(cell3G.size())).concat(" \t\n\t\n");
             writeDuplicateLacCi(fileName3G, new File(dataDirectory + File.separator + "CELL3G_Duplicate_LacCi.xlsx"), folderTemp, cell3G);
             attachFiles.add(folderTemp + File.separator + fileName3G);
             //gui mail canh bao nhung cell co tren SMRS va khong co tren Inventory
             String fileNameSmrsInventory = "SMRS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
             List smrsInventory = AutoMailFacade.findSmrsInventory();
-            message += "- Số lượng Cell có trên SMRS và không có trên Inventory: ".concat(smrsInventory == null ? "" : String.valueOf(smrsInventory.size())).concat(" \t\n");
+            message += "- Số lượng Cell có trên SMRS và không có trên Inventory: ".concat(smrsInventory == null ? "" : String.valueOf(smrsInventory.size())).concat(" \t\n\t\n");
             writeCellSmrsInventory(fileNameSmrsInventory, new File(dataDirectory + File.separator + "SMRS_INVENTORY.xlsx"), folderTemp, smrsInventory);
             attachFiles.add(folderTemp + File.separator + fileNameSmrsInventory);
             //gui mail canh bao nhung cell tren inventory khong tim thay tren RIMS
@@ -108,7 +108,7 @@ public class AutoMailJob implements Job {
             //
             String fileNameInventoryRims4G = "Cell4G_INVENTORY_RIMS_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
             List inventoryRims4G = AutoMailFacade.inventoryRims("7");
-            message += "- Số lượng Cell 4G có trên Inventory và không có trên Rims: ".concat(inventoryRims4G == null ? "" : String.valueOf(inventoryRims4G.size())).concat(" \t\n");
+            message += "- Số lượng Cell 4G có trên Inventory và không có trên Rims: ".concat(inventoryRims4G == null ? "" : String.valueOf(inventoryRims4G.size())).concat(" \t\n\t\n");
             writeInventoryRims(fileNameInventoryRims4G, new File(dataDirectory + File.separator + "Cell4G_Inventory_Rims.xlsx"), folderTemp, inventoryRims4G);
             attachFiles.add(folderTemp + File.separator + fileNameInventoryRims4G);
             //gui mail canh bao nhung cell co tren rims khong tim thay tren inventory

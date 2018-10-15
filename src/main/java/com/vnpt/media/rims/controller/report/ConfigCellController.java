@@ -76,7 +76,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(value = "/configCell")
 public class ConfigCellController extends BaseController {
 
-    private static final Logger LOGGER = LogManager.getLogger(ConfigCellController.class);
+    private static final Logger logger = LogManager.getLogger(ConfigCellController.class);
     private static String CELL_CONFIG = "report/cauhinhthietbi/cell_config";
 
 //    @ModelAttribute("filterReportList")
@@ -386,11 +386,11 @@ public class ConfigCellController extends BaseController {
 
         List<?> temp = null;
         try {
-            LOGGER.info("user: {}, ip: {}, call cell2GReport({},{},{},{})", user.getUsername(), request.getRemoteAddr(), type, filter.listParam(), null, null);
+            logger.info("user: {}, ip: {}, call cell2GReport({},{},{},{})", user.getUsername(), request.getRemoteAddr(), type, filter.listParam(), null, null);
             temp = facade.cell2GReport(type, filter, null, null);
-            LOGGER.info("user: {}, ip: {}, done cell2GReport: {}", user.getUsername(), request.getRemoteAddr(), temp.size());
+            logger.info("user: {}, ip: {}, done cell2GReport: {}", user.getUsername(), request.getRemoteAddr(), temp.size());
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
 
         String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
@@ -408,7 +408,7 @@ public class ConfigCellController extends BaseController {
         File fileTemplate = new File(dataDirectory + File.separator + fileName);
         File fileResult = null;
 
-        LOGGER.debug("user: {}, ip: {}, call write Excel cau hinh thiet bi {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+        logger.debug("user: {}, ip: {}, call write Excel cau hinh thiet bi {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
         if (type.equals("5") || type.equals("6")) {
             writeBc(type, fileTemplate, temp);
         } else {
@@ -437,12 +437,12 @@ public class ConfigCellController extends BaseController {
             if (temp != null) {
                 temp.clear();
             }
-            LOGGER.debug("user: {}, ip: {}, end write Excel cau hinh thiet bi {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            logger.debug("user: {}, ip: {}, end write Excel cau hinh thiet bi {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
         } catch (IOException e) {
             if (e.getMessage().contains("An established connection was aborted by the software in your host machine") || e.getMessage().contains("An existing connection was forcibly closed by the remote host")) {
-                LOGGER.info(e.getMessage());
+                logger.info(e.getMessage());
             } else {
-                LOGGER.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
     }
