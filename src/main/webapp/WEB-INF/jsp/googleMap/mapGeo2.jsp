@@ -26,7 +26,7 @@
                 width: 100%;
                 overflow: hidden;
             }
-            #borough {
+            #borough2 {
                 background-color: #fff;
                 border: 1px solid #000;
                 font-family: Arial, sans-serif;
@@ -42,11 +42,11 @@
                 right: 0;
                 display: none;
             }
-            #borough h4{
+            #borough2 h4{
                 text-align: center;
                 margin-top:0;
             }
-            #borough span{
+            #borough2 span{
                 color: blue;
             }
             ol, ul {
@@ -390,7 +390,8 @@
                         </table>
                     </div>
                 </div>
-                <div id="borough">
+                <div id="borough2">
+                    <button id="btnFilterOption" onclick="ShowAndHideResultFiler()">-</button>
                     <a href="#" id="borough-closer" class="ol-popup-closer"><img draggable="false" class="emoji" alt="✖" src="https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/2716.svg"></a>
                     <h4 id="nameProvince"></h4>
                     <div class="divTotalFill" id="divcountBTS"><strong>BTS:</strong> <span id="countBTS">0</span></div> 
@@ -400,6 +401,7 @@
                     <div class="divTotalFill" id="divcountNodeB"><strong>eNodeB:</strong> <span id="counteNodeB">0</span></div> 
                     <div class="divTotalFill" id="divcountCell4G"><strong>Cell4G:</strong> <span id="countCell4G">0</span></div> 
                     <div id="whereFilter"></div>
+                    <div id="filterResultContainer"></div>
                 </div>
                 <div id="noteLink">
                     <a href="#" class="notelink-closer ol-popup-closer" onclick ="hideLink()"><img draggable="false" class="emoji" alt="✖" src="https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/2716.svg"></a>
@@ -605,13 +607,16 @@
                                 <div class="form-group">
                                     <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
                                 </div>
-
+                                 <div class="form-group" id="divResultSearch">
+                                                                
+                                                        </div>                            
 
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                                 <button type="button" id="sm" onclick="searchMap()" class="btn btn-primary">Tìm kiếm</button>
                             </div>
+                                                        
                         </div>
                     </div>
                 </div>
@@ -1794,6 +1799,7 @@
         if ($("#tinhTpId").val().indexOf(',') == - 1){
         getCountNode();
         }
+        SearchNodes();
 //        enable ket qua tim kiem khi dung filter
         $('#bts').iCheck('check');
         bts_layer.setVisible(true);
@@ -1931,7 +1937,7 @@
         $('#divNeLink').hide(1000);
         });
         $('#borough-closer').click(function () {
-        $('#borough').hide(1000);
+        $('#borough2').hide(1000);
         });
         $('#detail-closer').click(function () {
         $('#iframeDetail').hide(1000);
@@ -2057,8 +2063,22 @@
         $('#countCell2G').text(data.cell2g);
         $('#countCell3G').text(data.cell3g);
         $('#countCell4G').text(data.cell4g);
-        $('#borough').show();
+        $('#borough2').show();
         });
+        }
+        function SearchNodes(){
+            $('#whereFilter').text('');
+            var whereSearch = ' ';
+            var htmlFilter = '';
+            $("#boxSearch .groupFilter").each(function (i) {
+            whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+            htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
+                    //alert(whereSearch);
+            });
+            
+            $.get("${pageContext.request.contextPath}/mapGeo2/Nodes", {tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
+            $('#filterResultContainer').html(data);
+            });
         }
         function getListHuyen(tinh)
         {
@@ -2826,5 +2846,28 @@
                     }
     </script>
     <script src="${pageContext.request.contextPath}/resources/js/measure.js" type="text/javascript"></script>
+    <script>
+            function ShowAndHideResultFiler()
+            {
+                if($('#filterResultContainer').hasClass('hide'))
+                {
+                    $('#btnFilterOption').html('-');
+                    $('#filterResultContainer').removeClass('hide');
+                    $('#filterResultContainer').removeClass('hidden');
+                }
+                else
+                {
+                    $('#btnFilterOption').html('+');
+                    $('#filterResultContainer').addClass('hide');
+                     $('#filterResultContainer').addClass('hidden');
+                }
+            }
+            function SetLocation(long,lat){
+                 map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
+                  map.getView().setZoom(18);
+                  ShowAndHideResultFiler();
+                 return false
+            }
+    </script>
 </body>
 </html>
