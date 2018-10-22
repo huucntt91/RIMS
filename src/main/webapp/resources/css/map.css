@@ -585,4 +585,23 @@
 .modal-header-map{
     padding: 7px 15px;
 }
+modal-body-search {
+    padding: 10px 20px 0px;
+}
+#borough2
+{
+    width:900px !important;
+    /*margin-right: 0px !important;*/
+    top:-38px;
+    z-index: 1039 !important;
+}
+#filterResultContainer
+{
+    
+}
+#btnFilterOption {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+}
 /* end cuongvn */

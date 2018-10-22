@@ -125,7 +125,87 @@ public class GoogleMapFacade {
             }
         }
     }
-
+     public List<NodeBO> getNodes(String type, String where) {
+        ResultSet rs = null;
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        ArrayList<NodeBO> arrayList = new ArrayList<>();
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
+            if (type.equals("2")) {
+                sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
+            } else if (type.equals("3")) {
+                sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
+            } else if (type.equals("8")) {
+                sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
+            }
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cstmt.setString(2, where);
+            cstmt.setInt(3, 2);
+            cstmt.executeQuery();
+            //return cstmt.getInt(1);
+            rs = (ResultSet) cstmt.getObject(1);
+            while (rs.next()) {
+                NodeBO item = new NodeBO();
+                item.setId(rs.getLong("node_id"));
+                item.setCode(rs.getString("ma_node"));
+                item.setBuildingId(rs.getLong("building_id"));
+                item.setAddress(rs.getString("dia_chi"));
+                item.setLongitude(rs.getDouble("longitude"));
+                item.setLatitude(rs.getDouble("latitude"));
+                if(rs.getLong("ne_type_id")==2)
+                {
+                    item.setTenNeType("BTS");
+                }
+                else if(rs.getLong("ne_type_id")==3)
+                {
+                    item.setTenNeType("NODEB");
+                }
+                else if(rs.getLong("ne_type_id")==8)
+                {
+                    item.setTenNeType("ENODEB");
+                }
+                else if(rs.getLong("ne_type_id")==5)
+                {
+                    item.setTenNeType("2G");
+                }
+                else if(rs.getLong("ne_type_id")==6)
+                {
+                    item.setTenNeType("3G");
+                }
+                else if(rs.getLong("ne_type_id")==7)
+                {
+                    item.setTenNeType("4G");
+                }
+                else
+                {
+                
+                }
+                arrayList.add(item);
+            }
+            return arrayList;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+           // return null;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return null;
+    }
     public List<FilterMapBO> findFilterMap(String objectId) throws DAOException {
         CallableStatement cstmt = null;
         ResultSet rs = null;
