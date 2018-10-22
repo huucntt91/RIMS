@@ -572,3 +572,17 @@
 .MT-dokhoangcach:hover .dokhoangcach {
     display: block !important;
 }
+
+/* cuongvn */
+/* chuyenn nut tim kiem len tren */
+.MapToolsBar {
+    position: absolute;
+    top: -31px;
+}
+.modal-searchmap-title{
+    line-height:  20px;
+}
+.modal-header-map{
+    padding: 7px 15px;
+}
+/* end cuongvn */
