@@ -82,6 +82,7 @@
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/fda/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/sapc/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/mapDetail/detailGeo" />
+    <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/mapGeo2/Nodes" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/broadband/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/logicalLink/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/networkSpace/*" />
