@@ -181,7 +181,7 @@
 
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="${pageContext.request.contextPath}/resources/js/ol_v4.6.5.js" type="text/javascript"></script>
-   
+
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDn_nXdDrNiUlGFpAr2uwL3hsDGYaLiU7M"></script>
 
     <link href="${pageContext.request.contextPath}/resources/css/daterangepicker/bootstrap-datepicker3.css" rel="stylesheet" type="text/css" />
@@ -190,21 +190,21 @@
     <link href="${pageContext.request.contextPath}/resources/css/spectrum.css" rel="stylesheet" type="text/css"/>
     <script src="${pageContext.request.contextPath}/resources/js/spectrum.js" type="text/javascript"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106468556-7"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'UA-106468556-7');
-            gtag('set', {'user_id': '<%=request.getRemoteUser()%>}'); 
-        </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106468556-7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+        dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-106468556-7');
+        gtag('set', {'user_id': '<%=request.getRemoteUser()%>}');
+    </script>
 
 </head>
 <body>
     <section class="content">
-   
+
         <div class="row">
             <div class="col-xs-12">
                 <ul class="MapToolsBar btns">
@@ -225,7 +225,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="MT-search"><a data-toggle="modal" data-target="#myModal" title="Tìm kiếm"><span class="icon-search"></span>
+                    <li class="MT-search"><a data-toggle="modal" data-target="#myModal" class="" title="Tìm kiếm"><span class="icon-search"></span>
                         </a></li>
                     <li class="MT-layers"><a title="Các lớp trên bản đồ"><span></span></a>
                         <ul class="MT-layers-list">
@@ -239,7 +239,7 @@
                                                                    id="here_base" value="2">
                                                             <label>Here Map</label> </li>-->
                             <li style="font-weight: bold">Lớp bản đồ</li>
-                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/bsc_rnc')}">
+                                <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/bsc_rnc')}">
                                 <li>
 
                                     <input type="checkbox"  name="neType"
@@ -249,78 +249,78 @@
 
                                 </li>
                             </c:if>
-                                 <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/bts')}">
-                            <li >
-                                <input type="checkbox"  name="neType"
-                                       id="bts" value="2">
-                                <label>BTS</label>
-                                <div class="colorLayerBTS"></div>
-                            </li>
-                                 </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/nodeb')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="nodeb" value="3">
-                                <label>NODEB</label>
-                                <div class="colorLayerNodeB"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/enodeb')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="enodeb" value="8">
-                                <label>ENODEB</label>
-                                <div class="colorLayereNodeB"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cell2g')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="cell2g" value="5">
-                                <label>CELL 2G</label>
-                                <div class="colorLayereCell2g"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cell3g')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="cell3g" value="6">
-                                <label>CELL 3G</label>
-                                <div class="colorLayereCell3g"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cell4g')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="cell4g" value="7">
-                                <label>CELL 4G</label>
-                                <div class="colorLayereCell4g"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/nodeqh')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="nodeQH" value="9">
-                                <label>NODE QH</label>
-                                <div class="colorLayereQH"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/nodeda')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="nodeDA" value="10">
-                                <label>NODE DA</label>
-                                <div class="colorLayereDA"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/csht')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="building" value="4">
-                                <label>CSHT</label>
-                                <div class="colorLayereBuilding"></div>
-                            </li> 
-                             </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/bts')}">
+                                <li >
+                                    <input type="checkbox"  name="neType"
+                                           id="bts" value="2">
+                                    <label>BTS</label>
+                                    <div class="colorLayerBTS"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/nodeb')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="nodeb" value="3">
+                                    <label>NODEB</label>
+                                    <div class="colorLayerNodeB"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/enodeb')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="enodeb" value="8">
+                                    <label>ENODEB</label>
+                                    <div class="colorLayereNodeB"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cell2g')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="cell2g" value="5">
+                                    <label>CELL 2G</label>
+                                    <div class="colorLayereCell2g"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cell3g')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="cell3g" value="6">
+                                    <label>CELL 3G</label>
+                                    <div class="colorLayereCell3g"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cell4g')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="cell4g" value="7">
+                                    <label>CELL 4G</label>
+                                    <div class="colorLayereCell4g"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/nodeqh')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="nodeQH" value="9">
+                                    <label>NODE QH</label>
+                                    <div class="colorLayereQH"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/nodeda')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="nodeDA" value="10">
+                                    <label>NODE DA</label>
+                                    <div class="colorLayereDA"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/csht')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="building" value="4">
+                                    <label>CSHT</label>
+                                    <div class="colorLayereBuilding"></div>
+                                </li> 
+                            </c:if>
                             <li>
                                 <input type="checkbox"  name="neType"
                                        id="chk_province" value="12">
@@ -334,22 +334,22 @@
                                 <div class="colorLayereDistrict"></div>
                             </li> 
                             <!--trunglk_start-->
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cs_core')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="chk_cs_core" value="20">
-                                <label>CS CORE</label>
-                                <div class="colorLayerCsCore"></div>
-                            </li>
-                             </c:if>
-                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/ps_core')}">
-                            <li>
-                                <input type="checkbox"  name="neType"
-                                       id="chk_ps_core" value="25">
-                                <label>PS CORE</label>
-                                <div class="colorLayerPsCore"></div>
-                            </li> 
-                             </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/cs_core')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="chk_cs_core" value="20">
+                                    <label>CS CORE</label>
+                                    <div class="colorLayerCsCore"></div>
+                                </li>
+                            </c:if>
+                            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'maps/ps_core')}">
+                                <li>
+                                    <input type="checkbox"  name="neType"
+                                           id="chk_ps_core" value="25">
+                                    <label>PS CORE</label>
+                                    <div class="colorLayerPsCore"></div>
+                                </li> 
+                            </c:if>
                             <!--trunglk_end-->
                         </ul>
                     </li>
@@ -457,33 +457,33 @@
                         <div class="titleRight"><p>MY LAYERS</p></div>
 
                         <div class="form_main content" >
-<!--                            <h4>Object Layer</h4>
-                            <table id="myLayer" class="table table-bordered table-hover">
-                                <thead>
-                                <th width="50">Active</th>
-                                <th>Layer name</th>
-                                <th width="52">Color</th>
-                                <th width="50"></th>
-                                <th width="50"></th>
-                                <thead>
+                            <!--                            <h4>Object Layer</h4>
+                                                        <table id="myLayer" class="table table-bordered table-hover">
+                                                            <thead>
+                                                            <th width="50">Active</th>
+                                                            <th>Layer name</th>
+                                                            <th width="52">Color</th>
+                                                            <th width="50"></th>
+                                                            <th width="50"></th>
+                                                            <thead>
+                            
+                                                            <tbody id="listLayer">
+                            <c:if test="${lstLayer !=  null}">
+                                <c:forEach var="item" items="${lstLayer}">
 
-                                <tbody id="listLayer">
-                                    <c:if test="${lstLayer !=  null}">
-                                        <c:forEach var="item" items="${lstLayer}">
-
-                                            <tr>
-                                                <td style="text-align: center"><input type="checkbox" name="chkLayer" class="chkMyLayer" checked value="myLayer_${item.layerId}"></td>
-                                                <td>${item.layerName}</td>
-                                                <td><div class="colorLayer" data-id="${item.layerId}" style="background-color: ${item.styleColor}"></div></td>
-                                                <td style="text-align: center">
-                                                    <a href="#" data-toggle="modal" onclick="updateFormStyle(${item.layerId}, '${item.layerName}',${item.styleSize}, '${item.styleColor}', '${item.styleBorderColor}',${item.styleOpacity})"  data-target="#styleLayers" class="linkChangeStyleLayer"></a>
-                                                </td>
-                                                <td style="text-align: center"><a href="#" data-id="${item.layerId}" class="linkDeleteLayer"></td>
-                                            </tr>
-                                        </c:forEach>
-                                    </c:if>
-                                </tbody>
-                            </table>-->
+                                    <tr>
+                                        <td style="text-align: center"><input type="checkbox" name="chkLayer" class="chkMyLayer" checked value="myLayer_${item.layerId}"></td>
+                                        <td>${item.layerName}</td>
+                                        <td><div class="colorLayer" data-id="${item.layerId}" style="background-color: ${item.styleColor}"></div></td>
+                                        <td style="text-align: center">
+                                            <a href="#" data-toggle="modal" onclick="updateFormStyle(${item.layerId}, '${item.layerName}',${item.styleSize}, '${item.styleColor}', '${item.styleBorderColor}',${item.styleOpacity})"  data-target="#styleLayers" class="linkChangeStyleLayer"></a>
+                                        </td>
+                                        <td style="text-align: center"><a href="#" data-id="${item.layerId}" class="linkDeleteLayer"></td>
+                                    </tr>
+                                </c:forEach>
+                            </c:if>
+                        </tbody>
+                    </table>-->
                             <h4>Event Layer</h4>
                             <table id="myEvent" class="table table-bordered table-hover">
                                 <thead>
@@ -511,7 +511,7 @@
                                 </tbody>
                             </table>
                             <div class="modal-footer" style="text-align: center">
-<!--                                <button type="button" style="margin-right: 100px;" data-toggle="modal" data-target="#addLayer" class="btn btn-primary">Add Layer</button>-->
+                                <!--                                <button type="button" style="margin-right: 100px;" data-toggle="modal" data-target="#addLayer" class="btn btn-primary">Add Layer</button>-->
                                 <button type="button" data-toggle="modal" data-target="#addEvent" class="btn btn-primary">Add Event</button>
                             </div>
                         </div>
@@ -524,62 +524,83 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
 
-                            <div class="modal-header">
+                            <div class="modal-header modal-header-map">
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-tiCỎtle" id="myModalLabel"></h4>
+                                <h4 class="modal-title modal-searchmap-title" id="myModalLabel">Tìm kiếm</h4>
                             </div>
                             <div class="modal-body" id="boxSearch">
-                                
-                                <div class="locationFilter">
-                                    <div class="col-md-4">                            
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Latitude</label>
-                                            <input type="number" id="locationLat" name="locationLat" placeholder="Latitude"  class="form-control">
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        <div class="locationFilter row">
+
+                                            <div class="col-md-4">                            
+                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Latitude</label>
+                                                <div class="col-md-8">
+                                                    <input type="number" id="locationLat" name="locationLat" placeholder="Latitude"  class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">                            
+                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Longitude</label>
+                                                <div  class="col-md-8">
+                                                    <input type="number" id="locationLong" name="locationLong" placeholder="Longitude"  class="form-control">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-4">                            
+                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Bán kính(m)</label>
+                                                <div  class="col-md-8">
+                                                    <input type="number" id="radius" name="radius"  placeholder="Longitude" value="1000"  class="form-control">
+                                                </div>
+
+                                            </div>
                                         </div>
+
                                     </div>
-                                    <div class="col-md-4">                            
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Longitude</label>
-                                            <input type="number" id="locationLong" name="locationLong" placeholder="Longitude"  class="form-control">
+                                    <!--tinhList-->
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="exampleInputEmail1"  class="col-md-4 control-label" title="Chọn tỉnh quản lý">Chọn tỉnh</label>
+                                                <div class="col-md-8">
+                                                    <select name="tinhTpId" id="tinhTpId" class="form-control selectpicker" data-live-search="true"  onchange="getListHuyen(0);"> 
+                                                        <option value="${tinhTpId}">--- Tỉnh/Thành Phố ---</option>
+                                                        <c:forEach var="tinhBO" items="${tinhList}">
+                                                            <option  data-tokens="${tinhBO.tenTinhTp}"
+                                                                     value="${tinhBO.tinhTpId}"  
+                                                                     >${tinhBO.tenTinhTp}</option>
+                                                        </c:forEach>
+                                                    </select>  
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label  for="exampleInputEmail1"  class="col-md-4 control-label" title="Chọn huyện">Chọn huyện</label>
+                                                <div class="col-md-8">
+                                                    <select name="quanHuyenId" id="quanHuyenId" class="form-control selectpicker" data-live-search="true" onchange="getListPhuongXa(0);"> 
+                                                        <option value="">--- Quận / Huyện ---</option>
+                                                    </select>  
+                                                </div>
+
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label  for="exampleInputEmail1"  class="col-md-4 control-label" title="Chọn phường/xã">Phường/xã</label>
+                                                <div class="col-md-8">
+                                                    <select name="phuongXaId" id="phuongXaId" class="form-control selectpicker" data-live-search="true" > 
+                                                        <option value="">--- Phường / Xã ---</option>
+                                                    </select>      
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">                            
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Bán kính(m)</label>
-                                            <input type="number" id="radius" name="radius"  placeholder="Longitude" value="1000"  class="form-control">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--tinhList-->
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Chọn tỉnh quản lý</label>
-                                    <select name="tinhTpId" id="tinhTpId" class="form-control selectpicker" data-live-search="true"  onchange="getListHuyen(0);"> 
-                                        <option value="${tinhTpId}">--- Tỉnh/Thành Phố ---</option>
-                                        <c:forEach var="tinhBO" items="${tinhList}">
-                                            <option  data-tokens="${tinhBO.tenTinhTp}"
-                                                     value="${tinhBO.tinhTpId}"  
-                                                     >${tinhBO.tenTinhTp}</option>
-                                        </c:forEach>
-
-                                    </select>  
-                                </div> 
-
-                                <div class="form-group">
-                                    <label  for="exampleInputEmail1">Chọn huyện</label>
-                                    <select name="quanHuyenId" id="quanHuyenId" class="form-control selectpicker" data-live-search="true" onchange="getListPhuongXa(0);"> 
-                                        <option value="">--- Quận / Huyện ---</option>
-                                    </select>  
 
 
+                                    </div> 
                                 </div>
 
-                                <div class="form-group">
-                                    <label  for="exampleInputEmail1">Chọn phường/xã</label>
-                                    <select name="phuongXaId" id="phuongXaId" class="form-control selectpicker" data-live-search="true" > 
-                                        <option value="">--- Phường / Xã ---</option>
-                                    </select>      
 
-                                </div>
+
+
 
                                 <div class="form-group">
                                     <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
@@ -919,9 +940,8 @@
                 scrollwheel: false,
                 streetViewControl: false,
                 mapTypeControl: false
-            
+
         });
-       
         bts_layer = new ol.layer.Tile({
         source: new ol.source.TileWMS({
         url: url,
@@ -1116,11 +1136,11 @@
         var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
         gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
         view.on('change:center', function () {
-            var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
-            gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
+        var center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
+        gmap.setCenter(new google.maps.LatLng(center[1], center[0]));
         });
         view.on('change:resolution', function () {
-            gmap.setZoom(view.getZoom());
+        gmap.setZoom(view.getZoom());
         });
         ;
         map = new ol.Map({
@@ -1136,7 +1156,6 @@
         });
         olMapDiv.parentNode.removeChild(olMapDiv);
         gmap.controls[google.maps.ControlPosition.TOP_LEFT].push(olMapDiv);
-        
         loadMyLayer();
         displayLayer();
         map.on("moveend", function () {
@@ -1218,7 +1237,6 @@
         // sort tab
 
         });
-        
         //end init 
         }
 
@@ -1535,8 +1553,8 @@
         if ($('#quanHuyenId').val() !== '')
                 quanHuyenId = $('#quanHuyenId').val();
         if (tinhId !== '0' && $('#tinhTpId').val() !== '') {
-            where += " AND building.TINHTP_ID IN (" + tinhId + ') ';
-            whereProvince = where;
+        where += " AND building.TINHTP_ID IN (" + tinhId + ') ';
+        whereProvince = where;
         }
         if (quanHuyenId !== 0 && $('#quanHuyenId').val() !== '') {
         where += " AND building.QUANHUYEN_ID IN ( " + quanHuyenId + " ) ";
@@ -1546,7 +1564,7 @@
         phuongXaId = $('#phuongXaId').val();
         where = where + " AND building.PHUONGXA_ID IN( " + phuongXaId + " ) ";
         }
-       
+
         // check addfilter
         var listObjectFill = "";
         $("#boxSearch .groupFilter").each(function (i) {
@@ -1633,59 +1651,52 @@
 
         var vectorLayer = ol.source.Vector({});
         function searchMap() {
-            var loca_lat = $('#locationLat').val();
-            var loca_long = $('#locationLong').val();
-            
-            map.removeLayer(vectorLayer);
-            if( loca_lat != '' && loca_long != '') {
-                map.getView().setCenter(ol.proj.transform([Number(loca_long), Number(loca_lat)], 'EPSG:4326', 'EPSG:3857'));               
-                map.getView().setZoom(16);
-                var banKinh =  Number($('#radius').val());
-                var circle = new ol.geom.Circle(
-                    ol.proj.transform([Number(loca_long), Number(loca_lat)], 'EPSG:4326', 'EPSG:3857'),
-                    banKinh
+        var loca_lat = $('#locationLat').val();
+        var loca_long = $('#locationLong').val();
+        map.removeLayer(vectorLayer);
+        if (loca_lat != '' && loca_long != '') {
+        map.getView().setCenter(ol.proj.transform([Number(loca_long), Number(loca_lat)], 'EPSG:4326', 'EPSG:3857'));
+        map.getView().setZoom(16);
+        var banKinh = Number($('#radius').val());
+        var circle = new ol.geom.Circle(
+                ol.proj.transform([Number(loca_long), Number(loca_lat)], 'EPSG:4326', 'EPSG:3857'),
+                banKinh
                 );
-                
-                // Features
-                var circleFeature = new ol.Feature(circle);
-
-                // Source and vector layer
-                var vectorSource = new ol.source.Vector({
-                    projection: 'EPSG:4326',
-                    features: [circleFeature]
-                });
-
-                var style = new ol.style.Style({
-                    fill: new ol.style.Fill({
-                        color: 'rgba(255, 100, 50, 0.3)'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        width: 2,
+        // Features
+        var circleFeature = new ol.Feature(circle);
+        // Source and vector layer
+        var vectorSource = new ol.source.Vector({
+        projection: 'EPSG:4326',
+                features: [circleFeature]
+        });
+        var style = new ol.style.Style({
+        fill: new ol.style.Fill({
+        color: 'rgba(255, 100, 50, 0.3)'
+        }),
+                stroke: new ol.style.Stroke({
+                width: 2,
                         color: 'rgba(255, 100, 50, 0.8)'
-                    }),
-                    image: new ol.style.Circle({
-                        fill: new ol.style.Fill({
-                            color: 'rgba(55, 200, 150, 0.5)'
-                        }),
+                }),
+                image: new ol.style.Circle({
+                fill: new ol.style.Fill({
+                color: 'rgba(55, 200, 150, 0.5)'
+                }),
                         stroke: new ol.style.Stroke({
-                            width: 1,
-                            color: 'rgba(55, 200, 150, 0.8)'
+                        width: 1,
+                                color: 'rgba(55, 200, 150, 0.8)'
                         }),
                         radius: 7
-                    }),
-                });
+                }),
+        });
+        vectorLayer = new ol.layer.Vector({
+        source: vectorSource,
+                style: style
+        });
+        map.addLayer(vectorLayer);
+        $('#myModal').modal('hide');
+        return;
+        }
 
-                vectorLayer = new ol.layer.Vector({
-                    source: vectorSource,
-                    style: style
-                });
-
-                map.addLayer(vectorLayer);
-                
-                $('#myModal').modal('hide');
-                return;
-            }
-        
         var checkValue = false;
         $("#boxSearch .groupFilter").each(function (i) {
         if ($(this).find('.value_').val().trim() == '') {
@@ -1725,26 +1736,26 @@
         address: address.trim()
         }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-        if($("#tinhTpId").val().indexOf(',') == -1){
-            alert($("#tinhTpId").val().indexOf(','));
+        if ($("#tinhTpId").val().indexOf(',') == - 1){
+        alert($("#tinhTpId").val().indexOf(','));
 //            alert(1)
-            map.getView().setCenter(ol.proj.transform([results[0].geometry.location.lng(), results[0].geometry.location.lat()], 'EPSG:4326', 'EPSG:3857'));
-            map.getView().setZoom(15);
+        map.getView().setCenter(ol.proj.transform([results[0].geometry.location.lng(), results[0].geometry.location.lat()], 'EPSG:4326', 'EPSG:3857'));
+        map.getView().setZoom(15);
 //            alert(2)
         }
         //map.setCenter(results[0].geometry.location);
         if ($("#phuongXaId").val() !== '')
         {
-        
+
         district_layer.setVisible(false);
         province_layer.setVisible(false);
         //$('#chk_district').prop('checked', true);
         $('#chk_district').iCheck('uncheck');
         $('#chk_province').iCheck('uncheck');
         } else {
-        if ($("#quanHuyenId").val() == '' && $("#tinhTpId").val().indexOf(',') == -1)
+        if ($("#quanHuyenId").val() == '' && $("#tinhTpId").val().indexOf(',') == - 1)
         {
-            map.getView().setZoom(9);
+        map.getView().setZoom(9);
         var whereProvince = "  AND TINHTP_ID IN (" + $("#tinhTpId").val() + ') ';
         whereProvince = EscapeCommasSemiColons(whereProvince);
         province_layer.getSource().updateParams({"VIEWPARAMS": 'WHERE_:' + whereProvince});
@@ -1754,7 +1765,7 @@
         $('#chk_province').iCheck('check');
         }
         //map.setZoom(9); // 9 la tinh
-        else if ($("#quanHuyenId").val() != '' && $("#tinhTpId").val().indexOf(',') == -1)
+        else if ($("#quanHuyenId").val() != '' && $("#tinhTpId").val().indexOf(',') == - 1)
         {
         map.getView().setZoom(12);
         var where_district = " AND QUANHUYEN_ID IN ( " + $("#quanHuyenId").val() + " ) ";
@@ -1780,9 +1791,9 @@
         //$('#borough').show();
         $('#nameProvince').text(address);
         }
-            if($("#tinhTpId").val().indexOf(',') == -1){
-                getCountNode();
-            }
+        if ($("#tinhTpId").val().indexOf(',') == - 1){
+        getCountNode();
+        }
 //        enable ket qua tim kiem khi dung filter
         $('#bts').iCheck('check');
         bts_layer.setVisible(true);
@@ -1993,14 +2004,11 @@
         }
         });
         init();
-        
         $("label").click(function () {
-            if($(this).attr("for") != null){
-                $('#' + $(this).attr("for")).click();
-            }
+        if ($(this).attr("for") != null){
+        $('#' + $(this).attr("for")).click();
+        }
         });
-        
-        
         });
         closer.onclick = function () {
         overlay.setPosition(undefined);
@@ -2183,11 +2191,11 @@
         if (type == 11){
         linkDetail = '${pageContext.request.contextPath}/bscRnc/view/' + id;
         }
-        else if (type == 2 || type == 3 || type == 8 ){
-            linkDetail = '${pageContext.request.contextPath}/nodes/preUpdate/' + id + '/' + type;
+        else if (type == 2 || type == 3 || type == 8){
+        linkDetail = '${pageContext.request.contextPath}/nodes/preUpdate/' + id + '/' + type;
         }
-        else if (type == 5 || type == 6 || type == 7 ){
-            linkDetail = '${pageContext.request.contextPath}/cells/preUpdate/' + id + '/' + type;
+        else if (type == 5 || type == 6 || type == 7){
+        linkDetail = '${pageContext.request.contextPath}/cells/preUpdate/' + id + '/' + type;
         }
         else if (type == 0){
         linkDetail = '${pageContext.request.contextPath}/building/view/' + id;
@@ -2700,131 +2708,122 @@
                     var urlTopo = '${pageContext.request.contextPath}/broadband/topo/vpntopo?node1=' + node1 + '&node2=' + node2;
                     PopupCenter(urlTopo, '_blank', 800, 600);
                     }
-                    
+
                     //Function to add replaceAll to Strings
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
-};
-
-function EscapeCommasSemiColons(input){
-    var output=input.replaceAll(",", "\\,"); //replace all the commas
-    output=output.replaceAll(";", "\\;"); //replace all the SemiColons
-    return output;
-}
-
- function hdsd(media) {
-    window.open('${pageContext.request.contextPath}/hdsd/init?media=' + media, '_blank', 'width=700,height=500');
- }
- 
- // ve thuoc do do dai
- function openRuler(item){
-        //createMeasureTooltip();
-        //createHelpTooltip();
-
-        
-        map.removeInteraction(draw);
-        map.removeOverlay(measureTooltip);
-        map.removeOverlay(helpTooltip);
-        map.render();
-        if (item.value == 'none') {
-            map.removeLayer(layer_circle)
-            map.render();      
-        }
-        else{
-            
-            var layer_circle = new ol.layer.Vector({
-                source: new ol.source.Vector(),
-                style: new ol.style.Style({
-                  fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 255, 0.2)'
-                  }),
-                  stroke: new ol.style.Stroke({
-                    color: '#ffcc33',
-                    width: 2
-                  }),
-                  image: new ol.style.Circle({
-                    radius: 7,
-                    fill: new ol.style.Fill({
-                      color: '#ffcc33'
-                    })
-                  })
-                })
-              });
-            
-            map.addLayer(layer_circle);
-            createMeasureTooltip();
-            createHelpTooltip();
-            var type = (item.value == 'polygon' ? 'Polygon' : 'LineString');
-            draw = new ol.interaction.Draw({
-              source: new ol.source.Vector(),
-              type: type,
-              style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                  color: 'rgba(255, 255, 255, 0.2)'
-                }),
-                stroke: new ol.style.Stroke({
-                  color: 'rgba(0, 0, 0, 0.5)',
-                  lineDash: [10, 10],
-                  width: 2
-                }),
-                image: new ol.style.Circle({
-                  radius: 5,
-                  stroke: new ol.style.Stroke({
-                    color: 'rgba(0, 0, 0, 0.7)'
-                  }),
-                  fill: new ol.style.Fill({
-                    color: 'rgba(255, 255, 255, 0.2)'
-                  })
-                })
-              })
-            });
-            map.addInteraction(draw);
-
-           
-            map.on('pointermove', pointerMoveHandler);
-
-            map.getViewport().addEventListener('mouseout', function() {
-              helpTooltipElement.classList.add('hidden');
-            });
-            var listener;
-            draw.on('drawstart',
-                function(evt) {
-                  // set sketch
-                  sketch = evt.feature;
-
-                  /** @type {ol.Coordinate|undefined} */
-                  var tooltipCoord = evt.coordinate;
-
-                  listener = sketch.getGeometry().on('change', function(evt) {
-                    var geom = evt.target;
-                    var output;
-                    if (geom instanceof ol.geom.Polygon) {
-                      output = formatArea(geom);
-                      tooltipCoord = geom.getInteriorPoint().getCoordinates();
-                    } else if (geom instanceof ol.geom.LineString) {
-                      output = formatLength(geom);
-                      tooltipCoord = geom.getLastCoordinate();
+                    String.prototype.replaceAll = function(search, replacement) {
+                    var target = this;
+                    return target.replace(new RegExp(search, 'g'), replacement);
+                    };
+                    function EscapeCommasSemiColons(input){
+                    var output = input.replaceAll(",", "\\,"); //replace all the commas
+                    output = output.replaceAll(";", "\\;"); //replace all the SemiColons
+                    return output;
                     }
-                    measureTooltipElement.innerHTML = output;
-                    measureTooltip.setPosition(tooltipCoord);
-                  });
-                }, this);
 
-            draw.on('drawend',
-                function() {
-                  measureTooltipElement.className = 'tooltip tooltip-static';
-                  measureTooltip.setOffset([0, -7]);
-                  // unset sketch
-                  sketch = null;
-                  // unset tooltip so that a new one can be created
-                  measureTooltipElement = null;
-                  createMeasureTooltip();
-                  ol.Observable.unByKey(listener);
-                }, this);
+                    function hdsd(media) {
+                    window.open('${pageContext.request.contextPath}/hdsd/init?media=' + media, '_blank', 'width=700,height=500');
+                    }
 
-        }
- }
+                    // ve thuoc do do dai
+                    function openRuler(item){
+                    //createMeasureTooltip();
+                    //createHelpTooltip();
+
+
+                    map.removeInteraction(draw);
+                    map.removeOverlay(measureTooltip);
+                    map.removeOverlay(helpTooltip);
+                    map.render();
+                    if (item.value == 'none') {
+                    map.removeLayer(layer_circle)
+                            map.render();
+                    }
+                    else{
+
+                    var layer_circle = new ol.layer.Vector({
+                    source: new ol.source.Vector(),
+                            style: new ol.style.Style({
+                            fill: new ol.style.Fill({
+                            color: 'rgba(255, 255, 255, 0.2)'
+                            }),
+                                    stroke: new ol.style.Stroke({
+                                    color: '#ffcc33',
+                                            width: 2
+                                    }),
+                                    image: new ol.style.Circle({
+                                    radius: 7,
+                                            fill: new ol.style.Fill({
+                                            color: '#ffcc33'
+                                            })
+                                    })
+                            })
+                    });
+                    map.addLayer(layer_circle);
+                    createMeasureTooltip();
+                    createHelpTooltip();
+                    var type = (item.value == 'polygon' ? 'Polygon' : 'LineString');
+                    draw = new ol.interaction.Draw({
+                    source: new ol.source.Vector(),
+                            type: type,
+                            style: new ol.style.Style({
+                            fill: new ol.style.Fill({
+                            color: 'rgba(255, 255, 255, 0.2)'
+                            }),
+                                    stroke: new ol.style.Stroke({
+                                    color: 'rgba(0, 0, 0, 0.5)',
+                                            lineDash: [10, 10],
+                                            width: 2
+                                    }),
+                                    image: new ol.style.Circle({
+                                    radius: 5,
+                                            stroke: new ol.style.Stroke({
+                                            color: 'rgba(0, 0, 0, 0.7)'
+                                            }),
+                                            fill: new ol.style.Fill({
+                                            color: 'rgba(255, 255, 255, 0.2)'
+                                            })
+                                    })
+                            })
+                    });
+                    map.addInteraction(draw);
+                    map.on('pointermove', pointerMoveHandler);
+                    map.getViewport().addEventListener('mouseout', function() {
+                    helpTooltipElement.classList.add('hidden');
+                    });
+                    var listener;
+                    draw.on('drawstart',
+                            function(evt) {
+                            // set sketch
+                            sketch = evt.feature;
+                            /** @type {ol.Coordinate|undefined} */
+                            var tooltipCoord = evt.coordinate;
+                            listener = sketch.getGeometry().on('change', function(evt) {
+                            var geom = evt.target;
+                            var output;
+                            if (geom instanceof ol.geom.Polygon) {
+                            output = formatArea(geom);
+                            tooltipCoord = geom.getInteriorPoint().getCoordinates();
+                            } else if (geom instanceof ol.geom.LineString) {
+                            output = formatLength(geom);
+                            tooltipCoord = geom.getLastCoordinate();
+                            }
+                            measureTooltipElement.innerHTML = output;
+                            measureTooltip.setPosition(tooltipCoord);
+                            });
+                            }, this);
+                    draw.on('drawend',
+                            function() {
+                            measureTooltipElement.className = 'tooltip tooltip-static';
+                            measureTooltip.setOffset([0, - 7]);
+                            // unset sketch
+                            sketch = null;
+                            // unset tooltip so that a new one can be created
+                            measureTooltipElement = null;
+                            createMeasureTooltip();
+                            ol.Observable.unByKey(listener);
+                            }, this);
+                    }
+                    }
     </script>
     <script src="${pageContext.request.contextPath}/resources/js/measure.js" type="text/javascript"></script>
 </body>
