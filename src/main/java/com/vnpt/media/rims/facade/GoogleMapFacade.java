@@ -125,12 +125,49 @@ public class GoogleMapFacade {
             }
         }
     }
+    private String getTableName(String type){
+        String tableName="";
+        if(type.equals("2"))
+        {
+            tableName="omc_bts_info";
+        }
+        else if(type.equals("3")){
+            tableName="rims.omc_nodeb_info";
+        }
+        else if(type.equals("8")){
+            tableName="omc_enodeb_info";
+        }
+        else if(type.equals("5")){
+            tableName="omc_cell2g_info";
+        }
+        else if(type.equals("6")){
+            //Cell3G
+            tableName="OMC_CELL3G_INFO";
+        }
+        else if(type.equals("7")){
+            //Cell4G
+            tableName="OMC_CELL4G_INFO";
+        }
+        return tableName;
+    }
      public List<NodeBO> getNodes(String type, String where) {
         ResultSet rs = null;
         CallableStatement cstmt = null;
         Connection conn = null;
         ArrayList<NodeBO> arrayList = new ArrayList<>();
         try {
+            String extTableInfo=getTableName(type);
+            String sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude  FROM node a,building  where a.building_id=building.building_id ";
+            if(extTableInfo!=null && type!="")
+            {
+                sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude  FROM node a,building "
+                        + ", " + extTableInfo + " "
+                        + " where a.building_id=building.building_id"
+                        + " and a.node_id=" + extTableInfo+ ".node_id ";
+                        
+            }
+            if(where==null) where=" ";
+            String querySql = sqlCommand + where  +"  and rownum<200";
             conn = EnvManager.getDbConnection(RIMS_DS);
             String sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
             if (type.equals("2")) {
@@ -140,11 +177,13 @@ public class GoogleMapFacade {
             } else if (type.equals("8")) {
                 sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
             }
+            //
             cstmt = conn.prepareCall(sql);
             cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
-            cstmt.setString(2, where);
+            cstmt.setString(2,querySql);
             cstmt.setInt(3, 2);
             cstmt.executeQuery();
+            
             //return cstmt.getInt(1);
             rs = (ResultSet) cstmt.getObject(1);
             while (rs.next()) {
