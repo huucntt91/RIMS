@@ -19,8 +19,8 @@
                       <tr>
                          
                           <td class="text-left" >${item.code}</td>
-                          <td>${item.tenHeThong}</td>
-                          <td>${item.tenNeType}</td>
+                          <td class="text-left" >${item.tenHeThong}</td>
+                          <td class="text-left" >${item.tenNeType}</td>
                           <td class="text-left" alight="left">${item.address}</td>
                           <td>
                               <a onclick="SetLocation(${item.longitude},${item.latitude})"><i class="fa fa-search-plus"></i></a>  
