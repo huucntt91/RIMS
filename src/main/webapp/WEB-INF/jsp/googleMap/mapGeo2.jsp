@@ -1250,8 +1250,14 @@
         var url = source.getGetFeatureInfoUrl(
                 evt.coordinate, viewResolution, view.getProjection(),
         {'INFO_FORMAT': 'application/json', 'FEATURE_COUNT': 50});
-        if (url) {
-        getListNodeClick(url, nameType, evt);
+        if (url) 
+        {
+            getListNodeClick(url, nameType, evt);
+            //cuongvn - an neu ko click vao doi tuong
+            if(url.indexOf('detailGeo') < 0)
+            {
+                $('#iframeDetail').hide();
+            }
         }
         }
         }
@@ -1266,7 +1272,9 @@
         }
 
         function getListNodeClick(url, nameType, evt) {
-
+//console.log('url'+url);
+//console.log('nameType'+nameType);
+//console.log('evt'+evt);
         $.ajax({
         type: "POST",
                 url: url,
@@ -1348,8 +1356,9 @@
 //                    $("#table-content").append(html);
 //                        overlay.setPosition(evt.coordinate);
                 }
-                else{
-                $('#iframeDetail').hide();
+                else
+                {
+                   // $('#iframeDetail').hide();
 //                        overlay.setPosition(undefined);
 //                        closer.blur();
                 }

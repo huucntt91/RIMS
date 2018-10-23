@@ -222,7 +222,7 @@ public class MapGeo2Controller {
         GoogleMapFacade facade = new GoogleMapFacade();
 
         String whereLocation = " ";
-        if (model.getTinhId() != null && model.getTinhId() != "") {
+        if (model.getTinhId() != null && model.getTinhId() != ""  && !model.getTinhId().equals("0")) {
             whereLocation += " and building.tinhtp_id = " + model.getTinhId();
             if (model.getHuyenId() != null && model.getHuyenId() != "") {
                 whereLocation += " and building.quanhuyen_id = " + model.getHuyenId();
@@ -233,12 +233,61 @@ public class MapGeo2Controller {
         }
 
         String where = whereLocation + model.getWhere();
-        int totalBts = facade.getTotalNodes("2", where);
-        int totalNodeB = facade.getTotalNodes("3", where);
-        int totaleNodeB = facade.getTotalNodes("8", where);
-        int total2G = facade.getTotalNodes("5", where);
-        int total3G = facade.getTotalNodes("6", where);
-        int total4G = facade.getTotalNodes("7", where);
+        int totalBts=0;
+        try
+        {
+          totalBts = facade.getTotalNodes("2", where);
+        }
+        catch(Exception ex1)
+        {
+            ex1.getStackTrace();
+        }
+      
+        int totalNodeB= 0;
+        try
+        {
+            totalNodeB = facade.getTotalNodes("3", where);
+        }
+        catch(Exception ex1)
+        {
+            ex1.getStackTrace();
+        }
+        int totaleNodeB = 0;
+        try
+        {
+            totaleNodeB = facade.getTotalNodes("8", where);
+        }
+        catch(Exception ex1)
+        {
+            ex1.getStackTrace();
+        }
+        int total2G = 0;
+        try
+        {
+            total2G = facade.getTotalNodes("5", where);
+        }
+        catch(Exception ex1)
+        {
+            ex1.getStackTrace();
+        }
+        int total3G = 0;
+        try
+        {
+        total3G = facade.getTotalNodes("6", where);
+        }
+        catch(Exception ex1)
+        {
+            ex1.getStackTrace();
+        }
+        int total4G =0;
+         try
+        {
+        total4G = facade.getTotalNodes("7", where);
+        }
+        catch(Exception ex1)
+        {
+            ex1.getStackTrace();
+        }
         //Object to JSON in String
         return "{\"bts\":" + totalBts + ",\"nodeb\":" + totalNodeB + ",\"enodeb\":" + totaleNodeB + ",\"cell2g\":" + total2G + ",\"cell3g\":" + total3G + ",\"cell4g\":" + total4G + "}";
     }
@@ -251,7 +300,7 @@ public class MapGeo2Controller {
         GoogleMapFacade facade = new GoogleMapFacade();
         //
         String whereLocation = " ";
-        if (model.getTinhId() != null && model.getTinhId() != "") {
+        if (model.getTinhId() != null && model.getTinhId() != "" && !model.getTinhId().equals("0")) {
             whereLocation += " and building.tinhtp_id = " + model.getTinhId();
             if (model.getHuyenId() != null && model.getHuyenId() != "") {
                 whereLocation += " and building.quanhuyen_id = " + model.getHuyenId();
