@@ -7,9 +7,9 @@
     <thead>
         <tr>
          
-            <th>Code</th>
-            <th>Name</th>
-            <th>Type</th>
+            <th>Mã </th>
+            <th>Tên hệ thống</th>
+            <th>Loại</th>
             <th>Địa chỉ </th>
             <th>Vị trí</th>
         </tr>
