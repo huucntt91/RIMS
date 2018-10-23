@@ -249,7 +249,7 @@ public class MapGeo2Controller {
       public  String getNodes(@ModelAttribute(value = "model") FilterMapForm model, ModelMap mm,
             HttpServletRequest request) throws IOException {
         GoogleMapFacade facade = new GoogleMapFacade();
-
+        //
         String whereLocation = " ";
         if (model.getTinhId() != null && model.getTinhId() != "") {
             whereLocation += " and building.tinhtp_id = " + model.getTinhId();
@@ -260,7 +260,7 @@ public class MapGeo2Controller {
                 }
             }
         }
-
+        //
         String objectType=model.getObjectType();
         String where = whereLocation + model.getWhere();
         List<NodeBO> resultSearch=facade.getNodes(objectType, where);

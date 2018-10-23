@@ -198,7 +198,7 @@
         }
         gtag('js', new Date());
         gtag('config', 'UA-106468556-7');
-        gtag('set', {'user_id': '<%=request.getRemoteUser()%>}');
+        gtag('set', {'user_id': '<%=request.getRemoteUser()%>'});
     </script>
 
 </head>

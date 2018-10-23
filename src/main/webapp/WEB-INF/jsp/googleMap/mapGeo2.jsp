@@ -198,7 +198,7 @@
         }
         gtag('js', new Date());
         gtag('config', 'UA-106468556-7');
-        gtag('set', {'user_id': '<%=request.getRemoteUser()%>}');
+        gtag('set', {'user_id': '<%=request.getRemoteUser()%>'});
     </script>
 
 </head>
@@ -2101,9 +2101,9 @@
         
             $.ajax({
                type:'GET',
-               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch},
-               url:"${pageContext.request.contextPath}/mapGeo2/Nodes"",
-               success:function(data){
+               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}
+               ,url:"${pageContext.request.contextPath}/mapGeo2/Nodes"
+               ,success:function(data){
                     $('#filterResultContainer').html(data);
                     $('#borough2').show();
                },
