@@ -81,8 +81,16 @@ public class NodeBO {
     }
 
     private String code;
-
+    private String tenHeThong;
     private Long donViId;
+
+    public String getTenHeThong() {
+        return tenHeThong;
+    }
+
+    public void setTenHeThong(String tenHeThong) {
+        this.tenHeThong = tenHeThong;
+    }
     private String donViName;
     private Long thietBiId;
     private Long buildingId;
