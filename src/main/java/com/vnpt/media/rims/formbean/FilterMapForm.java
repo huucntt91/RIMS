@@ -56,6 +56,13 @@ public class FilterMapForm {
     public void setWhere(String where) {
         this.where = where;
     }
+    private String objectType;
+    public String getObjectType() {
+        return objectType;
+    }
 
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
     
 }

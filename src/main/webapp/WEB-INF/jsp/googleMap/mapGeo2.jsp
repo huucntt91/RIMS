@@ -532,32 +532,6 @@
                             </div>
                             <div class="modal-body modal-body-search" id="boxSearch">
                                 <div class="form-horizontal">
-                                    <div class="form-group">
-                                        <div class="locationFilter row">
-
-                                            <div class="col-md-4">                            
-                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Latitude</label>
-                                                <div class="col-md-8">
-                                                    <input type="number" id="locationLat" name="locationLat" placeholder="Latitude"  class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">                            
-                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Longitude</label>
-                                                <div  class="col-md-8">
-                                                    <input type="number" id="locationLong" name="locationLong" placeholder="Longitude"  class="form-control">
-                                                </div>
-
-                                            </div>
-                                            <div class="col-md-4">                            
-                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Bán kính(m)</label>
-                                                <div  class="col-md-8">
-                                                    <input type="number" id="radius" name="radius"  placeholder="Longitude" value="1000"  class="form-control">
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
                                     <!--tinhList-->
                                     <div class="form-group">
                                         <div class="row">
@@ -598,25 +572,67 @@
 
 
                                     </div> 
+                                    <div class="form-group">
+
+                                        <div class="locationFilter row">
+
+                                            <div class="col-md-4">                            
+                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Latitude</label>
+                                                <div class="col-md-8">
+                                                    <input type="number" id="locationLat" name="locationLat" placeholder="Latitude"  class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">                            
+                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Longitude</label>
+                                                <div  class="col-md-8">
+                                                    <input type="number" id="locationLong" name="locationLong" placeholder="Longitude"  class="form-control">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-4">                            
+                                                <label for="exampleInputEmail1" class="col-md-4 control-label">Bán kính(m)</label>
+                                                <div  class="col-md-8">
+                                                    <input type="number" id="radius" name="radius"  placeholder="Longitude" value="1000"  class="form-control">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label  class="col-md-4 control-label">Đối tượng</label>
+                                                <div class="col-md-8">
+                                                    <select name="selectObjectFill2" id="selectObjectFillFiler"  class="form-control objectFill2"  onchange="changeObjectFill2(this)">
+                                                        <option value="-1">Chọn Object</option>
+                                                        <option value="2">BTS</option>
+                                                        <option value="3">NodeB</option>
+                                                        <option value="8">eNodeB</option>
+                                                        <option value="5">Cell2G</option>
+                                                        <option value="6">Cell3G</option>
+                                                        <option value="7">Cell4G</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="col-md-12">
+                                                    <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
-
-
-
-
-                                <div class="form-group">
-                                    <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
-                                </div>
-                                 <div class="form-group" id="divResultSearch">
-                                                                
-                                                        </div>                            
-
+                                <div class="form-group" id="divResultSearch"> </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                                <button type="button" id="sm" onclick="searchMap()" class="btn btn-primary">Tìm kiếm</button>
+                                <p class="text-right">
+                                    <button type="button" id="sm" onclick="searchMap()" class="btn btn-primary">Tìm kiếm</button>  
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+
+                                </p>
                             </div>
-                                                        
+
                         </div>
                     </div>
                 </div>
@@ -678,10 +694,10 @@
         <!--form popup search-->
     </section>
     <div id="addFiller" style="display: none">
-        <div class="groupFilter">
+        <div class="groupFilter row">
             <div class="col-md-2">                            
                 <div class="form-group">
-                    <select name="objectFill"  class="form-control objectFill"  onchange="changeObjectFill(this)">
+                    <select name="objectFill"  class="form-control objectFill disabled"  onchange="changeObjectFill(this)" disabled="disabled">
                         <option value="-1">Chọn Object</option>
                         <option value="2">BTS</option>
                         <option value="3">NodeB</option>
@@ -1818,8 +1834,13 @@
         }
 
         function afterText() {
+        if ($('#selectObjectFillFiler').val() > 0){
         $('#boxSearch').append($('#addFiller').html());
         return false;
+        }
+        else{
+        window.alert('Bạn chưa chọn đối tượng tìm kiếm ');
+        }
         }
 
 
@@ -1839,6 +1860,25 @@
         html += htmlx;
         });
         $(that).parents('.groupFilter').find('.column').html(html);
+        };
+        });
+        }
+        function changeObjectFill2(that)
+        {
+        $('#boxSearch .groupFilter').remove();
+        var htmlObject = '<option value="' + $('#selectObjectFillFiler').val() + '">' + $("#selectObjectFillFiler option:selected").text() + '</option>';
+        $('#addFiller select[name="objectFill"]').html(htmlObject);
+        //
+        $.get("${pageContext.request.contextPath}/mapGeo/fillAttrObject/" + $(that).val(), function (data)
+        {
+        var html = '<option value="">Chọn thuộc tính</option>';
+        if (data.length > 0) {
+        data.forEach(function (entry) {
+        var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
+        html += htmlx;
+        });
+        $('#addFiller select[name="column"]').html(html);
+        afterText();
         };
         });
         }
@@ -2067,18 +2107,18 @@
         });
         }
         function SearchNodes(){
-            $('#whereFilter').text('');
-            var whereSearch = ' ';
-            var htmlFilter = '';
-            $("#boxSearch .groupFilter").each(function (i) {
-            whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
-            htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
-                    //alert(whereSearch);
-            });
-            
-            $.get("${pageContext.request.contextPath}/mapGeo2/Nodes", {tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
+        $('#whereFilter').text('');
+        $('#filterResultContainer').html('<h1> Đang lấy dữ liệu ...</h1>');
+        var whereSearch = ' ';
+        var htmlFilter = '';
+        $("#boxSearch .groupFilter").each(function (i) {
+        whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+        htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
+                //alert(whereSearch);
+        });
+        $.get("${pageContext.request.contextPath}/mapGeo2/Nodes", {objectType:$('#selectObjectFillFiler').val(),tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
             $('#filterResultContainer').html(data);
-            });
+        });
         }
         function getListHuyen(tinh)
         {
@@ -2847,27 +2887,27 @@
     </script>
     <script src="${pageContext.request.contextPath}/resources/js/measure.js" type="text/javascript"></script>
     <script>
-            function ShowAndHideResultFiler()
-            {
-                if($('#filterResultContainer').hasClass('hide'))
-                {
+                    function ShowAndHideResultFiler()
+                    {
+                    if ($('#filterResultContainer').hasClass('hide'))
+                    {
                     $('#btnFilterOption').html('-');
                     $('#filterResultContainer').removeClass('hide');
                     $('#filterResultContainer').removeClass('hidden');
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     $('#btnFilterOption').html('+');
                     $('#filterResultContainer').addClass('hide');
-                     $('#filterResultContainer').addClass('hidden');
-                }
-            }
-            function SetLocation(long,lat){
-                 map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
-                  map.getView().setZoom(18);
-                  ShowAndHideResultFiler();
-                 return false
-            }
+                    $('#filterResultContainer').addClass('hidden');
+                    }
+                    }
+                    function SetLocation(long, lat){
+                    map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
+                    map.getView().setZoom(18);
+                    ShowAndHideResultFiler();
+                    return false
+                    }
     </script>
 </body>
 </html>
