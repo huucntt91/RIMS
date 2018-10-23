@@ -244,7 +244,7 @@ public class MapGeo2Controller {
     }
     
     // API tra ve danh sach cac node
-    @RequestMapping(value = "/Nodes", method = RequestMethod.GET)
+     @RequestMapping(value = "/Nodes", method = RequestMethod.GET)
     // public @ResponseBody
       public  String getNodes(@ModelAttribute(value = "model") FilterMapForm model, ModelMap mm,
             HttpServletRequest request) throws IOException {

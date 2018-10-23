@@ -19,7 +19,7 @@
                       <tr>
                          
                           <td class="text-left" >${item.code}</td>
-                          <td></td>
+                          <td>${item.tenHeThong}</td>
                           <td>${item.tenNeType}</td>
                           <td class="text-left" alight="left">${item.address}</td>
                           <td>

@@ -150,6 +150,31 @@ public class GoogleMapFacade {
         }
         return tableName;
     }
+     private String getObjectName(String type){
+        String objectName="";
+        if(type.equals("2"))
+        {
+            objectName=",omc_bts_info.TEN_TREN_HE_THONG ";
+        }
+        else if(type.equals("3")){
+            objectName=",omc_nodeb_info.TEN_TREN_HE_THONG ";
+        }
+        else if(type.equals("8")){
+            objectName=",omc_enodeb_info.TEN_TREN_HE_THONG ";
+        }
+        else if(type.equals("5")){
+            objectName=",omc_cell2g_info.TEN_TREN_HE_THONG ";
+        }
+        else if(type.equals("6")){
+            //Cell3G
+            objectName=",OMC_CELL3G_INFO.TEN_TREN_HE_THONG ";
+        }
+        else if(type.equals("7")){
+            //Cell4G
+            objectName=",OMC_CELL4G_INFO.TEN_TREN_HE_THONG ";
+        }
+        return objectName;
+    }
      public List<NodeBO> getNodes(String type, String where) {
         ResultSet rs = null;
         CallableStatement cstmt = null;
@@ -157,10 +182,14 @@ public class GoogleMapFacade {
         ArrayList<NodeBO> arrayList = new ArrayList<>();
         try {
             String extTableInfo=getTableName(type);
-            String sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude  FROM node a,building  where a.building_id=building.building_id ";
-            if(extTableInfo!=null && type!="")
+            String objectName=getObjectName(type);
+            String sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude"
+                    + objectName + " "
+                    + "  FROM node a,building  where a.building_id=building.building_id ";
+            if(extTableInfo!=null && type!="" && !extTableInfo.equals(""))
             {
-                sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude  FROM node a,building "
+                sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude " + objectName
+                        + " FROM node a,building "
                         + ", " + extTableInfo + " "
                         + " where a.building_id=building.building_id"
                         + " and a.node_id=" + extTableInfo+ ".node_id ";
@@ -222,6 +251,16 @@ public class GoogleMapFacade {
                 {
                 
                 }
+                //Ten he thong
+                try
+                {
+                     item.setTenHeThong(rs.getString("TEN_TREN_HE_THONG"));
+                }
+                catch(Exception exx)
+                {
+                     exx.printStackTrace();
+                }
+               
                 arrayList.add(item);
             }
             return arrayList;

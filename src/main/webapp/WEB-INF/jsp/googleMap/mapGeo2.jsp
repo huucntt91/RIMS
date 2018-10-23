@@ -1881,7 +1881,7 @@
         html += htmlx;
         });
         $('#addFiller select[name="column"]').html(html);
-        afterText();
+        //afterText();
         };
         });
         }
@@ -2101,13 +2101,15 @@
         
             $.ajax({
                type:'GET',
-               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}
+               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#boxSearch #tinhTpId").val(), huyenId: $("#boxSearch #quanHuyenId").val(), xaId: $("#boxSearch #phuongXaId").val(), where: whereSearch}
                ,url:"${pageContext.request.contextPath}/mapGeo2/Nodes"
-               ,success:function(data){
+               ,success:function(data)
+               {
                     $('#filterResultContainer').html(data);
                     $('#borough2').show();
                },
-               error:function(){
+               error:function()
+                {
                     $('#filterResultContainer').html('');
                }
             });
