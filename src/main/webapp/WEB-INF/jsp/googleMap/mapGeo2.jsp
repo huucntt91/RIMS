@@ -1306,30 +1306,41 @@
 
                 postdata = postdata.substring(0, postdata.length - 1); ;
                 $.ajax({
-                type: "GET",
+                        type: "GET",
                         url: "${pageContext.request.contextPath}/mapDetail/detailGeo",
                         data: postdata,
-                        success: function(data) {
-//                            console.log(data);
-                        var isset = false;
-                        var neNew = $(data).find('#tabs li').attr('data-id');
-                        $("#tabs li").each(function (i) {
-                        if ($(this).attr('data-id') == neNew){
-                        isset = true;
-                        }
-                        });
-                        if (!isset){
-                        if ($('#tabs').text() == ''){
-                        $('#tabs').append($(data).find('#tabs').html().replace('class=""', 'class="active"'));
-                        $('#divDetail').append($(data).find('#divContent').html().replace('tab-pane fade', 'tab-pane fade active in'));
-                        } else{
-                        $('#tabs').append($(data).find('#tabs').html());
-                        $('#divDetail').append($(data).find('#divContent').html());
-                        }
-                        $("#tabs").html($("#tabs").children('li').sort(function(a, b){
-                        return ($(b).data('position')) < ($(a).data('position')) ? 1 : - 1;
-                        }));
-                        }
+                        success: function(data) 
+                        {
+                            // console.log(data);
+                            var isset = false;
+                            var neNew = $(data).find('#tabs li').attr('data-id');
+                            $("#tabs li").each(function (i) 
+                            {
+                                if ($(this).attr('data-id') == neNew)
+                                {
+                                isset = true;
+                                }
+                          
+                            });
+                            //
+                            if (!isset)
+                            {
+                                if ($('#tabs').text() == '')
+                                {
+                                     $('#tabs').append($(data).find('#tabs').html().replace('class=""', 'class="active"'));
+                                     $('#divDetail').append($(data).find('#divContent').html().replace('tab-pane fade', 'tab-pane fade active in'));
+                                } 
+                                else
+                                {
+                                    $('#tabs').append($(data).find('#tabs').html());
+                                    $('#divDetail').append($(data).find('#divContent').html());
+                                }
+                                $("#tabs").html($("#tabs").children('li').sort(function(a, b)
+                                {
+                                    return 1;
+                                    //return ($(b).data('position')) < ($(a).data('position')) ? 1 : - 1;
+                                }));
+                            }
                         }
                 });
                 $('#iframeDetail').show();
