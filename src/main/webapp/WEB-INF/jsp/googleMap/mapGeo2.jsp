@@ -1813,7 +1813,7 @@
         $('#nameProvince').text(address);
         }
         if ($("#tinhTpId").val().indexOf(',') == - 1){
-        getCountNode();
+            getCountNode();
         }
         SearchNodes();
 //        enable ket qua tim kiem khi dung filter
@@ -1833,14 +1833,17 @@
         }
         }
 
-        function afterText() {
-        if ($('#selectObjectFillFiler').val() > 0){
-        $('#boxSearch').append($('#addFiller').html());
-        return false;
-        }
-        else{
-        window.alert('Bạn chưa chọn đối tượng tìm kiếm ');
-        }
+        function afterText() 
+        {
+            if ($('#selectObjectFillFiler').val() > 0)
+            {
+                $('#boxSearch').append($('#addFiller').html());
+                return false;
+            }
+            else
+            {
+                window.alert('Bạn chưa chọn đối tượng tìm kiếm ');
+            }
         }
 
 
@@ -2063,62 +2066,51 @@
         };
         function getCountNode()
         {
-        $('#whereFilter').text('');
-        var whereSearch = ' ';
-        var htmlFilter = '';
-        $("#boxSearch .groupFilter").each(function (i) {
-        whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
-        htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
-                //alert(whereSearch);
-        });
-        if (whereSearch !== ' '){
-        //$('#whereFilter').text(htmlFilter);
-//        $('#divcountBTS').hide();
-//        $('#divcountNodeB').hide();
-//        $('#divcountCell2G').hide();
-//        $('#divcountCell3G').hide();
-//        $('#divcountCell4G').hide();
-//        $('#divcounteNodeB').hide();
-//        $("#boxSearch .groupFilter").each(function (i) {
-//        var typeId = $(this).find('.objectFill').val();
-//        if (typeId == 2){
-//        $('#divcountBTS').show();
-//        } else if (typeId == 3){
-//        $('#divcountNodeB').show();
-//        } else if (typeId == 5){
-//        $('#divcountCell2G').show();
-//        } else if (typeId == 6){
-//        $('#divcountCell3G').show();
-//        } else if (typeId == 7){
-//        $('#divcountCell4G').show();
-//        } else if (typeId == 8){
-//        $('#divcounteNodeB').show();
-//        }
-//        });
-        }
-        $.post("${pageContext.request.contextPath}/mapGeo/countNodes", {tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
-        $('#countBTS').text(data.bts);
-        $('#countNodeB').text(data.nodeb);
-        $('#counteNodeB').text(data.enodeb);
-        $('#countCell2G').text(data.cell2g);
-        $('#countCell3G').text(data.cell3g);
-        $('#countCell4G').text(data.cell4g);
-        $('#borough2').show();
-        });
+            $('#whereFilter').text('');
+            var whereSearch = ' ';
+            var htmlFilter = '';
+            $("#boxSearch .groupFilter").each(function (i) {
+            whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+            htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
+                    //alert(whereSearch);
+            });
+            if (whereSearch !== ' ')
+            {
+
+            }
+            $.post("${pageContext.request.contextPath}/mapGeo2/countNodes", {tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
+                $('#countBTS').text(data.bts);
+                $('#countNodeB').text(data.nodeb);
+                $('#counteNodeB').text(data.enodeb);
+                $('#countCell2G').text(data.cell2g);
+                $('#countCell3G').text(data.cell3g);
+                $('#countCell4G').text(data.cell4g);
+                $('#borough2').show();
+            });
         }
         function SearchNodes(){
-        $('#whereFilter').text('');
-        $('#filterResultContainer').html('<h1> Đang lấy dữ liệu ...</h1>');
-        var whereSearch = ' ';
-        var htmlFilter = '';
-        $("#boxSearch .groupFilter").each(function (i) {
-        whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
-        htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
-                //alert(whereSearch);
-        });
-        $.get("${pageContext.request.contextPath}/mapGeo2/Nodes", {objectType:$('#selectObjectFillFiler').val(),tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
-            $('#filterResultContainer').html(data);
-        });
+            $('#whereFilter').text('');
+            $('#filterResultContainer').html('<h1 class="text-left"> Đang lấy dữ liệu ...</h1>');
+            var whereSearch = ' ';
+            var htmlFilter = '';
+            $("#boxSearch .groupFilter").each(function (i) {
+            whereSearch = whereSearch + convertQueryTotalFilter($(this).find('.column').val().trim(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+            htmlFilter += $(this).find('.column option:selected').text() + "  " + $(this).find('.filterType').val() + " " + $(this).find('.value_').val() + " | "
+                    //alert(whereSearch);
+            });
+        
+            $.ajax({
+               type:'GET',
+               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch},
+               url:"${pageContext.request.contextPath}/mapGeo2/Nodes"",
+               success:function(data){
+                    $('#filterResultContainer').html(data);
+                    $('#borough2').show();
+               },
+               error:function(){
+                    $('#filterResultContainer').html('');
+               }
+            });
         }
         function getListHuyen(tinh)
         {
