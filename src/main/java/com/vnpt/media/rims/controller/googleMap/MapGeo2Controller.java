@@ -313,6 +313,7 @@ public class MapGeo2Controller {
         String objectType=model.getObjectType();
         String where = whereLocation + model.getWhere();
         List<NodeBO> resultSearch=facade.getNodes(objectType, where);
+        mm.put("objectType",objectType);
         mm.put("list", resultSearch);
         return NODE_LIST;
     }
