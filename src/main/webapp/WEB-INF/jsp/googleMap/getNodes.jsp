@@ -8,18 +8,23 @@
         <tr>
          
             <th>Mã </th>
-            <th>Tên hệ thống</th>
+             <c:if test="${objectType!='-1'}">
+                              <th>Tên hệ thống</th>
+                          </c:if>
+            
             <th>Loại</th>
             <th>Địa chỉ </th>
             <th>Vị trí</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody >
            <c:forEach var="item" items="${list}" >   
                       <tr>
                          
                           <td class="text-left" >${item.code}</td>
-                          <td class="text-left" >${item.tenHeThong}</td>
+                          <c:if test="${objectType!='-1'}">
+                              <td class="text-left" >${item.tenHeThong}</td>
+                          </c:if>
                           <td class="text-left" >${item.tenNeType}</td>
                           <td class="text-left" alight="left">${item.address}</td>
                           <td>
