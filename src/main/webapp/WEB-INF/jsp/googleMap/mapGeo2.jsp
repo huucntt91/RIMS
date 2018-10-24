@@ -1780,8 +1780,9 @@
         address: address.trim()
         }, function (results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
-        if ($("#tinhTpId").val().indexOf(',') == - 1){
-        alert($("#tinhTpId").val().indexOf(','));
+        if ($("#tinhTpId").val().indexOf(',') == - 1)
+        {
+           // alert($("#tinhTpId").val().indexOf(','));
 //            alert(1)
         map.getView().setCenter(ol.proj.transform([results[0].geometry.location.lng(), results[0].geometry.location.lat()], 'EPSG:4326', 'EPSG:3857'));
         map.getView().setZoom(15);
@@ -2920,11 +2921,11 @@
                     }
                     }
                     function SetLocation(long, lat){
-                    map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
-                    map.getView().setZoom(18);
-                    ShowAndHideResultFiler();
-                    $('#iframeDetail').hide();
-                    return false
+                        map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
+                        map.getView().setZoom(18);
+                        ShowAndHideResultFiler();
+                        $('#iframeDetail').hide();
+                        return false
                     }
     </script>
 </body>
