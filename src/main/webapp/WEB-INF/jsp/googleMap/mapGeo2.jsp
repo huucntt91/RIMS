@@ -394,12 +394,15 @@
                     <button id="btnFilterOption" onclick="ShowAndHideResultFiler()">-</button>
                     <a href="#" id="borough-closer" class="ol-popup-closer"><img draggable="false" class="emoji" alt="✖" src="https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/2716.svg"></a>
                     <h4 id="nameProvince"></h4>
-                    <div class="divTotalFill" id="divcountBTS"><strong>BTS:</strong> <span id="countBTS">0</span></div> 
+                    <div class="row">
+                         <div class="divTotalFill" id="divcountBTS"><strong>BTS:</strong> <span id="countBTS">0</span></div> 
                     <div class="divTotalFill" id="divcountCell2G"><strong>Cell2G:</strong> <span id="countCell2G">0</span></div> 
                     <div class="divTotalFill" id="divcountNodeB"><strong>NodeB:</strong> <span id="countNodeB">0</span></div> 
                     <div class="divTotalFill" id="divcountCell3G"><strong>Cell3G:</strong> <span id="countCell3G">0</span></div> 
                     <div class="divTotalFill" id="divcountNodeB"><strong>eNodeB:</strong> <span id="counteNodeB">0</span></div> 
                     <div class="divTotalFill" id="divcountCell4G"><strong>Cell4G:</strong> <span id="countCell4G">0</span></div> 
+                    </div>
+                   
                     <div id="whereFilter"></div>
                     <div id="filterResultContainer"></div>
                 </div>
@@ -2110,7 +2113,7 @@
         }
         function SearchNodes(){
             $('#whereFilter').text('');
-            $('#filterResultContainer').html('<h1 class="text-left"> Đang lấy dữ liệu ...</h1>');
+            $('#filterResultContainer').html('<h4 class="text-left"> Đang lấy dữ liệu ...</h4>');
             var whereSearch = ' ';
             var htmlFilter = '';
             $("#boxSearch .groupFilter").each(function (i) {
