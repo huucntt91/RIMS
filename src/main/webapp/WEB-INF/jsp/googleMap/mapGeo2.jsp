@@ -2114,7 +2114,11 @@
         }
         function SearchNodes(){
             $('#whereFilter').text('');
-            $('#filterResultContainer').html('<h4 class="text-left"> Đang lấy dữ liệu ...</h4>');
+            if($('#filterResultContainer').hasClass('hide')){
+                 $('#filterResultContainer').removeClass('hide');
+                 $('#filterResultContainer').removeClass('hidden');
+            }
+            $('#filterResultContainer').html('<h3 class="text-left"> Đang lấy dữ liệu ...</h4>');
             var whereSearch = ' ';
             var htmlFilter = '';
             $("#boxSearch .groupFilter").each(function (i) {
