@@ -2,8 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<div style="width:100%;max-height: 300px;overflow-y: scroll;">
-    <table class="table">
+
+<div style="width:100%;max-height: 500px;overflow-y: scroll;" class="table-responsive">
+    <table class="table" id="listNodes">
     <thead>
         <tr>
          
@@ -35,3 +36,8 @@
     </tbody>
 </table>
 </div>
+<script>
+   
+    $('#listNodes').DataTable();
+
+</script>
