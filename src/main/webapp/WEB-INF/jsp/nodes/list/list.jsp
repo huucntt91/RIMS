@@ -1005,8 +1005,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                         <th>Mã trạm dự án</th>
 
                                         <th>Tên trên hệ thống</th>
-                                        <th>Lac</th>
-                                        <th>Ci</th>
+                                        
                                         <th>Tên băng tần</th>
                                         <th>Pci</th>
                                         <th>tac</th>
@@ -1232,8 +1231,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <td>${item.codeTramDA}</td>
 
                                             <td>${item.tenTrenHeThong}</td>
-                                            <td>${item.lac}</td>
-                                            <td>${item.ci}</td>
+                                           
                                             <td>${item.tenBangTan}</td>
                                             <td>${item.pci}</td>
                                             <td>${item.tac}</td>
