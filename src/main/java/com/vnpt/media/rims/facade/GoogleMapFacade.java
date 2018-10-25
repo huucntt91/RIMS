@@ -196,7 +196,7 @@ public class GoogleMapFacade {
                         
             }
             if(where==null) where=" ";
-            String querySql = sqlCommand + where  +"  and rownum<200";
+            String querySql = sqlCommand + where  +"  ";
             conn = EnvManager.getDbConnection(RIMS_DS);
             String sql = "begin ?:=pkg_test.GoogleMapSearch(?,?) ; end;";
             if (type.equals("2")) {
