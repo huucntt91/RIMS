@@ -231,25 +231,138 @@ public class GoogleMapFacade {
                 {
                     item.setTenNeType("NODEB");
                 }
-                else if(rs.getLong("ne_type_id")==8)
-                {
-                    item.setTenNeType("ENODEB");
-                }
+               
                 else if(rs.getLong("ne_type_id")==5)
                 {
                     item.setTenNeType("2G");
                 }
                 else if(rs.getLong("ne_type_id")==6)
                 {
-                    item.setTenNeType("3G");
+                    item.setTenNeType("CELL3G");
                 }
                 else if(rs.getLong("ne_type_id")==7)
                 {
-                    item.setTenNeType("4G");
+                    item.setTenNeType("CELL4G");
+                }
+                 else if(rs.getLong("ne_type_id")==8)
+                {
+                    item.setTenNeType("ENODEB");
+                }
+                else if(rs.getLong("ne_type_id")==9)
+                {
+                    item.setTenNeType("NODE_QH");
+                }
+                else if(rs.getLong("ne_type_id")==10)
+                {
+                    item.setTenNeType("NODE_DA");
+                }
+                else if(rs.getLong("ne_type_id")==11)
+                {
+                    item.setTenNeType("BSC_RNC_MBSC");
+                }
+                else if(rs.getLong("ne_type_id")==12)
+                {
+                    item.setTenNeType("MSC");
+                }
+                else if(rs.getLong("ne_type_id")==13)
+                {
+                    item.setTenNeType("MSS");
+                }
+                else if(rs.getLong("ne_type_id")==14)
+                {
+                    item.setTenNeType("MGW");
+                }
+                else if(rs.getLong("ne_type_id")==15)
+                {
+                    item.setTenNeType("STP");
+                }
+                else if(rs.getLong("ne_type_id")==16)
+                {
+                    item.setTenNeType("TSS");
+                }
+                else if(rs.getLong("ne_type_id")==17)
+                {
+                    item.setTenNeType("HSS");
+                }
+                else if(rs.getLong("ne_type_id")==18)
+                {
+                    item.setTenNeType("HLR");
+                }
+                else if(rs.getLong("ne_type_id")==19)
+                {
+                    item.setTenNeType("IMS");
+                }
+                else if(rs.getLong("ne_type_id")==20)
+                {
+                    item.setTenNeType("NGN");
+                }
+                else if(rs.getLong("ne_type_id")==21)
+                {
+                    item.setTenNeType("ANTEN");
+                }
+                else if(rs.getLong("ne_type_id")==22)
+                {
+                    item.setTenNeType("SGSN");
+                }
+                 else if(rs.getLong("ne_type_id")==23)
+                {
+                    item.setTenNeType("GGSN");
+                }
+                  else if(rs.getLong("ne_type_id")==24)
+                {
+                    item.setTenNeType("MME");
+                }
+                 else if(rs.getLong("ne_type_id")==25)
+                {
+                    item.setTenNeType("PGW");
+                }
+                 else if(rs.getLong("ne_type_id")==26)
+                {
+                    item.setTenNeType("SMSC");
+                }
+                else if(rs.getLong("ne_type_id")==27)
+                {
+                    item.setTenNeType("SMPP");
+                }
+                else if(rs.getLong("ne_type_id")==28)
+                {
+                    item.setTenNeType("DSR");
+                }
+                else if(rs.getLong("ne_type_id")==29)
+                {
+                    item.setTenNeType("MCA");
+                }
+                else if(rs.getLong("ne_type_id")==30)
+                {
+                    item.setTenNeType("CRBT");
+                }
+                 else if(rs.getLong("ne_type_id")==31)
+                {
+                    item.setTenNeType("USSD");
+                }
+                  else if(rs.getLong("ne_type_id")==32)
+                {
+                    item.setTenNeType("DNS");
+                }
+                 else if(rs.getLong("ne_type_id")==33)
+                {
+                    item.setTenNeType("RC");
+                }
+                else if(rs.getLong("ne_type_id")==33)
+                {
+                    item.setTenNeType("RC");
+                }
+                 else if(rs.getLong("ne_type_id")==34)
+                {
+                    item.setTenNeType("SDP");
+                }
+                 else if(rs.getLong("ne_type_id")==35)
+                {
+                    item.setTenNeType("FDA");
                 }
                 else
                 {
-                
+                item.setTenNeType("");
                 }
                 //Ten he thong
                 try

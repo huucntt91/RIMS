@@ -39,6 +39,8 @@ public abstract class DAOFactory {
     public abstract ITinh getTinhDAO();
 
     public abstract IThietBi getThietBiDAO();
+    
+    public abstract IDieuHoa getDieuHoaDAO();
 
     public abstract INode getNodeDAO();
 

@@ -377,6 +377,62 @@ public class CategoriesFacade {
         }
     }
 
+     public List<LoaiDieuHoaBO> findAllDieuHoa(String id) throws ServiceException {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            IDieuHoa iDieuHoa = factory.getDieuHoaDAO();
+            trans.connectionType(DB_ADMIN);
+            iDieuHoa.setTransaction(trans);
+            return iDieuHoa.findAll(id);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+    // Thiet Bi
+    // modify Thiet Bi  (add,edit,del)
+    public int modifyDieuHoa(String action, LoaiDieuHoaBO dieuHoaBO) throws ServiceException {
+        ITransaction trans = null;
+        int result = -1;
+        try {
+            trans = factory.getTransaction();
+            IDieuHoa iDieuHoa = factory.getDieuHoaDAO();
+            trans.connectionType(DB_ADMIN);
+            iDieuHoa.setTransaction(trans);
+            trans.beginTransaction();
+            result = iDieuHoa.modify(action, dieuHoaBO);
+            trans.commit();
+            trans.endTransaction();
+
+        } catch (DAOException de) {
+            DatabaseUtils.rollback(trans);
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+            return result;
+        }
+    }
+     public List<ThietBiBO> findAllThietBi(String id) throws ServiceException {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            IThietBi iThietBi = factory.getThietBiDAO();
+            trans.connectionType(DB_ADMIN);
+            iThietBi.setTransaction(trans);
+            return iThietBi.findAll(id);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+     
+   
     // Thiet Bi
     // modify Thiet Bi  (add,edit,del)
     public int modifyThietBi(String action, ThietBiBO thietBiBO) throws ServiceException {
@@ -401,23 +457,6 @@ public class CategoriesFacade {
             return result;
         }
     }
-
-    public List<ThietBiBO> findAllThietBi(String id) throws ServiceException {
-        ITransaction trans = null;
-        try {
-            trans = factory.getTransaction();
-            IThietBi iThietBi = factory.getThietBiDAO();
-            trans.connectionType(DB_ADMIN);
-            iThietBi.setTransaction(trans);
-            return iThietBi.findAll(id);
-        } catch (DAOException de) {
-            logger.error("DAOException : ", de);
-            throw new ServiceException(de);
-        } finally {
-            DatabaseUtils.close(trans);
-        }
-    }
-
     public List<ThietBiBO> findThietBiByName(String name) throws ServiceException {
         ITransaction trans = null;
         try {

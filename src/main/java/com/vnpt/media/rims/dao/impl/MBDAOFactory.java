@@ -12,6 +12,7 @@ import com.vnpt.media.rims.dao.IMenuAction;
 import com.vnpt.media.rims.dao.INetworkType;
 import com.vnpt.media.rims.dao.IPhancap;
 import com.vnpt.media.rims.dao.IThietBi;
+import com.vnpt.media.rims.dao.IDieuHoa;
 import com.vnpt.media.rims.dao.ITinh;
 import com.vnpt.media.rims.dao.ILoaiAnTen;
 import com.vnpt.media.rims.dao.IUsers;
@@ -63,7 +64,10 @@ public class MBDAOFactory extends DAOFactory {
     public IThietBi getThietBiDAO() {
         return new ThietBiDAO();
     }
-
+    @Override
+    public IDieuHoa getDieuHoaDAO() {
+        return new DieuHoaDAO();
+    }
     @Override
     public ILoaiAnTen getLoaiAnTenDAO() {
         return new LoaiAnTenDAO();
