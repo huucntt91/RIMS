@@ -185,7 +185,7 @@ public class GoogleMapFacade {
             String objectName=getObjectName(type);
             String sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude"
                     + objectName + " "
-                    + "  FROM node a,building  where a.building_id=building.building_id and a.ne_type_id in (2,3,5,6,7,8) ";
+                    + "  FROM node a,building  where a.building_id=building.building_id and a.ne_type_id in (2,3,5,6,7,8) and a.status=211 ";
             if(extTableInfo!=null && type!="" && !extTableInfo.equals(""))
             {
                 sqlCommand="SELECT a.node_id, a.ma_node,a.ne_type_id, a.donvi_id,a.thiet_bi_id, a.building_id,building.dia_chi,building.latitude,building.longitude " + objectName
@@ -193,7 +193,7 @@ public class GoogleMapFacade {
                         + ", " + extTableInfo + " "
                         + " where a.building_id=building.building_id"
                         + " and a.node_id=" + extTableInfo+ ".node_id "
-                        + " and a.ne_type_id="+ type + " ";
+                        + " and a.ne_type_id="+ type + "  and a.status=211 ";
                         
             }
             if(where==null) where=" ";
