@@ -16,6 +16,7 @@
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/quan/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/tinh/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/thietbi/*" />
+    <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/dieuhoa/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/truyendan/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/tunguon/*" />
     <mapping exclude="true" decorator="/decorators/dashboardtheme" path="/dv/*" />
