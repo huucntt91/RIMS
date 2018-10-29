@@ -89,9 +89,13 @@ public class PhuTroController {
     @ModelAttribute("loaiantenList")
     public List findAllLoaiAnten() {
         CategoriesFacade facade = new CategoriesFacade();
-        return facade.findAllAnTen("");
+        return facade.findAllLoaiTram("");
     }
-    
+    @ModelAttribute("loaidieuhoaList")
+    public List findAllLoaiDieuHoa() {
+        CategoriesFacade facade = new CategoriesFacade();
+        return facade.findAllDieuHoa("");
+    }
     @ModelAttribute("loaicotantenList")
     public List findAllLoaiCotAnten() {
         DmLoaiCotAntenFacade facade = new DmLoaiCotAntenFacade();
