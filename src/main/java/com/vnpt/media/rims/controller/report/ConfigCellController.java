@@ -318,8 +318,8 @@ public class ConfigCellController extends BaseController {
                         ls.add(item.getSystemName());
                         ls.add(item.getCi());
                         ls.add(item.getFrequencyBand());
-                        ls.add(item.getUarfcn());
                         ls.add(item.getBandWidth());
+                        ls.add(item.getUarfcn());
                         ls.add(item.getPci());
                         ls.add(item.getTac());
                         ls.add(item.getLcrid());
