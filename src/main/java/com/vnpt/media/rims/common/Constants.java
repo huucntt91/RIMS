@@ -3,12 +3,8 @@ package com.vnpt.media.rims.common;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.connection.JdbcConfig;
 
-
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +14,20 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class Constants {
+
+    public static final String INSERT_ACTION = "INSERT";
+    public static final String DELETE_ACTION = "DELETE";
+    public static final String UPDATE_ACTION = "UPDATE";
+    public static final String BUILDING_OBJECT = "BUILDING";
+    public static final String BTS_OBJECT = "BTS";
+    public static final String NODEB_OBJECT = "NODEB";
+    public static final String ENODEB_OBJECT = "ENODEB";
+    public static final String CELL2G_OBJECT = "CELL2G";
+    public static final String CELL3G_OBJECT = "CELL3G";
+    public static final String CELL4G_OBJECT = "CELL4G";
+    public static final String BSC_OBJECT = "BSC";
+    public static final String RNC_OBJECT = "RNC";
+    public static final String PHU_TRO_OBJECT = "PHU_TRO";
 
     public static final String FOLDER_SAVE_IMG = "/resources/img/topo/";
     public static final int BATCH_ROW_COMMIT = 30;
@@ -81,6 +91,7 @@ public class Constants {
     public static int NE_APPROVE_OFF = 111;
     public static int NE_UNAPPROVE_OFF = 221;
     public static String API_RIMS = "";
+
     static {
         loadConfiguration();
     }

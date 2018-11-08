@@ -149,17 +149,29 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-    <servlet>
-        <servlet-name>data-report-servlet</servlet-name>
-        <servlet-class>
-            com.vnpt.media.rims.job.QuartServlet
-        </servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet> 
     <context-param>
         <param-name>defaultHtmlEscape</param-name>
         <param-value>true</param-value>
     </context-param> 
- 
-
+    
+    <!-- config quarzt -->
+    <context-param>
+         <param-name>quartz:config-file</param-name>
+         <param-value>quartz.properties</param-value>
+     </context-param>
+     <context-param>
+         <param-name>quartz:shutdown-on-unload</param-name>
+         <param-value>true</param-value>
+     </context-param>
+     <context-param>
+         <param-name>quartz:wait-on-shutdown</param-name>
+         <param-value>true</param-value>
+     </context-param>
+     <context-param>
+         <param-name>quartz:start-on-load</param-name>
+         <param-value>true</param-value>
+     </context-param>
+     <listener>
+         <listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
+     </listener>
 </web-app>

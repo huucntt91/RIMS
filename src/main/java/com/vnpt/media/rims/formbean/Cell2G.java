@@ -34,6 +34,26 @@ public class Cell2G implements Serializable{
     String cell_id_ocs;
     String lacStr;
     String ciStr;
+    String provinceName;
+    String areaName;
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+    
+    
 
     public String getCell_id_ocs() {
         return cell_id_ocs;

@@ -74,10 +74,10 @@ public class ChartFacade {
         }
         return arrayList;
     }
-    
+
     /*
     load du lieu de vieu bieu do so luong parsed
-    */
+     */
     public static List<ChartBO> fn_get_parsing(String ne_type, String p_vendor, String p_start_time, String p_end_time) {
 
         CallableStatement cstmt = null;
@@ -98,7 +98,7 @@ public class ChartFacade {
             rs = (ResultSet) cstmt.getObject(1);
             while (rs.next()) {
                 ChartBO item = new ChartBO();
-                item.setVendor(rs.getString("vendor"));
+                item.setVendor(rs.getString("vendor") == null ? "" : rs.getString("vendor"));
                 item.setFile_num(rs.getInt("num"));
                 item.setDownload_time(new Date(rs.getDate("parsing_time").getTime()));
                 arrayList.add(item);

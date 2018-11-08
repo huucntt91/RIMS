@@ -55,7 +55,7 @@ public class QuartServlet implements Servlet {
 //            scheduler = new StdSchedulerFactory().getScheduler();
 //            scheduler.start();
 //            scheduler.scheduleJob(job, trigger);
-            addJob(scheduler, "AutoMailJob", "Mail", StringUtils.getString("schedule_lac_ci"), jobDataMap);
+//            addJob(scheduler, "AutoMailListener", "AutoMailListener", "0 0/1 * * * ?", jobDataMap);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
@@ -68,13 +68,13 @@ public class QuartServlet implements Servlet {
                 scheduler.start();
             }
             if (schedule == null || schedule.isEmpty()) {
-                schedule = "0 0/15 * * * ?";
+                schedule = "0 00/05 * * * ?";
             }
             JobKey jobKey = new JobKey(jobName, jobGroup);
             if (scheduler.checkExists(jobKey)) {
                 scheduler.deleteJob(jobKey);
             }
-            JobDetail jobDetail = JobBuilder.newJob(AutoMailJob.class)
+            JobDetail jobDetail = JobBuilder.newJob(AutoMailListener.class)
                     .withIdentity(jobKey).usingJobData(jobDataMap).build();
             Trigger trigger = newTrigger()
                     .withIdentity("trigger_" + jobName, jobGroup)

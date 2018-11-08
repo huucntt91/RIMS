@@ -26,6 +26,25 @@ public class Cell4G {
     String uarcn;
     String oam_ip;
     String service_ip;
+    String provinceName;
+    String areaName;
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+    
 
     public String getCell_name() {
         return cell_name;

@@ -36,7 +36,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class StringUtils {
 
     private static Logger logger = LogManager.getLogger(StringUtils.class);
-
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("config", Locale.getDefault());
     private static final String FOLDER_SEPARATOR = "/";
     private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
     private static final String TOP_PATH = "..";
@@ -2589,7 +2589,6 @@ public class StringUtils {
     // lay ra thu muc chua file template
     public static String getFolderTemp() {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("config");
             String folderTemp = System.getProperty("catalina.base") + File.separator + resourceBundle.getString("folder_temp");
             File folder = new File(folderTemp);
             if (!folder.exists()) {
@@ -2605,7 +2604,7 @@ public class StringUtils {
     // lay ra thu muc chua file template
     public static String getString(String key) {
         try {
-            ResourceBundle resourceBundle = ResourceBundle.getBundle("config",Locale.getDefault());
+            
             return resourceBundle.getString(key);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

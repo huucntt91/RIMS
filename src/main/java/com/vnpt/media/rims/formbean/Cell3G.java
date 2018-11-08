@@ -35,6 +35,26 @@ public class Cell3G implements Serializable{
     String dcSupport;
     String oamIp;
     String serviceIp;
+    String provinceName;
+    String areaName;
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+    
+    
 
     public String getRac() {
         return rac;

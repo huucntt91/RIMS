@@ -5,19 +5,14 @@
  */
 package com.vnpt.media.rims.job;
 
+import com.vnpt.media.rims.bean.EmailReportBO;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
+import com.vnpt.media.rims.common.utils.ZipUtils;
 import com.vnpt.media.rims.facade.AutoMailFacade;
-import com.vnpt.media.rims.formbean.Cell2G;
-import com.vnpt.media.rims.formbean.Cell3G;
-import com.vnpt.media.rims.formbean.Cell4G;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
@@ -31,14 +26,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.servlet.ServletContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -60,450 +49,39 @@ public class AutoMailJob implements Job {
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
         try {
+            String jobKey = jec.getJobDetail().getKey().getName();
             List<JobExecutionContext> jobs = jec.getScheduler().getCurrentlyExecutingJobs();
             for (JobExecutionContext job : jobs) {
                 if (job.getTrigger().equals(jec.getTrigger()) && !job.getJobInstance().equals(this)) {
-                    logger.info("Another job instance running, leaving : " + jec.getJobDetail().getKey().getName());
+                    logger.info("Another job instance running, leaving : " + jobKey);
                     return;
                 }
             }
-            logger.info("auto mail job: {}", new Date().toString());
-            ServletContext servletContext = (ServletContext) jec.getMergedJobDataMap().get("servletContext");
-            String toAddress = StringUtils.getString("to_address_lac_ci");
-            String subject = StringUtils.getString("subject_lac_ci");
-            String message = "";
-            ArrayList<String> attachFiles = new ArrayList<>();
-            String folderTemp = StringUtils.getFolderTemp();
-            String dataDirectory = servletContext.getRealPath("/WEB-INF/excel-templates/");
-            //gui mail nhung cell 2G trung LAC-CI tren inventory
-            String fileName2G = "Cell2G_Duplicate_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List cell2G = AutoMailFacade.findCell2G();
-            message += "- Số lượng Cell2G trùng LAC-CI trên Inventory: ".concat(cell2G == null ? "" : String.valueOf(cell2G.size())).concat(" \t\n");
-            writeDuplicateLacCi(fileName2G, new File(dataDirectory + File.separator + "CELL2G_Duplicate_LacCi.xlsx"), folderTemp, cell2G);
-            attachFiles.add(folderTemp + File.separator + fileName2G);
-            //gui mail nhung cell 3G trung LAC-CI tren inventory
-            String fileName3G = "Cell3G_Duplicate_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List cell3G = AutoMailFacade.findCell3G();
-            message += "- Số lượng Cell3G trùng LAC-CI trên Inventory: ".concat(cell3G == null ? "" : String.valueOf(cell3G.size())).concat(" \t\n\t\n");
-            writeDuplicateLacCi(fileName3G, new File(dataDirectory + File.separator + "CELL3G_Duplicate_LacCi.xlsx"), folderTemp, cell3G);
-            attachFiles.add(folderTemp + File.separator + fileName3G);
-            //gui mail canh bao nhung cell co tren SMRS va khong co tren Inventory
-            String fileNameSmrsInventory = "SMRS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List smrsInventory = AutoMailFacade.findSmrsInventory();
-            message += "- Số lượng Cell có trên SMRS và không có trên Inventory: ".concat(smrsInventory == null ? "" : String.valueOf(smrsInventory.size())).concat(" \t\n\t\n");
-            writeCellSmrsInventory(fileNameSmrsInventory, new File(dataDirectory + File.separator + "SMRS_INVENTORY.xlsx"), folderTemp, smrsInventory);
-            attachFiles.add(folderTemp + File.separator + fileNameSmrsInventory);
-            //gui mail canh bao nhung cell tren inventory khong tim thay tren RIMS
-            String fileNameInventoryRims2G = "Cell2G_INVENTORY_RIMS_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List inventoryRims2G = AutoMailFacade.inventoryRims("5");
-            message += "- Số lượng Cell 2G có trên Inventory và không có trên Rims: ".concat(inventoryRims2G == null ? "" : String.valueOf(inventoryRims2G.size())).concat(" \t\n");
-            writeInventoryRims(fileNameInventoryRims2G, new File(dataDirectory + File.separator + "Cell2G_Inventory_Rims.xlsx"), folderTemp, inventoryRims2G);
-            attachFiles.add(folderTemp + File.separator + fileNameInventoryRims2G);
-            //
-            String fileNameInventoryRims3G = "Cell3G_INVENTORY_RIMS_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List inventoryRims3G = AutoMailFacade.inventoryRims("6");
-            message += "- Số lượng Cell 3G có trên Inventory và không có trên Rims: ".concat(inventoryRims3G == null ? "" : String.valueOf(inventoryRims3G.size())).concat(" \t\n");
-            writeInventoryRims(fileNameInventoryRims3G, new File(dataDirectory + File.separator + "Cell3G_Inventory_Rims.xlsx"), folderTemp, inventoryRims3G);
-            attachFiles.add(folderTemp + File.separator + fileNameInventoryRims3G);
-            //
-            String fileNameInventoryRims4G = "Cell4G_INVENTORY_RIMS_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List inventoryRims4G = AutoMailFacade.inventoryRims("7");
-            message += "- Số lượng Cell 4G có trên Inventory và không có trên Rims: ".concat(inventoryRims4G == null ? "" : String.valueOf(inventoryRims4G.size())).concat(" \t\n\t\n");
-            writeInventoryRims(fileNameInventoryRims4G, new File(dataDirectory + File.separator + "Cell4G_Inventory_Rims.xlsx"), folderTemp, inventoryRims4G);
-            attachFiles.add(folderTemp + File.separator + fileNameInventoryRims4G);
-            //gui mail canh bao nhung cell co tren rims khong tim thay tren inventory
-            String fileNameRimsInventory4G = "Cell4G_RIMS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List rimsInventory4G = AutoMailFacade.rimsInventory("7");
-            message += "- Số lượng Cell 4G có trên Rims và không có trên Inventory: ".concat(rimsInventory4G == null ? "" : String.valueOf(rimsInventory4G.size())).concat(" \t\n");
-            writeRimsInventory(fileNameRimsInventory4G, new File(dataDirectory + File.separator + "Cell4G_Rims_Inventory.xlsx"), folderTemp, rimsInventory4G);
-            attachFiles.add(folderTemp + File.separator + fileNameRimsInventory4G);
-            //
-             String fileNameRimsInventory3G = "Cell3G_RIMS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List rimsInventory3G = AutoMailFacade.rimsInventory("6");
-            message += "- Số lượng Cell 3G có trên Rims và không có trên Inventory: ".concat(rimsInventory3G == null ? "" : String.valueOf(rimsInventory3G.size())).concat(" \t\n");
-            writeRimsInventory(fileNameRimsInventory3G, new File(dataDirectory + File.separator + "Cell3G_Rims_Inventory.xlsx"), folderTemp, rimsInventory3G);
-            attachFiles.add(folderTemp + File.separator + fileNameRimsInventory3G);
-            //
-             String fileNameRimsInventory2G = "Cell2G_RIMS_INVENTORY_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            List rimsInventory2G = AutoMailFacade.rimsInventory("5");
-            message += "- Số lượng Cell 2G có trên Rims và không có trên Inventory: ".concat(rimsInventory2G == null ? "" : String.valueOf(rimsInventory2G.size())).concat(" \t\n");
-            writeRimsInventory(fileNameRimsInventory2G, new File(dataDirectory + File.separator + "Cell2G_Rims_Inventory.xlsx"), folderTemp, rimsInventory2G);
-            attachFiles.add(folderTemp + File.separator + fileNameRimsInventory2G);
-            
-            //send mail
-            sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, toAddress, subject, message, attachFiles);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
+            logger.info("AutoMailJob running : " + jobKey);
+            String idReportMail = jec.getJobDetail().getJobDataMap().getString("idReportMail");
+            String reportMailName = jec.getJobDetail().getJobDataMap().getString("reportMailName");
+            String listMail = jec.getJobDetail().getJobDataMap().getString("listMail");
+            String emailDetail = jec.getJobDetail().getJobDataMap().getString("emailDetail");
 
-    private void writeDuplicateLacCi(String fileName, File fileTemplate, String folderTemp, List<?> temp) {
-        try {
-            FileInputStream fin = new FileInputStream(fileTemplate);
-            XSSFWorkbook workbook = null;
-            workbook = new XSSFWorkbook(fin);
-            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
-
-            Cell cell = null;
-            Row row = null;
-            int rowIndex = 1;
-            if (fileName.contains("2G")) {
-                Iterator<Cell2G> iterator = (Iterator<Cell2G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell2G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCellName());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getLac());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(3);
-                    cell.setCellValue(item.getFreqBand());
-                    cell = row.createCell(4);
-                    cell.setCellValue(item.getBcch());
-                    cell = row.createCell(5);
-                    cell.setCellValue(item.getBsic());
-                    cell = row.createCell(6);
-                    cell.setCellValue(item.getTch());
-                    cell = row.createCell(7);
-                    cell.setCellValue(item.getTrxConfig());
-                    cell = row.createCell(8);
-                    cell.setCellValue(item.getmBsc());
-                    cell = row.createCell(9);
-                    cell.setCellValue(item.getBtsName());
-                    cell = row.createCell(10);
-                    cell.setCellValue(item.getVendor());
-                    cell = row.createCell(11);
-                    cell.setCellValue(item.getFileName());
-                    cell = row.createCell(12);
-                    cell.setCellValue(item.getCheckDate());
-                    cell = row.createCell(13);
-                    cell.setCellValue(item.getCellCode());
-                }
-            } else if (fileName.contains("3G")) {
-                Iterator<Cell3G> iterator = (Iterator<Cell3G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell3G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCellName());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getLac());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(3);
-                    cell.setCellValue(item.getFreqBand());
-                    cell = row.createCell(4);
-                    cell.setCellValue(item.getDlpsc());
-                    cell = row.createCell(5);
-                    cell.setCellValue(item.getFreq());
-                    cell = row.createCell(6);
-                    cell.setCellValue(item.getCpichPower());
-                    cell = row.createCell(7);
-                    cell.setCellValue(item.getTotalPower());
-                    cell = row.createCell(8);
-                    cell.setCellValue(item.getMaxPower());
-                    cell = row.createCell(9);
-                    cell.setCellValue(item.getmBsc());
-                    cell = row.createCell(10);
-                    cell.setCellValue(item.getNodeBname());
-                    cell = row.createCell(11);
-                    cell.setCellValue(item.getVendor());
-                    cell = row.createCell(12);
-                    cell.setCellValue(item.getFileName());
-                    cell = row.createCell(13);
-                    cell.setCellValue(item.getCheckDate());
-                    cell = row.createCell(14);
-                    cell.setCellValue(item.getCellCode());
-                    cell = row.createCell(15);
-                    cell.setCellValue(item.getRac());
-                    cell = row.createCell(16);
-                    cell.setCellValue(item.getDlUarfcn());
-                    cell = row.createCell(17);
-                    cell.setCellValue(item.getDcSupport());
-                    cell = row.createCell(18);
-                    cell.setCellValue(item.getOamIp());
-                    cell = row.createCell(19);
-                    cell.setCellValue(item.getServiceIp());
+            ArrayList<String> attachFiles = new ArrayList<String>();
+//           lay danh sach cau lenh sql bao cao de chay
+            List<EmailReportBO> sqlLst = AutoMailFacade.getEmailReportDetail(idReportMail);
+            if (sqlLst != null) {
+                for (EmailReportBO lst : sqlLst) {
+                    String fileName = AutoMailFacade.findData(lst.sqlValue, lst.sqlName);
+                    attachFiles.add(fileName);
                 }
             }
-            fin.close();
-            File file = new File(folderTemp + File.separator + fileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
-            fos.close();
-            workbook.close();
+            String zipFile = StringUtils.getFolderTemp() + File.separator + "data_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".zip";
+            ZipUtils.zipMultipleFiles(attachFiles, zipFile);
+            ArrayList<String> zipFiles = new ArrayList<String>();
+            zipFiles.add(zipFile);
 
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
+            sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, listMail, reportMailName, emailDetail, zipFiles);
 
-    /*
-    ghi danh sach nhung cell tren SMRS và không có trên Inventory
-     */
-    private void writeCellSmrsInventory(String fileName, File fileTemplate, String folderTemp, List<?> temp) {
-        try {
-            FileInputStream fin = new FileInputStream(fileTemplate);
-            XSSFWorkbook workbook = null;
-            workbook = new XSSFWorkbook(fin);
-            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
-
-            Cell cell = null;
-            Row row = null;
-            int rowIndex = 2;
-            Iterator<Cell2G> iterator = (Iterator<Cell2G>) temp.iterator();
-            while (iterator.hasNext()) {
-                Cell2G item = iterator.next();
-                row = sheet.createRow(rowIndex++);
-                CellStyle style = sheet.getWorkbook().createCellStyle();
-                row.setRowStyle(style);
-                cell = row.createCell(0);
-                cell.setCellValue(rowIndex - 3);
-                cell = row.createCell(1);
-                cell.setCellValue(item.getLacStr());
-                cell = row.createCell(2);
-                cell.setCellValue(item.getCiStr());
-                cell = row.createCell(3);
-                cell.setCellValue(item.getCell_id_ocs());
-            }
-            fin.close();
-            File file = new File(folderTemp + File.separator + fileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
-            fos.close();
-            workbook.close();
-
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    /*
-    ghi danh sach nhung cell tren inventory khong tim thay tren rims
-     */
-    private void writeInventoryRims(String fileName, File fileTemplate, String folderTemp, List<?> temp) {
-        try {
-            FileInputStream fin = new FileInputStream(fileTemplate);
-            XSSFWorkbook workbook = null;
-            workbook = new XSSFWorkbook(fin);
-            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
-
-            Cell cell = null;
-            Row row = null;
-            int rowIndex = 2;
-            if (fileName.contains("2G")) {
-                Iterator<Cell2G> iterator = (Iterator<Cell2G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell2G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCellName());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getLac());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(3);
-                    cell.setCellValue(item.getFreqBand());
-                    cell = row.createCell(4);
-                    cell.setCellValue(item.getBcch());
-                    cell = row.createCell(5);
-                    cell.setCellValue(item.getBsic());
-                    cell = row.createCell(6);
-                    cell.setCellValue(item.getTch());
-                    cell = row.createCell(7);
-                    cell.setCellValue(item.getTrxConfig());
-                    cell = row.createCell(8);
-                    cell.setCellValue(item.getmBsc());
-                    cell = row.createCell(9);
-                    cell.setCellValue(item.getBtsName());
-                    cell = row.createCell(10);
-                    cell.setCellValue(item.getVendor());
-                    cell = row.createCell(11);
-                    cell.setCellValue(item.getFileName());
-                    cell = row.createCell(12);
-                    cell.setCellValue(item.getCheckDate());
-                    cell = row.createCell(13);
-                    cell.setCellValue(item.getCellCode());
-                }
-            } else if (fileName.contains("3G")) {
-                Iterator<Cell3G> iterator = (Iterator<Cell3G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell3G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCellName());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getLac());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(3);
-                    cell.setCellValue(item.getFreqBand());
-                    cell = row.createCell(4);
-                    cell.setCellValue(item.getDlpsc());
-                    cell = row.createCell(5);
-                    cell.setCellValue(item.getFreq());
-                    cell = row.createCell(6);
-                    cell.setCellValue(item.getCpichPower());
-                    cell = row.createCell(7);
-                    cell.setCellValue(item.getTotalPower());
-                    cell = row.createCell(8);
-                    cell.setCellValue(item.getMaxPower());
-                    cell = row.createCell(9);
-                    cell.setCellValue(item.getmBsc());
-                    cell = row.createCell(10);
-                    cell.setCellValue(item.getNodeBname());
-                    cell = row.createCell(11);
-                    cell.setCellValue(item.getVendor());
-                    cell = row.createCell(12);
-                    cell.setCellValue(item.getFileName());
-                    cell = row.createCell(13);
-                    cell.setCellValue(item.getCheckDate());
-                    cell = row.createCell(14);
-                    cell.setCellValue(item.getCellCode());
-                    cell = row.createCell(15);
-                    cell.setCellValue(item.getRac());
-                    cell = row.createCell(16);
-                    cell.setCellValue(item.getDlUarfcn());
-                    cell = row.createCell(17);
-                    cell.setCellValue(item.getDcSupport());
-                    cell = row.createCell(18);
-                    cell.setCellValue(item.getOamIp());
-                    cell = row.createCell(19);
-                    cell.setCellValue(item.getServiceIp());
-                }
-            } else if (fileName.contains("4G")) {
-                Iterator<Cell4G> iterator = (Iterator<Cell4G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell4G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCell_name());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getFrequency_band());
-                    cell = row.createCell(3);
-                    cell.setCellValue(item.getPci());
-                    cell = row.createCell(4);
-                    cell.setCellValue(item.getTac());
-                    cell = row.createCell(5);
-                    cell.setCellValue(item.getLcrid());
-                    cell = row.createCell(6);
-                    cell.setCellValue(item.getEnodeb_name());
-                    cell = row.createCell(7);
-                    cell.setCellValue(item.getVendor());
-                    cell = row.createCell(8);
-                    cell.setCellValue(item.getFilename());
-                    cell = row.createCell(9);
-                    cell.setCellValue(item.getEnodeb_id());
-                    cell = row.createCell(10);
-                    cell.setCellValue(item.getCheck_date());
-                    cell = row.createCell(11);
-                    cell.setCellValue(item.getCell_code());
-                    cell = row.createCell(12);
-                    cell.setCellValue(item.getBandwith());
-                    cell = row.createCell(13);
-                    cell.setCellValue(item.getUarcn());
-                    cell = row.createCell(14);
-                    cell.setCellValue(item.getOam_ip());
-                    cell = row.createCell(15);
-                    cell.setCellValue(item.getService_ip());
-                }
-            }
-            fin.close();
-            File file = new File(folderTemp + File.separator + fileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
-            fos.close();
-            workbook.close();
-
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
-    }
-
-    /*
-    ghi danh sach nhung cell tren inventory khong tim thay tren rims
-     */
-    private void writeRimsInventory(String fileName, File fileTemplate, String folderTemp, List<?> temp) {
-        try {
-            FileInputStream fin = new FileInputStream(fileTemplate);
-            XSSFWorkbook workbook = null;
-            workbook = new XSSFWorkbook(fin);
-            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
-
-            Cell cell = null;
-            Row row = null;
-            int rowIndex = 2;
-            if (fileName.contains("2G")) {
-                Iterator<Cell2G> iterator = (Iterator<Cell2G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell2G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCellName());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getLac());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(3);
-                }
-            } else if (fileName.contains("3G")) {
-                Iterator<Cell3G> iterator = (Iterator<Cell3G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell3G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCellName());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getLac());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(3);
-                }
-            } else if (fileName.contains("4G")) {
-                Iterator<Cell4G> iterator = (Iterator<Cell4G>) temp.iterator();
-                while (iterator.hasNext()) {
-                    Cell4G item = iterator.next();
-                    row = sheet.createRow(rowIndex++);
-                    CellStyle style = sheet.getWorkbook().createCellStyle();
-                    row.setRowStyle(style);
-                    cell = row.createCell(0);
-                    cell.setCellValue(item.getCell_name());
-                    cell = row.createCell(1);
-                    cell.setCellValue(item.getCi());
-                    cell = row.createCell(2);
-                    cell.setCellValue(item.getTac());
-                    cell = row.createCell(3);
-                    cell.setCellValue(item.getEnodeb_id());
-                    cell = row.createCell(4);
-                }
-            }
-            fin.close();
-            File file = new File(folderTemp + File.separator + fileName);
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
-            fos.close();
-            workbook.close();
-
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -558,4 +136,22 @@ public class AutoMailJob implements Job {
         // sends the e-mail
         Transport.send(msg);
     }
+
+    public static boolean sendEmailReport(ArrayList<String> listEmail, String subject, String message, ArrayList<String> attachFiles) {
+        try {
+            ArrayList<String> files = new ArrayList<String>();
+            for (String email : listEmail) {
+                logger.info("user: {}, subject: {}, files: {}, start send mail to user...", email, subject, files);
+
+//                sendEmailWithAttachments(HOST,PORT,USER,PASS,email,subject,message,files);
+//                Thread.sleep(100);
+                logger.info("user: {}, subject: {}, files: {}, end send mail to user...", email, subject, files);
+            }
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
 }
