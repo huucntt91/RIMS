@@ -30,8 +30,12 @@ import oracle.jdbc.OracleTypes;
 import org.apache.logging.log4j.LogManager;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
@@ -42,6 +46,7 @@ public class AutoMailFacade {
 
     private static final String RIMS_DS = ResourceBundle.getBundle("config", Locale.getDefault()).getString("RIMS_DS");
     private static org.apache.logging.log4j.Logger logger = LogManager.getLogger(AutoMailFacade.class);
+
     public static List findCell2G() {
         CallableStatement cs = null;
         ResultSet rs = null;
@@ -403,7 +408,7 @@ public class AutoMailFacade {
                 result.add(emailReport);
             }
         } catch (Exception e) {
-            throw e;
+            logger.error(e.getMessage(), e);
         } finally {
             if (rs != null) {
                 try {
@@ -486,6 +491,10 @@ public class AutoMailFacade {
         ResultSet rs = null;
         Connection conn = null;
         String result = "";
+        FileOutputStream fos = null;
+        SXSSFWorkbook workbook = null;
+        Cell cell = null;
+        Row row = null;
         try {
             conn = EnvManager.getDbConnection(RIMS_DS);
             String sql = "begin ?:=pkg_auto_email.find_data_sql(?); end;";
@@ -498,22 +507,22 @@ public class AutoMailFacade {
 
             String folderTemp = StringUtils.getFolderTemp();
 
-            XSSFWorkbook workbook = null;
-            workbook = new XSSFWorkbook();
-            Sheet sheet = workbook.createSheet("1");
-            Cell cell = null;
-            Row row = null;
+            workbook = new SXSSFWorkbook(1000);
+            XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            Sheet sheet = workbook.createSheet("data");
+
             int rowIndex = 1;
 
             row = sheet.createRow(0);
-            CellStyle style = sheet.getWorkbook().createCellStyle();
-            row.setRowStyle(style);
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int count = rsmd.getColumnCount();
             for (int i = 1; i <= count; i++) {
-                cell = row.createCell(i-1);
+                cell = row.createCell(i - 1);
                 cell.setCellValue(rsmd.getColumnName(i));
+                cell.setCellStyle(style);
             }
             String name = rsmd.getColumnName(1);
 
@@ -521,23 +530,26 @@ public class AutoMailFacade {
 //          ghi gia tri vao file exels
             while (rs.next()) {
                 row = sheet.createRow(rowIndex++);
-                row.setRowStyle(style);
                 for (int i = 1; i <= count; i++) {
-                    cell = row.createCell(i-1);
-                    cell.setCellValue(rs.getString(i));
+                    cell = row.createCell(i - 1);
+                    cell.setCellValue(rs.getString(i) == null? "" : rs.getString(i) );
+                    cell.setCellStyle(style);
                 }
             }
 //            fin.close();
             String pathFile = folderTemp + File.separator + sqlName.replace(" ", "_") + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            File file = new File(pathFile);
-            FileOutputStream fos = new FileOutputStream(file);
+            fos = new FileOutputStream(new File(pathFile));
             workbook.write(fos);
+            if (SXSSFWorkbook.class.equals(workbook.getClass())) {
+                SXSSFWorkbook wb = (SXSSFWorkbook) workbook;
+                wb.dispose();
+            }
+            fos.flush();
             fos.close();
-            workbook.close();
             return pathFile;
         } catch (Exception ex) {
             ex.printStackTrace();
-            logger.error(ex.getMessage(),ex);
+            logger.error(ex.getMessage(), ex);
         } finally {
             if (rs != null) {
                 try {

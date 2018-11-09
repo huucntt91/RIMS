@@ -78,7 +78,7 @@ public class AutoMailJob implements Job {
             zipFiles.add(zipFile);
 
             sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, listMail, reportMailName, emailDetail, zipFiles);
-
+            logger.info("AutoMailJob done : " + jobKey);
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.error(ex.getMessage(), ex);
