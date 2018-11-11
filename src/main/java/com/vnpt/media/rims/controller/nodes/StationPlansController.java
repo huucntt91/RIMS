@@ -683,7 +683,7 @@ public class StationPlansController extends BaseController {
             @RequestParam(value = "tinhTpId", required = false) String tinhTpId,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             @RequestParam("maTramDuAn") String maTramDuAn,
-            @RequestParam("tenTramDuAn") String tenTramDuAn) {
+            @RequestParam("tenTramDuAn") String tenTramDuAn) { 
         List<TramDuAnBO> data = null;
         try {
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);

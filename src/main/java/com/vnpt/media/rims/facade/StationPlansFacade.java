@@ -17,8 +17,12 @@ import com.vnpt.media.rims.dao.*;
 import com.vnpt.media.rims.exception.ConnectionException;
 import com.vnpt.media.rims.exception.JdbcException;
 import com.vnpt.media.rims.formbean.CellNewForm;
+import com.vnpt.media.rims.formbean.RegDuAnNguonExcel;
 import com.vnpt.media.rims.formbean.RegTramDuAnExcel;
 import com.vnpt.media.rims.formbean.RegTramQuyHoachExcel;
+import com.vnpt.media.rims.formbean.UpdateDuAnNguonPTMExcel;
+import com.vnpt.media.rims.formbean.UpdateDuAnNguonQLDAHT1Excel;
+import com.vnpt.media.rims.formbean.UpdateDuAnNguonVTTExcel;
 import com.vnpt.media.rims.jdbc.RowMapper;
 import com.vnpt.media.rims.jdbc.SQLTemplate;
 import java.sql.CallableStatement;
@@ -29,6 +33,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -1017,4 +1022,458 @@ public class StationPlansFacade {
         }
         return (List<TramDuAnBO>) list;
     }
+//    trunglk_start_du_an_nguon
+    public static Integer countDuAnNguon(String khuvucId,
+                                         String tinhTpId) {
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        int result = 0;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_DU_AN_NGUON.fc_total_du_an_nguon(?,?); end;";
+
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.INTEGER);
+            cs.setString(2, khuvucId);
+            cs.setString(3, tinhTpId);           
+            cs.executeQuery();
+            result = (int) cs.getObject(1);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cs != null) {
+                try {
+                    cs.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return result;
+    }
+    
+    public static List<DuAnNguonBO> searchDuAnNguon(String startRow, 
+                                                    String endRow,  
+                                                    String khuvucId,
+                                                    String tinhTpId) throws ServiceException {
+        CallableStatement cstmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        List<DuAnNguonBO> ar = null;
+        try {
+            ar = new ArrayList<>();
+            conn = EnvManager.getDbConnection(RIMS_DS);
+
+
+            String  sql = "begin ?:=PKG_DU_AN_NGUON.fc_search_du_an_nguon(?,?,?,?); end;";
+            
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cstmt.setString(2, startRow == null ? "0" : startRow);
+            cstmt.setString(3, endRow == null ? "0" : endRow);
+            cstmt.setString(4, khuvucId);
+            cstmt.setString(5, tinhTpId);
+            
+            cstmt.executeQuery();
+            rs = (ResultSet) cstmt.getObject(1);
+            while (rs.next()) {
+                DuAnNguonBO record = new DuAnNguonBO();
+                  record.setDu_an_nguon_id(rs.getLong("du_an_nguon_id"));
+                  record.setArea(rs.getLong("area"));
+                  record.setTinh_tp_id(rs.getLong("tinh_tp_id"));
+                  record.setTen_tinh_tp(rs.getString("ten_tinh_tp"));
+                  record.setTram_quy_hoach_id(rs.getLong("tram_quy_hoach_id"));
+                  record.setTen_quy_hoach(rs.getString("ten_quy_hoach"));
+                  record.setMa_quy_hoach(rs.getString("ma_quy_hoach"));
+                  record.setBuilding_id(rs.getLong("building_id")); 
+                  record.setMa_building(rs.getString("ma_building"));
+                  record.setBuilding_name(rs.getString("building_name"));
+                  record.setDia_chi(rs.getString("dia_chi"));
+                  record.setLongitude(rs.getString("longitude"));
+                  record.setLatitude(rs.getString("latitude"));
+                  record.setStatus(rs.getLong("status"));
+                  record.setNgay_hoat_dong_csht(rs.getDate("ngay_hoat_dong_csht"));
+                  record.setNgay_hoan_thanh_csht(rs.getDate("csht_finish_date"));
+                  record.setTu_nguon(rs.getLong("tu_nguon"));
+                  record.setChungloai_accu(rs.getString("chungloai_accu"));
+                  record.setSo_to_accu(rs.getLong("so_to_accu"));
+                  record.setMuc_dich_tb_nguon(rs.getString("muc_dich_tb_nguon"));
+                  record.setSo_van_ban(rs.getString("so_van_ban"));
+                  record.setNgay_van_ban(rs.getDate("ngay_van_ban"));
+                  record.setNgay_can_lap_tb_nguon(rs.getDate("ngay_can_lap_tb_nguon"));
+                  record.setPhone_number(rs.getString("phone_number"));
+                  record.setTen_tu_nguon(rs.getString("ten_tu_nguon"));
+                  record.setSo_tu_nguon(rs.getLong("so_tu_nguon"));
+                  record.setSo_module_nan(rs.getLong("so_module_nan"));
+                  record.setCong_suat_module_nan(rs.getString("cong_suat_module_nan"));
+                  record.setNgay_du_kien_ban_giao_tu_nguon(rs.getDate("ngay_du_kien_ban_giao_tu_nguon"));
+                  record.setThuoc_du_an_tu_nguon(rs.getString("thuoc_du_an_tu_nguon"));
+                  record.setSo_po_tu_nguon(rs.getLong("so_po_tu_nguon"));
+                  record.setNgay_thuc_te_giao_tu_nguon(rs.getDate("ngay_thuc_te_giao_tu_nguon"));
+                  record.setNgay_nghiem_thu(rs.getDate("ngay_nghiem_thu"));
+                  record.setTen_accu(rs.getString("ten_accu"));
+                  record.setChung_loai_accu_ptm(rs.getString("chung_loai_accu_ptm"));
+                  record.setSo_to_accu_ptm(rs.getLong("so_to_accu_ptm"));
+                  record.setNgay_du_kien_ban_giao_accu(rs.getDate("ngay_du_kien_ban_giao_accu"));
+                  record.setThuoc_du_an_accu(rs.getString("thuoc_du_an_accu"));
+                  record.setSo_po_accu(rs.getLong("so_po_accu"));
+                  record.setNgay_thuc_te_giao_accu(rs.getDate("ngay_thuc_te_giao_accu"));
+                  record.setNgay_nghiem_thu_accu(rs.getDate("ngay_nghiem_thu_accu"));
+                  record.setGhi_chu_net(rs.getString("ghi_chu_net"));
+                  record.setGhi_chu_vtt(rs.getString("ghi_chu_vtt"));
+
+                ar.add(record);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return ar;
+    }
+    
+    public static List<DuAnNguonBO> exportDuAnNguon(String khuvucId,
+                                                    String tinhTpId) throws ServiceException {
+        CallableStatement cstmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        List<DuAnNguonBO> ar = null;
+        try {
+            ar = new ArrayList<>();
+            conn = EnvManager.getDbConnection(RIMS_DS);
+
+
+            String  sql = "begin ?:=PKG_DU_AN_NGUON.fc_export_du_an_nguon(?,?); end;";
+            
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cstmt.setString(2, khuvucId);
+            cstmt.setString(3, tinhTpId);
+            
+            cstmt.executeQuery();
+            rs = (ResultSet) cstmt.getObject(1);
+            while (rs.next()) {
+                DuAnNguonBO record = new DuAnNguonBO();
+                  record.setDu_an_nguon_id(rs.getLong("du_an_nguon_id"));
+                  record.setArea(rs.getLong("area"));
+                  record.setTinh_tp_id(rs.getLong("tinh_tp_id"));
+                  record.setTen_tinh_tp(rs.getString("ten_tinh_tp"));
+                  record.setTram_quy_hoach_id(rs.getLong("tram_quy_hoach_id"));
+                  record.setTen_quy_hoach(rs.getString("ten_quy_hoach"));
+                  record.setMa_quy_hoach(rs.getString("ma_quy_hoach"));
+                  record.setBuilding_id(rs.getLong("building_id")); 
+                  record.setMa_building(rs.getString("ma_building"));
+                  record.setBuilding_name(rs.getString("building_name"));
+                  record.setDia_chi(rs.getString("dia_chi"));
+                  record.setLongitude(rs.getString("longitude"));
+                  record.setLatitude(rs.getString("latitude"));
+                  record.setStatus(rs.getLong("status"));
+                  record.setNgay_hoat_dong_csht(rs.getDate("ngay_hoat_dong_csht"));
+                  record.setNgay_hoan_thanh_csht(rs.getDate("csht_finish_date"));
+                  record.setTu_nguon(rs.getLong("tu_nguon"));
+                  record.setChungloai_accu(rs.getString("chungloai_accu"));
+                  record.setSo_to_accu(rs.getLong("so_to_accu"));
+                  record.setMuc_dich_tb_nguon(rs.getString("muc_dich_tb_nguon"));
+                  record.setSo_van_ban(rs.getString("so_van_ban"));
+                  record.setNgay_van_ban(rs.getDate("ngay_van_ban"));
+                  record.setNgay_can_lap_tb_nguon(rs.getDate("ngay_can_lap_tb_nguon"));
+                  record.setPhone_number(rs.getString("phone_number"));
+                  record.setTen_tu_nguon(rs.getString("ten_tu_nguon"));
+                  record.setSo_tu_nguon(rs.getLong("so_tu_nguon"));
+                  record.setSo_module_nan(rs.getLong("so_module_nan"));
+                  record.setCong_suat_module_nan(rs.getString("cong_suat_module_nan"));
+                  record.setNgay_du_kien_ban_giao_tu_nguon(rs.getDate("ngay_du_kien_ban_giao_tu_nguon"));
+                  record.setThuoc_du_an_tu_nguon(rs.getString("thuoc_du_an_tu_nguon"));
+                  record.setSo_po_tu_nguon(rs.getLong("so_po_tu_nguon"));
+                  record.setNgay_thuc_te_giao_tu_nguon(rs.getDate("ngay_thuc_te_giao_tu_nguon"));
+                  record.setNgay_nghiem_thu(rs.getDate("ngay_nghiem_thu"));
+                  record.setTen_accu(rs.getString("ten_accu"));
+                  record.setChung_loai_accu_ptm(rs.getString("chung_loai_accu_ptm"));
+                  record.setSo_to_accu_ptm(rs.getLong("so_to_accu_ptm"));
+                  record.setNgay_du_kien_ban_giao_accu(rs.getDate("ngay_du_kien_ban_giao_accu"));
+                  record.setThuoc_du_an_accu(rs.getString("thuoc_du_an_accu"));
+                  record.setSo_po_accu(rs.getLong("so_po_accu"));
+                  record.setNgay_thuc_te_giao_accu(rs.getDate("ngay_thuc_te_giao_accu"));
+                  record.setNgay_nghiem_thu_accu(rs.getDate("ngay_nghiem_thu_accu"));
+                  record.setGhi_chu_net(rs.getString("ghi_chu_net"));
+                  record.setGhi_chu_vtt(rs.getString("ghi_chu_vtt"));
+
+                ar.add(record);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        return ar;
+    }
+    
+    public static String addDuAnNguonExcel(RegDuAnNguonExcel daNguonBO, String userId) {
+        daNguonBO = (RegDuAnNguonExcel) StringUtils.trimObject(daNguonBO);
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_DU_AN_NGUON.fs_add_du_an_nguon_excel(?,?,?,?,?,?,?,?,?,?,?,?); end;";
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
+            cstmt.setString(2, daNguonBO.getMaTramQuyHoach().trim());
+            cstmt.setString(3, daNguonBO.getMaCSHT().trim());
+            cstmt.setString(4, daNguonBO.getNgayDuKienHtCSHT().trim());
+            cstmt.setString(5, daNguonBO.getTuNguon().trim());
+            cstmt.setString(6, daNguonBO.getChungLoaiACCU().trim());
+            cstmt.setString(7, daNguonBO.getSoToACCU().trim());
+            cstmt.setString(8, daNguonBO.getMucDichTrangBiNguon().trim());
+            cstmt.setString(9, daNguonBO.getSoVanBan().trim());
+            cstmt.setString(10, daNguonBO.getNgayVanBan().trim());
+            cstmt.setString(11, daNguonBO.getNgayCanLapTbNguon().trim());
+            cstmt.setString(12, daNguonBO.getSoDienThoai().trim());
+            cstmt.setString(13, userId);
+
+            cstmt.executeQuery();
+            return cstmt.getString(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "-1";
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+    }
+    
+    public static String updateDuAnNguonVTT(UpdateDuAnNguonVTTExcel daNguonBO, String userId) {
+        daNguonBO = (UpdateDuAnNguonVTTExcel) StringUtils.trimObject(daNguonBO);
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_DU_AN_NGUON.fs_edit_du_an_nguon_vtt_excel(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); end;";
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
+            cstmt.setString(2, daNguonBO.getMaTramQuyHoach().trim());
+            cstmt.setString(3, daNguonBO.getMaCSHT().trim());
+            cstmt.setString(4, daNguonBO.getNgayDuKienHtCSHT().trim());
+            cstmt.setString(5, daNguonBO.getTuNguon().trim());
+            cstmt.setString(6, daNguonBO.getChungLoaiACCU().trim());
+            cstmt.setString(7, daNguonBO.getSoToACCU().trim());
+            cstmt.setString(8, daNguonBO.getMucDichTrangBiNguon().trim());
+            cstmt.setString(9, daNguonBO.getSoVanBan().trim());
+            cstmt.setString(10, daNguonBO.getNgayVanBan().trim());
+            cstmt.setString(11, daNguonBO.getNgayCanLapTbNguon().trim());
+            cstmt.setString(12, daNguonBO.getSoDienThoai().trim());
+            cstmt.setString(13, daNguonBO.getNgayNghiemThu().trim());
+            cstmt.setString(14, daNguonBO.getNgayNghiemThuACCU().trim());
+            cstmt.setString(15, daNguonBO.getGhiChuVTT().trim());
+            cstmt.setString(16, userId);
+
+            cstmt.executeQuery();
+            return cstmt.getString(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "-1";
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+    }
+    
+    public static String updateDuAnNguonPTM(UpdateDuAnNguonPTMExcel daNguonBO, String userId) {
+        daNguonBO = (UpdateDuAnNguonPTMExcel) StringUtils.trimObject(daNguonBO);
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_DU_AN_NGUON.fs_edit_du_an_nguon_ptm_excel(?,?,?,?,?,?,?,?); end;";
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
+            cstmt.setString(2, daNguonBO.getMaTramQuyHoach().trim());
+            cstmt.setString(3, daNguonBO.getSoTuNguon().trim());
+            cstmt.setString(4, daNguonBO.getSoModuleNan().trim());
+            cstmt.setString(5, daNguonBO.getCongSuatModuleNan().trim());
+            cstmt.setString(6, daNguonBO.getChungLoaiACCU().trim());
+            cstmt.setString(7, daNguonBO.getSoToACCU().trim());
+            cstmt.setString(8, daNguonBO.getGhiChuNet().trim());
+            cstmt.setString(9, userId);
+
+            cstmt.executeQuery();
+            return cstmt.getString(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "-1";
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+    }
+    
+    public static String updateDuAnNguonQLDAHT1(UpdateDuAnNguonQLDAHT1Excel daNguonBO, String userId) {
+        daNguonBO = (UpdateDuAnNguonQLDAHT1Excel) StringUtils.trimObject(daNguonBO);
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_DU_AN_NGUON.fs_edit_da_nguon_qldaht1_excel(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?); end;";
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.VARCHAR);
+            cstmt.setString(2, daNguonBO.getMaTramQuyHoach().trim());
+            cstmt.setString(3, daNguonBO.getTenTuNguon().trim());
+            cstmt.setString(4, daNguonBO.getNgayDkBanGiaoTuNguon().trim());
+            cstmt.setString(5, daNguonBO.getThuocDuAnTuNguon().trim());
+            cstmt.setString(6, daNguonBO.getSoPoTuNguon().trim());
+            cstmt.setString(7, daNguonBO.getNgayThucTeGiaoTuNguon().trim());
+            cstmt.setString(8, daNguonBO.getTenACCU().trim());
+            cstmt.setString(9, daNguonBO.getNgayDuKienBanGiaoACCU().trim());
+            cstmt.setString(10, daNguonBO.getThuocDuAnACCU().trim());
+            cstmt.setString(11, daNguonBO.getSoPoACCU().trim());
+            cstmt.setString(12, daNguonBO.getNgayThucTeGiaoACCU().trim());
+            cstmt.setString(13, daNguonBO.getGhiChuNet().trim());
+            cstmt.setString(14, userId);
+
+            cstmt.executeQuery();
+            return cstmt.getString(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return "-1";
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+    }
+    
+    public static int deleteDuAnNguon(String duAnNguonId) {
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_DU_AN_NGUON.fn_delete(?); end;";
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.INTEGER);
+            cs.setString(2, duAnNguonId);
+            cs.executeQuery();
+            return cs.getInt(1);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -1;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cs != null) {
+                try {
+                    cs.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+
+    }
+//    trunglk_end_du_an_nguon
 }
