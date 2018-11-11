@@ -148,7 +148,7 @@
 
                                                 <td>
                                                     <a href="<%=request.getContextPath()%>/duAnNguon/delete/${list.du_an_nguon_id}"
-                                                       title="Xóa">
+                                                       title="Xóa" onclick="return confirm('Bạn có muốn thực hiện xoá không ?')">
                                                        <img src="<%=request.getContextPath()%>/image/icon/delete.png">
                                                     </a>
                                                 </td>    
