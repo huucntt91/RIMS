@@ -22,9 +22,13 @@ public class BaoDuongNetExcel {
     private String donvi;
     @Column(name = "note", index = "4")
     private String note;
+    @Column(name = "neType", index = "")
     private String neType;
+    @Column(name = "nodeId", index = "")
     private String nodeId;
+    @Column(name = "baoDuongId", index = "")
     private String baoDuongId;
+    @Column(name = "neTypeId", index = "")
     private String neTypeId;
 
     public String getNodeId() {
