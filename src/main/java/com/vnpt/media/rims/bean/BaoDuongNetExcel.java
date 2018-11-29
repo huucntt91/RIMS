@@ -22,6 +22,48 @@ public class BaoDuongNetExcel {
     private String donvi;
     @Column(name = "note", index = "4")
     private String note;
+    private String neType;
+    private String nodeId;
+    private String baoDuongId;
+    private String neTypeId;
+
+    public String getNodeId() {
+        return nodeId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    
+
+    public String getBaoDuongId() {
+        return baoDuongId;
+    }
+
+    public void setBaoDuongId(String baoDuongId) {
+        this.baoDuongId = baoDuongId;
+    }
+
+    public String getNeTypeId() {
+        return neTypeId;
+    }
+
+    public void setNeTypeId(String neTypeId) {
+        this.neTypeId = neTypeId;
+    }
+    
+    
+
+    public String getNeType() {
+        return neType;
+    }
+
+    public void setNeType(String neType) {
+        this.neType = neType;
+    }
+    
+    
  
     public BaoDuongNetExcel() {
     }

@@ -48,6 +48,9 @@ public class AutoMailJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
+        ArrayList<String> attachFiles = null;
+        ArrayList<String> zipFiles = null;
+        List<EmailReportBO> sqlLst = null;
         try {
             String jobKey = jec.getJobDetail().getKey().getName();
             List<JobExecutionContext> jobs = jec.getScheduler().getCurrentlyExecutingJobs();
@@ -63,26 +66,34 @@ public class AutoMailJob implements Job {
             String listMail = jec.getJobDetail().getJobDataMap().getString("listMail");
             String emailDetail = jec.getJobDetail().getJobDataMap().getString("emailDetail");
 
-            ArrayList<String> attachFiles = new ArrayList<String>();
+            attachFiles = new ArrayList<String>();
 //           lay danh sach cau lenh sql bao cao de chay
-            List<EmailReportBO> sqlLst = AutoMailFacade.getEmailReportDetail(idReportMail);
+            sqlLst = AutoMailFacade.getEmailReportDetail(idReportMail);
             if (sqlLst != null) {
                 for (EmailReportBO lst : sqlLst) {
                     String fileName = AutoMailFacade.findData(lst.sqlValue, lst.sqlName);
-                    attachFiles.add(fileName);
+                    if (fileName != null && !fileName.isEmpty()) {
+                        attachFiles.add(fileName);
+                    }
                 }
             }
-            String zipFile = StringUtils.getFolderTemp() + File.separator + "data_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".zip";
-            ZipUtils.zipMultipleFiles(attachFiles, zipFile);
-            ArrayList<String> zipFiles = new ArrayList<String>();
-            zipFiles.add(zipFile);
-
-            sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, listMail, reportMailName, emailDetail, zipFiles);
+            if (!attachFiles.isEmpty()) {
+                String zipFile = StringUtils.getFolderTemp() + File.separator + "data_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".zip";
+                ZipUtils.zipMultipleFiles(attachFiles, zipFile);
+                zipFiles = new ArrayList<String>();
+                zipFiles.add(zipFile);
+                sendEmailWithAttachments(HOST, PORT, USERNAME, PASSWORD, listMail, reportMailName, emailDetail, zipFiles);
+            }
             logger.info("AutoMailJob done : " + jobKey);
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.error(ex.getMessage(), ex);
+        } finally {
+            attachFiles = null;
+            zipFiles = null;
+            sqlLst = null;
         }
+
     }
 
     private void sendEmailWithAttachments(String host, String port,
