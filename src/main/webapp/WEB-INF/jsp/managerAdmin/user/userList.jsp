@@ -1,6 +1,7 @@
 <%@page import="com.vnpt.media.rims.common.Message"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
@@ -28,7 +29,7 @@
     <body>
         <section class="content-header">
             <h1><spring:message code="welcome.userList"/><small></small>
-            <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_QUANLYTAIKHOAN_RIMS.mp4');" >Hướng dẫn</button>
+                <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_QUANLYTAIKHOAN_RIMS.mp4');" >Hướng dẫn</button>
             </h1>
             <ol class="breadcrumb">
                 <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/user/preAdd'" >
@@ -70,10 +71,10 @@
                         return false;
                     }
                 }
-                
-    function hdsd(media) {
-        window.open('${pageContext.request.contextPath}/hdsd/init?media=' + media, '_blank', 'width=700,height=500');
-    }
+
+                function hdsd(media) {
+                    window.open('${pageContext.request.contextPath}/hdsd/init?media=' + media, '_blank', 'width=700,height=500');
+                }
 
             </script>
 
@@ -151,12 +152,20 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>
-
+                                                    <c:if test="${userBO.status=='1'}">
                                                     &nbsp;
                                                     <a href="<%=request.getContextPath()%>/user/active/${userBO.id}"
-                                                       title="Active/Inactive"
-                                                       onclick="return confirm('Bạn có muốn thực hiện active/inactive không ?')">
+                                                       title="Inactive"
+                                                       onclick="return confirm('Bạn có muốn thực hiện inactive không ?')">
+                                                        <img src="<%=request.getContextPath()%>/image/icon/inactive_icon.png"></a>
+                                                    </c:if>
+                                                    <c:if test="${userBO.status=='0'}">
+                                                    &nbsp;
+                                                    <a href="<%=request.getContextPath()%>/user/active/${userBO.id}"
+                                                       title="Active"
+                                                       onclick="return confirm('Bạn có muốn thực hiện active không ?')">
                                                         <img src="<%=request.getContextPath()%>/image/icon/icon_check.png"></a>
+                                                    </c:if>
                                                     &nbsp;
                                                     <a href="<%=request.getContextPath()%>/user/view/${userBO.id}"
                                                        title="Sửa">
@@ -167,11 +176,13 @@
                                                        title="Xoá" onclick="return confirm('Bạn có muốn thực hiện xoá không ?')">
                                                         <img src="<%=request.getContextPath()%>/image/icon/delete.png">
                                                     </a>
-                                                    &nbsp;
-                                                    <a href="<%=request.getContextPath()%>/user/addGroupToUser/${userBO.id}"
-                                                       title="Thông tin nhóm quyền" >
-                                                        <img src="<%=request.getContextPath()%>/image/icon/document-add-icon.png">
-                                                    </a>                                                    
+                                                    <c:if test="${userBO.status=='1'}">
+                                                        &nbsp;
+                                                        <a href="<%=request.getContextPath()%>/user/addGroupToUser/${userBO.id}"
+                                                           title="Thông tin nhóm quyền" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/document-add-icon.png">
+                                                        </a> 
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </c:forEach>                                       							
