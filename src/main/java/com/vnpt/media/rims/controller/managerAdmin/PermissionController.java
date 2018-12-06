@@ -100,8 +100,8 @@ public class PermissionController {
                                     //Thêm thuộc tính quyền VIEW, UPDATE. Kiểm tra trạng thái và hiển thị
                                     sb.append("<ul>");
                                         String idChild = classList.get(j).getId() + "-" + attrList.get(k).getId() + "-";
-                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "VIEW") ? dataSelected : "") + " class='groupClass' id='" + idChild + "VIEW' >Xem</li>");
-                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "UPDATE") ? dataSelected : "") + " class='groupClass' id='" + idChild + "UPDATE' >Cập nhật</li>");
+                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "VIEW") ? dataSelected : "") + " class='groupClass' id='" + idChild + "VIEW' >Chặn xem</li>");
+                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "UPDATE") ? dataSelected : "") + " class='groupClass' id='" + idChild + "UPDATE' >Chặn cập nhật</li>");
                                     sb.append("</ul>");
 
                             sb.append("</li>");

@@ -405,7 +405,7 @@ public class UsersDAO extends GenericDAO implements IUsers {
 
                 userBO.setUserId(rs.getLong("USER_ID"));
                 userBO.setUserAttrId(rs.getLong("USER_ATTR_ID"));
-                userBO.setAction(rs.getString("ACTION") == null || rs.getString("ACTION").equals("") ? "VIEW,UPDATE": rs.getString("ACTION"));
+                userBO.setAction(rs.getString("ACTION"));
 
                 attributeBO.setId(rs.getLong("ATTR_ID"));
                 attributeBO.setAttrCode(rs.getString("ATTR_CODE"));

@@ -32,14 +32,20 @@ public class PermissionUtils {
             if(listUserAttrBo == null){
                 return  false;
             }
+
+            if(!listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equals(attrCode) && x.getAttClass().getCode().equals(attrClassCode)))
+            {
+                return  true;
+            }
+
             result = listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equals(attrCode) && x.getAttClass().getCode().equals(attrClassCode) && (x.getAction() + ",").contains(acctionName + ","));
-            return result;
+            return !result;
         }catch (Exception ex){
             listUserAttrBo = null;
             LOGGER.error("Exception :", ex);
         }
         finally {
-            return result;
+            return !result;
         }
     }
 
