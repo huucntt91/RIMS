@@ -6,6 +6,7 @@
 package com.vnpt.media.rims.controller.nodes;
 
 import com.blogspot.na5cent.exom.ExOM;
+import com.google.gson.Gson;
 import com.vnpt.media.rims.bean.*;
 import java.util.List;
 import java.util.Locale;
@@ -26,12 +27,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.vnpt.media.rims.common.Constants;
+import com.vnpt.media.rims.common.ContentDataTableItem;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
 import com.vnpt.media.rims.common.utils.Convert;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.Page;
 import com.vnpt.media.rims.common.utils.StringUtils;
+import com.vnpt.media.rims.exception.DAOException;
 import com.vnpt.media.rims.facade.NodesFacade;
 import com.vnpt.media.rims.facade.*;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
@@ -40,6 +43,7 @@ import com.vnpt.media.rims.formbean.ApproveForm;
 import com.vnpt.media.rims.formbean.CellNewForm;
 import com.vnpt.media.rims.formbean.FilterObject;
 import com.vnpt.media.rims.formbean.NeLinkForm;
+import com.vnpt.media.rims.formbean.ReportCSHT;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +55,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -63,7 +68,7 @@ import org.springframework.util.FileCopyUtils;
 @RequestMapping(value = "/nodes")
 public class NodesController {
 
-    private static final Logger LOGGER = LogManager.getLogger(NodesController.class);
+    private static final Logger logger = LogManager.getLogger(NodesController.class);
     private static final String LIST = "nodes/list/list";
     private static final String FORM = "nodes/node/new";
     private static final String ADDTRAM = "nodes/tram/tramNew";
@@ -113,7 +118,7 @@ public class NodesController {
             @RequestParam(value = "value", required = false) String value,
             ModelMap mm, HttpServletRequest request) {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-        LOGGER.info("user: {}, ip: {}, danh sach doi tuong init : {} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, status, khuvucId);
+        logger.info("user: {}, ip: {}, danh sach doi tuong init : {} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, status, khuvucId);
         String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
         page = page == null ? "1" : page;
         Integer pageInt;
@@ -142,7 +147,7 @@ public class NodesController {
         try {
             totalRows = neTypeId == null ? 0 : facade.getTotalDetailNode(code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status, strFilter);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             totalRows = 0;
         }
         Page objPage = new Page();
@@ -187,14 +192,14 @@ public class NodesController {
             NodesFacade nodesFacade = new NodesFacade();
             List<?> list = null;
             try {
-                LOGGER.info("user: {}, ip: {}, call findAllDetail({},{},{},{},{},{},{},{},{},{})", user.getUsername(), request.getRemoteAddr(), startRow, endRow, code,
+                logger.info("user: {}, ip: {}, call findAllDetail({},{},{},{},{},{},{},{},{},{})", user.getUsername(), request.getRemoteAddr(), startRow, endRow, code,
                         khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status);
                 list = nodesFacade.findAllDetailNode("", String.valueOf(startRow),
                         String.valueOf(endRow), code,
                         khuvucId, tinhTpId, quanHuyenId, phuongXaId, neType, thietBiId, status, strFilter);
-                LOGGER.info("user: {}, ip: {}, done findAllDetail: {}", user.getUsername(), request.getRemoteAddr(), list.size());
+                logger.info("user: {}, ip: {}, done findAllDetail: {}", user.getUsername(), request.getRemoteAddr(), list.size());
             } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
             switch (neType) {
                 case "5":
@@ -221,11 +226,11 @@ public class NodesController {
         ManagerAdminFacade adminFacade = new ManagerAdminFacade();
         List<String> classAtrrView = new ArrayList<>();
         try {
-            LOGGER.debug("user: {}, ip: {}, call findClassAttrByUserId({},{},{})", user.getUsername(), request.getRemoteAddr(), user.getId(), "S", Convert.convertNeTypeToObjectId(neType));
+            logger.debug("user: {}, ip: {}, call findClassAttrByUserId({},{},{})", user.getUsername(), request.getRemoteAddr(), user.getId(), "S", Convert.convertNeTypeToObjectId(neType));
             classAtrrView = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "S", Convert.convertNeTypeToObjectId(neType));
-            LOGGER.debug("user: {}, ip: {}, call findClassAttrByUserId:{}", user.getUsername(), request.getRemoteAddr(), classAtrrView.size());
+            logger.debug("user: {}, ip: {}, call findClassAttrByUserId:{}", user.getUsername(), request.getRemoteAddr(), classAtrrView.size());
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         mm.addAttribute("classAtrrView", classAtrrView);
         mm.put("phuongXaId", phuongXaId);
@@ -261,7 +266,7 @@ public class NodesController {
             @RequestParam(value = "neTypeId", required = false) String neTypeId, @RequestParam(value = "thietBiId", required = false) String thietBiId, @RequestParam(value = "tinhTpId", required = false) String tinhTpId, @RequestParam(value = "quanHuyenId", required = false) String quanHuyenId, @RequestParam(value = "phuongXaId", required = false) String phuongXaId, @RequestParam(value = "status", required = false) String status,
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             ModelMap mm, HttpServletRequest request) {
-        LOGGER.info("Action init Building");
+        logger.info("Action init Building");
 
         String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
         page = page == null ? "1" : page;
@@ -341,7 +346,7 @@ public class NodesController {
             @RequestParam(value = "khuvucId", required = false) String khuvucId,
             ModelMap mm, HttpServletRequest request) {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-        LOGGER.info("user: {}, ip: {}, popup:{} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, khuvucId);
+        logger.info("user: {}, ip: {}, popup:{} {} {} {} {} {} {} {} {}", user.getUsername(), request.getRemoteAddr(), page, code, neTypeId, thietBiId, tinhTpId, quanHuyenId, phuongXaId, khuvucId);
 
         String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
         page = page == null ? "1" : page;
@@ -367,7 +372,7 @@ public class NodesController {
         try {
             totalRows = neTypeId == null ? 0 : facade.getTotalDetail(code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neTypeId, thietBiId, statusList);
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             totalRows = 0;
         }
         Page objPage = new Page();
@@ -409,11 +414,11 @@ public class NodesController {
         }
         List<NodeBO> list = new ArrayList<NodeBO>();
         try {
-            LOGGER.info("user: {}, ip: {}, call findAllNodeBO({},{},{},{},{},{},{},{},{},{})", user.getUsername(), request.getRemoteAddr(), startRow, endRow, code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neTypeId, thietBiId, statusList);
+            logger.info("user: {}, ip: {}, call findAllNodeBO({},{},{},{},{},{},{},{},{},{})", user.getUsername(), request.getRemoteAddr(), startRow, endRow, code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neTypeId, thietBiId, statusList);
             list = facade.findAllNodeBO(String.valueOf(startRow), String.valueOf(endRow), code, khuvucId, tinhTpId, quanHuyenId, phuongXaId, neTypeId, thietBiId, statusList);
-            LOGGER.info("user: {}, ip: {}, done findAllNodeBO: {}", user.getUsername(), request.getRemoteAddr(), list.size());
+            logger.info("user: {}, ip: {}, done findAllNodeBO: {}", user.getUsername(), request.getRemoteAddr(), list.size());
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         mm.put("list", list);
         mm.put("phuongXaId", phuongXaId);
@@ -432,7 +437,7 @@ public class NodesController {
     public String popupTramDuAn(@RequestParam(value = "page", required = false) String page, @RequestParam(value = "code", required = false) String code,
             @RequestParam(value = "tinhTpId", required = false) String tinhTpId,
             ModelMap mm, HttpServletRequest request) {
-        LOGGER.info("Action init Popup Tram Du An");
+        logger.info("Action init Popup Tram Du An");
 
         String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
         page = page == null ? "1" : page;
@@ -546,7 +551,7 @@ public class NodesController {
                 model.setUserInsert(user.getId());
                 result = adminFacade.addTram(model);
                 if (result == -1) {
-                    LOGGER.info("Exception trung ma_node :{}", codeVNPT);
+                    logger.info("Exception trung ma_node :{}", codeVNPT);
                 }
             }
 
@@ -561,7 +566,7 @@ public class NodesController {
         } catch (Exception e) {
 
             String message = StringUtils.captureStackTrace(e);
-            LOGGER.error("Exception :", e);
+            logger.error("Exception :", e);
             String msg = messageSource.getMessage("admin.common.error", null, locale);
             attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
         }
@@ -684,7 +689,7 @@ public class NodesController {
     @RequestMapping(value = "/view/{type}/{id}", method = RequestMethod.GET)
     public String view(@PathVariable(value = "id") String id, @PathVariable(value = "type") String type,
             Locale locale, RedirectAttributes attr, ModelMap mm) throws Exception {
-        LOGGER.debug("view Node");
+        logger.debug("view Node");
         try {
             if (StringUtils.hasText(id) && StringUtils.hasText(type)) {
                 NodesFacade facade = new NodesFacade();
@@ -720,7 +725,7 @@ public class NodesController {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error("Exception :", e);
+            logger.error("Exception :", e);
             String msg = messageSource.getMessage("admin.common.error", null, locale);
             attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
         }
@@ -738,9 +743,9 @@ public class NodesController {
         String statusList = Constants.NE_REG_ON + "," + Constants.NE_REG_OFF;
         String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
         String tinhTpId = String.join(",", tinhManager);
-        LOGGER.info("user: {}, ip: {}, call findDuyetTram({},'{}',{})", user.getUsername(), request.getRemoteAddr(), "", statusList, tinhTpId);
+        logger.info("user: {}, ip: {}, call findDuyetTram({},'{}',{})", user.getUsername(), request.getRemoteAddr(), "", statusList, tinhTpId);
         List<BTSInfoBO> list = NodeObjectFacade.findDuyetTram("", statusList, tinhTpId);
-        LOGGER.info("user: {}, ip: {}, done findDuyetTram: {}", user.getUsername(), request.getRemoteAddr(), list.size());
+        logger.info("user: {}, ip: {}, done findDuyetTram: {}", user.getUsername(), request.getRemoteAddr(), list.size());
         mm.put("list", list);
         return "nodes/tram/tramList";
     }
@@ -757,7 +762,7 @@ public class NodesController {
     public @ResponseBody
     String approveAll(@ModelAttribute(value = "approveForm") ApproveAllForm approveForm, ModelMap mm, Locale locale, RedirectAttributes attr, HttpServletRequest request) throws Exception {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-        LOGGER.info("user: {}, ip: {}, approveAll: {}", user.getUsername(), request.getRemoteAddr(), approveForm.listParam());
+        logger.info("user: {}, ip: {}, approveAll: {}", user.getUsername(), request.getRemoteAddr(), approveForm.listParam());
         NodesFacade nodesFacade = new NodesFacade();
         return String.valueOf(nodesFacade.approveAllNode(approveForm, user.getId()));
     }
@@ -868,11 +873,13 @@ public class NodesController {
     }
 
     @RequestMapping(value = "/baoduong", method = RequestMethod.GET)
-    public String updateInit(
+    public String baoDuong(
             @ModelAttribute("cellNewForm") CellNewForm cellNewForm,
-            ModelMap mm, HttpServletRequest request) {
+            ModelMap mm, HttpServletRequest request,
+            @RequestParam(value = "node_code", required = false) String node_code) {
         CellNewExcelBO cellNewExcelBO = new CellNewExcelBO();
         mm.put("cellNewExcelBO", cellNewExcelBO);
+        mm.put("node_code", node_code);
         return "nodes/tram/baoDuongExcel";
     }
 
@@ -890,12 +897,12 @@ public class NodesController {
                         .to(BaoDuongNetExcel.class)
                         .mapSheet(0, 2);
             } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
             CellsFacade cellsFacade = new CellsFacade();
             List<String> result = new ArrayList<>();
             String temp;
-            LOGGER.info("user: {}, ip: {}, call updateBaoDuongNetExcel({})", user.getUsername(), request.getRemoteAddr(), items.size());
+            logger.info("user: {}, ip: {}, call updateBaoDuongNetExcel({})", user.getUsername(), request.getRemoteAddr(), items.size());
 
             for (int i = 0; i < items.size(); i++) {
                 if (items.get(i).getCode() == null || items.get(i).getCode().equals("")) {
@@ -904,11 +911,11 @@ public class NodesController {
                 temp = cellsFacade.updateBaoDuongNetExcel(items.get(i), user.getId());
                 result.add(temp);
             }
-            LOGGER.info("user: {}, ip: {}, done updateBaoDuongNetExcel:", user.getUsername(), request.getRemoteAddr(), result.size());
+            logger.info("user: {}, ip: {}, done updateBaoDuongNetExcel:", user.getUsername(), request.getRemoteAddr(), result.size());
 
-            LOGGER.info("user: {}, ip: {}, call writeExcelBaoDuong {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            logger.info("user: {}, ip: {}, call writeExcelBaoDuong {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
             writeResult(convFile, result, "result_update_bao_duong_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
-            LOGGER.info("user: {}, ip: {}, end writeExcelBaoDuong {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            logger.info("user: {}, ip: {}, end writeExcelBaoDuong {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
 
         } catch (Exception e) {
             String message = StringUtils.captureStackTrace(e);
@@ -916,10 +923,10 @@ public class NodesController {
                 if (message.contains("java.io.FileNotFoundException")) {
                     attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "File import không tồn tại"));
                 } else {
-                    LOGGER.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             } else {
-                LOGGER.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
         return "redirect:/nodes/baoduong";
@@ -956,12 +963,12 @@ public class NodesController {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(file)), response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException e) {
-                    LOGGER.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             }
             return file;
         } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -979,4 +986,126 @@ public class NodesController {
     }
 
 //    trunglk_end_search_new
+    
+    @RequestMapping(value = "/searchBaoDuong", method = RequestMethod.GET,
+            produces = "application/json; charset=UTF-8")
+    public @ResponseBody
+    String searchBaoDuong(HttpServletRequest request) {
+        try {
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+            logger.info("user: {}, ip: {},mem: {}, search", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            String[] tinhManagerArr = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+            String tinhManagers = String.join(",", tinhManagerArr);
+            logger.debug("tinhManagers: {}", tinhManagers);
+            int draw = -1;
+            String prs_start_record = "";
+            String prs_length_page = "";
+            String prs_global_search = "";
+            String prs_list_column_name = "";
+            String prs_list_column_search = "";
+            String prs_column_to_sort = "";
+            String param_sort_column = "";
+            String prs_sort_direction = "";
+            String pList = "";
+            ArrayList<String> ar_name = new ArrayList<>();
+            ArrayList<String> ar_search_value = new ArrayList<>();
+            
+            String columnPermisson = "";
+            // duyệt tất cả các tham số truyền vào request
+            for (Enumeration items = request.getParameterNames(); items.hasMoreElements();) {
+                String param_name = (String) items.nextElement();
+                String param_value = request.getParameter(param_name);
+                if (param_name.equals("draw")) {
+                    draw = Integer.parseInt(param_value);
+                } else if (param_name.startsWith("order") && param_name.contains("column")) {
+                    param_sort_column = param_value;
+                    prs_column_to_sort = param_value;
+                } else if (param_name.startsWith("order") && param_name.contains("dir")) {
+                    prs_sort_direction = param_value;
+                } else if (param_name.equals("start")) {
+                    prs_start_record = String.valueOf(Integer.parseInt(param_value) + 1);
+                } else if (param_name.equals("length")) {
+                    prs_length_page = param_value;
+                } else if (param_name.equals("search[value]")) {
+                    prs_global_search = param_value;
+                } else if (param_name.startsWith("columns") && param_name.contains("name")) {
+                    ar_name.add(param_value);
+                } else if (param_name.startsWith("columns") && param_name.contains("search") && param_name.contains("value")) {
+                    ar_search_value.add(param_value);
+                }
+                pList += param_name + "=" + param_value + ",";
+            }
+            //bổ sung phân quyền vào điều kiện tìm kiếm
+            Integer index =  ar_name.indexOf("tinhtp_id");
+            if(index !=null && !ar_search_value.isEmpty() && index >= 0 ){
+                String temp = ar_search_value.get(index);
+                if(temp == null || temp.isEmpty()){
+                    ar_search_value.set(index, tinhManagers);
+                }
+            }
+            //            
+            int total_column = ar_name.size();
+            for (int i = 0; i < total_column; i++) {
+                String name = ar_name.get(i);
+                String value = ar_search_value.get(i);
+                // update tên cột sorting
+                if (!param_sort_column.equals("0")) {
+                    if (Integer.parseInt(param_sort_column) == i) {
+                        prs_column_to_sort = ar_name.get(i);
+                    }
+                }
+                // check xem cột đó có giá trị cần search ko
+                if (!value.isEmpty()) {
+                    prs_list_column_name = prs_list_column_name + ";" + name;
+                    prs_list_column_search = prs_list_column_search + ";" + value;
+                }
+            }
+            String[] recordsTotal = new String[1];
+            String[] recordsFiltered = new String[1];
+            ArrayList<BaoDuongNetExcel> list = null;
+            CellsFacade cellsFacade = new CellsFacade();
+            try {
+                logger.debug("prs_start_record :{}, prs_length_page:{}, prs_global_search:{}, prs_list_column_name:{}, prs_list_column_search:{}, prs_column_to_sort:{}, prs_sort_direction:{} ",
+                        prs_start_record, prs_length_page, prs_global_search, prs_list_column_name, prs_list_column_search, prs_column_to_sort, prs_sort_direction);
+                list = cellsFacade.searchBaoDuong(prs_start_record, prs_length_page,
+                        prs_global_search, prs_list_column_name, prs_list_column_search, prs_column_to_sort,
+                        prs_sort_direction, recordsTotal, recordsFiltered);
+                logger.info("user: {}, ip: {},mem: {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            } catch (DAOException ex) {
+                logger.error(ex.getMessage(), ex);
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+            int count = 0;
+            // chuyển list  thành list String
+            List<List<String>> data = new ArrayList();
+            if (list != null) {
+                for (BaoDuongNetExcel item : list) {
+                    ArrayList<String> ls = new ArrayList();
+                    // thứ tự phải khớp với thứ tự của các cột trong table của trang jsp
+                    count++;
+                    ls.add(count + "");
+                    ls.add(item.getCode() ==null? "": item.getCode());
+                    ls.add(item.getNeType()  ==null? "": item.getNeType());
+                    ls.add(item.getNgayBaoDuong()  ==null? "": item.getNgayBaoDuong());
+                    ls.add(item.getDonvi() ==null? "": item.getDonvi());
+                    ls.add(item.getNote() ==null? "": item.getNote());
+                    ls.add(item.getNeTypeId()==null? "": item.getNeTypeId());
+                    ls.add(item.getBaoDuongId()==null? "": item.getBaoDuongId());
+                    ls.add(item.getNodeId()==null? "": item.getNodeId());
+                    data.add(ls);
+                }
+            }
+            // chuyển thành object json
+            ContentDataTableItem responseObj = new ContentDataTableItem(draw, recordsTotal[0], recordsFiltered[0], data);
+            Gson gson = new Gson();
+            logger.info("user: {}, ip: {},mem: {} end", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            return gson.toJson(responseObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+
+    }
 }

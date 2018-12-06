@@ -24,8 +24,14 @@ import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.formbean.Cell2gRegForm;
 import com.vnpt.media.rims.formbean.Cell3gRegForm;
 import com.vnpt.media.rims.formbean.Cell4gRegForm;
+import com.vnpt.media.rims.formbean.ReportCSHT;
 //import com.vnpt.media.rims.formbean.Cell2GList;
 import com.vnpt.media.rims.transaction.ITransaction;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -833,5 +839,75 @@ public class CellsFacade {
             DatabaseUtils.close(trans);
         }
         return result;
+    }
+    
+    public  ArrayList<BaoDuongNetExcel> searchBaoDuong(String prs_start_record, String prs_length_page,
+            String prs_global_search, String prs_list_column_name, String prs_list_column_search, String prs_column_to_sort,
+            String prs_sort_direction, String[] recordsTotal, String[] recordsFiltered) throws Exception {
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        ArrayList<BaoDuongNetExcel> arrayList = new ArrayList<>();
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            ICells i = factory.getCellsDAO();
+            trans.connectionType(DB_ADMIN);
+            conn = trans.getConnection();
+            String sql = "begin ?:=pkg_excel_node.fn_search_bao_duong(?,?,?,?,?,?,?,?,?); end;";
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cs.setString(2, prs_start_record);
+            cs.setString(3, prs_length_page);
+            cs.setString(4, prs_global_search);
+            cs.setString(5, prs_list_column_name);
+            cs.setString(6, prs_list_column_search);
+            cs.setString(7, prs_column_to_sort);
+            cs.setString(8, prs_sort_direction);
+            cs.registerOutParameter(9, oracle.jdbc.OracleTypes.VARCHAR);
+            cs.registerOutParameter(10, oracle.jdbc.OracleTypes.VARCHAR);
+            cs.executeQuery();
+            rs = (ResultSet) cs.getObject(1);
+            recordsTotal[0] = cs.getString(9);
+            recordsFiltered[0] = cs.getString(10);
+            while (rs.next()) {
+                BaoDuongNetExcel item = new BaoDuongNetExcel();
+                item.setCode(rs.getString("ma_node"));
+                item.setNeType(rs.getString("ne_type"));
+                item.setNgayBaoDuong(rs.getString("ngay_bao_duong"));
+                item.setDonvi(rs.getString("don_vi_thuc_hien"));
+                item.setNote(rs.getString("ghi_chu"));
+                item.setNodeId(rs.getString("node_id"));
+                item.setBaoDuongId(rs.getString("baoduong_id"));
+                item.setNeTypeId(rs.getString("ne_type_id"));
+                arrayList.add(item);
+            }
+            return arrayList;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            return arrayList;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    throw ex;
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw ex;
+                }
+            }
+            if (cs != null) {
+                try {
+                    cs.close();
+                } catch (SQLException ex) {
+                    throw ex;
+                }
+            }
+        }
     }
 }

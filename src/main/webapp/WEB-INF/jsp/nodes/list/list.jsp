@@ -399,6 +399,10 @@
                                                        title="Danh sách thiết bị" >
                                                         <img src="<%=request.getContextPath()%>/resources/img/equipment/rack-16.png">
                                                     </a>
+                                                    <a style="cursor: pointer"  href="<%=request.getContextPath()%>/nodes/baoduong?node_code=${item.code}"
+                                                       title="Thông tin bảo dưỡng" >
+                                                        <img src="<%=request.getContextPath()%>/image/icon/repair_icon.jpg">
+                                                    </a>
                                                 </c:if>   
 
 <!--                                        <a href="<%=request.getContextPath()%>/nodes/off/${item.id}"

@@ -532,21 +532,23 @@ public class AutoMailFacade {
                 row = sheet.createRow(rowIndex++);
                 for (int i = 1; i <= count; i++) {
                     cell = row.createCell(i - 1);
-                    cell.setCellValue(rs.getString(i) == null? "" : rs.getString(i) );
+                    cell.setCellValue(rs.getString(i) == null ? "" : rs.getString(i));
                     cell.setCellStyle(style);
                 }
             }
 //            fin.close();
-            String pathFile = folderTemp + File.separator + sqlName.replace(" ", "_") + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-            fos = new FileOutputStream(new File(pathFile));
-            workbook.write(fos);
-            if (SXSSFWorkbook.class.equals(workbook.getClass())) {
-                SXSSFWorkbook wb = (SXSSFWorkbook) workbook;
-                wb.dispose();
+            if (rowIndex > 1) {
+                String pathFile = folderTemp + File.separator + sqlName.replace(" ", "_") + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+                fos = new FileOutputStream(new File(pathFile));
+                workbook.write(fos);
+                if (SXSSFWorkbook.class.equals(workbook.getClass())) {
+                    SXSSFWorkbook wb = (SXSSFWorkbook) workbook;
+                    wb.dispose();
+                }
+                fos.flush();
+                fos.close();
+                return pathFile;
             }
-            fos.flush();
-            fos.close();
-            return pathFile;
         } catch (Exception ex) {
             ex.printStackTrace();
             logger.error(ex.getMessage(), ex);
@@ -570,7 +572,7 @@ public class AutoMailFacade {
                 }
             }
         }
-        return result;
+        return null;
     }
 
 }
