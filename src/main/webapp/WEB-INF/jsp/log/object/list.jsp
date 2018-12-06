@@ -30,25 +30,21 @@
 
                 <form method="GET" action="'<%=request.getContextPath()%>/object/search'"  id="frm_search">
                     <div class="box-body"> 
-                        <div class="col-md-6">
-                            <div class="form-group" style="padding: 0 15px">
-                                <div class="input-group">       
-                                    <label class=" input-group-addon">Nhóm</label>
-                                    <select  name="group" id="group" class="form-control" onchange="getListObject();" required="true">
-                                        <option value="">--Chọn nhóm--</option>
-                                        <c:forEach var="item" items="${groups}">
-                                            <option value="${item.group_name}" >${item.group_name}</option>
-                                        </c:forEach>
-                                    </select> 
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-6">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
                                     <label class=" input-group-addon">Đối tượng</label>
                                     <select  name="object" id="object" class="form-control">
                                         <option value="">--Chọn đối tượng--</option>
+                                        <option value="0">CSHT</option>
+                                        <option value="1">Phụ trợ</option>
+                                        <option value="2">BTS</option>
+                                        <option value="3">NODEB</option>
+                                        <option value="8">ENODEB</option>
+                                        <option value="5">CELL2G</option>
+                                        <option value="6">CELL3G</option>
+                                        <option value="7">CELL4G</option>
                                     </select> 
                                 </div>
                             </div>
@@ -144,27 +140,6 @@
                                     autoclose: true
                                 });
                             });
-                            function getListObject()
-                            {
-                                var group = $("#group").val();
-                                if (group == null || group == '') {
-                                    var html = '<option value="" >-Chọn đối tượng-</option>';
-                                    $('#object').html(html);
-                                    return;
-                                }
-                                $.get("${pageContext.request.contextPath}/object/getObject/" + group, function (data) {
-                                    var html = '<option value="" >-Chọn đối tượng-</option>';
-                                    if (data.length > 0) {
-                                        data.forEach(function (entry) {
-                                            var htmlx = '<option value="' + entry.object_name + '">' + entry.object_name + '</option>';
-                                            html += htmlx;
-                                        });
-                                    }
-                                    $('#object').html(html);
-                                });
-                            }
-                            ;
-
                             function search() {
                                 $('#tables').empty();
                                 var group = $("#group").val();

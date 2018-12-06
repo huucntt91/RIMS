@@ -3194,15 +3194,15 @@ public class NodeDAO extends GenericDAO implements INode {
                     if (neTypeId.equals("2") || neTypeId.equals("3") || neTypeId.equals("8")) //BTS
                     {
                         BTSInfoBO item = new BTSInfoBO();
-                        item.setId(rs.getLong("node_id"));
-                        item.setNeTypeId(rs.getLong("ne_type_id"));
+                        item.setId(rs.getObject("node_id", Long.class));
+                        item.setNeTypeId(rs.getObject("ne_type_id", Long.class));
                         item.setCode(rs.getString("ma_node"));
                         item.setMaNodeCha(rs.getString("ma_node_cha"));
-                        item.setNodeChaId(rs.getLong("node_cha_id"));
+                        item.setNodeChaId(rs.getObject("node_cha_id", Long.class));
 
-                        item.setDonViId(rs.getLong("DONVI_ID"));
+                        item.setDonViId(rs.getObject("DONVI_ID", Long.class));
                         item.setCodeBuilding(rs.getString("ma_building"));
-                        item.setBuildingId(rs.getLong("building_id"));
+                        item.setBuildingId(rs.getObject("building_id", Long.class));
                         item.setTenNeType(rs.getString("ten_loai_ne"));
 
                         item.setTenThietBi(rs.getString("ten_thiet_bi"));
@@ -3213,10 +3213,10 @@ public class NodeDAO extends GenericDAO implements INode {
                         item.setTenNgQLy(rs.getString("TEN_NG_QLY"));
                         item.setSDTQLy(rs.getString("SDT_NG_QLY"));
 
-                        item.setThietBiId(rs.getLong("thiet_bi_id"));
-                        item.setLoaiTramId(rs.getLong("loai_tram_id"));
-                        item.setTrangThaiHDId(rs.getLong("trang_thai_hd_id"));
-                        item.setTrangThaiQLId(rs.getLong("trang_thai_ql_id"));
+                        item.setThietBiId(rs.getObject("thiet_bi_id", Long.class));
+                        item.setLoaiTramId(rs.getObject("loai_tram_id", Long.class));
+                        item.setTrangThaiHDId(rs.getObject("trang_thai_hd_id", Long.class));
+                        item.setTrangThaiQLId(rs.getObject("trang_thai_ql_id", Long.class));
 
                         if (neTypeId.equals("2")) {
                             item.setName(rs.getString("TEN_BTS"));
@@ -3231,7 +3231,7 @@ public class NodeDAO extends GenericDAO implements INode {
                         item.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
                         item.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
                         item.setCauHinh(rs.getString("cau_hinh"));
-                        item.setCauHinhPortId(rs.getLong("cau_hinh_port_id"));
+                        item.setCauHinhPortId(rs.getObject("cau_hinh_port_id", Long.class));
                         if (!neTypeId.equals("8")) {
                             item.setCosite2G3GType(rs.getInt("COSITE_2G_3G_TYPE"));
                             item.setMaCosite(rs.getString("MA_COSITE_2G_3G"));
@@ -3253,12 +3253,12 @@ public class NodeDAO extends GenericDAO implements INode {
                         }
                         item.setFilterUser(rs.getString("FILTER_USER"));
                         item.setFrequencyBand(rs.getString("FREQUENCY_BAND"));
-                        item.setBangTanId(rs.getLong("BANG_TAN_ID"));
+                        item.setBangTanId(rs.getObject("BANG_TAN_ID", Long.class));
 
                         item.setCodeTramDA(rs.getString("ma_tram_da"));
-                        item.setTramDAId(rs.getLong("TRAM_DU_AN_ID"));
+                        item.setTramDAId(rs.getObject("TRAM_DU_AN_ID", Long.class));
                         item.setStatus(rs.getInt("STATUS"));
-                        item.setUserInsert(rs.getLong("USER_INSERT"));
+                        item.setUserInsert(rs.getObject("USER_INSERT", Long.class));
 
                         item.setTenQuan(rs.getString("ten_quan_huyen"));
                         item.setTenPhuong(rs.getString("ten_phuong_xa"));
@@ -3269,20 +3269,20 @@ public class NodeDAO extends GenericDAO implements INode {
 
                     } else if (neTypeId.equals("5") || neTypeId.equals("6") || neTypeId.equals("7")) {
                         NodeBO nodebo = new NodeBO();
-                        nodebo.setId(rs.getLong("id"));
+                        nodebo.setId(rs.getObject("id", Long.class));
 
                         nodebo.setCode(rs.getString("ma_node"));
                         nodebo.setTenNgQLy(rs.getString("TEN_NG_QLY"));
                         nodebo.setSDTQLy(rs.getString("SDT_NG_QLY"));
                         nodebo.setDonViName(rs.getString("ten_don_vi"));
-                        nodebo.setNodeChaId(rs.getLong("node_cha_id"));
+                        nodebo.setNodeChaId(rs.getObject("node_cha_id", Long.class));
                         nodebo.setTenThietBi(rs.getString("ten_thiet_bi"));
-                        nodebo.setThietBiId(rs.getLong("thiet_bi_id"));
+                        nodebo.setThietBiId(rs.getObject("thiet_bi_id", Long.class));
 
                         nodebo.setCodeBuilding(rs.getString("ma_building"));
-                        nodebo.setNeTypeId(rs.getLong("ne_type_id"));
+                        nodebo.setNeTypeId(rs.getObject("ne_type_id", Long.class));
                         nodebo.setTenNeType(rs.getString("ten_loai_ne"));
-                        nodebo.setLoaiTramId(rs.getLong("loai_tram_id"));
+                        nodebo.setLoaiTramId(rs.getObject("loai_tram_id", Long.class));
 
                         nodebo.setTenLoaiTram(rs.getString("ten_loai_tram"));
                         nodebo.setTenTrangThaiHD(rs.getString("ten_trangthai_hd"));
@@ -3292,22 +3292,22 @@ public class NodeDAO extends GenericDAO implements INode {
                         nodebo.setNote(rs.getString("note"));
                         nodebo.setMaNodeCha(rs.getString("ma_node_cha"));
                         nodebo.setCodeTramDA(rs.getString("ma_tram_da"));
-                        nodebo.setUserInsert(rs.getLong("user_insert"));
-                        nodebo.setBuildingId(rs.getLong("building_id"));
+                        nodebo.setUserInsert(rs.getObject("user_insert", Long.class));
+                        nodebo.setBuildingId(rs.getObject("building_id", Long.class));
                         nodebo.setStatus(rs.getInt("status"));
 
                         if (neTypeId.equals("7")) //cell4g
                         {
                             OmcCell4gInfoBO omc = new OmcCell4gInfoBO(nodebo);
                             omc.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
-                            omc.setLac(rs.getLong("lac"));
-                            omc.setCi(rs.getLong("ci"));
+                            omc.setLac(rs.getObject("lac", Long.class));
+                            omc.setCi(rs.getObject("ci", Long.class));
                             omc.setTenBangTan(rs.getString("FREQUENCY_BAND"));
                             omc.setPci(rs.getString("pci"));
                             omc.setTac(rs.getString("tac"));
                             omc.setLcrid(rs.getString("lcrid"));
 
-                            omc.setCellType(rs.getLong("CELL_TYPE"));
+                            omc.setCellType(rs.getObject("CELL_TYPE", Long.class));
                             omc.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
                             omc.setHoanCanhRaDoi(rs.getString("HOAN_CANH_RA_DOI"));
                             omc.setTenCell(rs.getString("TEN_CELL"));
@@ -3315,25 +3315,19 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
                             omc.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
                             omc.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
-                            Long setAzimuth = rs.getLong("AZIMUTH");
-                            omc.setAzimuth(rs.wasNull() ? null : setAzimuth);
 
-//                            omc.setAzimuth(rs.getLong("AZIMUTH"));
-//                            omc.setMechanicalTilt(rs.getLong("MECHANICAL_TILT"));
-                            Long setMechanicalTilt = rs.getLong("MECHANICAL_TILT");
-                            omc.setMechanicalTilt(rs.wasNull() ? null : setMechanicalTilt);
+                            omc.setAzimuth(rs.getObject("AZIMUTH", Long.class));
+                            omc.setMechanicalTilt(rs.getObject("MECHANICAL_TILT", Long.class));
 
-//                            omc.setElectricalTilt(rs.getLong("ELECTRICAL_TILT"));
-                            Long setElectricalTilt = rs.getLong("ELECTRICAL_TILT");
-                            omc.setElectricalTilt(rs.wasNull() ? null : setElectricalTilt);
+                            omc.setElectricalTilt(rs.getObject("ELECTRICAL_TILT", Long.class));
 
-                            omc.setTotalTilt(rs.getLong("TOTAL_TILT"));
-                            omc.setAntennaType(rs.getLong("ANTENNA_TYPE"));
+                            omc.setTotalTilt(rs.getObject("TOTAL_TILT", Long.class));
+                            omc.setAntennaType(rs.getObject("ANTENNA_TYPE", Long.class));
                             omc.setAntennaName(rs.getString("ten_loai_anten"));
                             omc.setAntennaModel(rs.getString("ANTENNA_MODEL"));
                             omc.setAntennaPattern(rs.getString("ANTENNA_PATTERN"));
-                            omc.setAntennaHigh(rs.getLong("ANTENNA_HIGH"));
-                            omc.setNoOfCarrier(rs.getLong("no_of_carrier"));
+                            omc.setAntennaHigh(rs.getObject("ANTENNA_HIGH", Long.class));
+                            omc.setNoOfCarrier(rs.getObject("no_of_carrier", Long.class));
                             omc.setBosterTma(rs.getString("BOSTER_TMA"));
                             omc.setSpecialCoverage(rs.getString("SPECIAL_COVERAGE"));
                             omc.setListCellGroupId(rs.getString("list_group_id"));
@@ -3342,23 +3336,22 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setEnodebId(rs.getString("enodeb_id"));
                             omc.setLat(rs.getString("Latitude"));
                             omc.setLon(rs.getString("Longitude"));
-                            omc.setBangTanId(rs.getLong("bang_tan_id"));
+                            omc.setBangTanId(rs.getObject("bang_tan_id", Long.class));
                             return omc;
                         } else if (neTypeId.equals("5")) //cell
                         {
                             OmcCell2gInfoBO omc = new OmcCell2gInfoBO(nodebo);
                             omc.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
-                            omc.setLac(rs.getLong("lac"));
-                            omc.setCi(rs.getLong("ci"));
+                            omc.setLac(rs.getObject("lac", Long.class));
+                            omc.setCi(rs.getObject("ci", Long.class));
                             omc.setTenBangTan(rs.getString("FREQUENCY_BAND"));
-                            Long bcch = rs.getLong("bcch");
-                            omc.setBcch(rs.wasNull() ? null : bcch);
+                            omc.setBcch(rs.getObject("bcch", Long.class));
 
                             omc.setBsic(rs.getString("bsic"));
                             omc.setTch(rs.getString("tch"));
                             omc.setTrxConfig(rs.getString("trx_config"));
                             //info
-                            omc.setCellType(rs.getLong("CELL_TYPE"));
+                            omc.setCellType(rs.getObject("CELL_TYPE", Long.class));
                             omc.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
                             omc.setHoanCanhRaDoi(rs.getString("HOAN_CANH_RA_DOI"));
                             omc.setTenCell(rs.getString("TEN_CELL"));
@@ -3366,33 +3359,19 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
                             omc.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
                             omc.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
-//                            omc.setAzimuth(rs.getLong("AZIMUTH"));
-                            Long setAzimuth = rs.getLong("AZIMUTH");
-                            omc.setAzimuth(rs.wasNull() ? null : setAzimuth);
+                            omc.setAzimuth(rs.getObject("AZIMUTH", Long.class));
 
-//                            omc.setMechanicalTilt(rs.getLong("MECHANICAL_TILT"));
-                            Long setMechanicalTilt = rs.getLong("MECHANICAL_TILT");
-                            omc.setMechanicalTilt(rs.wasNull() ? null : setMechanicalTilt);
+                            omc.setMechanicalTilt(rs.getObject("MECHANICAL_TILT", Long.class));
 
-//                            omc.setElectricalTilt(rs.getLong("ELECTRICAL_TILT"));
-                            Long setElectricalTilt = rs.getLong("ELECTRICAL_TILT");
-                            omc.setElectricalTilt(rs.wasNull() ? null : setElectricalTilt);
-
-//                            omc.setTotalTilt(rs.getLong("TOTAL_TILT"));
-                            Long setTotalTilt = rs.getLong("TOTAL_TILT");
-                            omc.setTotalTilt(rs.wasNull() ? null : setTotalTilt);
-
-//                            omc.setAntennaType(rs.getLong("ANTENNA_TYPE"));
-                            Long setAntennaType = rs.getLong("ANTENNA_TYPE");
-                            omc.setAntennaType(rs.wasNull() ? null : setAntennaType);
+                            omc.setElectricalTilt(rs.getObject("ELECTRICAL_TILT", Long.class));
+                            omc.setTotalTilt(rs.getObject("TOTAL_TILT", Long.class));
+                            omc.setAntennaType(rs.getObject("ANTENNA_TYPE", Long.class));
 
                             omc.setAntennaName(rs.getString("ten_loai_anten"));
 
                             omc.setAntennaModel(rs.getString("ANTENNA_MODEL"));
                             omc.setAntennaPattern(rs.getString("ANTENNA_PATTERN"));
-//                            omc.setAntennaHigh(rs.getLong("ANTENNA_HIGH"));
-                            Long setAntennaHigh = rs.getLong("ANTENNA_HIGH");
-                            omc.setAntennaHigh(rs.wasNull() ? null : setAntennaHigh);
+                            omc.setAntennaHigh(rs.getObject("ANTENNA_HIGH", Long.class));
 
                             omc.setBosterTma(rs.getString("BOSTER_TMA"));
                             omc.setSpecialCoverage(rs.getString("SPECIAL_COVERAGE"));
@@ -3400,21 +3379,21 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setListCellGroupId(rs.getString("list_group_id"));
                             omc.setLat(rs.getString("Latitude"));
                             omc.setLon(rs.getString("Longitude"));
-                            omc.setBangTanId(rs.getLong("bang_tan_id"));
+                            omc.setBangTanId(rs.getObject("bang_tan_id", Long.class));
                             return omc;
 
                         } else if (neTypeId.equals("6")) //cell
                         {
                             OmcCell3gInfoBO omc = new OmcCell3gInfoBO(nodebo);
                             omc.setTenTrenHeThong(rs.getString("TEN_TREN_HE_THONG"));
-                            omc.setLac(rs.getLong("lac"));
-                            omc.setCi(rs.getLong("ci"));
+                            omc.setLac(rs.getObject("lac", Long.class));
+                            omc.setCi(rs.getObject("ci", Long.class));
                             omc.setTenBangTan(rs.getString("FREQUENCY_BAND"));
                             omc.setDlPsc(rs.getString("dl_psc"));
                             omc.setCpichPower(rs.getString("cpich_power"));
                             omc.setTotalPower(rs.getString("total_power"));
                             omc.setMaxPower(rs.getString("max_power"));
-                            omc.setCellType(rs.getLong("CELL_TYPE"));
+                            omc.setCellType(rs.getObject("CELL_TYPE", Long.class));
                             omc.setNgayHoatDong(rs.getDate("NGAY_HOAT_DONG"));
                             omc.setHoanCanhRaDoi(rs.getString("HOAN_CANH_RA_DOI"));
                             omc.setTenCell(rs.getString("TEN_CELL"));
@@ -3422,16 +3401,16 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setNgayDangKy(rs.getDate("NGAY_DANG_KY"));
                             omc.setNgayKiemDuyet(rs.getDate("NGAY_KIEM_DUYET"));
                             omc.setNgayCapPhep(rs.getDate("NGAY_CAP_PHEP"));
-                            omc.setAzimuth(rs.getLong("AZIMUTH"));
-                            omc.setMechanicalTilt(rs.getLong("MECHANICAL_TILT"));
-                            omc.setElectricalTilt(rs.getLong("ELECTRICAL_TILT"));
-                            omc.setTotalTilt(rs.getLong("TOTAL_TILT"));
-                            omc.setAntennaType(rs.getLong("ANTENNA_TYPE"));
+                            omc.setAzimuth(rs.getObject("AZIMUTH", Long.class));
+                            omc.setMechanicalTilt(rs.getObject("MECHANICAL_TILT", Long.class));
+                            omc.setElectricalTilt(rs.getObject("ELECTRICAL_TILT", Long.class));
+                            omc.setTotalTilt(rs.getObject("TOTAL_TILT", Long.class));
+                            omc.setAntennaType(rs.getObject("ANTENNA_TYPE", Long.class));
                             omc.setAntennaName(rs.getString("ten_loai_anten"));
                             omc.setAntennaModel(rs.getString("ANTENNA_MODEL"));
                             omc.setAntennaPattern(rs.getString("ANTENNA_PATTERN"));
-                            omc.setAntennaHigh(rs.getLong("ANTENNA_HIGH"));
-                            omc.setNoOfCarrier(rs.getLong("NO_OF_CARRIER"));
+                            omc.setAntennaHigh(rs.getObject("ANTENNA_HIGH", Long.class));
+                            omc.setNoOfCarrier(rs.getObject("NO_OF_CARRIER", Long.class));
                             omc.setBosterTma(rs.getString("BOSTER_TMA"));
                             omc.setSpecialCoverage(rs.getString("SPECIAL_COVERAGE"));
                             omc.setListCellGroupId(rs.getString("list_group_id"));
@@ -3439,20 +3418,20 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setAntennaGain(rs.getString("ANTENNA_GAIN"));
                             omc.setLat(rs.getString("Latitude"));
                             omc.setLon(rs.getString("Longitude"));
-                            omc.setBangTanId(rs.getLong("bang_tan_id"));
+                            omc.setBangTanId(rs.getObject("bang_tan_id", Long.class));
                             return omc;
 
                         }
                     } else if (neTypeId.equals("11")) //BSC RNC
                     {
                         BSCRNCInfoBO item = new BSCRNCInfoBO();
-                        item.setId(rs.getLong("node_id"));
-                        item.setNeTypeId(rs.getLong("ne_type_id"));
+                        item.setId(rs.getObject("node_id", Long.class));
+                        item.setNeTypeId(rs.getObject("ne_type_id", Long.class));
                         item.setCode(rs.getString("ma_node"));
                         item.setMaNodeCha(rs.getString("ma_node_cha"));
-                        item.setDonViId(rs.getLong("DONVI_ID"));
+                        item.setDonViId(rs.getObject("DONVI_ID", Long.class));
                         item.setCodeBuilding(rs.getString("ma_building"));
-                        item.setBuildingId(rs.getLong("building_id"));
+                        item.setBuildingId(rs.getObject("building_id", Long.class));
                         item.setTenNeType(rs.getString("ten_loai_ne"));
                         item.setTenThietBi(rs.getString("ten_thiet_bi"));
                         item.setDonViName(rs.getString("ten_don_vi"));
@@ -3462,10 +3441,10 @@ public class NodeDAO extends GenericDAO implements INode {
                         item.setTenNgQLy(rs.getString("TEN_NG_QLY"));
                         item.setSDTQLy(rs.getString("SDT_NG_QLY"));
 
-                        item.setThietBiId(rs.getLong("thiet_bi_id"));
-                        item.setLoaiTramId(rs.getLong("loai_tram_id"));
-                        item.setTrangThaiHDId(rs.getLong("trang_thai_hd_id"));
-                        item.setTrangThaiQLId(rs.getLong("trang_thai_ql_id"));
+                        item.setThietBiId(rs.getObject("thiet_bi_id", Long.class));
+                        item.setLoaiTramId(rs.getObject("loai_tram_id", Long.class));
+                        item.setTrangThaiHDId(rs.getObject("trang_thai_hd_id", Long.class));
+                        item.setTrangThaiQLId(rs.getObject("trang_thai_ql_id", Long.class));
 
                         item.setName(rs.getString("TEN_BSC_RNC"));
                         item.setHoanCanhRaDoi(rs.getString("hoan_canh_ra_doi"));

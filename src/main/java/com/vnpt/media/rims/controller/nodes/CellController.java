@@ -205,7 +205,10 @@ public class CellController {
         mm.put("approveForm", new ApproveForm());
         return "nodes/cell/cellList";
     }
-
+    
+    /*
+    dang ky huy node
+    */
     @RequestMapping(value = "/approve", method = RequestMethod.POST)
     public String approve(@ModelAttribute(value = "approveForm") ApproveForm approveForm, ModelMap mm, Locale locale, RedirectAttributes attr, HttpServletRequest request) throws Exception {
         NodesFacade nodesFacade = new NodesFacade();

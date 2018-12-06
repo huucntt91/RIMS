@@ -39,126 +39,40 @@
 
     </head>
     <body>
-        <div class="content-header">
-            <h1>Đăng ký OFFAIR đối tượng</h1>
-            <ol class="breadcrumb">                
-                <div class="btn-group">
-                    <button type="button" class="btn btn-danger">
-                        <i class="fa fa-download"></i> 
-                        Download Template
-                    </button>
-                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="${pageContext.request.contextPath}/resources/excel/Template_DELETE_NODE.xlsx">Biểu mẫu đăng ký OFFAIR tượng</a></li>     
-                    </ul>
-                </div>
-            </ol>
-        </div>
-        <section class="content">            
+        <section class="content"> 
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title"></h3>
+                            <h3 class="box-title">Đăng ký offair node</h3>
                         </div>
-
-                        <form:form method="POST" action="${pageContext.request.contextPath}/excelDeleteNode/preCheck" commandName="importNodeForm"
+                        <form:form method="POST" action="${pageContext.request.contextPath}/excelDeleteNode/update" commandName="importNodeForm"
                                    enctype="multipart/form-data">
                             <div class="box-body" >
                                 <div class="form-group">
-                                    <div class="col-xs-4">                                    
-                                        <div class="input-group">   
-                                            <form:input type="file" path="file"  id="BSbtndanger" value="${groupContactForm.name}"/>
-                                            <script>
-                                                $('#BSbtndanger').filestyle({
-                                                    buttonName: 'btn-info',
-                                                    buttonText: ' Chọn File import'
-                                                });
-                                            </script>
+
+                                    <div class="col-xs-6">                                    
+                                        <div class="input-group">                                
+                                            <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn file import</label>
+                                            <form:input class="form-control"  id="file3"
+                                                        type="file"  path="file"  value="${groupContactForm.name}"/>
 
                                         </div>
                                     </div>                                   
-
-                                    <div class="col-xs-8" >
-
+                                    <div class="col-xs-6">                                    
+                                        <button type="button" onclick='window.location.href = "${pageContext.request.contextPath}/resources/excel/Template_DELETE_NODE.xlsx"' class="btn btn-facebook"><spring:message code="btn.download.template"/></button>
                                     </div>
                                 </div>
                             </div>
                             </br>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">Kiểm tra dữ liệu</button>
+                                <button type="submit" class="btn btn-primary">Cập nhật dữ liệu</button>
                             </div>
                         </form:form>
                     </div>
                 </div>
-            </div>
+            </div>               
 
-            <c:if test="${tableDeleteForm.models.size()>0}">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box">
-
-                            <div class="box-body table-responsive">
-                                <div id="tablePagingId">
-
-                                    <%--modelAttribute="tableForm">--%>
-                                    <form:form method="post" action="${pageContext.request.contextPath}/excelDeleteNode/update" 
-                                               modelAttribute="tableDeleteForm">
-                                        <table id="example1" class="table table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-
-                                                    <th><input type="checkbox" id="checkall"></th>
-                                                    <th>Kết quả</th>                                                    
-                                                    <th>Mã Node</th>
-                                                    <th>Kiểu Node</th>
-                                                    <th>Lý do</th>
-
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>                                       
-                                                <c:forEach var="temp" items="${tableDeleteForm.models}" varStatus="status">                                        
-                                                    <tr>
-                                                        <td><form:checkbox path="models[${status.index}].check" class="checkitem"/></td>
-                                                        <td><form:label path="models[${status.index}].checkDB" 
-                                                                    cssStyle="border:0;font-weight:normal" readonly="true" >${temp.checkDB}</form:label>
-                                                            <form:hidden path="models[${status.index}].checkDB" />
-                                                        </td>
-
-                                                        <td><form:label path="models[${status.index}].code" 
-                                                                    cssStyle="border:0;font-weight:normal" readonly="true" >${temp.code}</form:label>
-                                                            <form:hidden path="models[${status.index}].code" />
-                                                        </td>
-
-                                                        <td><form:label path="models[${status.index}].loaiNE" 
-                                                                    cssStyle="border:0;font-weight:normal" readonly="true" >${temp.loaiNE}</form:label>
-                                                            <form:hidden path="models[${status.index}].loaiNE" />
-                                                        </td>
-                                                        <td><form:label path="models[${status.index}].lyDo" 
-                                                                    cssStyle="border:0;font-weight:normal" readonly="true" >${temp.lyDo}</form:label>
-                                                            <form:hidden path="models[${status.index}].lyDo" />
-                                                        </td>                                                                                                              
-                                                    </tr>
-                                                </c:forEach>                                       							
-                                            </tbody>                                    
-                                        </table>
-
-                                        <br/>                                    
-                                        <button type="submit" class="btn btn-primary" onclick="return checkSumit();"  >Save</button>
-                          
-                                    </form:form>
-                                </div>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- /.box -->
-                    </div>
-                </div>
-            </c:if>            
         </section> 
 
         <script  type="text/javascript">
@@ -178,13 +92,13 @@
                         $('.checkitem').iCheck('uncheck');
                     }
                 });
-//                $('#example1').DataTable({
-//                    "language": {
-//                        "url": "${pageContext.request.contextPath}/resources/js/plugins/datatables/vi.json"
-//                    }
-//                });
+                //                $('#example1').DataTable({
+                //                    "language": {
+                //                        "url": "${pageContext.request.contextPath}/resources/js/plugins/datatables/vi.json"
+                //                    }
+                //                });
             });
-            
+
             function checkSumit() {
                 var flag = false;
                 $(".checkitem").each(function (i) {

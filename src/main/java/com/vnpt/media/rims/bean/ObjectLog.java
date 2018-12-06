@@ -10,7 +10,7 @@ package com.vnpt.media.rims.bean;
  * @author Cyano
  */
 public class ObjectLog {
-
+    String  id;
     String objectName;
     String attributeName;
     String oldValue;
@@ -19,6 +19,49 @@ public class ObjectLog {
     String actionDate;
     String actionName;
     String objectId;
+    String objectCode;
+    String userName;
+    String objectType;
+
+    public String getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
+    
+    
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
+
+    public String getObjectCode() {
+        return objectCode;
+    }
+
+    public void setObjectCode(String objectCode) {
+        this.objectCode = objectCode;
+    }
+    
+    
 
     public String getObjectId() {
         return objectId;

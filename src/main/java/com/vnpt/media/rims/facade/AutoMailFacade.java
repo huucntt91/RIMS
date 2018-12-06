@@ -408,7 +408,7 @@ public class AutoMailFacade {
                 result.add(emailReport);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            throw e;
         } finally {
             if (rs != null) {
                 try {
