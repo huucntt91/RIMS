@@ -1,13 +1,8 @@
 package com.vnpt.media.rims.dao;
 
-import com.vnpt.media.rims.bean.AttClassGroupBO;
-import com.vnpt.media.rims.bean.AttClassListBO;
+import com.vnpt.media.rims.bean.*;
 import com.vnpt.media.rims.exception.DAOException;
 import java.util.List;
-import com.vnpt.media.rims.bean.HuyenBO;
-import com.vnpt.media.rims.bean.ObjectListBO;
-import com.vnpt.media.rims.bean.PhuongXaBO;
-import com.vnpt.media.rims.bean.TinhBO;
 
 /**
  * Created with IntelliJ IDEA. User: haidd Date: 6/26/13 Time: 4:21 PM To change
@@ -30,4 +25,6 @@ public interface IClassGroup extends IGeneric {
     public List<TinhBO> findListTinhByUserId(String id) throws DAOException;
 
     public List<String> findClassAttrByUserId(String userId, String action, String objectId) throws DAOException;
+
+    public List<AttributeBO> findAttrByClassId(long classId) throws DAOException;
 }

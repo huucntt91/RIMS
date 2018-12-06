@@ -319,4 +319,38 @@ public class ClassGroupDAO extends GenericDAO implements IClassGroup {
             throw new DAOException(e);
         }
     }
+
+    @Override
+    public List<AttributeBO> findAttrByClassId(long classId) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = this.getConnection();
+            String querySql = "{? = call PKG_GROUP.fc_get_attr_by_classid(?) }";
+
+            List<Object> vars = new Vector<Object>();
+            vars.add(classId);
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+
+            List<?> list = sqlTemplate.queryFunction(querySql, (ResultSet rs, int rowNum) -> {
+                AttributeBO attributeBO = new AttributeBO();
+                attributeBO.setId(rs.getLong("attr_id"));
+                attributeBO.setAttrName(rs.getString("attr_name"));
+                attributeBO.setAttrCode(rs.getString("attr_code"));
+                attributeBO.setAttrTableName(rs.getString("attr_table_name"));
+                return attributeBO;
+            }, vars);
+
+            return (List<AttributeBO>) list;
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+
 }

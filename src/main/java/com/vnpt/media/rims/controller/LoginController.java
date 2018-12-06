@@ -8,6 +8,7 @@ package com.vnpt.media.rims.controller;
 import com.vnpt.media.rims.bean.ChartData;
 import com.vnpt.media.rims.bean.ChartBO;
 import com.vnpt.media.rims.bean.MonitoringJobAuditBO;
+import com.vnpt.media.rims.common.utils.PermissionUtils;
 import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.facade.ChartFacade;
 import com.vnpt.media.rims.facade.DataAuditFacade;
@@ -209,6 +210,7 @@ public class LoginController {
         StringBuffer url = request.getRequestURL();
         String uri = request.getRequestURI();
         String host = url.substring(0, url.indexOf(uri));
+        PermissionUtils.clear();
         return "redirect:https://id.vnpt.com.vn/cas/logout?service=" + host + request.getContextPath();
         //return "redirect:/login?logout";
     }

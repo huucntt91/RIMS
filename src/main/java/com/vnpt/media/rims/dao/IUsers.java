@@ -1,5 +1,6 @@
 package com.vnpt.media.rims.dao;
 
+import com.vnpt.media.rims.bean.UserAttrBO;
 import com.vnpt.media.rims.exception.DAOException;
 import java.util.List;
 import com.vnpt.media.rims.bean.GroupBO;
@@ -54,4 +55,6 @@ public interface IUsers extends IGeneric {
     UserBO checkLogin(String email, String password) throws DAOException;
     
     int UserLogin(String userId, String Ip) throws DAOException;
+
+    List<UserAttrBO> findUserAttrByUserId(String userId) throws DAOException;
 }

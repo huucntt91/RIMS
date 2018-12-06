@@ -355,6 +355,7 @@ $(document).ready(function() {
 });
 //
 function moveRows(fromTable, toTable) {
+    $.fn.dataTable.ext.errMode = 'none';
     var rows = fromTable.rows('.selected').data();
     var destination = toTable.rows().data();
     var i, j;
@@ -468,10 +469,12 @@ $('#getAllCheckboxGroupUser').click(function() {
             $(data).find("responseCode").each(function() {
                 code = code + $(this).text() + "";
             });
+
             if (code == '01') {
                 alert("Có lỗi trong quá trình xử lý. Vui lòng thử lại");
             } else if (code == '00') {
                 alert("Xử lý thành công");
+                location.reload();
             }
         },
         error: function(result) {

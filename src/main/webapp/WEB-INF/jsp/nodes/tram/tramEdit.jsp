@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="pm" uri="/WEB-INF/tld/permissionTagLib" %>
 <%@include file="../../include/header.jsp"%>
 
 <section class="content">            
@@ -115,10 +116,14 @@
                                     <h3 class="panel-title">Thông tin quản lý</h3>
                                 </div>
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"MANAGEMENT_INFO")}'> disableGroup="disable" </c:if>>                        
-                                    <div class="form-group" class="form-control">
+                                    <div class="form-group" class="form-control"
+                                        <c:if test="${not pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO','VIEW')}"> style="display: none" </c:if>
+                                    >
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;"  for="exampleInputEmail1">Tên người quản lý</label>
-                                            <input type="text" value="${model.tenNgQLy}" class="form-control" name="tenNgQLy"  placeholder="Tên người quản lý"  />                    
+                                            <input type="text" value="${model.tenNgQLy}" class="form-control" name="tenNgQLy"  placeholder="Tên người quản lý"
+                                                <c:if test="${not pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO','UPDATE')}"> disabled </c:if>
+                                            />
                                     </div>
                                 </div> 
                                 <div class="form-group" class="form-control">
