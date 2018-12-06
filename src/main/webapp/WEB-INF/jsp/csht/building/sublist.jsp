@@ -188,7 +188,10 @@
                                         <td>${item.buildingBO.nhomCSHT}</td>
                                         <td> <a href="#" onclick="getBuildingLink(${item.buildingBO.id}, '${item.buildingBO.code}')" data-toggle="modal" data-target="#myModal">Chi tiết</a> </td>
                                         <td>
-
+                                            <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=BUILDING&objectCode=${item.buildingBO.code}"
+                                                           title="Lịch sử CSHT" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                             </a>
                                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/view/{id}')}">
                                                 <a href="<%=request.getContextPath()%>/building/view/${item.buildingBO.id}"
                                                    title="Sửa">
