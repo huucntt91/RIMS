@@ -880,6 +880,72 @@ public class CellsFacade {
                 item.setNodeId(rs.getString("node_id"));
                 item.setBaoDuongId(rs.getString("baoduong_id"));
                 item.setNeTypeId(rs.getString("ne_type_id"));
+                item.setArea(rs.getString("khu_vuc"));
+                item.setProvinceId(rs.getString("tinhtp_id"));
+                item.setProvinceName(rs.getString("ten_tinh_tp"));
+                arrayList.add(item);
+            }
+            return arrayList;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+            return arrayList;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    throw ex;
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex) {
+                    throw ex;
+                }
+            }
+            if (cs != null) {
+                try {
+                    cs.close();
+                } catch (SQLException ex) {
+                    throw ex;
+                }
+            }
+        }
+    }
+    public  List exportBaoDuong(String khuvucIds, String tinhTpIds, String nodeCode, String neType) throws Exception {
+        CallableStatement cs = null;
+        ResultSet rs = null;
+        Connection conn = null;
+        List arrayList = new ArrayList<>();
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            ICells i = factory.getCellsDAO();
+            trans.connectionType(DB_ADMIN);
+            conn = trans.getConnection();
+            String sql = "begin ?:=pkg_excel_node.fn_export_bao_duong(?,?,?,?); end;";
+            cs = conn.prepareCall(sql);
+            cs.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cs.setString(2, khuvucIds);
+            cs.setString(3, tinhTpIds);
+            cs.setString(4, nodeCode);
+            cs.setString(5, neType);
+            cs.executeQuery();
+            rs = (ResultSet) cs.getObject(1);
+            while (rs.next()) {
+                BaoDuongNetExcel item = new BaoDuongNetExcel();
+                item.setCode(rs.getString("ma_node"));
+                item.setNeType(rs.getString("ne_type"));
+                item.setNgayBaoDuong(rs.getString("ngay_bao_duong"));
+                item.setDonvi(rs.getString("don_vi_thuc_hien"));
+                item.setNote(rs.getString("ghi_chu"));
+                item.setNodeId(rs.getString("node_id"));
+                item.setBaoDuongId(rs.getString("baoduong_id"));
+                item.setNeTypeId(rs.getString("ne_type_id"));
+                item.setArea(rs.getString("khu_vuc"));
+                item.setProvinceId(rs.getString("tinhtp_id"));
+                item.setProvinceName(rs.getString("ten_tinh_tp"));
                 arrayList.add(item);
             }
             return arrayList;

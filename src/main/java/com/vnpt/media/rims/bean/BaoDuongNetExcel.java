@@ -31,6 +31,54 @@ public class BaoDuongNetExcel {
     @Column(name = "neTypeId", index = "")
     private String neTypeId;
 
+    @Column(name = "area", index = "")
+    private String area;
+
+    @Column(name = "provinceCode", index = "")
+    private String provinceCode;
+    @Column(name = "provinceName", index = "")
+    private String provinceName;
+    @Column(name = "provinceId", index = "")
+    private String provinceId;
+
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+    
+    
+    
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getProvinceCode() {
+        return provinceCode;
+    }
+
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
+    }
+    
+    
+    
+
     public String getNodeId() {
         return nodeId;
     }
@@ -38,8 +86,6 @@ public class BaoDuongNetExcel {
     public void setNodeId(String nodeId) {
         this.nodeId = nodeId;
     }
-
-    
 
     public String getBaoDuongId() {
         return baoDuongId;
@@ -56,8 +102,6 @@ public class BaoDuongNetExcel {
     public void setNeTypeId(String neTypeId) {
         this.neTypeId = neTypeId;
     }
-    
-    
 
     public String getNeType() {
         return neType;
@@ -66,9 +110,7 @@ public class BaoDuongNetExcel {
     public void setNeType(String neType) {
         this.neType = neType;
     }
-    
-    
- 
+
     public BaoDuongNetExcel() {
     }
 
@@ -111,7 +153,5 @@ public class BaoDuongNetExcel {
     public void setNote(String note) {
         this.note = note;
     }
-    
-    
-    
+
 }
