@@ -44,12 +44,27 @@
                     }
                     $(function() {
                         //document.getElementById("plugins1").innerHTML = $('#data').val();
-                        $("#checkview")
-                                .on("changed.jstree", function(e, data) {
+                        $("#checkview").jstree({
+                            "plugins": ["checkbox"],
+                            core : {
+                                expand_selected_onload : false
+                            }
+                        }).on("changed.jstree", function(e, data) {
                                     //console.log(data.selected.length); // newly selected
                                     //console.log(data.changed.deselected); // newly deselected
                                     var i, j, r = [];
                                     var selected = [];
+
+                                    var allNodes = $('#checkview').jstree(true).get_json('#', {flat:true});
+                                    for (n = 0; n < allNodes.length; n++) {
+                                        var obj = allNodes[n];
+                                        if(obj.state.selected == false && (obj.id.lastIndexOf('-VIEW') > 0 || obj.id.lastIndexOf('-UPDATE') > 0))
+                                        {
+                                            r.push(obj.id.replace('-VIEW', '-NOTVIEW').replace('-UPDATE', '-NOTUPDATE'));
+                                        }
+                                    }
+
+
                                     for (i = 0, j = data.selected.length; i < j; i++) {
                                         if(data.instance.get_node(data.selected[i]).id.indexOf('-') !== -1)
                                             var item = data.instance.get_node(data.selected[i]).id.replace('CLASS_','');
@@ -80,11 +95,7 @@
         //                            var loMainSelected = data;
         //                            uiGetParents(loMainSelected);
         //                        })
-                        $("#checkview").jstree({
-                            "plugins": ["checkbox"]
 
-
-                        });
 
                     });
                 </script>
@@ -94,6 +105,31 @@
         </h1>
         </section>
         <section class="content">
+             <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title"><spring:message code="admin.common.search" /></h3>
+                        </div>
+                        <form:form method="GET" action="userAttr">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Tìm theo tài khoản</label>
+                                    <input name="uid" value="${name}"
+                                           type="text" class="form-control" id="exampleInputEmail1"
+                                           placeholder="Tài khoản">
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
@@ -116,7 +152,7 @@
                              <div class="box-footer">
                                  <input type="hidden"  name="listmenu" id="listmenu" value=""  />
                                  <input type="hidden"  name="groupid" id="listmenu" value="${groupId}"  />
-                                 <input type="hidden"  name="uid" id="uid" value="${param.uid}"  />
+                                 <input type="hidden"  name="uid" id="uid" value="${uid}"  />
 
                                  <button id="btnUpdateMenu" type="submit" class="btn btn-primary"><spring:message code="admin.common.update" /></button>
                              </div>

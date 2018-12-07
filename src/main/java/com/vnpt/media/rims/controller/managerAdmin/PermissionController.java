@@ -6,7 +6,9 @@
 package com.vnpt.media.rims.controller.managerAdmin;
 
 import com.vnpt.media.rims.bean.*;
+import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Message;
+import com.vnpt.media.rims.common.utils.PagingUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.security.SetSessionServlet;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
@@ -53,26 +55,24 @@ public class PermissionController {
     private MessageSource messageSource;
 
     @RequestMapping(value = "/userAttr", method = RequestMethod.GET)
-    public String userAttr(@RequestParam("uid") Integer uid, @RequestParam("groupid") Integer groupid, ModelMap mm, HttpServletRequest request) {
+    public String userAttr(@RequestParam("uid") String uid, ModelMap mm, HttpServletRequest request) {
 
         ManagerAdminFacade facade = new ManagerAdminFacade();
         logger.info("Action userAttr");
 
         //huan.nguyen bo sung kiem tra quyen theo thuoc tinh
         ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-        UserBO userB0 = facade.findByUserId(uid.toString());
+        UserBO userB0 = facade.findByUserName(uid);
         mm.put("name", userB0.getUsername());
+        mm.put("uid", userB0.getId());
 
         List<UserAttrBO> listUserAtts = adminFacade.findUserAttrByUserId(String.valueOf(userB0.getId()));
-        mm.addAttribute("listUserAtts", listUserAtts);
 
-        String groupId = groupid.toString();
+        //List<GroupBO> groupList = adminFacade.getGroupByUserId(String.valueOf(userB0.getId()));
+
         StringBuffer sb = new StringBuffer();
         String dataSelected = "data-jstree='{ \"selected\" : true}'";
-
-        List<GroupBO> groupBO = adminFacade.getGroup(groupId);
         List<ObjectListBO> objectList = adminFacade.findAllObjectList("");
-
 
         sb.append("<ul>");
         boolean isSelected = false;
@@ -100,8 +100,8 @@ public class PermissionController {
                                     //Thêm thuộc tính quyền VIEW, UPDATE. Kiểm tra trạng thái và hiển thị
                                     sb.append("<ul>");
                                         String idChild = classList.get(j).getId() + "-" + attrList.get(k).getId() + "-";
-                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "VIEW") ? dataSelected : "") + " class='groupClass' id='" + idChild + "VIEW' >Chặn xem</li>");
-                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "UPDATE") ? dataSelected : "") + " class='groupClass' id='" + idChild + "UPDATE' >Chặn cập nhật</li>");
+                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "VIEW") ? dataSelected : "") + " class='groupClass' id='" + idChild + "VIEW' >Xem</li>");
+                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "UPDATE") ? dataSelected : "") + " class='groupClass' id='" + idChild + "UPDATE' >Cập nhật</li>");
                                     sb.append("</ul>");
 
                             sb.append("</li>");
@@ -121,9 +121,6 @@ public class PermissionController {
         //
 
         mm.addAttribute("data", sb.toString());
-        mm.addAttribute("groupId", groupId);
-        mm.addAttribute("groupName", groupBO.get(0).getName());
-
         return USER_ATTR_LIST;
     }
 
@@ -170,6 +167,22 @@ public class PermissionController {
 
 
     private boolean checkAttr(List<UserAttrBO> userAttrList, Long attrId, Long attrClassId, String action) {
-        return userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && (x.getAction() + ",").contains(action + ","));
+        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equals(action)))
+        {
+            return  true;
+        }
+
+        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equals("NOT" + action)))
+        {
+            return  false;
+        }
+//        UserAttrBO userAttr = userAttrList.stream().filter(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId).findFirst().orElse(null);
+//        if(userAttr == null)
+//        {
+//            return  true;
+//        }
+//        if(userAttr.getAction().equals("NOT" + action))
+//            return  false;
+        return true;
     }
 }

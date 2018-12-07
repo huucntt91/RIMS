@@ -96,7 +96,7 @@
                                         <td>
                                             ${groupBO.name}</td>
                                         <td align="center">
-                                            <a href="${pageContext.request.contextPath}/permission/userAttr?uid=${userId}&groupid=${groupBO.id}" title="Phân quyền tài khoản theo thuộc tính">
+                                            <a href="${pageContext.request.contextPath}/permission/userAttr?uid=${userName}" title="Phân quyền tài khoản theo thuộc tính">
                                                 <img src="/RIMS/image/icon/document-add-icon.png">
                                             </a>
                                         </td>

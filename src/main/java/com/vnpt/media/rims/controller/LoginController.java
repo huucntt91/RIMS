@@ -210,7 +210,6 @@ public class LoginController {
         StringBuffer url = request.getRequestURL();
         String uri = request.getRequestURI();
         String host = url.substring(0, url.indexOf(uri));
-        PermissionUtils.clear();
         return "redirect:https://id.vnpt.com.vn/cas/logout?service=" + host + request.getContextPath();
         //return "redirect:/login?logout";
     }
