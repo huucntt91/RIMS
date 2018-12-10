@@ -343,9 +343,8 @@ public class BuildingController {
                 CategoriesFacade facade = new CategoriesFacade();
                 List<BuildingBO> list = facade.findAllBuildingBO("", "", id, "", null, "", "", "");
                 if (list != null && !list.isEmpty()) {
-                    mm.addAttribute("model", list.get(0));
+                    mm.addAttribute("m", list.get(0));
                 }
-                mm.addAttribute("isView", 1);
             }
         } catch (Exception e) {
             LOGGER.error("Exception :", e);

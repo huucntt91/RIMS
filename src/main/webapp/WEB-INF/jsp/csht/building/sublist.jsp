@@ -189,15 +189,18 @@
                                         <td> <a href="#" onclick="getBuildingLink(${item.buildingBO.id}, '${item.buildingBO.code}')" data-toggle="modal" data-target="#myModal">Chi tiết</a> </td>
                                         <td>
                                             <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=BUILDING&objectCode=${item.buildingBO.code}"
-                                                           title="Lịch sử CSHT" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                             </a>
+                                               title="Lịch sử CSHT" >
+                                                <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                            </a>
+                                            &nbsp;
                                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/view/{id}')}">
                                                 <a href="<%=request.getContextPath()%>/building/view/${item.buildingBO.id}"
                                                    title="Sửa">
                                                     <img src="<%=request.getContextPath()%>/image/icon/edit_icon.png">
-                                                </a>  
+                                                </a>
+                                                &nbsp;
                                             </c:if>
+
                                             <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/delete/{id}')}">
                                                 <a href="<%=request.getContextPath()%>/building/delete/${item.buildingBO.id}"
                                                    title="Xoá" onclick="return confirm('Bạn có muốn thực hiện xoá không ?')">
@@ -205,6 +208,10 @@
                                                 </a>
                                             </c:if>
                                             &nbsp;
+                                            <a  onclick="showDetail(${item.buildingBO.id})"
+                                               title="Chi tiết">
+                                                <img src="<%=request.getContextPath()%>/image/icon/info_box_blue.png">
+                                            </a>
 
                                         </td>
                                     </tr>
@@ -237,10 +244,10 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                                
+                                            <td></td>    
                                             <td>${itemTram.tenThietBi}</td>                            
                                             <td></td>
-                                           <td></td>
+                                            <td></td>
                                             <td></td>
                                         </tr>
                                         <c:forEach var="itemCell" items="${item.cell}">
@@ -255,10 +262,10 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-
+                                                    <td></td>
                                                     <td>${itemCell.tenThietBi}</td>                            
                                                     <td></td>
-                                                      <td></td>
+                                                    <td></td>
                                                     <td></td>
                                                 </tr>
                                             </c:if> 
@@ -346,6 +353,28 @@
             <div class="modal-body">
                 <div class="box-body table-responsive">
                     <div id="detailDiv"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>                 
+</div>
+
+<div id="detailBuilding" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông tin chi tiết</h4>
+            </div>
+            <div class="modal-body">
+                <div class="box-body table-responsive">
+                    <div id="divDetail"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -565,6 +594,14 @@
 
                                                         function hdsd(media) {
                                                             window.open('${pageContext.request.contextPath}/hdsd/init?media=' + media, '_blank', 'width=700,height=500');
+                                                        }
+                                                        function showDetail(buildingId) {
+                                                            var linkDetail = '${pageContext.request.contextPath}/building/detail/' + buildingId;
+                                                            $.get(linkDetail, function (data) {
+                                                                $('#divDetail').html(data);
+                                                                $('#detailBuilding').modal('show');
+                                                            });
+                                                            $('#divDetail').find('input, textarea, button, select').attr('disabled', 'disabled');
                                                         }
 </script>
 

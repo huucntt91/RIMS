@@ -328,7 +328,7 @@
                             var status = data[20];
                             var td_15_content = '';
     <c:if test='${fn:containsIgnoreCase(sessionScope.function,"viewqh")}'>
-                            td_15_content += ' <a title="Chi tiết" onclick="showDetail(' + data[17] + ');"> <img src="<%=request.getContextPath()%>/image/icon/view.png"> </a> ';
+                            td_15_content += ' <a title="Chi tiết" onclick="showDetail(' + data[17] + ');"> <img src="<%=request.getContextPath()%>/image/icon/info_box_blue.png"> </a> ';
     </c:if>
                             if (status === '60') {
     <c:if test='${fn:containsIgnoreCase(sessionScope.function,"approveqh")}'>
