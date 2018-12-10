@@ -410,6 +410,7 @@ public class UsersDAO extends GenericDAO implements IUsers {
                 attributeBO.setId(rs.getLong("ATTR_ID"));
                 attributeBO.setAttrCode(rs.getString("ATTR_CODE"));
                 attributeBO.setAttrName(rs.getString("ATTR_NAME"));
+                attributeBO.setAliasExcelAttr(rs.getString("alias_excel_attr") == null ? "": rs.getString("alias_excel_attr"));
 
                 attClassListBO.setId(rs.getLong("ATTR_CLASS_ID"));
                 attClassListBO.setCode(rs.getString("ATTR_CLASS_CODE"));

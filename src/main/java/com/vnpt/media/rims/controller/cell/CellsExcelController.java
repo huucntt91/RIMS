@@ -16,6 +16,7 @@ import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
 import com.vnpt.media.rims.common.utils.Convert;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
+import com.vnpt.media.rims.common.utils.PermissionUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.managerAdmin.BaseController;
 import com.vnpt.media.rims.facade.CellsFacade;
@@ -173,6 +174,16 @@ public class CellsExcelController extends BaseController {
                             .to(Cell2GNewExcelModel.class)
                             .mapSheet(0, 2);
                     Integer[] checkRows = {1, 2};
+
+                    //kiểm tra quyền cập nhập thông tin khai sinh
+                    PermissionUtils.filterUserExcelAttr(items, "BIRTH_INFO");
+
+                    //kiểm tra quyền cập nhập thông tin OMC
+                    PermissionUtils.filterUserExcelAttr(items, "OMC_INFO");
+
+                    //kiểm tra quyền cập nhập thông tin cấu hình
+                    PermissionUtils.filterUserExcelAttr(items, "CONFIG_INFO");
+
                     resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "Template_DK_CELL_2G.xls"), checkRows);
                     LOGGER.info("user: {}, ip: {}, call check addCell2gExcel", user.getUsername(), request.getRemoteAddr());
                     items = cellsFacade.importCell2G(items, resultCheckFile, user.getId());

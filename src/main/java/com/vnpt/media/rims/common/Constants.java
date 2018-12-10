@@ -93,6 +93,8 @@ public class Constants {
     public static int NE_UNAPPROVE_OFF = 221;
     public static String API_RIMS = "";
 
+    public  static  final String USER_PERMISSION_UPDATE = "UPDATE";
+
     static {
         loadConfiguration();
     }
