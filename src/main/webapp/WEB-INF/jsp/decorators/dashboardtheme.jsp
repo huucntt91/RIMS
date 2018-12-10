@@ -128,7 +128,7 @@
                             <span id="lblHelp">Hướng dẫn sử dụng</span>
                         </a>
                         <br>
-                        <span id="lblCopyright">© VNPT, xây dựng, triển khai bởi VNPT MEDIA SOFTWARE</span>
+                        <span id="lblCopyright">© VNPT, xây dựng, triển khai bởi Trung tâm ERP - VNPT IT</span>
                         <br>
                         <span id="lblContact">57 Huỳnh Thúc Kháng - Đống Đa - Hà Nội.</span>
                     </div>
