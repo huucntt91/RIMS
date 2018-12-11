@@ -941,5 +941,64 @@ public class ManagerAdminFacade {
             return result;
         }
     }
+
+    public List<AttClassListBO> findAllAttClass() throws ServiceException {
+        ITransaction trans = null;
+        try {
+            List<AttClassListBO> listAttClass = this.findAttrClassListByObjectId("");
+            return  listAttClass;
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public boolean updateAttr(AttributeBO attr) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IClassGroup classGroupDAO = factory.getClassGroupDAO();
+            trans.connectionType(DB_ADMIN);
+            classGroupDAO.setTransaction(trans);
+            trans.beginTransaction();
+            ret = classGroupDAO.updateAttr(attr);
+            trans.commit();
+            trans.endTransaction();
+            return ret.equals("1");
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public boolean deleteAttr(AttributeBO attr) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IClassGroup classGroupDAO = factory.getClassGroupDAO();
+            trans.connectionType(DB_ADMIN);
+            classGroupDAO.setTransaction(trans);
+            trans.beginTransaction();
+            ret = classGroupDAO.updateAttr(attr);
+            trans.commit();
+            trans.endTransaction();
+            return ret.equals("1");
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
     //huan.nguyen end
 }

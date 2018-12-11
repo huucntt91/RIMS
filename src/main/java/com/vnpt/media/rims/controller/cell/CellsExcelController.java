@@ -1,16 +1,7 @@
 package com.vnpt.media.rims.controller.cell;
 
 import com.blogspot.na5cent.exom.ExOM;
-import com.vnpt.media.rims.bean.Cell2GNewExcelModel;
-import com.vnpt.media.rims.bean.Cell2GUpdateExcelModel;
-import com.vnpt.media.rims.bean.Cell3GNewExcelModel;
-import com.vnpt.media.rims.bean.Cell3GUpdateExcelModel;
-import com.vnpt.media.rims.bean.Cell4GNewExcelModel;
-import com.vnpt.media.rims.bean.Cell4GUpdateExcelModel;
-import com.vnpt.media.rims.bean.CellNewExcelBO;
-import com.vnpt.media.rims.bean.CellUpdateExcelNetModel;
-import com.vnpt.media.rims.bean.ExcelDeleteNodeBO;
-import com.vnpt.media.rims.bean.UserBO;
+import com.vnpt.media.rims.bean.*;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
@@ -39,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -139,6 +131,9 @@ public class CellsExcelController extends BaseController {
             String folderTemp = StringUtils.getFolderTemp();
             String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+
+            ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+
             File convFile = new File(folderTemp + File.separator + importNodeForm.getFile().getOriginalFilename());
             importNodeForm.getFile().transferTo(convFile);
             CellsFacade cellsFacade = new CellsFacade();
@@ -149,6 +144,8 @@ public class CellsExcelController extends BaseController {
                     List<Cell4GNewExcelModel> items = ExOM.mapFromExcel(convFile)
                             .to(Cell4GNewExcelModel.class)
                             .mapSheet(0, 2);
+                    List<String> listClassCode = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("7"));
+                    PermissionUtils.filterUserExcelAttr(items, listClassCode);
                     LOGGER.info("user: {}, ip: {}, call check addCell4gExcel", user.getUsername(), request.getRemoteAddr());
                     Integer[] checkRows = {1, 2};
                     resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "Template_DK_CELL_4G.xls"), checkRows);
@@ -162,6 +159,8 @@ public class CellsExcelController extends BaseController {
                     List<Cell3GNewExcelModel> items = ExOM.mapFromExcel(convFile)
                             .to(Cell3GNewExcelModel.class)
                             .mapSheet(0, 2);
+                    List<String> listClassCode = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("6"));
+                    PermissionUtils.filterUserExcelAttr(items, listClassCode);
                     Integer[] checkRows = {1, 2};
                     resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "Template_DK_CELL_3G.xls"), checkRows);
                     items = cellsFacade.importCell3G(items, resultCheckFile, user.getId());
@@ -174,15 +173,8 @@ public class CellsExcelController extends BaseController {
                             .to(Cell2GNewExcelModel.class)
                             .mapSheet(0, 2);
                     Integer[] checkRows = {1, 2};
-
-                    //kiểm tra quyền cập nhập thông tin khai sinh
-                    PermissionUtils.filterUserExcelAttr(items, "BIRTH_INFO");
-
-                    //kiểm tra quyền cập nhập thông tin OMC
-                    PermissionUtils.filterUserExcelAttr(items, "OMC_INFO");
-
-                    //kiểm tra quyền cập nhập thông tin cấu hình
-                    PermissionUtils.filterUserExcelAttr(items, "CONFIG_INFO");
+                    List<String> listClassCode = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+                    PermissionUtils.filterUserExcelAttr(items, listClassCode);
 
                     resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "Template_DK_CELL_2G.xls"), checkRows);
                     LOGGER.info("user: {}, ip: {}, call check addCell2gExcel", user.getUsername(), request.getRemoteAddr());
@@ -533,6 +525,9 @@ public class CellsExcelController extends BaseController {
                 String temp;
                 Integer[] checkRows = {1, 2};
                 resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G.xlsx"), checkRows);
+
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
                 LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
                 for (Cell2GUpdateExcelModel item : items) {
                     if (resultCheckFile) {
@@ -563,6 +558,7 @@ public class CellsExcelController extends BaseController {
                 String temp;
                 Integer[] checkRows = {1, 2};
                 resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_3G.xlsx"), checkRows);
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
                 LOGGER.info("user: {}, ip: {}, call updateCell3gExcel", user.getUsername(), request.getRemoteAddr());
                 for (Cell3GUpdateExcelModel item : items) {
                     if (resultCheckFile) {
@@ -593,6 +589,7 @@ public class CellsExcelController extends BaseController {
                 String temp;
                 Integer[] checkRows = {1, 2};
                 resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G.xlsx"), checkRows);
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
                 LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
                 for (Cell4GUpdateExcelModel item : items) {
                     if (resultCheckFile) {

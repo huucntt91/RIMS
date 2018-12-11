@@ -10,7 +10,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Field;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class PermissionUtils {
     private static HttpSession ss;
@@ -86,24 +88,26 @@ public class PermissionUtils {
         }
     }
 
-    public static <T> void filterUserExcelAttr(List<T> items, String attrClassCode) {
+    public static <T> void filterUserExcelAttr(List<T> items, List<String> listAttrClassCode) {
         LOGGER.debug("PermissionUtils.checkUserAttr");
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession(true);
         try {
-            for(int i = 0; i< items.size(); i++){
-                Object item = items.get(i);
-                Field[] fields = items.get(0).getClass().getDeclaredFields();
-                for(int j = 0; j < fields.length; j++){
-                    Field field = fields[j];
-                    field.setAccessible(true);
-                    //nếu không có quyền update thì set là giá trị là rỗng
-                  if(field.getType().getName().equals("java.lang.String") && !PermissionUtils.checkUserExcelAttr(field.getName(), attrClassCode, Constants.USER_PERMISSION_UPDATE)){
-                      field.set(item, null);
-                  }
+            for (Iterator<String> iAttrClass = listAttrClassCode.iterator(); iAttrClass.hasNext();) {
+                String attrClassCode = iAttrClass.next();
+                for(int i = 0; i< items.size(); i++){
+                    Object item = items.get(i);
+                    Field[] fields = items.get(0).getClass().getDeclaredFields();
+                    for(int j = 0; j < fields.length; j++){
+                        Field field = fields[j];
+                        field.setAccessible(true);
+                        //nếu không có quyền update thì set là giá trị là rỗng
+                        if(field.getType().getName().equals("java.lang.String") && !PermissionUtils.checkUserExcelAttr(field.getName(), attrClassCode, Constants.USER_PERMISSION_UPDATE)){
+                            field.set(item, null);
+                        }
+                    }
                 }
             }
-
         }catch (Exception ex){
             LOGGER.error("Exception :", ex);
         }

@@ -49,7 +49,8 @@
                             core : {
                                 expand_selected_onload : false
                             }
-                        }).on("changed.jstree", function(e, data) {
+                        })
+                        .on("changed.jstree", function(e, data) {
                                     //console.log(data.selected.length); // newly selected
                                     //console.log(data.changed.deselected); // newly deselected
                                     var i, j, r = [];
@@ -89,13 +90,23 @@
                                     $('#listmenu').val(r.join(','));
         //
 
+                                })
+                                .on("select_node.jstree", function (e, data) {
+                                    console.log(e);
+                                    //alert("node_id: " + data.node.id);
+                                    if(data.node.id.indexOf('CLASS') >= 0){
+                                       //window.location.href = "${pageContext.request.contextPath}/permission/userAttr?uid=${name}&classid=" + data.node.id.split('_')[1];
+                                    }
+                                })
+                                .on("ready.jstree", function(e, data){
+                                    var urlParams = new URLSearchParams(window.location.search);
+                                    $('#checkview').jstree(true).select_node("CLASS_" + urlParams.get("classid"));
                                 });
 
         //                        .on('select_node.jstree', function(e, data) {
         //                            var loMainSelected = data;
         //                            uiGetParents(loMainSelected);
         //                        })
-
 
                     });
                 </script>
@@ -140,13 +151,19 @@
 
                         <div class="box-body">
                                  <div class="form-group">
-                                     <div id="checkview" class="demo plugin-demo">
-                                         ${data}
+                                     <div class="col-xs-6">
+                                         <br />
+                                         <div id="checkview" class="demo plugin-demo">
+                                             ${data}
+                                         </div>
+                                     </div>
+                                      <div class="col-xs-6">
+
                                      </div>
                                  </div>
                          </div>
                         <!-- /.box-body -->
-
+                        <div class="clearfix"></div>
                          <form:form method="POST" action="${pageContext.request.contextPath}/permission/updateUserAttr">
 
                              <div class="box-footer">
@@ -155,6 +172,8 @@
                                  <input type="hidden"  name="uid" id="uid" value="${uid}"  />
 
                                  <button id="btnUpdateMenu" type="submit" class="btn btn-primary"><spring:message code="admin.common.update" /></button>
+                                 &nbsp;
+                                 <a href="${pageContext.request.contextPath}/permission/attrList">Quản lý thuộc tính</a>
                              </div>
                          </form:form>
                     </div>

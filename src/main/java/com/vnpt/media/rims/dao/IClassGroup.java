@@ -27,4 +27,8 @@ public interface IClassGroup extends IGeneric {
     public List<String> findClassAttrByUserId(String userId, String action, String objectId) throws DAOException;
 
     public List<AttributeBO> findAttrByClassId(long classId) throws DAOException;
+
+    public String updateAttr(AttributeBO attr) throws DAOException;
+
+    public String deleteAttr(AttributeBO attr) throws DAOException;
 }

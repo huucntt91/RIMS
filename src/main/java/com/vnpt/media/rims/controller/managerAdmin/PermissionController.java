@@ -50,12 +50,13 @@ public class PermissionController {
     private static Logger logger = LogManager.getLogger(PermissionController.class);
 
     private static final String USER_ATTR_LIST = "managerAdmin/userAttr/userAttrList";
+    private static final String ATTR_LIST = "managerAdmin/userAttr/attrList";
 
     @Autowired
     private MessageSource messageSource;
 
     @RequestMapping(value = "/userAttr", method = RequestMethod.GET)
-    public String userAttr(@RequestParam("uid") String uid, ModelMap mm, HttpServletRequest request) {
+    public String userAttr(@RequestParam("uid") String uid, @RequestParam(value = "cid", defaultValue = "0") long cid, ModelMap mm, HttpServletRequest request) {
 
         ManagerAdminFacade facade = new ManagerAdminFacade();
         logger.info("Action userAttr");
@@ -67,7 +68,7 @@ public class PermissionController {
         mm.put("uid", userB0.getId());
 
         List<UserAttrBO> listUserAtts = adminFacade.findUserAttrByUserId(String.valueOf(userB0.getId()));
-
+        mm.put("listAttrs", adminFacade.findAttrByClassId(cid));
         //List<GroupBO> groupList = adminFacade.getGroupByUserId(String.valueOf(userB0.getId()));
 
         StringBuffer sb = new StringBuffer();
@@ -166,6 +167,102 @@ public class PermissionController {
     }
 
 
+    @RequestMapping(value = "/attrList", method = RequestMethod.GET)
+    public String attrList(@RequestParam(value = "cid", defaultValue = "0") long cid, ModelMap mm, HttpServletRequest request) {
+
+        ManagerAdminFacade facade = new ManagerAdminFacade();
+        logger.info("Action userAttr");
+
+        //huan.nguyen bo sung kiem tra quyen theo thuoc tinh
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        mm.put("cid", cid);
+        mm.put("listAttrs", adminFacade.findAttrByClassId(cid));
+
+        StringBuffer sb = new StringBuffer();
+        String dataSelected = "data-jstree='{ \"selected\" : true}'";
+        List<ObjectListBO> objectList = adminFacade.findAllObjectList("");
+
+        sb.append("<ul>");
+        boolean isSelected = false;
+
+        for (int i = 0; i < objectList.size(); i++) {
+
+            sb.append("<li id='OBJECT_" + objectList.get(i).getId() + "' >");
+            sb.append(objectList.get(i).getName());
+            List<AttClassListBO> classList = adminFacade.findAttrClassListByObjectId(String.valueOf(objectList.get(i).getId()));
+            if (classList.size() > 0) {
+                sb.append("<ul>");
+                for (int j = 0; j < classList.size(); j++) {
+                    List<AttributeBO> attrList =  new ArrayList<>(); //adminFacade.findAttrByClassId(classList.get(j).getId());
+
+                    sb.append("<li id='CLASS_" + classList.get(j).getId() + "' title='" + classList.get(j).getCode()  + "'>");
+                    sb.append(classList.get(j).getName());
+
+                    if(attrList.size() > 0){
+                        sb.append("<ul>");
+                        //duyệt danh sách thuộc tính theo ATTR_CLASS
+                        for (int k = 0; k < attrList.size(); k++) {
+                            sb.append("<li id='ATTR_" + attrList.get(k).getId() + "' title='"+attrList.get(k).getAttrCode() +"'>");
+                            sb.append(attrList.get(k).getAttrName());
+                            sb.append("</li>");
+                        }
+
+                        sb.append("</ul>");
+                    }
+
+                    sb.append("</li>");
+                }
+                sb.append("</ul>");
+            }
+
+            sb.append("</li>");
+        }
+        sb.append("</ul>");
+        //
+
+        mm.addAttribute("data", sb.toString());
+        return ATTR_LIST;
+    }
+
+    @RequestMapping(value = "/updateAttr", method = RequestMethod.POST)
+    public String updateAttr(@ModelAttribute("attrForm") AttributeBO attrForm,
+                                 ModelMap mm, HttpServletRequest request,HttpServletResponse response, RedirectAttributes attr, Locale locale) throws IOException {
+
+        AttributeBO a = attrForm;
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        if (adminFacade.updateAttr(attrForm)) {
+            attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
+
+            // set lai quyen  session
+            SetSessionServlet setSession = new SetSessionServlet();
+            setSession.initSession(request, response);
+        } else {
+            String msg = messageSource.getMessage("admin.common.error", null, locale);
+            attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
+        }
+
+        return "redirect:" + request.getHeader("referer");
+    }
+
+    @RequestMapping(value = "/deleteAttr", method = RequestMethod.POST)
+    public String deleteAttr(@ModelAttribute("attrForm") AttributeBO attrForm,
+                             ModelMap mm, HttpServletRequest request,HttpServletResponse response, RedirectAttributes attr, Locale locale) throws IOException {
+
+        AttributeBO a = attrForm;
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        if (adminFacade.updateAttr(attrForm)) {
+            attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
+
+            // set lai quyen  session
+            SetSessionServlet setSession = new SetSessionServlet();
+            setSession.initSession(request, response);
+        } else {
+            String msg = messageSource.getMessage("admin.common.error", null, locale);
+            attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
+        }
+        return "";
+    }
+
     private boolean checkAttr(List<UserAttrBO> userAttrList, Long attrId, Long attrClassId, String action) {
         if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equals(action)))
         {
@@ -185,4 +282,5 @@ public class PermissionController {
 //            return  false;
         return true;
     }
+
 }
