@@ -3337,6 +3337,8 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setLat(rs.getString("Latitude"));
                             omc.setLon(rs.getString("Longitude"));
                             omc.setBangTanId(rs.getObject("bang_tan_id", Long.class));
+                            omc.setBandwidth(rs.getString("bandwidth"));
+                            omc.setUarfcn(rs.getString("uarfcn"));
                             return omc;
                         } else if (neTypeId.equals("5")) //cell
                         {
@@ -3380,6 +3382,7 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setLat(rs.getString("Latitude"));
                             omc.setLon(rs.getString("Longitude"));
                             omc.setBangTanId(rs.getObject("bang_tan_id", Long.class));
+                            omc.setBscRncCode(rs.getString("bsc_rnc_code"));
                             return omc;
 
                         } else if (neTypeId.equals("6")) //cell
@@ -3419,6 +3422,7 @@ public class NodeDAO extends GenericDAO implements INode {
                             omc.setLat(rs.getString("Latitude"));
                             omc.setLon(rs.getString("Longitude"));
                             omc.setBangTanId(rs.getObject("bang_tan_id", Long.class));
+                            omc.setBscRncCode(rs.getString("bsc_rnc_code"));
                             return omc;
 
                         }

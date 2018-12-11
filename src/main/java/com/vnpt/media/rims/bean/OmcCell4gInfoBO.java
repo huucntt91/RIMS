@@ -71,6 +71,27 @@ public class OmcCell4gInfoBO extends NodeBO implements Serializable {
 
     private String lat;
     private String lon;
+    String bandwidth;
+    String uarfcn;
+
+    public String getBandwidth() {
+        return bandwidth;
+    }
+
+    public void setBandwidth(String bandwidth) {
+        this.bandwidth = bandwidth;
+    }
+
+    public String getUarfcn() {
+        return uarfcn;
+    }
+
+    public void setUarfcn(String uarfcn) {
+        this.uarfcn = uarfcn;
+    }
+    
+    
+    
     public String getTenNodeCha() {
         return tenNodeCha;
     }

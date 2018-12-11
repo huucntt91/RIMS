@@ -69,6 +69,18 @@ public class OmcCell2gInfoBO extends NodeBO implements Serializable {
     
     private String lat;
     private String lon;
+    
+    String bscRncCode;
+
+    public String getBscRncCode() {
+        return bscRncCode;
+    }
+
+    public void setBscRncCode(String bscRncCode) {
+        this.bscRncCode = bscRncCode;
+    }
+    
+    
 
     public String getLat() {
         return lat;

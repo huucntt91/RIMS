@@ -151,8 +151,8 @@
                                     <input type="hidden" name="column1" value="${column}"  id="column1" />
                                     <input type="hidden" name="filterType1" value="${filterType}"  id="filterType1" />
                                     <input type="hidden" name="value1" value="${value}"  id="value1" />
-                                    
-                                    
+
+
                                 </div>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                                 <button onclick="return afterText()" class="btn btn-primary">Add Filter (+)</button>
                                 <button onclick="return removeTextAll()" class="btn btn-primary">Clear Filter (-)</button>
                             </div>
-                           
+
                         </div>    
                         <div class="clearfix" ></div>
 
@@ -174,8 +174,8 @@
                         <button type="button" id="export" class="btn btn-primary" disabled="disabled"
                                 data-toggle="modal" data-target="#exportExcel"   onclick="exportExcel();">Export excel</button>
                     </div>
-                    
-                        
+
+
                 </form:form>
             </div>
         </div>
@@ -209,9 +209,10 @@
                                             <c:if test="${neTypeId==8}">          
                                             <th>ENODEB ID</th>
                                             </c:if>
-                                        <th>Lý do</th>     
-                                        <th>Ne Type</th> 
-                                        <th>Mã BSC/RNC</th>
+                                        <th>Ne Type</th>
+                                            <c:if test="${neTypeId==2 || neTypeId ==3}"> 
+                                            <th>Mã BSC/RNC</th>
+                                            </c:if>
                                         <th>Mã trạm dự án</th>
 
                                         <th>Mã CSHT</th>
@@ -226,12 +227,11 @@
                                         <th>Ngày hoạt động</th>
                                         <th>Tên trên hệ thống</th>
 
-                                        <th>Tên BSC/RNC</th>
-                                            <c:if test="${neTypeId==3}">
+
+                                        <c:if test="${neTypeId==3}">
                                             <th>DC-HSDPA 42M</th>
                                             </c:if>
-                                            <c:if test="${neTypeId==8}">                                        
-                                            <th>DC-HSDPA 42M</th>
+                                            <c:if test="${neTypeId==8}">                                          
                                             <th>MSC/MSS</th>
                                             <th>SGSN</th>
                                             </c:if>
@@ -248,7 +248,7 @@
                                         <th>Loại Trạm</th>
                                         <th>Cấu hình</th>
                                         <th>Trạng thái đặt máy nổ</th>   
-
+                                        <th>Note</th>    
                                         <th>Node Links</th>
 
                                     </tr>
@@ -274,156 +274,77 @@
                                                     public static int NE_APPROVE_OFF = 111;
                                                     public static int NE_UNAPPROVE_OFF = 221;-->
 
-                                                <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
-                                                           title="Lịch sử cell" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                <c:if test='${item.neTypeId == 2}'>
+                                                    <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=BTS&objectCode=${item.code}"
+                                                       title="Lịch sử BTS" >
+                                                        <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                    </a>
+                                                </c:if>
+                                                <c:if test='${item.neTypeId == 3}'>
+                                                    <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=NODEB&objectCode=${item.code}"
+                                                       title="Lịch sử NodeB" >
+                                                        <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                    </a>
+                                                </c:if>
+                                                <c:if test='${item.neTypeId == 8}'>
+                                                    <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=ENODEB&objectCode=${item.code}"
+                                                       title="Lịch sử Enodeb" >
+                                                        <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${item.status==NE_APPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
+                                                    </c:if>
+
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
                                                         </a>
                                                     </c:if>
-                                                    <c:if test="${item.status==NE_REG_ON}">
+                                                </c:if>                                                 
 
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
+                                                <c:if test="${item.status==NE_UNAPPROVE_ON || item.status==NE_REG_ON }">
+
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preRegUpdate')}">
+                                                        <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
+                                                        <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
+                                                            <a href="<%=request.getContextPath()%>/nodes/preRegUpdate/${item.id}/${item.neTypeId}"
+                                                               title="Cập nhật thông tin đăng ký" >
                                                                 <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>                                                 
-                                                    <c:if test="${item.status==NE_UNAPPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
-                                                            <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
-                                                            <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
-                                                                <a href="<%=request.getContextPath()%>/cell/preRegUpdate/${item.id}/${item.neTypeId}"
-                                                                   title="Cập nhật thông tin đăng ký cell" >
-                                                                    <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                                </a>   
-                                                            </c:if>
-                                                        </c:if>
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_UNAPPROVE_OFF}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
+                                                            </a>   
                                                         </c:if>
                                                     </c:if>
 
                                                 </c:if>
+                                                <c:if test="${item.status==NE_UNAPPROVE_OFF}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
+                                                    </c:if>
 
-                                                <c:if test='${item.neTypeId == 2 || item.neTypeId == 3 || item.neTypeId == 8}'>   
-                                                  <!--  <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=BTS&code=${item.id}"
-                                                           title="Lịch sử BTS/NodeB/eNodeB" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
                                                         </a>
                                                     </c:if>
-                                                  -->
-                                                  <c:if test='${item.neTypeId == 2}'>
-                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=BTS&objectCode=${item.code}"
-                                                           title="Lịch sử BTS" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>
-                                                  </c:if>
-                                                  <c:if test='${item.neTypeId == 3}'>
-                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=NODEB&objectCode=${item.code}"
-                                                           title="Lịch sử NodeB" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>
-                                                  </c:if>
-                                                  <c:if test='${item.neTypeId == 8}'>
-                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=ENODEB&objectCode=${item.code}"
-                                                           title="Lịch sử Enodeb" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>
-                                                  </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
+                                                </c:if>
+                                                <a style="cursor: pointer"  href="<%=request.getContextPath()%>/equipment/init?nodeId=${item.id}"
+                                                   title="Danh sách thiết bị" >
+                                                    <img src="<%=request.getContextPath()%>/resources/img/equipment/rack-16.png">
+                                                </a>
+                                                <a style="cursor: pointer"  href="<%=request.getContextPath()%>/nodes/baoduong?node_code=${item.code}"
+                                                   title="Thông tin bảo dưỡng" >
+                                                    <img src="<%=request.getContextPath()%>/image/icon/repair_icon.jpg">
+                                                </a>
 
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>                                                 
-
-                                                    <c:if test="${item.status==NE_UNAPPROVE_ON || item.status==NE_REG_ON }">
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preRegUpdate')}">
-                                                            <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
-                                                            <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
-                                                                <a href="<%=request.getContextPath()%>/nodes/preRegUpdate/${item.id}/${item.neTypeId}"
-                                                                   title="Cập nhật thông tin đăng ký" >
-                                                                    <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                                </a>   
-                                                            </c:if>
-                                                        </c:if>
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_UNAPPROVE_OFF}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>
-                                                    <a style="cursor: pointer"  href="<%=request.getContextPath()%>/equipment/init?nodeId=${item.id}"
-                                                       title="Danh sách thiết bị" >
-                                                        <img src="<%=request.getContextPath()%>/resources/img/equipment/rack-16.png">
-                                                    </a>
-                                                    <a style="cursor: pointer"  href="<%=request.getContextPath()%>/nodes/baoduong?node_code=${item.code}"
-                                                       title="Thông tin bảo dưỡng" >
-                                                        <img src="<%=request.getContextPath()%>/image/icon/repair_icon.jpg">
-                                                    </a>
-                                                </c:if>   
-
-<!--                                        <a href="<%=request.getContextPath()%>/nodes/off/${item.id}"
-title="Off" onclick="return confirm('Bạn có off không ?')">
-<img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-</a>-->
                                             </td>
                                             <td><c:choose>
                                                     <c:when test="${item.status==NE_REG_ON}">                                                            
@@ -450,7 +371,6 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                         Hủy duyệt off air
                                                         <br />
                                                     </c:when> 
-
                                                     <c:otherwise>
                                                         Orther
                                                         <br />
@@ -461,9 +381,10 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <c:if test="${neTypeId==8}">          
                                                 <td>${item.enodebId}</td>
                                             </c:if>
-                                            <td>${item.note}</td>
-                                            <td>${item.tenNeType}</td>
-                                            <td>${item.maNodeCha}</td>
+                                            <td>${item.tenNeType}</td>                            
+                                            <c:if test="${item.neTypeId==2 || item.neTypeId ==3}"> 
+                                                <td>${item.maNodeCha}</td>
+                                            </c:if>
                                             <td>${item.codeTramDA}</td>
                                             <td>${item.codeBuilding}</td>
                                             <td>${item.donViName}</td>
@@ -476,13 +397,10 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <td>${item.hoanCanhRaDoi}</td>
                                             <td>${item.ngayHoatDong}</td>
                                             <td>${item.tenTrenHeThong}</td>
-                                            <td>${item.tenBSCRNC}</td>
-
                                             <c:if test="${neTypeId==3}">
                                                 <td>${item.dCHSPDA42M}</td>
                                             </c:if>
                                             <c:if test="${neTypeId==8}">                                        
-                                                <td>${item.dCHSPDA42M}</td>
                                                 <td>${item.mSCMSS}</td>
                                                 <td>${item.sGSN}</td>
                                             </c:if>
@@ -516,7 +434,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                     </c:otherwise>
                                                 </c:choose>
 
-                                            </td>    
+                                            </td> 
+                                            <td>${item.note}</td>
                                             <td> <a href="#" onclick="getNodeLink(${item.id}, '${item.code}')" data-toggle="modal" data-target="#myModal">Chi tiết</a> </td>
 
                                         </tr>
@@ -553,7 +472,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                         <th>Tên người quản lý</th>
                                         <th>SĐT người quản lý</th>
                                         <th>Note</th>
-                                        <th>Mã node cha</th>
+                                        <th>Mã BTS</th>
+                                        <th>Mã BSC/RNC</th>
                                         <th>Mã trạm dự án</th>
                                         <th>Tên trên hệ thống</th>
                                         <th>Lac</th>
@@ -568,7 +488,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                         <th>Hoàn cảnh ra đời</th>
                                         <th>Tên cell</th>
                                         <th>Tên nhóm</th>
-                                      
+
                                         <th>Ngày đăng ký</th>
                                         <th>Ngày kiểm duyệt</th>
                                         <th>Ngày cấp phép</th>
@@ -602,68 +522,54 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                 <td> <a href="#" onclick="myPM('${item.code}', '${item.tenNeType}')" data-toggle="modal" data-target="#myPM">PM</a> </td>
                                             </c:if>
                                             <td>
-                                                
-                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL2G&objectCode=${item.code}"
-                                                           title="Lịch sử CELL2G" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+
+                                                <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL2G&objectCode=${item.code}"
+                                                   title="Lịch sử CELL2G" >
+                                                    <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                </a>
+                                                <c:if test="${item.status==NE_APPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
+                                                    </c:if>
+                                                    &nbsp;
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
                                                         </a>
-                                                
-                                                <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-<!--                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
-                                                           title="Lịch sử cell" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>-->
                                                     </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
+                                                </c:if>                                                 
+                                                <c:if test="${item.status==NE_UNAPPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
+                                                        <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
+                                                        <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
+                                                            <a href="<%=request.getContextPath()%>/cells/preRegUpdate/${item.id}/${item.neTypeId}"
+                                                               title="Cập nhật thông tin đăng ký cell" >
                                                                 <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-                                                        &nbsp;
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>                                                 
-                                                    <c:if test="${item.status==NE_UNAPPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
-                                                            <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
-                                                            <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
-                                                                <a href="<%=request.getContextPath()%>/cells/preRegUpdate/${item.id}/${item.neTypeId}"
-                                                                   title="Cập nhật thông tin đăng ký cell" >
-                                                                    <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                                </a>   
-                                                            </c:if>
+                                                            </a>   
                                                         </c:if>
                                                     </c:if>
-                                                    <c:if test="${item.status==NE_REG_OFF}">
+                                                </c:if>
+                                                <c:if test="${item.status==NE_UNAPPROVE_OFF}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
+                                                    </c:if>
+                                                    &nbsp;
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
 
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_OFF}">
 
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_UNAPPROVE_OFF}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-                                                        &nbsp;
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>
-
-                                                </c:if>                                                
                                             </td>
                                             <td><c:choose>
                                                     <c:when test="${item.status==NE_REG_ON}">                                                            
@@ -710,6 +616,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <td>${item.SDTQLy}</td>
                                             <td>${item.note}</td>
                                             <td>${item.maNodeCha}</td>
+                                            <td>${item.bscRncCode}</td>
                                             <td>${item.codeTramDA}</td>
                                             <td>${item.tenTrenHeThong}</td>
                                             <td>${item.lac}</td>
@@ -734,7 +641,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
 
                                             </td>
 
-                                  
+
                                             <td>${item.ngayDangKy}</td>
                                             <td>${item.ngayKiemDuyet}</td>
                                             <td>${item.ngayCapPhep}</td>
@@ -785,7 +692,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                         <th>Tên người quản lý</th>
                                         <th>SĐT người quản lý</th>
                                         <th>Note</th>
-                                        <th>Mã node cha</th>
+                                        <th>Mã NODEB</th>
+                                        <th>Mã BSC/RNC</th>
                                         <th>Mã trạm dự án</th>
 
                                         <th>Tên trên hệ thống</th>
@@ -838,19 +746,12 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                 <td> <a href="#" onclick="myPM('${item.code}', '${item.tenNeType}')" data-toggle="modal" data-target="#myPM">PM</a> </td>
                                             </c:if>
                                             <td>
-                                                
-                                                 <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL3G&objectCode=${item.code}"
-                                                           title="Lịch sử CELL3G" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                 </a>
-                                               
-                                                <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-<!--                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
-                                                           title="Lịch sử cell" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>-->
-                                                    </c:if>
+
+                                                <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL3G&objectCode=${item.code}"
+                                                   title="Lịch sử CELL3G" >
+                                                    <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                </a>
+
                                                     <c:if test="${item.status==NE_APPROVE_ON}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
                                                             <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
@@ -892,8 +793,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                             </a>
                                                         </c:if>
                                                     </c:if>
-
-                                                </c:if>                                                
+                                                
                                             </td>
                                             <td><c:choose>
                                                     <c:when test="${item.status==NE_REG_ON}">                                                            
@@ -940,6 +840,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <td>${item.SDTQLy}</td>
                                             <td>${item.note}</td>
                                             <td>${item.maNodeCha}</td>
+                                            <td>${item.bscRncCode}</td>
                                             <td>${item.codeTramDA}</td>
 
                                             <td>${item.tenTrenHeThong}</td>
@@ -1022,11 +923,13 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                         <th>Mã trạm dự án</th>
 
                                         <th>Tên trên hệ thống</th>
-                                        
+
                                         <th>Tên băng tần</th>
                                         <th>Pci</th>
                                         <th>tac</th>
                                         <th>lcrid</th>
+                                        <th>bandwidth</th>
+                                        <th>uarfcn</th>
 
                                         <th>Cell Type</th>
                                         <th>Ngày hoạt động</th>
@@ -1071,19 +974,10 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             </c:if>
                                             <td>
                                                 <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL4G&objectCode=${item.code}"
-                                                           title="Lịch sử CELL4G" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                 </a>
-                                                <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-<!--                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
-                                                           title="Lịch sử cell" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>-->
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_ON}">
+                                                   title="Lịch sử CELL4G" >
+                                                    <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                </a>
 
-                                                    </c:if>
                                                     <c:if test="${item.status==NE_APPROVE_ON}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
                                                             <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
@@ -1110,12 +1004,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                             </c:if>
                                                         </c:if>
                                                     </c:if>
-                                                    <c:if test="${item.status==NE_REG_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_OFF}">
-
-                                                    </c:if>
+                                                    
                                                     <c:if test="${item.status==NE_UNAPPROVE_OFF}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
                                                             <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
@@ -1131,75 +1020,6 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                             </a>
                                                         </c:if>
                                                     </c:if>
-
-                                                </c:if>
-
-                                                <c:if test='${item.neTypeId == 2 || item.neTypeId == 3 || item.neTypeId == 8}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=BTS&code=${item.id}"
-                                                           title="Lịch sử BTS/NodeB/eNodeB" >
-                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>
-                                                    </c:if>
-
-                                                    <c:if test="${item.status==NE_REG_ON}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>                                                 
-                                                    <c:if test="${item.status==NE_UNAPPROVE_ON || item.status==NE_REG_ON }">
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preRegUpdate')}">
-                                                            <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
-                                                            <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
-                                                                <a href="<%=request.getContextPath()%>/nodes/preRegUpdate/${item.id}/${item.neTypeId}"
-                                                                   title="Cập nhật thông tin đăng ký" >
-                                                                    <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                                </a>   
-                                                            </c:if>
-                                                        </c:if>
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_UNAPPROVE_OFF}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>
-
-                                                </c:if>   
-
-<!--                                        <a href="<%=request.getContextPath()%>/nodes/off/${item.id}"
-title="Off" onclick="return confirm('Bạn có off không ?')">
-<img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-</a>-->
                                             </td>
                                             <td><c:choose>
                                                     <c:when test="${item.status==NE_REG_ON}">                                                            
@@ -1251,22 +1071,23 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                             <td>${item.codeTramDA}</td>
 
                                             <td>${item.tenTrenHeThong}</td>
-                                           
+
                                             <td>${item.tenBangTan}</td>
                                             <td>${item.pci}</td>
                                             <td>${item.tac}</td>
                                             <td>${item.lcrid}</td>
-
-
+                                            <td>${item.bandwidth}</td>
+                                            <td>${item.uarfcn}</td>
+                                                
                                             <td>${item.cellType}</td>
                                             <td>${item.ngayHoatDong}</td>
                                             <td>${item.hoanCanhRaDoi}</td>
                                             <td>${item.tenCell}</td>
                                             <td>
-                                                <c:set var="listCellGroupId" value="${fn:split(item.listCellGroupId, ',')}" />
-                                                <c:forEach items="${listCellGroupId}" var="entry">
+                                            <c:set var="listCellGroupId" value="${fn:split(item.listCellGroupId, ',')}" />
+                                            <c:forEach items="${listCellGroupId}" var="entry">
                                                     ${hashMapListCellGroup[entry].name},</br>
-                                                </c:forEach>
+                                            </c:forEach>
 
                                             </td>
                                             <td>${item.ngayDangKy}</td>
@@ -1461,19 +1282,19 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
 </section>
 <div id="addFiller" style="display: none">
     <div class="groupFilter">
-<!--        <div class="col-md-2">                            
-            <div class="form-group">
-                <select name="objectFill" id="objectFill_stt"  class="form-control objectFill"  onchange="changeObjectFill(this)">
-                    <option value="-1">Chọn Object</option>
-                    <option value="2">BTS</option>
-                    <option value="3">NodeB</option>
-                    <option value="8">eNodeB</option>
-                    <option value="5">Cell2G</option>
-                    <option value="6">Cell3G</option>
-                    <option value="7">Cell4G</option>
-                </select>
-            </div>
-        </div>-->
+        <!--        <div class="col-md-2">                            
+                    <div class="form-group">
+                        <select name="objectFill" id="objectFill_stt"  class="form-control objectFill"  onchange="changeObjectFill(this)">
+                            <option value="-1">Chọn Object</option>
+                            <option value="2">BTS</option>
+                            <option value="3">NodeB</option>
+                            <option value="8">eNodeB</option>
+                            <option value="5">Cell2G</option>
+                            <option value="6">Cell3G</option>
+                            <option value="7">Cell4G</option>
+                        </select>
+                    </div>
+                </div>-->
         <div class="col-md-4">                            
             <div class="form-group">
                 <select name="column" id="column_stt"  class="form-control column"  onchange="changeAtrColum(this)">
@@ -1606,7 +1427,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                         <input type="checkbox" id="checkall"><label id="lbcheckall" for="checkall"> Chọn tất cả</label> 
                     </div>
                     <div id="divColumn">
-                        
+
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -1625,152 +1446,152 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
 <script src="${pageContext.request.contextPath}/resources/js/fileSaver.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/resources/js/tableexport.js" type="text/javascript"></script>
 <script>
-    $(document).ready(function () {
+                        $(document).ready(function () {
 
-        if ($("#quanHuyenId").val() != '')
-            getListPhuongXa(${quanHuyenId});
-        $('#example1 tbody').on('click', 'tr', function () {
-            if ($(this).hasClass('selected')) {
-                //$(this).removeClass('selected');
-            } else {
-            $('#example1 tbody').find('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-            }
-            var node_id = $(this).find('.node_id').val();
-            var type_id = $(this).find('.type_id').val();
-            viewDetail(node_id, type_id);
-        });
-        if($("#column1").val() != ''){
+                            if ($("#quanHuyenId").val() != '')
+                                getListPhuongXa(${quanHuyenId});
+                            $('#example1 tbody').on('click', 'tr', function () {
+                                if ($(this).hasClass('selected')) {
+                                    //$(this).removeClass('selected');
+                                } else {
+                                    $('#example1 tbody').find('tr.selected').removeClass('selected');
+                                    $(this).addClass('selected');
+                                }
+                                var node_id = $(this).find('.node_id').val();
+                                var type_id = $(this).find('.type_id').val();
+                                viewDetail(node_id, type_id);
+                            });
+                            if ($("#column1").val() != '') {
 //            var arrObjectFill = $("#objectFill1").val().split(",");
-            var arrColumn = $("#column1").val().split(",");
-            console.log('nhu cut: '+ $("#column1").val());
-            var arrFilterType = $("#filterType1").val().split(",");
-            var arrValue = $("#value1").val().split(",");
+                                var arrColumn = $("#column1").val().split(",");
+                                console.log('nhu cut: ' + $("#column1").val());
+                                var arrFilterType = $("#filterType1").val().split(",");
+                                var arrValue = $("#value1").val().split(",");
 
-            for(var i=0; i<arrColumn.length; i++){
-                afterText();
+                                for (var i = 0; i < arrColumn.length; i++) {
+                                    afterText();
 //                alert(arrValue[i]);
 //                $('#objectFill_' + i).val(arrObjectFill[i]);
-                changeDefaultObjectFill($("#neTypeId").val(),i,arrColumn[i]);
-                changeDefaultAtrColum(i,arrColumn[i],arrFilterType[i]);
-                $('#value_' + i).val(arrValue[i]);
-            }
-        }
-    });
-                                                
-    function myPM(code, tenNeType) {
-        $("#myPM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup?vnpCode=' + code + '&nodeType=' + tenNeType});
-    }
+                                    changeDefaultObjectFill($("#neTypeId").val(), i, arrColumn[i]);
+                                    changeDefaultAtrColum(i, arrColumn[i], arrFilterType[i]);
+                                    $('#value_' + i).val(arrValue[i]);
+                                }
+                            }
+                        });
 
-    function myFM(code, tenNeType) {
-        $("#myFM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup_fm?vnpCode=' + code + '&nodeType=' + tenNeType});
-    }
-    
-    function regOff(nodeId, code, type) {
-
-        var status =<%=Constants.NE_REG_OFF%>;
-
-
-        $("#myModalLabel").html('Đăng ký off node ' + code);
-        $(".modal-body #status").val(status);
-        $(".modal-body #nodeId").val(nodeId);
-        $(".modal-body #type").val(type);
-
-    }
-
-    //lay ra danh sach tinhtp theo khu vuc
-    function getTinhTp() {
-        var id = $("#khuvucId").val();
-        var tinhTpIds = $("#tinhTpIds").val();
-        $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
-        var html = '';
-        if (data.length > 0) {
-            data.forEach(function (data) {
-            var htmlx = '<option value="' + data.tinhTpId + '" ';
-            if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
-                htmlx += ' selected="selected" ';
-                }
-                htmlx += '>' + data.tenTinhTp + '</option>';
-                html += htmlx;
-            });
-        }
-        $('#tinhTpId').html(html);
-        $('#tinhTpId').multiselect('rebuild');
-        });
-    }
-    function getListHuyen(tinh)
-        {
-            var id = $("#tinhTpId").val();
-            if (id === null) {
-                id = $("#tinhTpIds").val();
-            }
-            var quanHuyenIds = $("#quanHuyenIds").val();
-            $.get("${pageContext.request.contextPath}/mane/getQuanHuyen?tinhTpId=" + id, function (data) {
-                var html = '';
-                if (data.length > 0) {
-                    data.forEach(function (data) {
-                        var htmlx = '<option value="' + data.quanHuyenId + '" ';
-                        if (quanHuyenIds.indexOf(data.quanHuyenId) > -1) {
-                            htmlx += ' selected="selected" ';
+                        function myPM(code, tenNeType) {
+                            $("#myPM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup?vnpCode=' + code + '&nodeType=' + tenNeType});
                         }
-                        htmlx += '>' + data.tenQuanHuyen + '</option>';
-                        html += htmlx;
-                    });
-                }
-                $('#quanHuyenId').html(html);
-                $('#quanHuyenId').multiselect('rebuild');
-            });
-        }
 
-    function getListPhuongXa(huyen)
-        {
-            var id = $("#quanHuyenId").val();
-            if (id === null) {
-                id = $("#quanHuyenIds").val();
-            }
-            if (id == null || id == '') {
-                return;
-            }
-            var phuongXaIds = $("#phuongXaIds").val();
-                $.get("${pageContext.request.contextPath}/mane/getPhuongXa?quanHuyenId=" + id, function (data) {
-                var html = '';
-                if (data.length > 0) {
-                    data.forEach(function (data) {
-                        var htmlx = '<option value="' + data.phuongXaId + '" ';
-                        if (phuongXaIds.indexOf(data.phuongXaId) > -1) {
-                            htmlx += ' selected="selected" ';
+                        function myFM(code, tenNeType) {
+                            $("#myFM iframe").prop({'src': '${pageContext.request.contextPath}/pm_fm/popup_fm?vnpCode=' + code + '&nodeType=' + tenNeType});
                         }
-                            htmlx += '>' + data.tenPhuongXa + '</option>';
-                            html += htmlx;
-                    });
-                }
-                $('#phuongXaId').html(html);
-                $('#phuongXaId').multiselect('rebuild');
-            });
-        }
+
+                        function regOff(nodeId, code, type) {
+
+                            var status =<%=Constants.NE_REG_OFF%>;
 
 
-        function getNodeLink(id, code)
-            {
-                $('#mynodes').text(code);
-                $("#myModal iframe").prop({'src': '${pageContext.request.contextPath}/nodes/getNodeLink/' + id});
-            }
+                            $("#myModalLabel").html('Đăng ký off node ' + code);
+                            $(".modal-body #status").val(status);
+                            $(".modal-body #nodeId").val(nodeId);
+                            $(".modal-body #type").val(type);
 
-                                                
-        function viewDetail(id, type) {
-            var linkDetail = '${pageContext.request.contextPath}/nodes/view/' + type + '/' + id;
+                        }
 
-            if (type == 5 || type == 6 || type == 7) {
-                linkDetail = '${pageContext.request.contextPath}/cell/detail/' + id + '/' + type;
+                        //lay ra danh sach tinhtp theo khu vuc
+                        function getTinhTp() {
+                            var id = $("#khuvucId").val();
+                            var tinhTpIds = $("#tinhTpIds").val();
+                            $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
+                                var html = '';
+                                if (data.length > 0) {
+                                    data.forEach(function (data) {
+                                        var htmlx = '<option value="' + data.tinhTpId + '" ';
+                                        if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
+                                            htmlx += ' selected="selected" ';
+                                        }
+                                        htmlx += '>' + data.tenTinhTp + '</option>';
+                                        html += htmlx;
+                                    });
+                                }
+                                $('#tinhTpId').html(html);
+                                $('#tinhTpId').multiselect('rebuild');
+                            });
+                        }
+                        function getListHuyen(tinh)
+                        {
+                            var id = $("#tinhTpId").val();
+                            if (id === null) {
+                                id = $("#tinhTpIds").val();
+                            }
+                            var quanHuyenIds = $("#quanHuyenIds").val();
+                            $.get("${pageContext.request.contextPath}/mane/getQuanHuyen?tinhTpId=" + id, function (data) {
+                                var html = '';
+                                if (data.length > 0) {
+                                    data.forEach(function (data) {
+                                        var htmlx = '<option value="' + data.quanHuyenId + '" ';
+                                        if (quanHuyenIds.indexOf(data.quanHuyenId) > -1) {
+                                            htmlx += ' selected="selected" ';
+                                        }
+                                        htmlx += '>' + data.tenQuanHuyen + '</option>';
+                                        html += htmlx;
+                                    });
+                                }
+                                $('#quanHuyenId').html(html);
+                                $('#quanHuyenId').multiselect('rebuild');
+                            });
+                        }
 
-            } else if (type == 2 || type == 3 || type == 8) {
-                linkDetail = '${pageContext.request.contextPath}/nodes/detail/' + id + '/' + type
+                        function getListPhuongXa(huyen)
+                        {
+                            var id = $("#quanHuyenId").val();
+                            if (id === null) {
+                                id = $("#quanHuyenIds").val();
+                            }
+                            if (id == null || id == '') {
+                                return;
+                            }
+                            var phuongXaIds = $("#phuongXaIds").val();
+                            $.get("${pageContext.request.contextPath}/mane/getPhuongXa?quanHuyenId=" + id, function (data) {
+                                var html = '';
+                                if (data.length > 0) {
+                                    data.forEach(function (data) {
+                                        var htmlx = '<option value="' + data.phuongXaId + '" ';
+                                        if (phuongXaIds.indexOf(data.phuongXaId) > -1) {
+                                            htmlx += ' selected="selected" ';
+                                        }
+                                        htmlx += '>' + data.tenPhuongXa + '</option>';
+                                        html += htmlx;
+                                    });
+                                }
+                                $('#phuongXaId').html(html);
+                                $('#phuongXaId').multiselect('rebuild');
+                            });
+                        }
 
-            }
+
+                        function getNodeLink(id, code)
+                        {
+                            $('#mynodes').text(code);
+                            $("#myModal iframe").prop({'src': '${pageContext.request.contextPath}/nodes/getNodeLink/' + id});
+                        }
+
+
+                        function viewDetail(id, type) {
+                            var linkDetail = '${pageContext.request.contextPath}/nodes/view/' + type + '/' + id;
+
+                            if (type == 5 || type == 6 || type == 7) {
+                                linkDetail = '${pageContext.request.contextPath}/cell/detail/' + id + '/' + type;
+
+                            } else if (type == 2 || type == 3 || type == 8) {
+                                linkDetail = '${pageContext.request.contextPath}/nodes/detail/' + id + '/' + type
+
+                            }
 //        $.get(linkDetail, function(data) {
 //            $('#detailDiv').html(data);
 //        });
-        }
+                        }
 </script>
 <script>
     $(document).ready(function () {
@@ -1829,8 +1650,8 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             //var checkboxId = parent.getElementsByTagName('input')[0].id;
             $(parent).find('input').click();
         });
-        
-        
+
+
         $('#checkall').click(function () {
             var isChecked = $("#checkall").prop("checked");
             if (!isChecked) {
@@ -1840,7 +1661,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
             }
         });
         $('#lbcheckall').click(function () {
-             $('#checkall').click();
+            $('#checkall').click();
         });
 
     });
@@ -1851,14 +1672,14 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
 
     function exportExcel() {
         var ne_type = $('#neTypeId option:selected').text();
-        if(ne_type == 'CELL2G')
+        if (ne_type == 'CELL2G')
             ne_type = 'CELL_2G';
-        else if(ne_type == 'CELL4G')
-            ne_type = 'CELL_4G'; 
-        else if(ne_type == 'CELL3G')
+        else if (ne_type == 'CELL4G')
+            ne_type = 'CELL_4G';
+        else if (ne_type == 'CELL3G')
             ne_type = 'CELL_3G';
-        else if(ne_type == 'BSC_RNC_MBSC')    
-            ne_type = 'BSC_RNC';  
+        else if (ne_type == 'BSC_RNC_MBSC')
+            ne_type = 'BSC_RNC';
         $.get("${API_RIMS}/listcolumn?ne_type=" + ne_type, function (data) {
             var html = '';
             if (data.length > 0) {
@@ -1868,12 +1689,12 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                 data.forEach(function (data) {
                     var columnName = data.column_name;
                     var columnDes = data.column_desc == '' ? columnName : data.column_desc;
-                    var htmlx = '<div class="col-sm-3"><input type="checkbox" value="'+ columnName +'" class="checkitem"/><label> ' + columnDes + '</label></div>';
-                    if(data.group_object == 'NODE')
+                    var htmlx = '<div class="col-sm-3"><input type="checkbox" value="' + columnName + '" class="checkitem"/><label> ' + columnDes + '</label></div>';
+                    if (data.group_object == 'NODE')
                         htmlNode += htmlx;
-                    else if(data.group_object == 'CHA')
+                    else if (data.group_object == 'CHA')
                         htmlCHA += htmlx;
-                    else if(data.group_object == 'CSHT')
+                    else if (data.group_object == 'CSHT')
                         htmlCSHT += htmlx;
                 });
                 htmlNode += '</fieldset>';
@@ -1882,12 +1703,12 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                 html += htmlNode + htmlCHA + htmlCSHT;
                 $('#divColumn').html(html);
             }
-            
+
 
         });
     }
 
-    function exportFinish(){
+    function exportFinish() {
         var flag = false;
         var listColumn = '';
         $('#divColumn input[type="checkbox"]').each(function (i) {
@@ -1899,37 +1720,37 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         if (!flag) {
             alert('Bạn cần click chọn cột cần export');
             return;
-        }  
+        }
         var ne_type = $('#neTypeId option:selected').text();
-        if(ne_type == 'CELL2G')
+        if (ne_type == 'CELL2G')
             ne_type = 'CELL_2G';
-        else if(ne_type == 'CELL3G')
-            ne_type = 'CELL_3G'; 
-        else if(ne_type == 'CELL4G')
+        else if (ne_type == 'CELL3G')
+            ne_type = 'CELL_3G';
+        else if (ne_type == 'CELL4G')
             ne_type = 'CELL_4G';
-        else if(ne_type == 'BSC_RNC_MBSC')    
+        else if (ne_type == 'BSC_RNC_MBSC')
             ne_type = 'BSC_RNC';
         var neTypeId = $('#neTypeId').val();
         var khuVuc = $('#khuvucId').val() == null ? '' : $('#khuvucId').val();
         var tinhTp = $('#tinhTpId').val() == null ? '' : $('#tinhTpId').val();
         var quanHuyen = $('#quanHuyenId').val() == null ? '' : $('#quanHuyenId').val();
         var phuongXa = $('#phuongXaId').val() == null ? '' : $('#phuongXaId').val();
-        var vender =  $('#thietBiId').val() == null ? '' : $('#thietBiId').val();
+        var vender = $('#thietBiId').val() == null ? '' : $('#thietBiId').val();
         var statusList = $('#status').val() == null ? '' : $('#status').val();
         var nameSearch = $('#code').val() == null ? '' : $('#code').val();
-        var u = '${userId}';      
+        var u = '${userId}';
         var filterSearch = $('#strFilter').val() == null ? '' : $('#strFilter').val();
-        var urlDownload = '${API_RIMS}/exportdsdt?ne_type=' + ne_type + '&ne_id=' + neTypeId + '&start_row=&end_row=&node_id=&name=' + nameSearch + '&list_khuvuc_id=' + khuVuc + '&list_tinh_id=' + tinhTp + '&list_quan_id=' + quanHuyen + '&list_phuong_id=' + phuongXa + '&vender_id=' + vender + '&status_list=' + statusList + '&list_column=' + listColumn + '&u=' + u + '&filterSearch='+ filterSearch.replace(/%/gi, "%25");
+        var urlDownload = '${API_RIMS}/exportdsdt?ne_type=' + ne_type + '&ne_id=' + neTypeId + '&start_row=&end_row=&node_id=&name=' + nameSearch + '&list_khuvuc_id=' + khuVuc + '&list_tinh_id=' + tinhTp + '&list_quan_id=' + quanHuyen + '&list_phuong_id=' + phuongXa + '&vender_id=' + vender + '&status_list=' + statusList + '&list_column=' + listColumn + '&u=' + u + '&filterSearch=' + filterSearch.replace(/%/gi, "%25");
         $('input[type="checkbox"]').iCheck('uncheck');
         $("#export").prop('disabled', true);
         window.location.href = urlDownload;
     }
-    
+
     function afterText() {
         var count = $('#boxSearch').find('.groupFilter').length;
-        var htmlFillter = $('#addFiller').html().replaceAll('stt',count);
+        var htmlFillter = $('#addFiller').html().replaceAll('stt', count);
         $('#boxSearch').append(htmlFillter);
-        
+
         $.get("${pageContext.request.contextPath}/nodes/fillAttrObject/" + $("#neTypeId").val(), function (data) {
             var html = '<option value="">Chọn thuộc tính</option>';
             if (data.length > 0) {
@@ -1938,62 +1759,65 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                     html += htmlx;
                 });
                 $('#column_' + count).html(html);
-            };
+            }
+            ;
         });
-        
+
         return false;
-        }
-    
-    function changeObjectFill(that){
+    }
+
+    function changeObjectFill(that) {
         $.get("${pageContext.request.contextPath}/nodes/fillAttrObject/" + $(that).val(), function (data) {
-        var html = '<option value="">Chọn thuộc tính</option>';
-        if (data.length > 0) {
-        data.forEach(function (entry) {
-        var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
-        html += htmlx;
+            var html = '<option value="">Chọn thuộc tính</option>';
+            if (data.length > 0) {
+                data.forEach(function (entry) {
+                    var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
+                    html += htmlx;
+                });
+                $(that).parents('.groupFilter').find('.column').html(html);
+            }
+            ;
         });
-        $(that).parents('.groupFilter').find('.column').html(html);
-        };
-        });
-        }
-    function changeDefaultObjectFill(type,i,value_colum){
+    }
+    function changeDefaultObjectFill(type, i, value_colum) {
         $.get("${pageContext.request.contextPath}/nodes/fillAttrObject/" + type, function (data) {
-        var html = '<option value="">Chọn thuộc tính</option>';
-        if (data.length > 0) {
-        data.forEach(function (entry) {
-        var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
-        html += htmlx;
+            var html = '<option value="">Chọn thuộc tính</option>';
+            if (data.length > 0) {
+                data.forEach(function (entry) {
+                    var htmlx = '<option  value="' + entry.columnId + '">' + entry.columnName + '</option>';
+                    html += htmlx;
+                });
+                $('#column_' + i).html(html);
+                console.log(value_colum + ',' + i);
+                $('#column_' + i).val(value_colum);
+            }
+            ;
         });
-        $('#column_' + i).html(html);
-        console.log(value_colum + ',' + i);
-        $('#column_' + i).val(value_colum);
-        };
-        });
-        }
-    
+    }
+
     function changeAtrColum(that)
-        {
-            var colum = $(that).val();
-            var i = colum.substring(0, 1);
-            if (i == 0) {
+    {
+        var colum = $(that).val();
+        var i = colum.substring(0, 1);
+        if (i == 0) {
             $(that).parents('.groupFilter').find('.filterType').html($('#varcharOption').html());
-            } else if (i == 1) {
+        } else if (i == 1) {
             $(that).parents('.groupFilter').find('.filterType').html($('#numberOption').html());
-            }
         }
-    function changeDefaultAtrColum(i,value_colum, value_atrr_colum)
-        {
-            var j = value_colum.substring(0, 1);
-            if (j == 0) {
+    }
+    function changeDefaultAtrColum(i, value_colum, value_atrr_colum)
+    {
+        var j = value_colum.substring(0, 1);
+        if (j == 0) {
             $('#filterType_' + i).html($('#varcharOption').html());
-            } else if (j == 1) {
+        } else if (j == 1) {
             $('#filterType_' + i).html($('#numberOption').html());
-            }
-            $('#filterType_' + i).val(value_atrr_colum);          
         }
+        $('#filterType_' + i).val(value_atrr_colum);
+    }
 //    function convertQueryFilter(neTypeId, type, colum, logic, value)
     function convertQueryFilter(neTypeId, colum, logic, value)
-        {
+    {
         value = value.trim();
         var str = " ";
 //        if (type == neTypeId)
@@ -2001,52 +1825,52 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         // logic
         str += " AND " + colum.substring(1);
         if (logic == "Contains")
-                str += " like '%" + value + "%'";
+            str += " like '%" + value + "%'";
         else if (logic == "Not contains")
-                str += " not like '%" + value + "%'";    
+            str += " not like '%" + value + "%'";
         else if (logic == "startWith")
-                str += " like '" + value + "%'";
+            str += " like '" + value + "%'";
         else if (logic == "endWith")
-                str += " like '%" + value + "'";
+            str += " like '%" + value + "'";
         else if (logic == "NULL")
-                str += " IS NULL ";
+            str += " IS NULL ";
         else if (logic == "NOT NULL")
-                str += " IS NOT NULL ";
+            str += " IS NOT NULL ";
         // toan tu
         else if (logic == "=")
-                str += " = " + value;
+            str += " = " + value;
         else if (logic == "<")
-                str += " < " + value;
+            str += " < " + value;
         else if (logic == "<=")
-                str += " <= " + value;
+            str += " <= " + value;
         else if (logic == ">")
-                str += " > " + value;
+            str += " > " + value;
         else if (logic == ">=")
-                str += " >= " + value;
+            str += " >= " + value;
 //        }
         return str;
-        }
-    
-    function filter(){
+    }
+
+    function filter() {
         var checkValue = false;
         $("#boxSearch .groupFilter").each(function (i) {
-            if($(this).find('.filterType').val().trim() != 'NULL' && $(this).find('.filterType').val().trim() != 'NOT NULL'){
-                if($(this).find('.value_').val().trim() == ''){
+            if ($(this).find('.filterType').val().trim() != 'NULL' && $(this).find('.filterType').val().trim() != 'NOT NULL') {
+                if ($(this).find('.value_').val().trim() == '') {
                     checkValue = true;
                 }
             }
         });
-        if (checkValue){
+        if (checkValue) {
             alert('Bạn phải nhập dữ liệu cho filter');
             return;
-        }else{
+        } else {
             var where = ' ';
             var neTypeId = $("#neTypeId").val();
             // check addfilter
             var listObjectFill = "";
             $("#boxSearch .groupFilter").each(function (i) {
 //            listObjectFill += $(this).find('.objectFill').val() + ",";
-            where = where + convertQueryFilter(neTypeId,  $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+                where = where + convertQueryFilter(neTypeId, $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
 //            where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
             });
 //            if (listObjectFill.length > 0)
@@ -2056,29 +1880,29 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
 //            }
             where = EscapeCommasSemiColons(where);
             document.getElementById("strFilter").value = where;
-            
+
             document.getElementById("frm_search").submit();
         }
-        
+
     }
     function removeText(that) {
         $(that).parents('.groupFilter').remove();
-        }
-    
+    }
+
     function removeTextAll() {
         $("#boxSearch .groupFilter").remove();
         return false;
-        }
-        
-    function EscapeCommasSemiColons(input){
-        var output=input.replaceAll(",", "\\,"); //replace all the commas
-        output=output.replaceAll(";", "\\;"); //replace all the SemiColons
+    }
+
+    function EscapeCommasSemiColons(input) {
+        var output = input.replaceAll(",", "\\,"); //replace all the commas
+        output = output.replaceAll(";", "\\;"); //replace all the SemiColons
         return output;
     }
-    
-    String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
+
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
     };
 </script>
 
@@ -2092,7 +1916,7 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
         padding: 0 1.4em 1.4em 1.4em !important;
         margin: 0 0 1.5em 0 !important;
         -webkit-box-shadow:  0px 0px 0px 0px #000;
-                box-shadow:  0px 0px 0px 0px #000;
+        box-shadow:  0px 0px 0px 0px #000;
     }
 
     legend.scheduler-border {
