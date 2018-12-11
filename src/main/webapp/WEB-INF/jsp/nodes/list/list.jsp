@@ -335,16 +335,31 @@
                                                 </c:if>
 
                                                 <c:if test='${item.neTypeId == 2 || item.neTypeId == 3 || item.neTypeId == 8}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
+                                                  <!--  <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
                                                         <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=BTS&code=${item.id}"
                                                            title="Lịch sử BTS/NodeB/eNodeB" >
                                                             <img src="<%=request.getContextPath()%>/image/icon/history.png">
                                                         </a>
                                                     </c:if>
-
-                                                    <c:if test="${item.status==NE_REG_ON}">
-
-                                                    </c:if>
+                                                  -->
+                                                  <c:if test='${item.neTypeId == 2}'>
+                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=BTS&objectCode=${item.code}"
+                                                           title="Lịch sử BTS" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                        </a>
+                                                  </c:if>
+                                                  <c:if test='${item.neTypeId == 3}'>
+                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=NODEB&objectCode=${item.code}"
+                                                           title="Lịch sử NodeB" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                        </a>
+                                                  </c:if>
+                                                  <c:if test='${item.neTypeId == 8}'>
+                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=ENODEB&objectCode=${item.code}"
+                                                           title="Lịch sử Enodeb" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                        </a>
+                                                  </c:if>
                                                     <c:if test="${item.status==NE_APPROVE_ON}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/nodes/preUpdate')}">
                                                             <a href="<%=request.getContextPath()%>/nodes/preUpdate/${item.id}/${item.neTypeId}"
@@ -587,16 +602,18 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                 <td> <a href="#" onclick="myPM('${item.code}', '${item.tenNeType}')" data-toggle="modal" data-target="#myPM">PM</a> </td>
                                             </c:if>
                                             <td>
-
-                                                <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
-                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
-                                                           title="Lịch sử cell" >
+                                                
+                                                      <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL2G&objectCode=${item.code}"
+                                                           title="Lịch sử CELL2G" >
                                                             <img src="<%=request.getContextPath()%>/image/icon/history.png">
                                                         </a>
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_ON}">
-
+                                                
+                                                <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
+<!--                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
+                                                           title="Lịch sử cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                        </a>-->
                                                     </c:if>
                                                     <c:if test="${item.status==NE_APPROVE_ON}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
@@ -821,16 +838,18 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                 <td> <a href="#" onclick="myPM('${item.code}', '${item.tenNeType}')" data-toggle="modal" data-target="#myPM">PM</a> </td>
                                             </c:if>
                                             <td>
-
+                                                
+                                                 <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL3G&objectCode=${item.code}"
+                                                           title="Lịch sử CELL3G" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                 </a>
+                                               
                                                 <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
                                                     <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
+<!--                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
                                                            title="Lịch sử cell" >
                                                             <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_ON}">
-
+                                                        </a>-->
                                                     </c:if>
                                                     <c:if test="${item.status==NE_APPROVE_ON}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
@@ -857,12 +876,6 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                                 </a>   
                                                             </c:if>
                                                         </c:if>
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_REG_OFF}">
-
-                                                    </c:if>
-                                                    <c:if test="${item.status==NE_APPROVE_OFF}">
-
                                                     </c:if>
                                                     <c:if test="${item.status==NE_UNAPPROVE_OFF}">
                                                         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
@@ -1057,13 +1070,16 @@ title="Off" onclick="return confirm('Bạn có off không ?')">
                                                 <td> <a href="#" onclick="myPM('${item.code}', '${item.tenNeType}')" data-toggle="modal" data-target="#myPM">PM</a> </td>
                                             </c:if>
                                             <td>
-
+                                                <a style="cursor: pointer" href="<%=request.getContextPath()%>/object/findLogObject?object=CELL4G&objectCode=${item.code}"
+                                                           title="Lịch sử CELL4G" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/history.png">
+                                                 </a>
                                                 <c:if test='${item.neTypeId == 5 || item.neTypeId == 6 || item.neTypeId == 7}'>   
                                                     <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/history/init')}">
-                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
+<!--                                                        <a style="cursor: pointer" href="<%=request.getContextPath()%>/history/init?type=CELL&code=${item.id}"
                                                            title="Lịch sử cell" >
                                                             <img src="<%=request.getContextPath()%>/image/icon/history.png">
-                                                        </a>
+                                                        </a>-->
                                                     </c:if>
                                                     <c:if test="${item.status==NE_REG_ON}">
 

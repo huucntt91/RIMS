@@ -4,7 +4,9 @@ import com.blogspot.na5cent.exom.ExOM;
 import com.vnpt.media.rims.bean.ExcelDeleteNodeBO;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
+import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
+import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.facade.NodesFacade;
@@ -16,6 +18,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -28,6 +32,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -49,7 +54,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(value = "/excelDeleteNode")
 public class ExcelDeleteController {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExcelDeleteController.class);
+    private static final Logger logger = LogManager.getLogger(ExcelDeleteController.class);
     private static final String FORM_NEW = "nodes/cell/excelImportDelete";
     private static final String FORM_DESTROY = "nodes/removeNode/destroyObject";
     @Autowired
@@ -64,68 +69,113 @@ public class ExcelDeleteController {
         return FORM_NEW;
     }
 
-    @RequestMapping(value = "/preCheck", method = RequestMethod.POST)
-    public String preCheck(ModelMap mm, @ModelAttribute(value = "importNodeForm") ImportNodeForm importNodeForm,
-            BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request) throws Exception, Throwable {
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(ModelMap mm, @ModelAttribute(value = "importNodeForm") ImportNodeForm importNodeForm,
+            BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request,HttpServletResponse response) throws Exception, Throwable {
         Locale locale = LocaleContextHolder.getLocale();
+        List<ExcelDeleteNodeBO> items = null;
         try {
+            
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-            File convFile = new File(importNodeForm.getFile().getOriginalFilename());
+            File convFile = new File(StringUtils.getFolderTemp() + File.separator + importNodeForm.getFile().getOriginalFilename());
             importNodeForm.getFile().transferTo(convFile);
             NodesFacade nodeFacade = new NodesFacade();
-
-            List<ExcelDeleteNodeBO> items = ExOM.mapFromExcel(convFile)
+            
+             items = ExOM.mapFromExcel(convFile)
                     .to(ExcelDeleteNodeBO.class)
                     .mapSheet(0,2);
+            List<String> result = new ArrayList<>();
+            logger.info("user: {}, ip: {}, call excelDeleteNode({})", user.getUsername(), request.getRemoteAddr(), items.size());
             for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).getLoaiNE() == null || items.get(i).getLoaiNE().isEmpty()) {
-                    continue;
-                }
-                String strCheck = nodeFacade.excelDeleteNode(false, user.getId(), items.get(i), attr, messageSource, locale);
-                items.get(i).setCheckDB(strCheck);
+                String strCheck = nodeFacade.excelDeleteNode(true, user.getId(), items.get(i), attr, messageSource, locale);
+                result.add(strCheck);
 
             }
-            TableFormDeleteNode tableDeleteForm = new TableFormDeleteNode();
-            tableDeleteForm.setModels(items);
-            attr.addFlashAttribute("tableDeleteForm", tableDeleteForm);
+            logger.info("user: {}, ip: {}, call writeExcel {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+            writeResult(convFile, result,StringUtils.getFolderTemp() + File.separator + "result_reg_off_node_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
+            logger.info("user: {}, ip: {}, end writeExcel {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
         } catch (Exception e) {
+            e.printStackTrace();
             String message = StringUtils.captureStackTrace(e);
             if (StringUtils.hasText(message)) {
                 if (message.contains("java.io.FileNotFoundException")) {
                     attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "File import không tồn tại"));
                 } else {
-                    LOGGER.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             }
+        }
+        finally{
+            items = null;
         }
         return "redirect:/excelDeleteNode/init";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String update(ModelMap mm,
-            @ModelAttribute("tableDeleteForm") TableFormDeleteNode tableDeleteForm, RedirectAttributes attr, Locale locale, HttpServletRequest request
-    ) {
-        NodesFacade nodeFacade = new NodesFacade();
-        UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-
+//    @RequestMapping(value = "/update", method = RequestMethod.POST)
+//    public String update(ModelMap mm, @ModelAttribute(value = "importNodeForm") ImportNodeForm importNodeForm,
+//            BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request
+//    ) {
+//        NodesFacade nodeFacade = new NodesFacade();
+//        UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+//
+//        try {
+//            List<ExcelDeleteNodeBO> items = tableDeleteForm.getModels();
+//            for (int i = 0; i < items.size(); i++) {
+//                if (items.get(i).isCheck()) {
+//                    String strCheck = nodeFacade.excelDeleteNode(true, user.getId(), items.get(i), attr, messageSource, locale);
+//                    items.get(i).setCheckDB(strCheck);
+//                }
+//            }
+//            //attr.addFlashAttribute("tableDeleteForm", tableDeleteForm);
+//            attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
+//        } catch (ServiceException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "Có lỗi xẩy ra vui lòng thử lại"));
+//        }
+//        return "redirect:/excelDeleteNode/init";
+//
+//    }
+    
+    public File writeResult(File inputFile, List<String> temp, String filePath, HttpServletResponse response) {
         try {
-            List<ExcelDeleteNodeBO> items = tableDeleteForm.getModels();
-            for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).isCheck()) {
-                    String strCheck = nodeFacade.excelDeleteNode(true, user.getId(), items.get(i), attr, messageSource, locale);
-                    items.get(i).setCheckDB(strCheck);
+            XSSFWorkbook workbook;
+            try (FileInputStream fin = new FileInputStream(inputFile)) {
+                workbook = new XSSFWorkbook(fin);
+                Sheet sheet = workbook.getSheetAt(0);
+                Cell cell;
+                Row row;
+                int rowIndex = 2;
+                for (int i = 0; i < temp.size(); i++) {
+                    row = sheet.getRow(rowIndex++);
+                    if (row != null) {
+                        CellStyle style = sheet.getWorkbook().createCellStyle();
+                        row.setRowStyle(style);
+                        cell = row.createCell(0);
+                        cell.setCellValue(temp.get(i));
+                    }
                 }
             }
-            //attr.addFlashAttribute("tableDeleteForm", tableDeleteForm);
-            attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
-        } catch (ServiceException e) {
-            LOGGER.error(e.getMessage(), e);
-            attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "Có lỗi xẩy ra vui lòng thử lại"));
+            File file = new File(filePath);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                workbook.write(fos);
+            }
+            workbook.close();
+            if (file.exists()) {
+                response.setContentType("application/excel");
+                response.addHeader("Content-Disposition", "attachment; filename=" + file.getName());
+                try {
+                    FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(file)), response.getOutputStream());
+                    response.getOutputStream().flush();
+                } catch (IOException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            return file;
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
         }
-        return "redirect:/excelDeleteNode/init";
-
+        return null;
     }
-
     @RequestMapping(value = "/update", method = RequestMethod.POST, params = {"excel"})
     public String insertBts(ModelMap mm,
             @RequestParam(value = "type", required = false) String type,
@@ -227,7 +277,7 @@ public class ExcelDeleteController {
             tableDeleteForm.setModels(items);
             attr.addFlashAttribute("tableDeleteForm", tableDeleteForm);
         } catch (Exception e) {
-            LOGGER.error("Exception :", e);
+            logger.error("Exception :", e);
             String message = StringUtils.captureStackTrace(e);
             if (StringUtils.hasText(message)) {
                 if (message.contains("java.io.FileNotFoundException")) {

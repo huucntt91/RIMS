@@ -41,35 +41,6 @@
     <body>
         <div class="content-header">
             <h1>Cập nhật cell 2G/cell 3G/cell 4G</h1>
-            <ol class="breadcrumb">                
-                <div class="btn-group">
-
-
-                    <button type="button" class="btn btn-danger">
-                        <i class="fa fa-download"></i> 
-                        Download Template
-                    </button>
-                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CELL_TINH_CSHT')}"> 
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_2G_CSHT.xlsx">Biểu mẫu cập nhật cell 2G CSHT</a></li>
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_3G_CSHT.xlsx">Biểu mẫu cập nhật cell 3G CSHT</a></li>
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_4G_CSHT.xlsx">Biểu mẫu cập nhật cell 4G CSHT</a></li>                        
-                            </c:if>
-                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CELL_TINH_EXCEL')}"> 
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_2G.xlsx">Biểu mẫu cập nhật cell 2G</a></li>
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_3G.xlsx">Biểu mẫu cập nhật cell 3G</a></li>
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_4G.xlsx">Biểu mẫu cập nhật cell 4G</a></li>                        
-                            </c:if>
-                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CELL_NET_EXCEL')}"> 
-                            <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_NET.xlsx">Biểu mẫu cập nhật thông tin RF</a></li>                       
-                        </c:if>    
-                    </ul>
-                </div>
-            </ol>
         </div>
         <section class="content"> 
             <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CELL_TINH_EXCEL')}"> 
@@ -96,11 +67,28 @@
                                                 <form:input class="form-control" type="file" path="file"  id="BSbtndanger" value="${groupContactForm.name}"/>
                                             </div>
                                         </div> 
+                                        <div class="col-xs-4">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-danger">
+                                                    <i class="fa fa-download"></i> 
+                                                    Download Template
+                                                </button>
+                                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_2G.xlsx">Biểu mẫu cập nhật cell 2G</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_3G.xlsx">Biểu mẫu cập nhật cell 3G</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_4G.xlsx">Biểu mẫu cập nhật cell 4G</a></li>                           
+                                                </ul>
+                                            </div>      
+                                        </div>   
                                     </div>
                                 </div>
                                 </br>
                                 <div class="box-footer">
-                                    <button type="submit" id="btnFull" class="btn btn-primary">Cập nhật</button>
+                                    <button type="submit" id="upload" class="btn btn-primary"><spring:message code="btn.update"/> </button>
                                 </div>
 
                             </form:form>
@@ -131,57 +119,91 @@
                                                 <label class=" input-group-addon" style="min-width:150px;" for="BSbtndanger">Chọn file import</label>
                                                 <form:input class="form-control" type="file" path="file"  id="BSbtndangerCSHT" value="${groupContactForm.name}"/>
                                             </div>
-                                        </div> 
-                                    </div>
-                                </div>
-                                </br>
-                                <div class="box-footer">
-                                    <button type="submit" id="btnFull" class="btn btn-primary">Cập nhật</button>
-                                </div>
-
-                            </form:form>
-                        </div>
-                    </div>
-                </div> 
-            </c:if>
-            <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CELL_NET_EXCEL')}"> 
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="box">
-                            <div class="box-header">
-                                <h3 class="box-title">Cập nhật các nhóm thông tin RF </h3>
-                            </div>
-                            <form:form method="POST" action="${pageContext.request.contextPath}/cellsExcel/update/updateExcelRF" commandName="cellNewExcelBO"
-                                       enctype="multipart/form-data">
-                                <div class="box-body" >
-                                    <div class="form-group">
-                                        <div class="col-xs-4">
-                                            <form:select  path="type" class="form-control" required="true"  >
-                                                <form:option value="5">--- Cell 2G ---</form:option>
-                                                <form:option value="6">--- Cell 3G ---</form:option>
-                                                <form:option value="7">--- Cell 4G ---</form:option>
-                                            </form:select>  
                                         </div>
-                                        <div class="col-xs-4">                                    
-                                            <div class="input-group">     
-                                                <label class=" input-group-addon" style="min-width:150px;" for="BSbtndanger">Chọn file import</label>
-                                                <form:input class="form-control" type="file" path="file"  id="BSbtndangerRF" value="${groupContactForm.name}"/>
-                                            </div>
-                                        </div> 
+                                        <div class="col-xs-4">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-danger">
+                                                    <i class="fa fa-download"></i> 
+                                                    Download Template
+                                                </button>
+                                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu" role="menu">
+                                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_2G_CSHT.xlsx">Biểu mẫu cập nhật cell 2G CSHT</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_3G_CSHT.xlsx">Biểu mẫu cập nhật cell 3G CSHT</a></li>
+                                                    <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_4G_CSHT.xlsx">Biểu mẫu cập nhật cell 4G CSHT</a></li>                        
+                                                </ul>
+                                            </div>      
+                                        </div
                                     </div>
                                 </div>
                                 </br>
                                 <div class="box-footer">
-                                    <button type="submit" id="btnRF" class="btn btn-primary">Cập nhật</button>
+                                    <button type="submit" id="upload" class="btn btn-primary"><spring:message code="btn.update"/> </button>
                                 </div>
 
                             </form:form>
                         </div>
                     </div>
                 </div> 
-            </c:if>
-        </section> 
-    </body>
+            </div>
+        </c:if>
+        <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'UPDATE_CELL_NET_EXCEL')}"> 
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Cập nhật các nhóm thông tin RF </h3>
+                        </div>
+                        <form:form method="POST" action="${pageContext.request.contextPath}/cellsExcel/update/updateExcelRF" commandName="cellNewExcelBO"
+                                   enctype="multipart/form-data">
+                            <div class="box-body" >
+                                <div class="form-group">
+                                    <div class="col-xs-4">
+                                        <form:select  path="type" class="form-control" required="true"  >
+                                            <form:option value="5">--- Cell 2G ---</form:option>
+                                            <form:option value="6">--- Cell 3G ---</form:option>
+                                            <form:option value="7">--- Cell 4G ---</form:option>
+                                        </form:select>  
+                                    </div>
+                                    <div class="col-xs-4">                                    
+                                        <div class="input-group">     
+                                            <label class=" input-group-addon" style="min-width:150px;" for="BSbtndanger">Chọn file import</label>
+                                            <form:input class="form-control" type="file" path="file"  id="BSbtndangerRF" value="${groupContactForm.name}"/>
+                                        </div>
+                                    </div> 
+                                    <div class="col-xs-4">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-danger">
+                                                <i class="fa fa-download"></i> 
+                                                Download Template
+                                            </button>
+                                            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li><a href="${pageContext.request.contextPath}/resources/excel/Template_CAPNHAT_CELL_NET.xlsx">Biểu mẫu cập nhật thông tin RF</a></li>                       
+                                            </ul>
+                                        </div>      
+                                    </div
+                                </div>
+                            </div>
+                            </br>
+                            <div class="box-footer">
+                                <button type="submit" id="upload" class="btn btn-primary"><spring:message code="btn.update"/> </button>
+                            </div>
+
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:if>
+</section> 
+</body>
 
 </html>
 

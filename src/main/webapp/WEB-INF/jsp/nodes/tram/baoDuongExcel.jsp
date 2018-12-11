@@ -55,7 +55,33 @@
             <h3 class="box-title">Tìm kiếm</h3> 
         </div>
         <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class=" input-group-addon">Khu vực</label>
+                        <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
+                            <c:forEach var="tinhBO" items="${khuvucList}">
+                                <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
+                                                                                            value="${tinhBO.id}"  
+                                                                                            >${tinhBO.name}</option>
+                            </c:forEach>
+                        </select>                                  
+                    </div>
+                </div>
+            </div>
 
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class=" input-group-addon">Tỉnh TP</label>
+
+                        <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control"  > 
+                        </select>
+                        <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
+                    </div>
+
+                </div>
+            </div>    
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
@@ -89,9 +115,9 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive">
-                        <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/reportCSHT/exportExcel?khuvucId=' + $('#khuvucId').val()
-                                        + '&tinhTpId=' + $('#tinhTpId').val() + '&quanHuyenId=' + $('#quanHuyenId').val() + '&phuongXaId=' + $('#phuongXaId').val() + '&buildingCode=' + $('#buildingCode').val()
-                                        + '&buildingName=' + $('#buildingName').val()" >
+                        <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/nodes/exportBaoDuong?khuvucId=' + $('#khuvucId').val()
+                                        + '&tinhTpId=' + $('#tinhTpId').val()  + '&nodeCode=' + $('#nodeCode').val()
+                                        + '&neType=' + $('#neTypeId').val()" >
                             <span>  <img  width="17" src="${pageContext.request.contextPath}/resources/img/excel.png" alt=""/>Xuất Excel</span> 
                         </button>
                         <div id="tablePagingId" style="overflow-y: scroll;">
@@ -99,6 +125,9 @@
                                 <thead>
                                     <tr>
                                         <th>STT</th>
+                                        <th>Khu vực</th>
+                                        <th>ProvinceCode</th>
+                                        <th>Tỉnh/TP</th>
                                         <th>Mã Trạm</th>
                                         <th>Loại</th>
                                         <th>Ngày bảo dưỡng</th>
@@ -107,6 +136,7 @@
                                         <th>ne_type_id</th>
                                         <th>baoduong_id</th>
                                         <th>node_id</th>
+                                        
                                     </tr>
                                 </thead>
                             </table>
@@ -124,7 +154,22 @@
 <%@include file="../../include/footer.jsp"%>
 <script>
     $(document).ready(function () {
-
+        $('#khuvucId').multiselect(({
+            maxHeight: 200,
+            buttonWidth: '400px',
+            enableFiltering: true,
+            includeSelectAllOption: true,
+            onChange: function (element, checked) {
+            }
+        }));
+        $('#tinhTpId').multiselect(({
+            maxHeight: 200,
+            buttonWidth: '400px',
+            enableFiltering: true,
+            includeSelectAllOption: true,
+            onChange: function (element, checked) {
+            }
+        }));
         // Highlight selected row
         $(".indenter").each(function () {
             $(this).css('background-image', $(this).find('a').css('background-image'));
@@ -141,6 +186,9 @@
             //dinh nghia cac cloumn giong voi cloumn trả về trong database
             "columns": [
                 {"name": "stt", "orderable": false, "searchable": false},
+                {"name": "khu_vuc"},
+                {"name": "tinhtp_id", "visible": false},
+                {"name": "ten_tinh_tp"},
                 {"name": "ma_node"},
                 {"name": "ne_type"},
                 {"name": "ngay_bao_duong"},
@@ -160,11 +208,36 @@
     });
     function  search() {
         var table0 = $('#table0').DataTable();
-        table0.columns(1).search($('#nodeCode').val());
-        table0.columns(2).search($('#neTypeId').val());
+        table0.columns(4).search($('#nodeCode').val());
+        table0.columns(5).search($('#neTypeId').val());
+        if( $('#khuvucId').val() != '' && $('#khuvucId').val() != null){
+            table0.columns(1).search($('#khuvucId').val());
+        }
+        if( $('#tinhTpId').val() != '' && $('#tinhTpId').val() != null){
+            table0.columns(2).search($('#tinhTpId').val());
+        }
         //vẽ bảng
         table0.draw();
         $('#btnSearch').attr("disabled", false);
+    }
+    function getTinhTp() {
+        var id = $("#khuvucId").val();
+        var tinhTpIds = $("#tinhTpIds").val();
+        $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=" + id, function (data) {
+            var html = '';
+            if (data.length > 0) {
+                data.forEach(function (data) {
+                    var htmlx = '<option value="' + data.tinhTpId + '" ';
+                    if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
+                        htmlx += ' selected="selected" ';
+                    }
+                    htmlx += '>' + data.tenTinhTp + '</option>';
+                    html += htmlx;
+                });
+            }
+            $('#tinhTpId').html(html);
+            $('#tinhTpId').multiselect('rebuild');
+        });
     }
 
 </script>

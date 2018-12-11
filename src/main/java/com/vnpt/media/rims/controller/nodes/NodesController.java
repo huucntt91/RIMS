@@ -59,8 +59,13 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.util.FileCopyUtils;
 
@@ -886,12 +891,13 @@ public class NodesController {
     @RequestMapping(value = "/baoduong/update", method = RequestMethod.POST)
     public String updateBaoDuong(ModelMap mm, @ModelAttribute(value = "cellNewExcelBO") CellNewExcelBO cellNewExcelBO,
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request, HttpServletResponse response) throws Exception, Throwable {
+        List<BaoDuongNetExcel> items = null;
         try {
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
-            File convFile = new File(cellNewExcelBO.getFile().getOriginalFilename());
+            File convFile = new File(StringUtils.getFolderTemp() + File.separator + cellNewExcelBO.getFile().getOriginalFilename());
             cellNewExcelBO.getFile().transferTo(convFile);
 
-            List<BaoDuongNetExcel> items = new ArrayList<>();
+            items = new ArrayList<>();
             try {
                 items = ExOM.mapFromExcel(convFile)
                         .to(BaoDuongNetExcel.class)
@@ -905,16 +911,13 @@ public class NodesController {
             logger.info("user: {}, ip: {}, call updateBaoDuongNetExcel({})", user.getUsername(), request.getRemoteAddr(), items.size());
 
             for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).getCode() == null || items.get(i).getCode().equals("")) {
-                    continue;
-                }
                 temp = cellsFacade.updateBaoDuongNetExcel(items.get(i), user.getId());
                 result.add(temp);
             }
             logger.info("user: {}, ip: {}, done updateBaoDuongNetExcel:", user.getUsername(), request.getRemoteAddr(), result.size());
 
             logger.info("user: {}, ip: {}, call writeExcelBaoDuong {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-            writeResult(convFile, result, "result_update_bao_duong_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
+            writeResult(convFile, result, StringUtils.getFolderTemp() + File.separator + "result_update_bao_duong_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx", response);
             logger.info("user: {}, ip: {}, end writeExcelBaoDuong {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
 
         } catch (Exception e) {
@@ -928,11 +931,13 @@ public class NodesController {
             } else {
                 logger.error(e.getMessage(), e);
             }
+        } finally {
+            items = null;
         }
         return "redirect:/nodes/baoduong";
     }
 
-    public File writeResult(File inputFile, List<String> temp, String name, HttpServletResponse response) {
+    public File writeResult(File inputFile, List<String> temp, String filePath, HttpServletResponse response) {
         try {
             XSSFWorkbook workbook;
             try (FileInputStream fin = new FileInputStream(inputFile)) {
@@ -951,14 +956,14 @@ public class NodesController {
                     }
                 }
             }
-            File file = new File(name);
+            File file = new File(filePath);
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 workbook.write(fos);
             }
             workbook.close();
             if (file.exists()) {
                 response.setContentType("application/excel");
-                response.addHeader("Content-Disposition", "attachment; filename=" + name);
+                response.addHeader("Content-Disposition", "attachment; filename=" + file.getName());
                 try {
                     FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(file)), response.getOutputStream());
                     response.getOutputStream().flush();
@@ -986,7 +991,6 @@ public class NodesController {
     }
 
 //    trunglk_end_search_new
-    
     @RequestMapping(value = "/searchBaoDuong", method = RequestMethod.GET,
             produces = "application/json; charset=UTF-8")
     public @ResponseBody
@@ -1009,7 +1013,7 @@ public class NodesController {
             String pList = "";
             ArrayList<String> ar_name = new ArrayList<>();
             ArrayList<String> ar_search_value = new ArrayList<>();
-            
+
             String columnPermisson = "";
             // duyệt tất cả các tham số truyền vào request
             for (Enumeration items = request.getParameterNames(); items.hasMoreElements();) {
@@ -1036,10 +1040,10 @@ public class NodesController {
                 pList += param_name + "=" + param_value + ",";
             }
             //bổ sung phân quyền vào điều kiện tìm kiếm
-            Integer index =  ar_name.indexOf("tinhtp_id");
-            if(index !=null && !ar_search_value.isEmpty() && index >= 0 ){
+            Integer index = ar_name.indexOf("tinhtp_id");
+            if (index != null && !ar_search_value.isEmpty() && index >= 0) {
                 String temp = ar_search_value.get(index);
-                if(temp == null || temp.isEmpty()){
+                if (temp == null || temp.isEmpty()) {
                     ar_search_value.set(index, tinhManagers);
                 }
             }
@@ -1085,14 +1089,17 @@ public class NodesController {
                     // thứ tự phải khớp với thứ tự của các cột trong table của trang jsp
                     count++;
                     ls.add(count + "");
-                    ls.add(item.getCode() ==null? "": item.getCode());
-                    ls.add(item.getNeType()  ==null? "": item.getNeType());
-                    ls.add(item.getNgayBaoDuong()  ==null? "": item.getNgayBaoDuong());
-                    ls.add(item.getDonvi() ==null? "": item.getDonvi());
-                    ls.add(item.getNote() ==null? "": item.getNote());
-                    ls.add(item.getNeTypeId()==null? "": item.getNeTypeId());
-                    ls.add(item.getBaoDuongId()==null? "": item.getBaoDuongId());
-                    ls.add(item.getNodeId()==null? "": item.getNodeId());
+                    ls.add(item.getArea());
+                    ls.add(item.getProvinceId());
+                    ls.add(item.getProvinceName());
+                    ls.add(item.getCode() == null ? "" : item.getCode());
+                    ls.add(item.getNeType() == null ? "" : item.getNeType());
+                    ls.add(item.getNgayBaoDuong() == null ? "" : item.getNgayBaoDuong());
+                    ls.add(item.getDonvi() == null ? "" : item.getDonvi());
+                    ls.add(item.getNote() == null ? "" : item.getNote());
+                    ls.add(item.getNeTypeId() == null ? "" : item.getNeTypeId());
+                    ls.add(item.getBaoDuongId() == null ? "" : item.getBaoDuongId());
+                    ls.add(item.getNodeId() == null ? "" : item.getNodeId());
                     data.add(ls);
                 }
             }
@@ -1108,4 +1115,146 @@ public class NodesController {
         return null;
 
     }
+
+    @RequestMapping(value = "/exportBaoDuong", method = RequestMethod.GET)
+    public void exportBaoDuong(HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(value = "tinhTpId", required = false) String tinhTpIds,
+            @RequestParam(value = "khuvucId", required = false) String khuvucIds,
+            @RequestParam(value = "nodeCode", required = false) String nodeCode,
+            @RequestParam(value = "neType", required = false) String neType) {
+        List<BaoDuongNetExcel> data = null;
+        try {
+            UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
+            String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+            String tinhManagers = String.join(",", tinhManager);
+
+            if (khuvucIds != null && khuvucIds.equalsIgnoreCase("null")) {
+                khuvucIds = null;
+            }
+            if (tinhTpIds != null && tinhTpIds.equalsIgnoreCase("null")) {
+                tinhTpIds = null;
+            }
+            //neu user search theo tinh tp thi search theo gia tri nguoi dung chon
+            if (tinhTpIds != null && !tinhTpIds.isEmpty()) {
+                tinhManagers = tinhTpIds;
+            }
+            logger.info("user: {}, ip: {},mem: {} function 'exportExcel' nodeCode:{}, neType:{}, khuVucIds:{}, tinhTpIds:{}, permisson:{}",
+                    user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory(), nodeCode, neType, khuvucIds, tinhTpIds, tinhManagers);
+            String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
+            CellsFacade cellsFacade = new CellsFacade();
+            data = cellsFacade.exportBaoDuong(khuvucIds, tinhManagers, nodeCode, neType);
+            File fileResult = writeExportExcel(data);
+            if (fileResult.exists()) {
+                response.setContentType("application/excel");
+                response.addHeader("Content-Disposition", "attachment; filename=" + fileResult.getName());
+                try {
+                    FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
+                    response.getOutputStream().flush();
+                } catch (IOException ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+            }
+            logger.info("user: {}, ip: {},mem: {}, function 'exportExcel' end", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            data = null;
+        }
+    }
+
+    private File writeExportExcel(List<BaoDuongNetExcel> datas) {
+        File result = null;
+        FileOutputStream fos = null;
+        SXSSFWorkbook workbook = null;
+        try {
+            workbook = new SXSSFWorkbook(1000);
+            XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+            style.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            Sheet sheet = workbook.createSheet("data");
+            if (datas != null) {
+                int rowIndex = 1;
+                Cell cell = null;
+                Row row = null;
+                //tạo header
+                row = sheet.createRow(0);
+                cell = row.createCell(0);
+                cell.setCellValue("Khu vực");
+                cell.setCellStyle(style);
+                cell = row.createCell(1);
+                cell.setCellValue("Tỉnh/TP");
+                cell.setCellStyle(style);
+                cell = row.createCell(2);
+                cell.setCellValue("Mã trạm");
+                cell.setCellStyle(style);
+                cell = row.createCell(3);
+                cell.setCellValue("Loại trạm");
+                cell.setCellStyle(style);
+                cell = row.createCell(4);
+                cell.setCellValue("Ngày bảo dưỡng");
+                cell.setCellStyle(style);
+                cell = row.createCell(5);
+                cell.setCellValue("Đơn vị thực hiện");
+                cell.setCellStyle(style);
+                cell = row.createCell(6);
+                cell.setCellValue("Ghi chú");
+                cell.setCellStyle(style);
+                //
+                for (BaoDuongNetExcel it : datas) {
+                    row = sheet.createRow(rowIndex++);
+                    cell = row.createCell(0);
+                    cell.setCellValue(it.getArea() == null ? "" : it.getArea());
+                    cell.setCellStyle(style);
+                    cell = row.createCell(1);
+                    cell.setCellValue(it.getProvinceName() == null ? "" : it.getProvinceName());
+                    cell.setCellStyle(style);
+                    cell = row.createCell(2);
+                    cell.setCellValue(it.getCode() == null ? "" : it.getCode());
+                    cell.setCellStyle(style);
+                    cell = row.createCell(3);
+                    cell.setCellValue(it.getNeType() == null ? "" : it.getNeType());
+                    cell.setCellStyle(style);
+                    cell = row.createCell(4);
+                    cell.setCellValue(it.getNgayBaoDuong() == null ? "" : it.getNgayBaoDuong());
+                    cell.setCellStyle(style);
+                    cell = row.createCell(5);
+                    cell.setCellValue(it.getDonvi() == null ? "" : it.getDonvi());
+                    cell.setCellStyle(style);
+                    cell = row.createCell(6);
+                    cell.setCellValue(it.getNote() == null ? "" : it.getNote());
+                    cell.setCellStyle(style);
+                }
+            }
+
+            String pathFile = StringUtils.getFolderTemp() + File.separator + "BaoDuong_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
+            result = new File(pathFile);
+            fos = new FileOutputStream(result);
+            workbook.write(fos);
+            if (SXSSFWorkbook.class.equals(workbook.getClass())) {
+                SXSSFWorkbook wb = (SXSSFWorkbook) workbook;
+                wb.dispose();
+            }
+            fos.flush();
+            fos.close();
+
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            try {
+                if (workbook != null) {
+                    workbook.close();
+                }
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException ex) {
+                logger.error(ex.getMessage(), ex);
+            }
+
+        }
+
+        return result;
+    }
+
 }

@@ -881,12 +881,10 @@ public class NodesFacade {
             //ret = Convert.convertErrorCodeDeleteNode(ret);
 
             return ret;
-        } catch (DAOException de) {
+        }  catch (Exception de) {
+            de.printStackTrace();
             logger.error("DAOException : ", de);
             DatabaseUtils.rollback(trans);
-            return "Lỗi hệ thống";
-        } catch (Exception de) {
-            logger.error(de.getMessage(), de);
             return "Lỗi hệ thống";
         } finally {
             DatabaseUtils.close(trans);

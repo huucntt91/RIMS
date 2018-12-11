@@ -14,11 +14,11 @@ public class ExcelDeleteNodeBO {
     private boolean check;
     @Column(name = "Kiem tra du lieu db", index = "")
     private String checkDB;
-    @Column(name = "ten NE", index = "0")
+    @Column(name = "ten NE", index = "1")
     private String loaiNE;
-    @Column(name = "ma", index = "1")
+    @Column(name = "ma", index = "2")
     private String code;
-    @Column(name = "ly do", index = "2")
+    @Column(name = "ly do", index = "3")
     private String lyDo;
 
     public ExcelDeleteNodeBO() {

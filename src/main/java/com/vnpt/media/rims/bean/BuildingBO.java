@@ -33,6 +33,36 @@ public class BuildingBO {
     private String nhomCSHT;
     private String ngayHdCsht;
     String planningCode;
+    String ACCREDITATION_CODE;
+    String ACCRE_START_DATE;
+    String ACCRE_END_DATE;
+
+
+    public String getACCREDITATION_CODE() {
+        return ACCREDITATION_CODE;
+    }
+
+    public void setACCREDITATION_CODE(String ACCREDITATION_CODE) {
+        this.ACCREDITATION_CODE = ACCREDITATION_CODE;
+    }
+
+    public String getACCRE_START_DATE() {
+        return ACCRE_START_DATE;
+    }
+
+    public void setACCRE_START_DATE(String ACCRE_START_DATE) {
+        this.ACCRE_START_DATE = ACCRE_START_DATE;
+    }
+
+    public String getACCRE_END_DATE() {
+        return ACCRE_END_DATE;
+    }
+
+    public void setACCRE_END_DATE(String ACCRE_END_DATE) {
+        this.ACCRE_END_DATE = ACCRE_END_DATE;
+    }
+    
+    
 
     public String getPlanningCode() {
         return planningCode;

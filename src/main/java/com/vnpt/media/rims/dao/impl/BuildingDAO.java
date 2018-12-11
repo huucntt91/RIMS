@@ -62,6 +62,9 @@ public class BuildingDAO extends GenericDAO implements IBuilding {
                     item.setName(rs.getString("building_name"));
                     item.setNhomCSHT(rs.getString("AREA_CLASSIFY_GROUP"));
                     item.setNgayHdCsht(rs.getString("infras_active_date"));
+                    item.setACCREDITATION_CODE(rs.getString("ACCREDITATION_CODE"));
+                    item.setACCRE_START_DATE(rs.getString("ACCRE_START_DATE"));
+                    item.setACCRE_END_DATE(rs.getString("ACCRE_END_DATE"));
                     item.setPlanningCode(rs.getString("planning_code"));
                     return item;
                 }
