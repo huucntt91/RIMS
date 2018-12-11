@@ -264,12 +264,12 @@ public class PermissionController {
     }
 
     private boolean checkAttr(List<UserAttrBO> userAttrList, Long attrId, Long attrClassId, String action) {
-        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equals(action)))
+        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equalsIgnoreCase(action)))
         {
             return  true;
         }
 
-        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equals("NOT" + action)))
+        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equalsIgnoreCase("NOT" + action)))
         {
             return  false;
         }

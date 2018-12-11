@@ -37,12 +37,12 @@ public class PermissionUtils {
                 return  false;
             }
 
-            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equals(attrCode) && x.getAttClass().getCode() == attrClassCode && x.getAction().equals(acctionName)))
+            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getAction().equalsIgnoreCase(acctionName)))
             {
                 return  true;
             }
 
-            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equals(attrCode) && x.getAttClass().getCode().equals(attrClassCode) && x.getAction().equals("NOT" + acctionName)))
+            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getAction().equalsIgnoreCase("NOT" + acctionName)))
             {
                 return  false;
             }
@@ -72,12 +72,12 @@ public class PermissionUtils {
                 return  false;
             }
 
-            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAliasExcelAttr().equals(attrCode) && x.getAttClass().getCode() == attrClassCode && x.getAction().equals(acctionName)))
+            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAliasExcelAttr().toUpperCase().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getAction().equalsIgnoreCase(acctionName)))
             {
                 return  true;
             }
 
-            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAliasExcelAttr().equals(attrCode) && x.getAttClass().getCode().equals(attrClassCode) && x.getAction().equals("NOT" + acctionName)))
+            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAliasExcelAttr().toUpperCase().equalsIgnoreCase(attrCode.toUpperCase()) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getAction().equalsIgnoreCase("NOT" + acctionName)))
             {
                 return  false;
             }
