@@ -1040,3 +1040,9 @@ border:none;
     background-color: #2fa4e7 !important;
     border-color: #2fa4e7 !important;
 }
+.frmSearchPhuTro .input-group label.input-group-addon{
+    min-width: 120px;
+}
+.frmSearchPhuTro .input-group .multiselect-native-select .btn-group{
+    width:100%;
+}

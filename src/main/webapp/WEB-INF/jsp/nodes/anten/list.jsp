@@ -10,7 +10,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <section class="content-header">
     <h1>
-        Quản lý Node Anten
+        <i class="fa fa-wifi"></i> Quản lý Node Anten
     </h1>
     <ol class="breadcrumb">
         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/anteninfo/view/{id}')}">
@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Khu vực</label>
+                                    <label class=" input-group-addon" style="min-width: 150px;">Khu vực</label>
                                     <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control"
                                             > 
                                         <!--<option value="">--- Chọn Tỉnh/Thành Phố ---</option>-->
@@ -50,7 +50,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Tỉnh/TP</label>
+                                    <label class=" input-group-addon" style="min-width: 150px;">Tỉnh/TP</label>
 
 
                                     <select  multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen(0);"> >
@@ -69,22 +69,26 @@
                             </div>
 
                         </div>
-
-
-                        <div class="clearfix" ></div>
-
-
-
-                        <div class="form-group">
-                            <input name="code" value="${code}"
+                        <div class="col-md-12">
+                              <div class="form-group">
+                            
+                                 <input name="code" value="${code}"
                                    type="text" class="form-control" id="code"
                                    placeholder="Mã Node hoặc tên Anten">
+                           
+                           
                         </div>
+                        </div>
+                                   <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
+                            </div>
+                            
+                        </div>
+                        <div class="clearfix" ></div>
+                      
                     </div>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
-                    </div>
+                  
                 </form:form>
             </div>
         </div>
@@ -192,6 +196,7 @@
     $(document).ready(function () {
         $('#tinhTpId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -205,6 +210,7 @@
         }));
         $('#khuvucId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {

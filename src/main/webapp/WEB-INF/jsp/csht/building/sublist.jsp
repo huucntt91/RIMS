@@ -18,7 +18,7 @@
     .tablePagingId table {
         table-layout: fixed;
         word-wrap: break-word;
-        width: 1450px !important;
+        min-width: 1450px !important;
     }
     span.indenter{
         width: 20px;
@@ -37,7 +37,7 @@
 </style>
 <section class="content-header">
     <h1>
-        Quản lý vị trí <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_CSHT_RIMS.mp4');" >Hướng dẫn</button>
+       <i class="fa fa-map-marker" aria-hidden="true"></i>  Quản lý vị trí <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_CSHT_RIMS.mp4');" >Hướng dẫn</button>
     </h1>
     <ol class="breadcrumb">
         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/preAdd')}">
@@ -126,7 +126,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
                     </div>
                 </form:form>
             </div>
@@ -135,7 +135,7 @@
 
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-md-12 col-lg-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách vị trí</h3>
@@ -150,8 +150,8 @@
                                 <tr>
                                     <th width="170">Type</th>
                                     <th width="140" >Mã</th>
-                                    <th width="140">Tên CSHT</th>  
-                                    <th width="140">Mã quy hoạch vị trí</th>
+                                    <th min-width="140">Tên CSHT</th>  
+                                    <th width="140" class="text-center" style="text-align: center;">Mã quy hoạch<br> vị trí</th>
                                     <th width="220">Địa chỉ</th> 
                                     <th>LATITUDE</th>
                                     <th>LONGITUDE</th> 

@@ -13,7 +13,7 @@
 <!--<script src="js/jquery.multi-select.js"></script>-->
 <section class="content-header">
     <h1>
-        Quản lý Nodes  <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_RIMS.mp4');" >Hướng dẫn</button>
+        <i class="fa fa-sitemap"></i>  Quản lý Nodes  <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_RIMS.mp4');" >Hướng dẫn</button>
     </h1>
     <ol class="breadcrumb">
         <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'excelUpdateNode/init/1')}">
@@ -183,8 +183,8 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" align="center">
-                        <button type="button" class="btn btn-primary" onclick="filter()"><spring:message code="admin.common.search" /></button>
-                        <button type="button" id="export" class="btn btn-primary" disabled="disabled"
+                        <button type="button" class="btn btn-primary" onclick="filter()"> <i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
+                        <button type="button" id="export" class="btn btn-primary" disabled="disabled" style="margin-left: 20px;"
                                 data-toggle="modal" data-target="#exportExcel"   onclick="exportExcel();">Export excel</button>
                     </div>
 

@@ -17,8 +17,8 @@
 <div class="container">
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">Tìm kiếm trạm quy hoạch</h3> 
-            <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_QH_RIMS.mp4');" >Hướng dẫn</button>
+            <h3 class="box-title"> <i class="fa fa-search-plus"></i> Tìm kiếm trạm quy hoạch  </h3> 
+            <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_QH_RIMS.mp4');" >  Hướng dẫn</button>
         </div>
         <div class="box-body">
             <div class="col-md-6">
@@ -94,7 +94,7 @@
 
             <div class="clearfix"></div>
             <div class="box-footer" align="center" >
-                <button type="button" id="btnSearch" onclick="this.disabled = true;searchQh();" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                <button type="button" id="btnSearch" onclick="this.disabled = true;searchQh();" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
             </div>
         </div>
         <!-- /.box-body -->

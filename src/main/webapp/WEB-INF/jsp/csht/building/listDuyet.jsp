@@ -15,7 +15,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Danh sách CSHT cần duyệt</h3>
+                    <h2 class="box-title"><i class="fa fa-gavel"></i> Danh sách CSHT cần duyệt</h2>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive"  >

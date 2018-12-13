@@ -7,7 +7,7 @@
 <%@include file="../../include/header.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-filestyle.min.js"></script>
         <div class="content-header">
-            <h1>Cập nhật thông tin kiểm định</h1>
+            <h1><i class="fa fa-edit"></i> Cập nhật thông tin kiểm định</h1>
             <ol class="breadcrumb">                
                 <div class="btn-group">
                         <a href="${pageContext.request.contextPath}/resources/excel/Template_NET_KiemDinh.xlsx">
@@ -24,15 +24,15 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title"></h3>
+                            <h3 class="box-title">Import file excel</h3>
                         </div>
                         <form:form method="POST" action="${pageContext.request.contextPath}/building/kiemdinh/update" commandName="cellNewExcelBO"
                                    enctype="multipart/form-data">
                             <div class="box-body" >
                                 <div class="form-group">
-                                   
-                                    <div class="col-xs-8">                                    
-                                        <div class="input-group">                                
+                                    <div class="col-xs-8"> 
+                                        <div class="row">
+                                                 <div class="input-group">                                
                                             <form:input type="file" path="file"  id="BSbtndanger" value="${groupContactForm.name}"/>
                                             <script>
                                                 $('#BSbtndanger').filestyle({
@@ -41,6 +41,8 @@
                                                 });
                                             </script>
                                         </div>
+                                        </div>
+                                   
                                     </div>                                   
                                     <div class="col-xs-4" >
                                     </div>
