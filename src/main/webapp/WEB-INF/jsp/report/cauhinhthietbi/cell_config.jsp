@@ -23,7 +23,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Khu vực</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Khu vực</label>
                         <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
                         </select> 
                         <input type="hidden" value="${khuvucIds}" id="khuvucIds"/>
@@ -34,7 +34,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Tỉnh TP</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Tỉnh TP</label>
 
                         <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen();"  > 
                         </select>
@@ -46,7 +46,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Quận/Huyện</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Quận/Huyện</label>
                         <select multiple="multiple" name="quanHuyenId" id="quanHuyenId" class="form-control" > 
                         </select>
                         <input type="hidden" value="${quanHuyenId}" id="quanHuyenIds"/>
@@ -63,10 +63,10 @@
                     </div>
                 </div>
             </div> -->
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Chọn đối tượng</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Chọn đối tượng</label>
                         <select name="neTypeId" id="neTypeId" class="form-control" onchange="generateTable();">
                             <option <c:if test='${ne_type_id == "5"}' > selected </c:if>  value="5">--- Cell 2G ---</option>
                             <option <c:if test='${ne_type_id == "6"}' > selected </c:if>  value="6">--- Cell 3G ---</option>
@@ -278,7 +278,7 @@
 //                                                          
                                 $('#tinhTpId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {
@@ -287,7 +287,7 @@
 
                                 $('#quanHuyenId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {
@@ -296,7 +296,7 @@
 
                                 $('#phuongXaId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {
@@ -304,7 +304,7 @@
                                 }));
                                 $('#khuvucId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {

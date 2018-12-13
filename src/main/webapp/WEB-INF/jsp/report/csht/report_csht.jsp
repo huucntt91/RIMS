@@ -23,7 +23,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label  class=" input-group-addon">Khu vực</label>
+                        <label  class=" input-group-addon" style="min-width: 150px" >Khu vực</label>
                         <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
                         </select>                
                         <input type="hidden" value="${khuvucIds}" id="khuvucIds"/>
@@ -34,7 +34,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Tỉnh TP</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Tỉnh TP</label>
 
                         <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen();"  > 
                         </select>
@@ -46,7 +46,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Quận/Huyện</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Quận/Huyện</label>
                         <select multiple="multiple" name="quanHuyenId" id="quanHuyenId" class="form-control" onchange="getListPhuongXa();"> 
                         </select>
                         <input type="hidden" value="${quanHuyenId}" id="quanHuyenIds"/>
@@ -56,7 +56,7 @@
             <div class="col-md-6"> 
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Phường/Xã</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Phường/Xã</label>
                         <select multiple="multiple" name="phuongXaId" id="phuongXaId" class="form-control"> 
                         </select>
                         <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>    
@@ -66,7 +66,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon" >Mã CSHT</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Mã CSHT</label>
                         <input type="text" class="form-control"  id="buildingCode" name="buildingCode" />
                     </div>
                 </div>
@@ -74,7 +74,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon" >Tên CSHT</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Tên CSHT</label>
                         <input type="text" class="form-control"  id="buildingName" name="buildingName" />
                     </div>
                 </div>
@@ -156,7 +156,7 @@
 //                                                               
                                 $('#tinhTpId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {
@@ -165,7 +165,7 @@
 
                                 $('#quanHuyenId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {
@@ -174,7 +174,7 @@
 
                                 $('#phuongXaId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {
@@ -182,7 +182,7 @@
                                 }));
                                 $('#khuvucId').multiselect(({
                                     maxHeight: 300,
-                                    buttonWidth: '300px',
+                                    buttonWidth: '100%',
                                     enableFiltering: true,
                                     includeSelectAllOption: true,
                                     onChange: function (element, checked) {

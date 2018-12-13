@@ -28,7 +28,7 @@
                         <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <label class=" input-group-addon">Khu vực</label>
+                                        <label class=" input-group-addon" style="min-width: 150px">Khu vực</label>
                                         <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"
                                                 > 
                                         <c:forEach var="tinhBO" items="${khuvucList}">
@@ -46,7 +46,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Tỉnh TP</label>
+                                    <label class=" input-group-addon" style="min-width: 150px">Tỉnh TP</label>
                                     <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control"> 
                                     </select>
                                     <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
@@ -57,7 +57,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">                                    
-                                    <label class=" input-group-addon">Loại công nghệ</label>
+                                    <label class=" input-group-addon" style="min-width: 150px">Loại công nghệ</label>
                                     <select  name="techType" id="techType" class="form-control">                                        
                                         <option value="2" <c:if test = '${fn:contains(techType,2)}'> selected="selected" </c:if> >2G</option>
                                         <option value="3" <c:if test = '${fn:contains(techType,3)}'> selected="selected" </c:if> >3G</option>  
@@ -69,7 +69,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">                                    
-                                    <label class=" input-group-addon">Loại thời gian</label>
+                                    <label class=" input-group-addon" style="min-width: 150px">Loại thời gian</label>
                                     <select  name="timeType" id="timeType" class="form-control" onchange="show1();">                                        
                                         <option value="1" <c:if test = '${fn:contains(timeType,1)}'> selected="selected" </c:if> >Ngày</option>
                                         <option value="2" <c:if test = '${fn:contains(timeType,2)}'> selected="selected" </c:if> >Tuần</option>  
@@ -123,7 +123,7 @@
                                     <div class="form-group">
                                         <div id="divFromYear" style="display: none">
                                             <div class="input-group">
-                                                <label class=" input-group-addon">From Year</label>
+                                                <label class=" input-group-addon" style="min-width: 150px">From Year</label>
                                                 <select  name="fromYear" id="fromYear" class="form-control">
                                                             <!--onchange="getTinhTp();" >--> 
                                                     <c:forEach var="fYear" begin = "2007" end = "2027">
@@ -140,7 +140,7 @@
                                     <div class="form-group" >
                                         
                                             <div class="input-group">
-                                                <label class=" input-group-addon">From Week</label>
+                                                <label class=" input-group-addon" style="min-width: 150px">From Week</label>
                                                 <select  name="fromWeek" id="fromWeek" class="form-control">
                                                             <!--onchange="getTinhTp();" >--> 
                                                     <c:forEach var="fWeek" begin = "1" end = "53">
@@ -157,7 +157,7 @@
                                     <div class="form-group">
                                         
                                             <div class="input-group">
-                                                <label class=" input-group-addon">From Month</label>
+                                                <label class=" input-group-addon" style="min-width: 150px">From Month</label>
                                                 <select  name="fromMonth" id="fromMonth" class="form-control">
                                                             <!--onchange="getTinhTp();" >--> 
                                                     <c:forEach var="fMonth" begin = "1" end = "12">
@@ -174,7 +174,7 @@
                                     <div class="form-group">
                                         <div id="divToYear">
                                             <div class="input-group">
-                                                <label class=" input-group-addon">To Year</label>
+                                                <label class=" input-group-addon" style="min-width: 150px">To Year</label>
                                                 <select  name="toYear" id="toYear" class="form-control">
                                                             <!--onchange="getTinhTp();" >--> 
                                                     <c:forEach var="tYear" begin = "2007" end = "2027">
@@ -191,7 +191,7 @@
                                     <div class="form-group">
                                         
                                             <div class="input-group">
-                                                <label class=" input-group-addon">To Week</label>
+                                                <label class=" input-group-addon" style="min-width: 150px">To Week</label>
                                                 <select  name="toWeek" id="toWeek" class="form-control">
                                                             <!--onchange="getTinhTp();" >--> 
                                                     <c:forEach var="tWeek" begin = "1" end = "53">
@@ -208,7 +208,7 @@
                                     <div class="form-group">
                                         
                                             <div class="input-group">
-                                                <label class=" input-group-addon">From Month</label>
+                                                <label class=" input-group-addon" style="min-width: 150px">From Month</label>
                                                 <select  name="toMonth" id="toMonth" class="form-control">
                                                             <!--onchange="getTinhTp();" >--> 
                                                     <c:forEach var="tMonth" begin = "1" end = "12">
@@ -322,6 +322,7 @@
     $(document).ready(function () {
          $('#khuvucId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -330,6 +331,7 @@
         
         $('#tinhTpId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
