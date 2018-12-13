@@ -7,12 +7,12 @@
 <%@include file="../../include/header.jsp"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/bootstrap-filestyle.min.js"></script>
 <div class="content-header">
-    <h1>Thông tin bảo dưỡng</h1>
+    <h1><i class="fa fa-shield"></i> Thông tin bảo dưỡng</h1>
 </div>
 <section class="content">
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title"><a data-toggle="collapse" href="#tuNguon1Div">+ Cập nhật thông tin bảo dưỡng</a></h3>
+            <h3 class="panel-title"><a data-toggle="collapse" href="#tuNguon1Div">+ Upload thông tin bảo dưỡng</a></h3>
         </div>
         <div class="panel-body panel-collapse collapse" id="tuNguon1Div">
             <div class="row">
@@ -100,7 +100,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="box-footer" align="center" >
-                <button type="button" id="btnSearch" onclick="this.disabled = true; search();" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                <button type="button" id="btnSearch" onclick="this.disabled = true; search();" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
             </div>
         </div>
         <!-- /.box-body -->
