@@ -39,65 +39,84 @@
                     <div class="box-body" id ="boxSearch">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <select name="neTypeId" id="neTypeId" class="form-control" onchange="removeTextAll()"> >
-                                    <!--<option value="">--- Chọn NE TYPE ---</option>-->
-                                    <c:forEach var="neBO" items="${neList}">
-                                        <%--c:if test='${neBO.id != 9 && neBO.id != 10}'--%>
-                                        <c:if test='${neBO.id == 2 ||  neBO.id == 3
-                                                      ||  neBO.id == 8 ||  neBO.id == 5
-                                                      ||  neBO.id == 6
-                                                      ||  neBO.id == 7
-                                                      ||  neBO.id == 11}'>
-                                              <option  
-                                                  value="${neBO.id}"  <c:choose>
-                                                      <c:when test="${neBO.id == neTypeId}">
-                                                          selected    
-                                                      </c:when>    
-                                                  </c:choose>
+                                <div class="input-group">
+                                    <label class=" input-group-addon" style="min-width: 150px" >Loại Ne</label>
+                                    <select name="neTypeId" id="neTypeId" class="form-control" onchange="removeTextAll()"> >
+                                        <!--<option value="">--- Chọn NE TYPE ---</option>-->
+                                        <c:forEach var="neBO" items="${neList}">
+                                            <%--c:if test='${neBO.id != 9 && neBO.id != 10}'--%>
+                                            <c:if test='${neBO.id == 2 ||  neBO.id == 3
+                                                          ||  neBO.id == 8 ||  neBO.id == 5
+                                                          ||  neBO.id == 6
+                                                          ||  neBO.id == 7
+                                                          ||  neBO.id == 11}'>
+                                                  <option  
+                                                      value="${neBO.id}"  <c:choose>
+                                                          <c:when test="${neBO.id == neTypeId}">
+                                                              selected    
+                                                          </c:when>    
+                                                      </c:choose>
 
-                                                  >${neBO.name}</option>
-                                        </c:if>
-                                    </c:forEach>
-                                </select>  
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select name="thietBiId" id="thietBiId" class="form-control"> >
-                                    <option value="">--- Chọn Vendor ---</option>
-                                    <c:forEach var="tbBO" items="${thietBiList}">
-                                        <option  
-                                            value="${tbBO.thietBiId}"  <c:choose>
-                                                <c:when test="${tbBO.thietBiId == thietBiId}">
-                                                    selected    
-                                                </c:when>    
-                                            </c:choose>
-
-                                            >${tbBO.tenThietBi}</option>
-                                    </c:forEach>
-                                </select>  
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <select name="status" id="status" class="form-control"> >
-                                    <option  value="">--- Chọn trạng thái ---</option>
-                                    <option ${status}   <c:if test='${status==NE_REG_ON}'> selected </c:if> value="${NE_REG_ON}">Đăng ký on air</option>
-                                    <option <c:if test='${status==NE_REG_OFF}'> selected </c:if> value="${NE_REG_OFF}">Đăng ký off air</option>
-                                    <option <c:if test='${status==NE_APPROVE_ON}'> selected </c:if> value="${NE_APPROVE_ON}">On air</option>
-                                    <option <c:if test='${status==NE_APPROVE_OFF}'> selected </c:if> value="${NE_APPROVE_OFF}">Off air</option>
-                                    <option <c:if test='${status==NE_UNAPPROVE_ON}'> selected </c:if> value="${NE_UNAPPROVE_ON}">Hủy on air</option>
-                                    <option <c:if test='${status==NE_UNAPPROVE_OFF}'> selected </c:if> value="${NE_UNAPPROVE_OFF}">Hủy off air</option>
-
+                                                      >${neBO.name}</option>
+                                            </c:if>
+                                        </c:forEach>
                                     </select>  
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label class=" input-group-addon" style="min-width: 150px" >Vendor</label>
+                                    <select name="thietBiId" id="thietBiId" class="form-control"> >
+                                        <option value="">--- Chọn Vendor ---</option>
+                                        <c:forEach var="tbBO" items="${thietBiList}">
+                                            <option  
+                                                value="${tbBO.thietBiId}"  <c:choose>
+                                                    <c:when test="${tbBO.thietBiId == thietBiId}">
+                                                        selected    
+                                                    </c:when>    
+                                                </c:choose>
+
+                                                >${tbBO.tenThietBi}</option>
+                                        </c:forEach>
+                                    </select>  
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label class=" input-group-addon" style="min-width: 150px" >Trạng thái</label>
+                                    <select name="status" id="status" class="form-control"> >
+                                        <option  value="">--- Chọn trạng thái ---</option>
+                                        <option ${status}   <c:if test='${status==NE_REG_ON}'> selected </c:if> value="${NE_REG_ON}">Đăng ký on air</option>
+                                        <option <c:if test='${status==NE_REG_OFF}'> selected </c:if> value="${NE_REG_OFF}">Đăng ký off air</option>
+                                        <option <c:if test='${status==NE_APPROVE_ON}'> selected </c:if> value="${NE_APPROVE_ON}">On air</option>
+                                        <option <c:if test='${status==NE_APPROVE_OFF}'> selected </c:if> value="${NE_APPROVE_OFF}">Off air</option>
+                                        <option <c:if test='${status==NE_UNAPPROVE_ON}'> selected </c:if> value="${NE_UNAPPROVE_ON}">Hủy on air</option>
+                                        <option <c:if test='${status==NE_UNAPPROVE_OFF}'> selected </c:if> value="${NE_UNAPPROVE_OFF}">Hủy off air</option>
+
+                                        </select>  
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <label class=" input-group-addon">Khu vực</label>
-                                        <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"
-                                                > 
+                                        <label class=" input-group-addon" style="min-width: 150px" >Mã, tên, địa chỉ</label>
+                                        <input name="code" value="${code}"
+                                           type="text" class="form-control" id="code"
+                                           placeholder="Mã Node, tên hoặc địa chỉ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <label class=" input-group-addon" style="min-width: 150px" >Khu vực</label>
+                                    <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"
+                                            > 
                                         <c:forEach var="tinhBO" items="${khuvucList}">
                                             <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
                                                                                                         value="${tinhBO.id}"  
@@ -110,18 +129,12 @@
                             </div>
                         </div> 
 
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <input name="code" value="${code}"
-                                       type="text" class="form-control" id="code"
-                                       placeholder="Mã Node, tên hoặc địa chỉ">
-                            </div>
-                        </div>
+
 
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Tỉnh TP</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Tỉnh TP</label>
                                     <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen();"  > 
                                     </select>
                                     <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
@@ -132,7 +145,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Quận/Huyện</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Quận/Huyện</label>
                                     <select multiple="multiple" name="quanHuyenId" id="quanHuyenId" class="form-control" onchange="getListPhuongXa();"> 
                                     </select>
                                     <input type="hidden" value="${quanHuyenId}" id="quanHuyenIds"/>
@@ -142,7 +155,7 @@
                         <div class="col-md-4"> 
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Phường/Xã</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Phường/Xã</label>
                                     <select multiple="multiple" name="phuongXaId" id="phuongXaId" class="form-control"> 
                                     </select>
                                     <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>     
@@ -169,7 +182,7 @@
 
                     </div>
                     <!-- /.box-body -->
-                    <div class="box-footer">
+                    <div class="box-footer" align="center">
                         <button type="button" class="btn btn-primary" onclick="filter()"><spring:message code="admin.common.search" /></button>
                         <button type="button" id="export" class="btn btn-primary" disabled="disabled"
                                 data-toggle="modal" data-target="#exportExcel"   onclick="exportExcel();">Export excel</button>
@@ -752,48 +765,48 @@
                                                     <img src="<%=request.getContextPath()%>/image/icon/history.png">
                                                 </a>
 
-                                                    <c:if test="${item.status==NE_APPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
+                                                <c:if test="${item.status==NE_APPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
+                                                    </c:if>
 
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>                                                 
-                                                    <c:if test="${item.status==NE_UNAPPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
-                                                            <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
-                                                            <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
-                                                                <a href="<%=request.getContextPath()%>/cells/preRegUpdate/${item.id}/${item.neTypeId}"
-                                                                   title="Cập nhật thông tin đăng ký cell" >
-                                                                    <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                                </a>   
-                                                            </c:if>
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>                                                 
+                                                <c:if test="${item.status==NE_UNAPPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
+                                                        <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
+                                                        <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
+                                                            <a href="<%=request.getContextPath()%>/cells/preRegUpdate/${item.id}/${item.neTypeId}"
+                                                               title="Cập nhật thông tin đăng ký cell" >
+                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                            </a>   
                                                         </c:if>
                                                     </c:if>
-                                                    <c:if test="${item.status==NE_UNAPPROVE_OFF}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
-
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
+                                                </c:if>
+                                                <c:if test="${item.status==NE_UNAPPROVE_OFF}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
                                                     </c:if>
-                                                
+
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
+
                                             </td>
                                             <td><c:choose>
                                                     <c:when test="${item.status==NE_REG_ON}">                                                            
@@ -978,48 +991,48 @@
                                                     <img src="<%=request.getContextPath()%>/image/icon/history.png">
                                                 </a>
 
-                                                    <c:if test="${item.status==NE_APPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
+                                                <c:if test="${item.status==NE_APPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
+                                                    </c:if>
 
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>                                                 
-                                                    <c:if test="${item.status==NE_UNAPPROVE_ON}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
-                                                            <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
-                                                            <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
-                                                                <a href="<%=request.getContextPath()%>/cells/preRegUpdate/${item.id}/${item.neTypeId}"
-                                                                   title="Cập nhật thông tin đăng ký cell" >
-                                                                    <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                                </a>   
-                                                            </c:if>
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>                                                 
+                                                <c:if test="${item.status==NE_UNAPPROVE_ON}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preRegUpdate')}">
+                                                        <%--<c:if test="${fn:containsIgnoreCase((UserBO)(sessionScope.user).id, item.userInsert)}">--%>
+                                                        <c:if test="${sessionScope.user.id==item.userInsert}">                                                        
+                                                            <a href="<%=request.getContextPath()%>/cells/preRegUpdate/${item.id}/${item.neTypeId}"
+                                                               title="Cập nhật thông tin đăng ký cell" >
+                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                            </a>   
                                                         </c:if>
                                                     </c:if>
-                                                    
-                                                    <c:if test="${item.status==NE_UNAPPROVE_OFF}">
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
-                                                            <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
-                                                               title="Cập nhật cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
-                                                            </a>    
-                                                        </c:if>
+                                                </c:if>
 
-                                                        <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
-                                                            <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
-                                                               title="Đăng ký Off cell" >
-                                                                <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
-                                                            </a>
-                                                        </c:if>
+                                                <c:if test="${item.status==NE_UNAPPROVE_OFF}">
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/preUpdate')}">
+                                                        <a href="<%=request.getContextPath()%>/cells/preUpdate/${item.id}/${item.neTypeId}"
+                                                           title="Cập nhật cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_edit.png">
+                                                        </a>    
                                                     </c:if>
+
+                                                    <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/cell/regOffAir')}">
+                                                        <a style="cursor: pointer" data-toggle="modal" data-target="#myModalOff" onclick="regOff(${item.id}, '${item.code}', '${item.neTypeId}');"
+                                                           title="Đăng ký Off cell" >
+                                                            <img src="<%=request.getContextPath()%>/image/icon/icon_off.png">
+                                                        </a>
+                                                    </c:if>
+                                                </c:if>
                                             </td>
                                             <td><c:choose>
                                                     <c:when test="${item.status==NE_REG_ON}">                                                            
@@ -1078,16 +1091,16 @@
                                             <td>${item.lcrid}</td>
                                             <td>${item.bandwidth}</td>
                                             <td>${item.uarfcn}</td>
-                                                
+
                                             <td>${item.cellType}</td>
                                             <td>${item.ngayHoatDong}</td>
                                             <td>${item.hoanCanhRaDoi}</td>
                                             <td>${item.tenCell}</td>
                                             <td>
-                                            <c:set var="listCellGroupId" value="${fn:split(item.listCellGroupId, ',')}" />
-                                            <c:forEach items="${listCellGroupId}" var="entry">
+                                                <c:set var="listCellGroupId" value="${fn:split(item.listCellGroupId, ',')}" />
+                                                <c:forEach items="${listCellGroupId}" var="entry">
                                                     ${hashMapListCellGroup[entry].name},</br>
-                                            </c:forEach>
+                                                </c:forEach>
 
                                             </td>
                                             <td>${item.ngayDangKy}</td>
@@ -1597,6 +1610,7 @@
     $(document).ready(function () {
         $('#tinhTpId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -1605,6 +1619,7 @@
 
         $('#quanHuyenId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -1613,6 +1628,7 @@
 
         $('#phuongXaId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -1626,6 +1642,7 @@
         }));
         $('#khuvucId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {

@@ -156,7 +156,7 @@
     $(document).ready(function () {
         $('#khuvucId').multiselect(({
             maxHeight: 200,
-            buttonWidth: '454px',
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -164,7 +164,7 @@
         }));
         $('#tinhTpId').multiselect(({
             maxHeight: 200,
-            buttonWidth: '454px',
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
