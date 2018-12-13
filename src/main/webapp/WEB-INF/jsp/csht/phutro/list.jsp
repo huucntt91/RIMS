@@ -10,7 +10,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <section class="content-header">
     <h1>
-        <i class="fa fa-car"></i> Quản lý Phụ trợ
+        <i class="fa fa-plug"></i> Quản lý Phụ trợ
     </h1>
     <ol class="breadcrumb">
         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/view/{id}')}">
