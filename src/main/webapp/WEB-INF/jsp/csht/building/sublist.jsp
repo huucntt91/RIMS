@@ -65,8 +65,7 @@
                 <div class="box-header">
                     <h3 class="box-title"><spring:message code="admin.common.search" /></h3>
                 </div>
-
-                <form:form method="GET" id="frm_search">
+                <form:form method="GET" id="frm_search" >
                     <div class="box-body">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -126,7 +125,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
                     </div>
                 </form:form>
             </div>
