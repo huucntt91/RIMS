@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon">Đối tượng</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Đối tượng</label>
                                     <select  name="object" id="object" class="form-control">
                                         <option value="">--Chọn đối tượng--</option>
                                         <option value="BUILDING" <c:if test='${object == "BUILDING"}'> selected </c:if> >CSHT</option>
@@ -52,7 +52,7 @@
                         <div class="col-md-6">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon">Tên đăng nhập</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Tên đăng nhập</label>
                                     <input name="userName" value="${userName}"
                                            type="text" class="form-control" id="userName"
                                            placeholder="username">
@@ -62,7 +62,7 @@
                         <div class="col-md-6">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon">Hành động</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Hành động</label>
                                     <select  name="action" id="action" class="form-control" value="${action}">
                                         <option value="">--Chọn hành động--</option>
                                         <option value="INSERT">Thêm</option>
@@ -76,7 +76,7 @@
                         <div class="col-md-6">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon">Từ ngày</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Từ ngày</label>
                                     <input type="text" class="form-control date_form"  id="fromDate" name="fromDate"
                                            value="<fmt:formatDate pattern="dd/mm/yyyy" value="${tramQuyHoach.namKhoiTao}" />" />
                                 </div>
@@ -85,7 +85,7 @@
                         <div class="col-md-6">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon">Đến ngày</label>
+                                    <label class=" input-group-addon" style="min-width: 150px" >Đến ngày</label>
                                     <input type="text" class="form-control date_form"  id="toDate" name="toDate"
                                            value="<fmt:formatDate pattern="dd/mm/yyyy" value="${tramQuyHoach.namKhoiTao}" />" />
                                 </div>

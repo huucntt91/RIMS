@@ -58,7 +58,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Khu vực</label>
+                        <label class=" input-group-addon" style="min-width: 150px" >Khu vực</label>
                         <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
                             <c:forEach var="tinhBO" items="${khuvucList}">
                                 <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
@@ -73,7 +73,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Tỉnh TP</label>
+                        <label class=" input-group-addon" style="min-width: 150px" >Tỉnh TP</label>
 
                         <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control"  > 
                         </select>
@@ -85,7 +85,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon" >Mã trạm</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Mã trạm</label>
                         <input type="text" class="form-control"  id="nodeCode" name="nodeCode" value="${node_code}" />
                     </div>
                 </div>
@@ -93,7 +93,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon" >Loại trạm</label>
+                        <label class=" input-group-addon" style="min-width: 150px" >Loại trạm</label>
                         <input type="text" class="form-control"  id="neTypeId" name="neTypeId" />
                     </div>
                 </div>
@@ -156,7 +156,7 @@
     $(document).ready(function () {
         $('#khuvucId').multiselect(({
             maxHeight: 200,
-            buttonWidth: '400px',
+            buttonWidth: '454px',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -164,7 +164,7 @@
         }));
         $('#tinhTpId').multiselect(({
             maxHeight: 200,
-            buttonWidth: '400px',
+            buttonWidth: '454px',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
