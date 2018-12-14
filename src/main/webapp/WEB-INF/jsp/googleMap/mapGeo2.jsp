@@ -200,7 +200,6 @@
         }
         gtag('js', new Date());
         gtag('config', 'UA-106468556-7');
-        gtag('set', {'user_id': '<%=request.getRemoteUser()%>'});
     </script>
 
 </head>
@@ -632,7 +631,7 @@
                             </div>
                             <div class="modal-footer">
                                 <p class="text-right">
-                                    <button type="button" id="sm" onclick="searchMap()" class="btn btn-primary">Tìm kiếm</button>  
+                                    <button type="button" id="sm" onclick="searchMap()" class="btn btn-primary"><i class="fa fa-search"></i> Tìm kiếm</button>  
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
 
                                 </p>
