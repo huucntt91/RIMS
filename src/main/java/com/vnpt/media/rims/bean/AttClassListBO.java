@@ -6,11 +6,13 @@
 
 package com.vnpt.media.rims.bean;
 
+import java.io.Serializable;
+
 /**
  *
  * @author VNP
  */
-public class AttClassListBO {
+public class AttClassListBO implements Serializable {
     private long id;
     
     private String name;

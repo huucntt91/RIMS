@@ -402,6 +402,7 @@ public class UsersDAO extends GenericDAO implements IUsers {
                 UserAttrBO userBO = new UserAttrBO();
                 AttributeBO attributeBO = new AttributeBO();
                 AttClassListBO attClassListBO = new AttClassListBO();
+                ObjectListBO objectListBO = new ObjectListBO();
 
                 userBO.setUserId(rs.getLong("USER_ID"));
                 userBO.setUserAttrId(rs.getLong("USER_ATTR_ID"));
@@ -416,8 +417,11 @@ public class UsersDAO extends GenericDAO implements IUsers {
                 attClassListBO.setCode(rs.getString("ATTR_CLASS_CODE"));
                 attClassListBO.setName(rs.getString("attr_class_name"));
 
+                objectListBO.setCode(rs.getString("object_code"));
+
                 userBO.setAttr(attributeBO);
                 userBO.setAttClass(attClassListBO);
+                userBO.setObject(objectListBO);
                 return userBO;
             }, vars);
             return (List<UserAttrBO>) list;

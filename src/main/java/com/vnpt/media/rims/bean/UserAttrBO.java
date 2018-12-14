@@ -8,6 +8,7 @@ public class UserAttrBO implements Serializable {
     private long userId;
     private  AttributeBO attr;
     private  AttClassListBO attClass;
+    private  ObjectListBO object;
     private  String action;
 
     public long getUserAttrId() {
@@ -48,5 +49,13 @@ public class UserAttrBO implements Serializable {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public ObjectListBO getObject() {
+        return object;
+    }
+
+    public void setObject(ObjectListBO object) {
+        this.object = object;
     }
 }

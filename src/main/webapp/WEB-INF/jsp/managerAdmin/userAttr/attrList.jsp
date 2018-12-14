@@ -108,6 +108,7 @@
                                                     <th>Tên</th>
                                                     <th>Code</th>
                                                     <th>ALIAS Code</th>
+                                                    <th>Mã cha</th>
                                                     <th>Xử lý</th>
                                                 </tr>
                                             </thead>
@@ -119,6 +120,7 @@
                                                         <td>${attr.attrName}</td>
                                                         <td>${attr.attrCode}</td>
                                                         <td>${attr.aliasExcelAttr}</td>
+                                                        <td>${classCode}</td>
                                                         <td>
                                                             <a class="edit" href="#" title="Sửa"
                                                                 data-id="${attr.id}"

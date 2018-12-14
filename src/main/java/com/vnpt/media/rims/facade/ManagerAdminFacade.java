@@ -987,7 +987,7 @@ public class ManagerAdminFacade {
             trans.connectionType(DB_ADMIN);
             classGroupDAO.setTransaction(trans);
             trans.beginTransaction();
-            ret = classGroupDAO.updateAttr(attr);
+            ret = classGroupDAO.deleteAttr(attr);
             trans.commit();
             trans.endTransaction();
             return ret.equals("1");

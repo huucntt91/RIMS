@@ -18,33 +18,31 @@ public class PermissionUtils {
     private static HttpSession ss;
     protected static org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(PermissionUtils.class);
 
-    public static Boolean checkUserAttr(String attrCode, String attrClassCode, String acctionName) {
+    public static Boolean checkUserAttr(String attrCode, String attrClassCode, String objectCode, String acctionName) {
         LOGGER.debug("PermissionUtils.checkUserAttr");
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession(true);
         try {
             List<UserAttrBO> listUserAttrBo = (List<UserAttrBO>)session.getAttribute(Constants.USER_ATTR_KEY);
-            if(listUserAttrBo == null){
+            //if(listUserAttrBo == null){
                 UserBO user = (UserBO)session.getAttribute(Constants.USER_KEY);
                 if(user == null)
                     return  false;
                 ManagerAdminFacade adminFacade = new ManagerAdminFacade();
                 listUserAttrBo = adminFacade.findUserAttrByUserId(String.valueOf(user.getId()));
                 session.setAttribute(Constants.USER_ATTR_KEY, listUserAttrBo);
-            }
+            //}
 
             if(listUserAttrBo == null){
                 return  false;
             }
-
-            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getAction().equalsIgnoreCase(acctionName)))
-            {
-                return  true;
-            }
-
-            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getAction().equalsIgnoreCase("NOT" + acctionName)))
+            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getObject().getCode().equalsIgnoreCase(objectCode) && x.getAction().equalsIgnoreCase("NOT" + acctionName)))
             {
                 return  false;
+            }
+            if(listUserAttrBo.stream().anyMatch(x->x.getAttr().getAttrCode().equalsIgnoreCase(attrCode) && x.getAttClass().getCode().equalsIgnoreCase(attrClassCode) && x.getObject().getCode().equalsIgnoreCase(objectCode) && x.getAction().equalsIgnoreCase(acctionName)))
+            {
+                return  true;
             }
             return true;
         }catch (Exception ex){

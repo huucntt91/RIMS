@@ -101,8 +101,8 @@ public class PermissionController {
                                     //Thêm thuộc tính quyền VIEW, UPDATE. Kiểm tra trạng thái và hiển thị
                                     sb.append("<ul>");
                                         String idChild = classList.get(j).getId() + "-" + attrList.get(k).getId() + "-";
-                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "VIEW") ? dataSelected : "") + " class='groupClass' id='" + idChild + "VIEW' >Xem</li>");
-                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), "UPDATE") ? dataSelected : "") + " class='groupClass' id='" + idChild + "UPDATE' >Cập nhật</li>");
+                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), objectList.get(i).getCode(), "VIEW") ? dataSelected : "") + " class='groupClass' id='" + idChild + "VIEW' >Xem</li>");
+                                        sb.append("<li " + (checkAttr(listUserAtts, attrList.get(k).getId(), classList.get(j).getId(), objectList.get(i).getCode(),"UPDATE") ? dataSelected : "") + " class='groupClass' id='" + idChild + "UPDATE' >Cập nhật</li>");
                                     sb.append("</ul>");
 
                             sb.append("</li>");
@@ -190,6 +190,12 @@ public class PermissionController {
             sb.append("<li id='OBJECT_" + objectList.get(i).getId() + "' >");
             sb.append(objectList.get(i).getName());
             List<AttClassListBO> classList = adminFacade.findAttrClassListByObjectId(String.valueOf(objectList.get(i).getId()));
+            AttClassListBO attClass = classList.stream().filter(x->x.getId() == cid).findFirst().orElse(null);
+            if(attClass != null)
+            {
+                mm.put("classCode", attClass.getCode());
+            }
+
             if (classList.size() > 0) {
                 sb.append("<ul>");
                 for (int j = 0; j < classList.size(); j++) {
@@ -250,7 +256,7 @@ public class PermissionController {
 
         AttributeBO a = attrForm;
         ManagerAdminFacade adminFacade = new ManagerAdminFacade();
-        if (adminFacade.updateAttr(attrForm)) {
+        if (adminFacade.deleteAttr(attrForm)) {
             attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
 
             // set lai quyen  session
@@ -260,26 +266,20 @@ public class PermissionController {
             String msg = messageSource.getMessage("admin.common.error", null, locale);
             attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
         }
-        return "";
+        response.getWriter().write("OK");
+
+        return "redirect:" + request.getHeader("referer");
     }
 
-    private boolean checkAttr(List<UserAttrBO> userAttrList, Long attrId, Long attrClassId, String action) {
-        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equalsIgnoreCase(action)))
-        {
-            return  true;
-        }
-
-        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getAction().equalsIgnoreCase("NOT" + action)))
+    private boolean checkAttr(List<UserAttrBO> userAttrList, Long attrId, Long attrClassId, String objectCode, String action) {
+        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getObject().getCode().equalsIgnoreCase(objectCode) && x.getAction().equalsIgnoreCase("NOT" + action)))
         {
             return  false;
         }
-//        UserAttrBO userAttr = userAttrList.stream().filter(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId).findFirst().orElse(null);
-//        if(userAttr == null)
-//        {
-//            return  true;
-//        }
-//        if(userAttr.getAction().equals("NOT" + action))
-//            return  false;
+        if(userAttrList.stream().anyMatch(x->x.getAttr().getId().equals(attrId) && x.getAttClass().getId() == attrClassId && x.getObject().getCode().equalsIgnoreCase(objectCode) && x.getAction().equalsIgnoreCase(action)))
+        {
+            return  true;
+        }
         return true;
     }
 
