@@ -8,7 +8,7 @@
 
 <%@include file="../../include/header.jsp"%>
 <section class="content-header">
-    <h1>Duyệt và cấp mã cell<small></small></h1>
+    <h1><i class="fa fa-check-square-o"></i>  Duyệt và cấp mã cell<small></small></h1>
     <ol class="breadcrumb">
     </ol>
 </section>
@@ -17,7 +17,8 @@
         <div class="col-xs-12">
             <form:form method="GET" id="frm_search">
                 <div class="col-md-6">
-                    <div class="form-group">
+                    <div class="row">
+                            <div class="form-group">
                         <div class="input-group">
                             <label class=" input-group-addon">Chọn loại cell</label>
                             <select name="neTypeId" id="neTypeId" class="form-control"> >
@@ -29,8 +30,10 @@
                             </div>
                         </div>
                     </div>
+                    </div>
+                
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
                 </div>        
             </form:form>
         </div>

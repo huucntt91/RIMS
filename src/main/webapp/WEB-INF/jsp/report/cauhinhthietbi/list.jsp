@@ -12,7 +12,7 @@
 
 <section class="content-header">
     <h1>
-        Báo cáo cấu hình thiết bị
+        <i class="fa fa-file-word-o"></i> Báo cáo cấu hình thiết bị
     </h1>            
 </section>
 <section class="content">            
@@ -139,7 +139,7 @@
 
                             <div class="form-group">
                                 <button type="submit" name="search" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
-                                <button type="submit" name="export" class="btn btn-primary">Export</button>
+                                <button type="submit" name="export" class="btn btn-primary"> <i class="fa fa-sign-in"></i> Export</button>
                             </div>
                             <input type="hidden" name="id" id="idRemove"/>
                         </form:form>

@@ -7,7 +7,7 @@
 <%@include file="../../include/header.jsp"%>
 <section class="content-header">
     <h1>
-        Quản lý BSC/RNC
+        <i class="fa fa-server" aria-hidden="true"></i> Quản lý BSC/RNC
     </h1>
     <ol class="breadcrumb">
         <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/bscRnc/preAdd'" >
