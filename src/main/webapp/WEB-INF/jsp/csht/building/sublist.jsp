@@ -18,7 +18,7 @@
     .tablePagingId table {
         table-layout: fixed;
         word-wrap: break-word;
-        width: 1450px !important;
+        min-width: 1450px !important;
     }
     span.indenter{
         width: 20px;
@@ -37,7 +37,7 @@
 </style>
 <section class="content-header">
     <h1>
-        Quản lý vị trí <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_CSHT_RIMS.mp4');" >Hướng dẫn</button>
+       <i class="fa fa-map-marker" aria-hidden="true"></i>  Quản lý vị trí <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_CSHT_RIMS.mp4');" >Hướng dẫn</button>
     </h1>
     <ol class="breadcrumb">
         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/preAdd')}">
@@ -71,7 +71,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Khu vực</label>
+                                    <label class=" input-group-addon" style="min-width: 150px">Khu vực</label>
                                     <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
                                         <c:forEach var="tinhBO" items="${khuvucList}">
                                             <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
@@ -86,7 +86,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Tỉnh TP</label>
+                                    <label class=" input-group-addon" style="min-width: 150px">Tỉnh TP</label>
 
                                     <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen();"  > 
                                     </select>
@@ -98,7 +98,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <label class=" input-group-addon">Quận/Huyện</label>
+                                    <label class=" input-group-addon" style="min-width: 150px">Quận/Huyện</label>
                                     <select multiple="multiple" name="quanHuyenId" id="quanHuyenId" class="form-control" onchange="getListPhuongXa();"> 
                                     </select>
                                     <input type="hidden" value="${quanHuyenId}" id="quanHuyenIds"/>
@@ -107,14 +107,15 @@
                         </div>
                         <div class="col-md-4"> 
                             <div class="input-group">
-                                <label class=" input-group-addon">Phường/Xã</label>
+                                <label class=" input-group-addon" style="min-width: 150px">Phường/Xã</label>
                                 <select multiple="multiple" name="phuongXaId" id="phuongXaId" class="form-control"> 
                                 </select>
                                 <input type="hidden" value="${phuongXaId}" id="phuongXaIds"/>    
                             </div>
                         </div>
                         <div class="col-md-8">
-                            <div class="form-group" style="padding: 0 15px">
+                            <div class="input-group">
+                                <label class=" input-group-addon" style="min-width: 150px">Code, Tên CSHT</label>
                                 <input name="code" value="${code}"
                                        type="text" class="form-control" id="exampleInputEmail1"
                                        placeholder="Mã hoặc tên CSHT">
@@ -125,7 +126,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
                     </div>
                 </form:form>
             </div>
@@ -134,7 +135,7 @@
 
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 col-md-12 col-lg-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Danh sách vị trí</h3>
@@ -149,8 +150,8 @@
                                 <tr>
                                     <th width="170">Type</th>
                                     <th width="140" >Mã</th>
-                                    <th width="140">Tên CSHT</th>  
-                                    <th width="140">Mã quy hoạch vị trí</th>
+                                    <th min-width="140">Tên CSHT</th>  
+                                    <th width="140" class="text-center" style="text-align: center;">Mã quy hoạch<br> vị trí</th>
                                     <th width="220">Địa chỉ</th> 
                                     <th>LATITUDE</th>
                                     <th>LONGITUDE</th> 
@@ -554,6 +555,7 @@
 //                                                          
                                                             $('#tinhTpId').multiselect(({
                                                                 maxHeight: 200,
+                                                                buttonWidth: '100%',
                                                                 enableFiltering: true,
                                                                 includeSelectAllOption: true,
                                                                 onChange: function (element, checked) {
@@ -562,6 +564,7 @@
 
                                                             $('#quanHuyenId').multiselect(({
                                                                 maxHeight: 200,
+                                                                buttonWidth: '100%',
                                                                 enableFiltering: true,
                                                                 includeSelectAllOption: true,
                                                                 onChange: function (element, checked) {
@@ -570,6 +573,7 @@
 
                                                             $('#phuongXaId').multiselect(({
                                                                 maxHeight: 200,
+                                                                buttonWidth: '100%',
                                                                 enableFiltering: true,
                                                                 includeSelectAllOption: true,
                                                                 onChange: function (element, checked) {
@@ -577,6 +581,7 @@
                                                             }));
                                                             $('#khuvucId').multiselect(({
                                                                 maxHeight: 200,
+                                                                buttonWidth: '100%',
                                                                 enableFiltering: true,
                                                                 includeSelectAllOption: true,
                                                                 onChange: function (element, checked) {

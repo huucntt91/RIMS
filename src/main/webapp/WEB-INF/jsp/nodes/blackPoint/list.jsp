@@ -10,7 +10,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <section class="content-header">
     <h1>
-        Quản lý điểm đen
+        <i class="fa fa-eercast"></i> Quản lý điểm đen
     </h1>
     <ol class="breadcrumb">
         <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/excel_black_point/init'" >

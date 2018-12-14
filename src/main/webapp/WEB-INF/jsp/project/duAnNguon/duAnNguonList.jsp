@@ -22,7 +22,7 @@
         
 
         <section class="content-header">
-            <h1>Quản lý dự án nguồn</h1>
+            <h1><i class="fa fa-battery-quarter"></i> Quản lý dự án nguồn</h1>
             <ol class="breadcrumb">
                 <%--<c:if test="${fn:containsIgnoreCase(sessionScope.function, '/stationPlansExcelImport/init')}">--%>
                     <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/duAnNguon/insertExels'" >
@@ -39,18 +39,19 @@
         </section>
         
         <section class="content">
-
             <div class="row">
                 <div class="col-xs-12">
+                    <form method="GET" action="search" class="form-horizontal">
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title"><spring:message code="admin.common.search" /></h3>
                         </div>
-                        <form method="GET" action="search">
+                        <div class="box-body">
+                             
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <label class=" input-group-addon">Khu vực</label>
+                                        <label class=" input-group-addon" style="min-width: 150px;">Khu vực</label>
                                             <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
                                                 <c:forEach var="tinhBO" items="${khuvucList}">
                                                     <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
@@ -61,25 +62,25 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <label class=" input-group-addon">Tỉnh TP</label>
+                                        <label class=" input-group-addon" style="min-width: 150px;">Tỉnh TP</label>
                                         <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" > 
                                         </select>
                                         <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
                                     </div>
 
                                 </div>
-                            </div>  
-                                         
-                            <!-- /.box-body -->
+                            </div> 
+                        </div>
+                         <!-- /.box-body -->
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
                             </div>
-                        </form>
                     </div>
+                             </form>
                 </div>
             </div>
 
@@ -183,6 +184,7 @@
 
                     $('#khuvucId').multiselect(({
                         maxHeight: 200,
+                        buttonWidth:'100%',
                         enableFiltering: true,
                         includeSelectAllOption: true,
                         onChange: function (element, checked) {
@@ -191,6 +193,7 @@
 
                     $('#tinhTpId').multiselect(({
                         maxHeight: 200,
+                        buttonWidth:'100%',
                         enableFiltering: true,
                         includeSelectAllOption: true,
                         onChange: function (element, checked) {

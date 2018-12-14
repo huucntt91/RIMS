@@ -17,14 +17,14 @@
 <div class="container">
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">Tìm kiếm trạm quy hoạch</h3> 
-            <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_QH_RIMS.mp4');" >Hướng dẫn</button>
+            <h3 class="box-title"> <i class="fa fa-search-plus"></i> Tìm kiếm trạm quy hoạch  </h3> 
+            <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_QH_RIMS.mp4');" >  Hướng dẫn</button>
         </div>
         <div class="box-body">
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon" >Mã trạm quy hoạch</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Mã trạm quy hoạch</label>
                         <input type="text" class="form-control"  id="MA_QUY_HOACH" name="MA_QUY_HOACH" placeholder="Mã trạm quy hoạch"/>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon" >Tên trạm quy hoạch</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Tên trạm quy hoạch</label>
                         <input type="text" class="form-control"  id="TEN_QUY_HOACH" name="TEN_QUY_HOACH" placeholder="Tên trạm quy hoạch"/>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Khu vực</label>
+                        <label class=" input-group-addon" style="min-width: 150px" >Khu vực</label>
                         <select multiple="multiple" name="khuvucId" id="khuvucId" class="form-control" onchange="getTinhTp();"> 
                             <c:forEach var="tinhBO" items="${khuvucList}">
                                 <option  <c:if test='${fn:contains(khuvucId,tinhBO.id)}' >  selected="selected" </c:if>
@@ -56,7 +56,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class=" input-group-addon">Tỉnh/Tp</label>
+                        <label class=" input-group-addon" style="min-width: 150px" >Tỉnh/Tp</label>
                         <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control"  > 
                         </select>
                         <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
@@ -67,7 +67,7 @@
             <div class="col-md-6">
                 <div class="form-group" > 
                     <div class="input-group">
-                        <label class=" input-group-addon" >Loại công nghệ</label>
+                        <label class=" input-group-addon" style="min-width: 150px">Loại công nghệ</label>
                         <select name="ID_LOAI_CONG_NGHE" id="ID_LOAI_CONG_NGHE" class="form-control" >
                             <option value="">-Chọn loại công nghệ-</option>
                             <c:forEach var="loaiCongNghe" items="${loaiCongNgheLst}">
@@ -81,7 +81,7 @@
             <div class="col-md-6">
                         <div class="form-group" > 
                             <div class="input-group">
-                                <label class=" input-group-addon" >Trạng thái</label>
+                                <label class=" input-group-addon" style="min-width: 150px" >Trạng thái</label>
                                 <select name="SEARCH_STATUS" id="SEARCH_STATUS" class="form-control" >
                                     <option value="">-Trạng thái-</option>
                                     <option value="1">-Chưa duyệt-</option>
@@ -94,7 +94,7 @@
 
             <div class="clearfix"></div>
             <div class="box-footer" align="center" >
-                <button type="button" id="btnSearch" onclick="this.disabled = true;searchQh();" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                <button type="button" id="btnSearch" onclick="this.disabled = true;searchQh();" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
             </div>
         </div>
         <!-- /.box-body -->
@@ -238,7 +238,7 @@
                 $(document).ready(function () {
                     $('#tinhTpId').multiselect(({
                         maxHeight: 200,
-                        buttonWidth: '300px',
+                        buttonWidth: '100%',
                         enableFiltering: true,
                         includeSelectAllOption: true,
                         onChange: function (element, checked) {
@@ -246,7 +246,7 @@
                     }));
                     $('#khuvucId').multiselect(({
                         maxHeight: 200,
-                        buttonWidth: '300px',
+                         buttonWidth: '100%',
                         enableFiltering: true,
                         includeSelectAllOption: true,
                         onChange: function (element, checked) {

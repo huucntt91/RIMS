@@ -10,7 +10,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <section class="content-header">
     <h1>
-        Quản lý Phụ trợ
+        <i class="fa fa-car"></i> Quản lý Phụ trợ
     </h1>
     <ol class="breadcrumb">
         <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/building/view/{id}')}">
@@ -24,7 +24,7 @@
 <section class="content">            
     <div class="row">
         <div class="col-xs-12">
-            <form:form method="GET" id="frm_search">
+            <form:form method="GET" id="frm_search" class="frmSearchPhuTro">
                 <div class="box-body">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -46,7 +46,7 @@
                             <div class="input-group">
                                 <label class=" input-group-addon">Tỉnh TP</label>
 
-                                <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen();"  > 
+                                <select style="width:100%;" multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" onchange="getListHuyen();"  > 
                                 </select>
                                 <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
                             </div>
@@ -72,18 +72,21 @@
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <div class="form-group" style="padding: 0 15px">
+                        <div class="row">
+                            <div class="form-group" style="padding: 0 15px">
                             <input name="code" value="${code}"
                                    type="text" class="form-control" id="exampleInputEmail1"
                                    placeholder="Mã hoặc tên CSHT">
                         </div>
+                        </div>
+                        
                     </div>
                     <div class="clearfix"></div>
 
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
                 </div>
             </form:form>
         </div>
@@ -103,7 +106,7 @@
                                             + $('#name').val() 
                                             + '&khuvucId=' + $('#khuvucId').val() + '&tinhTpId=' + $('#tinhTpId').val()">Export excel</button> -->
                     <button type="button" id="export" class="btn btn-primary" 
-                            onclick="exportExcel()">Export excel</button>
+                            onclick="exportExcel()"><i class="fa "></i> Export excel</button>
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -268,6 +271,7 @@
                                          
         $('#tinhTpId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -276,6 +280,7 @@
 
         $('#quanHuyenId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -284,6 +289,7 @@
 
         $('#phuongXaId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
@@ -291,6 +297,7 @@
         }));
         $('#khuvucId').multiselect(({
             maxHeight: 200,
+            buttonWidth: '100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {
