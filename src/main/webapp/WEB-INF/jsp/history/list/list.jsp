@@ -10,7 +10,7 @@
 
 <section class="content-header">
     <h1>
-        Lịch sự tác động vòng đời NE
+        <i class="fa fa-history"></i> Lịch sự tác động vòng đời NE
     </h1>
     <ol class="breadcrumb">
 

@@ -22,7 +22,7 @@
         
 
         <section class="content-header">
-            <h1>Quản lý trạm dự án<small></small> <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_KH_RIMS.mp4');" >Hướng dẫn</button> </h1>
+            <h1><i class="fa fa-building"></i> Quản lý trạm dự án<small></small> <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_KH_RIMS.mp4');" >Hướng dẫn</button> </h1>
             <ol class="breadcrumb">
                 <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'ADD_TRAM_DA')}">
                     <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/stationPlans/preAdd'" >
