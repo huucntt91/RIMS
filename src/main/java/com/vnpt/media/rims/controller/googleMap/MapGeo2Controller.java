@@ -214,7 +214,7 @@ public class MapGeo2Controller {
         }
     }
 
-    @RequestMapping(value = "/countNodes", method = RequestMethod.POST,
+    @RequestMapping(value = "/countNodes",
             produces = "application/json;charset=utf-8")
     public @ResponseBody
     String getCountNodes(@ModelAttribute(value = "model") FilterMapForm model, ModelMap mm,

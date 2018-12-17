@@ -2567,8 +2567,10 @@
                     }
 
                     $("#boxAddLayer .groupFilter").each(function (i) {
-                    where = where + convertQueryFilter(objectId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
-                    console.log(where);
+                        //cuongvn: ko can loc layer theo doi tuong cho hien thi tat    
+                        //where = where + convertQueryFilter(objectId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+         console.log('bo loc theo thuoc tinh');                
+        console.log(where);
                     });
                     $.post("${pageContext.request.contextPath}/mapGeo/addMyLayer", {layerId: - 1, layerName: nameLayer, styleOpacity: opacity, styleColor:color, styleBorderColor: borderColor, styleSize:size, styleWhere:where, objectId: objectId }, function(data) {
                     if (parseInt(data) < 1){
