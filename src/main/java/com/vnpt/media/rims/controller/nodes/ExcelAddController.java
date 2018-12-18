@@ -443,11 +443,15 @@ public class ExcelAddController {
                 cell = row.createCell(12);
                 cell.setCellValue(item.getThietBi());
                 cell = row.createCell(13);
-                cell.setCellValue(item.getLoaiTram());
+                cell.setCellValue(item.getDeviceType());
                 cell = row.createCell(14);
-                cell.setCellValue(item.getCauHinh());
+                cell.setCellValue(item.getLoaiTram());
                 cell = row.createCell(15);
+                cell.setCellValue(item.getCauHinh());
+                cell = row.createCell(16);
                 cell.setCellValue(item.getEnodebId());
+                cell = row.createCell(17);
+                cell.setCellValue(item.getFrequencyBand());
             }
             fin.close();
             File file = new File(folderTemp + File.separator + "RESULT_DK_SITE_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xls");

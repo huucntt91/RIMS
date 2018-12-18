@@ -40,30 +40,40 @@ public class ExcelBtsUpdateBO {
     private String ngayHoatDong;
     @Column(name = "ten tren he thong", index = "10")
     private String tenTrenHeThong;
-    @Column(name = "ten bsc rnc", index = "11")
-    private String tenBscRnc;
-    @Column(name = "msc mss", index = "12")
+ 
+    @Column(name = "msc mss", index = "11")
     private String mscMss;
-    @Column(name = "sgsn", index = "13")
+    @Column(name = "sgsn", index = "12")
     private String sgsn;
-    @Column(name = "dcHsdpa42M", index = "14")
+    @Column(name = "dcHsdpa42M", index = "13")
     private String dcHsdpa42M;
-    @Column(name = "filterUser", index = "15")
+    @Column(name = "filterUser", index = "14")
     private String filterUser;
-    @Column(name = "loai cong nghe", index = "16")
+    @Column(name = "loai cong nghe", index = "15")
     private String loaiCongNghe;
-    @Column(name = "frequencyBand", index = "17")
+    @Column(name = "frequencyBand", index = "16")
     private String frequencyBand;
-    
-    @Column(name = "enodeb Id", index = "18")
+
+    @Column(name = "enodeb Id", index = "17")
     private String enodebId;
-    
-    @Column(name = "ten thiet bi", index = "19")
+
+    @Column(name = "ten thiet bi", index = "18")
     private String thietBi;
+    @Column(name = "deviceType", index = "19")
+    private String deviceType;
     @Column(name = "loai Tram", index = "20")
     private String loaiTram;
     @Column(name = "cauHinh", index = "21")
     private String cauHinh;
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+    
+    
 
     public ExcelBtsUpdateBO() {
     }
@@ -108,7 +118,6 @@ public class ExcelBtsUpdateBO {
         this.maTramDuAn = maTramDuAn;
     }
 
-   
     public String getMaBuilding() {
         return maBuilding;
     }
@@ -165,13 +174,6 @@ public class ExcelBtsUpdateBO {
         this.tenTrenHeThong = tenTrenHeThong;
     }
 
-    public String getTenBscRnc() {
-        return tenBscRnc;
-    }
-
-    public void setTenBscRnc(String tenBscRnc) {
-        this.tenBscRnc = tenBscRnc;
-    }
 
     public String getMscMss() {
         return mscMss;
@@ -260,6 +262,5 @@ public class ExcelBtsUpdateBO {
     public void setEnodebId(String enodebId) {
         this.enodebId = enodebId;
     }
-
 
 }
