@@ -307,6 +307,10 @@ public class CellsExcelController extends BaseController {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
 
         List<Cell4GNewExcelModel> items = tableForm.getModels();
+        //kiểm tra quyền cập nhật thuộc tính, nếu không có quyền thì set lại giá trị null cho thuộc tính đó
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("7"));
+        PermissionUtils.filterUserExcelAttr(items, classAtrr);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isCheck()) {
                 String strCheck = "";
@@ -336,6 +340,10 @@ public class CellsExcelController extends BaseController {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
 
         List<Cell2GNewExcelModel> items = tableForm.getModels();
+        //kiểm tra quyền cập nhật thuộc tính, nếu không có quyền thì set lại giá trị null cho thuộc tính đó
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("5"));
+        PermissionUtils.filterUserExcelAttr(items, classAtrr);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isCheck()) {
                 String strCheck = "";
@@ -365,6 +373,10 @@ public class CellsExcelController extends BaseController {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
 
         List<Cell3GNewExcelModel> items = tableForm.getModels();
+        //kiểm tra quyền cập nhật thuộc tính, nếu không có quyền thì set lại giá trị null cho thuộc tính đó
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId("6"));
+        PermissionUtils.filterUserExcelAttr(items, classAtrr);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isCheck()) {
                 String strCheck = "";
@@ -651,6 +663,9 @@ public class CellsExcelController extends BaseController {
                 Integer[] checkRows = {1, 2};
                 resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_2G_CSHT.xlsx"), checkRows);
                 LOGGER.info("user: {}, ip: {}, call updateCell2gExcel", user.getUsername(), request.getRemoteAddr());
+
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
                 for (Cell2GUpdateExcelModel item : items) {
                     if (resultCheckFile) {
                         item = (Cell2GUpdateExcelModel) StringUtils.trimObject(item);
@@ -711,6 +726,9 @@ public class CellsExcelController extends BaseController {
                 Integer[] checkRows = {1, 2};
                 resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_4G_CSHT.xlsx"), checkRows);
                 LOGGER.info("user: {}, ip: {}, call updateCell4gExcel", user.getUsername(), request.getRemoteAddr());
+
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
                 for (Cell4GUpdateExcelModel item : items) {
                     if (resultCheckFile) {
                         item = (Cell4GUpdateExcelModel) StringUtils.trimObject(item);
@@ -770,6 +788,9 @@ public class CellsExcelController extends BaseController {
             Integer[] checkRows = {1, 2};
             resultCheckFile = StringUtils.checkImportFile(convFile, new File(request.getServletContext().getRealPath("/resources/excel/") + File.separator + "Template_CAPNHAT_CELL_NET.xlsx"), checkRows);
             LOGGER.info("user: {}, ip: {}, call updateCellNetRFExcel", user.getUsername(), request.getRemoteAddr());
+
+            PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
             for (CellUpdateExcelNetModel item : items) {
                 if (resultCheckFile) {
                     item = (CellUpdateExcelNetModel) StringUtils.trimObject(item);

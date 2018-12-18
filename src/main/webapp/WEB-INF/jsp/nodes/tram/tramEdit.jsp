@@ -72,10 +72,12 @@
                                 </div>
 
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"AREA")}'> disableGroup="disable" </c:if>>
-                                    <div class="form-group">
+                                    <div class="form-group" <c:if test="${!pm:checkUserAttr('PROVINCE_ID', 'AREA', model.tenNeType,'VIEW')}"> style="display: none" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Đơn vị quản lý </label>
-                                            <select name="donViId" id="donViId" class="form-control" required> >
+                                            <select name="donViId" id="donViId" class="form-control" required
+                                                <c:if test="${!pm:checkUserAttr('PROVINCE_ID', 'AREA', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            >
                                                 <option value="">--- Chọn Đơn Vị ---</option>
                                             <c:forEach var="dvBO" items="${dvList}">
 
@@ -117,19 +119,21 @@
                                 </div>
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"MANAGEMENT_INFO")}'> disableGroup="disable" </c:if>>                        
                                     <div class="form-group" class="form-control"
-                                        <c:if test="${not pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO','VIEW')}"> style="display: none" </c:if>
+                                            <c:if test="${!pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
                                     >
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;"  for="exampleInputEmail1">Tên người quản lý</label>
                                             <input type="text" value="${model.tenNgQLy}" class="form-control" name="tenNgQLy"  placeholder="Tên người quản lý"
-                                                <c:if test="${not pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO','UPDATE')}"> disabled </c:if>
+                                                    <c:if test="${!pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
                                             />
                                     </div>
                                 </div> 
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('MANAGER_PHONE', 'MANAGEMENT_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">SĐT quản lý</label>
-                                        <input type="text" value="${model.SDTQLy}" class="form-control" name="SDTQLy" placeholder="SĐT quản lý"  />                    
+                                        <input type="text" value="${model.SDTQLy}" class="form-control" name="SDTQLy" placeholder="SĐT quản lý"
+                                            <c:if test="${!pm:checkUserAttr('MANAGER_PHONE', 'MANAGEMENT_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>  
 
@@ -145,23 +149,29 @@
                                     <h3 class="panel-title">Thông tin khai sinh</h3>
                                 </div>
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"BIRTH_INFO")}'> disableGroup="disable" </c:if>>        
-                                    <div class="form-group">
+                                    <div class="form-group" <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên cho quản lý</label>                                    
-                                            <input required value="${model.name}" type="text" class="form-control" name="name" placeholder="Tên cho quản lý"  />
+                                            <input required value="${model.name}" type="text" class="form-control" name="name" placeholder="Tên cho quản lý"
+                                                <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                             />
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Hoàn cảnh ra đời </label>
-                                        <input  type="text" value="${model.hoanCanhRaDoi}" class="form-control" placeholder="Hoàn cảnh ra đời " name="hoanCanhRaDoi" />
+                                        <input  type="text" value="${model.hoanCanhRaDoi}" class="form-control" placeholder="Hoàn cảnh ra đời " name="hoanCanhRaDoi"
+                                            <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Ngày hoạt động</label>
                                         <input  type="text" class="form-control date_form" value="<fmt:formatDate pattern="dd/MM/yyyy" 
-                                                        value="${model.ngayHoatDong}" />" id="ngayHoatDong" name="ngayHoatDong"  />                    
+                                                        value="${model.ngayHoatDong}" />" id="ngayHoatDong" name="ngayHoatDong"
+                                                        <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                                        />
                                     </div>
                                     <script>
                                         $(document).ready(function () {
@@ -175,11 +185,13 @@
                                     </script>
                                 </div> 
 
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('CREATE_DATE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Ngày đăng ký</label>
                                         <input  type="text" class="form-control date_form" value="<fmt:formatDate pattern="dd/MM/yyyy" 
-                                                        value="${model.ngayDangKy}" />" id="ngayDangKy" name="ngayDangKy"  />                    
+                                                        value="${model.ngayDangKy}" />" id="ngayDangKy" name="ngayDangKy"
+                                                        <c:if test="${!pm:checkUserAttr('CREATE_DATE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                                        />
                                     </div>
                                     <script>
                                         $(document).ready(function () {
@@ -193,11 +205,13 @@
                                     </script>
                                 </div> 
 
-                                <div class="form-group" class="form-control">
-                                    <div class="input-group">  
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('AGREE_DATE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
+                                    <div class="input-group">
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Ngày kiểm duyệt</label>
                                         <input  type="text" class="form-control date_form" value="<fmt:formatDate pattern="dd/MM/yyyy" 
-                                                        value="${model.ngayKiemDuyet}" />" id="ngayKiemDuyet" name="ngayKiemDuyet"  />                    
+                                                        value="${model.ngayKiemDuyet}" />" id="ngayKiemDuyet" name="ngayKiemDuyet"
+                                                         <c:if test="${!pm:checkUserAttr('AGREE_DATE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                                         />
                                     </div>
                                     <script>
                                         $(document).ready(function () {
@@ -211,11 +225,13 @@
                                     </script>
                                 </div> 
 
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('APPROVED_DATE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if> >
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Ngày cấp phép</label>
                                         <input  type="text" class="form-control date_form" value="<fmt:formatDate pattern="dd/MM/yyyy" 
-                                                        value="${model.ngayCapPhep}" />" id="ngayCapPhep" name="ngayCapPhep"  />                    
+                                                        value="${model.ngayCapPhep}" />" id="ngayCapPhep" name="ngayCapPhep"
+                                                        <c:if test="${!pm:checkUserAttr('APPROVED_DATE', 'BIRTH_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                                        />
                                     </div>
                                     <script>
                                         $(document).ready(function () {
@@ -266,61 +282,77 @@
                                     <h3 class="panel-title">Thông tin trên OMC</h3>
                                 </div>
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"OMC_INFO")}'> disableGroup="disable" </c:if>>        
-                                    <div class="form-group">
+                                    <div class="form-group" <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên trên hệ thống</label>                                    
 
-                                            <input  type="text" value="${model.tenTrenHeThong}"  class="form-control" placeholder="Tên trên hệ thống" name="tenTrenHeThong" />
+                                            <input  type="text" value="${model.tenTrenHeThong}"  class="form-control" placeholder="Tên trên hệ thống" name="tenTrenHeThong"
+                                                <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            />
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('PARENT_NAME', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                     <div class="input-group">
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên BSC/RNC</label>
-                                        <input value="${model.tenBSCRNC}"   type="text" class="form-control" placeholder="Tên BSC/RNC" name="tenBSCRNC" />
+                                        <input value="${model.tenBSCRNC}"   type="text" class="form-control" placeholder="Tên BSC/RNC" name="tenBSCRNC"
+                                            <c:if test="${!pm:checkUserAttr('PARENT_NAME', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('PARENT_NAME_QL', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                     <div class="input-group">
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên BSC/RNC quản lý</label>
-                                        <input value="${model.tenBSCRNCQL}"   type="text" class="form-control" placeholder="Tên BSC/RNC quản lý" name="tenBSCRNCQL" />
+                                        <input value="${model.tenBSCRNCQL}"   type="text" class="form-control" placeholder="Tên BSC/RNC quản lý" name="tenBSCRNCQL"
+                                            <c:if test="${!pm:checkUserAttr('PARENT_NAME_QL', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>    
                                 <c:if test='${model.neTypeId == 8}'>
-                                    <div class="form-group">
+                                    <div class="form-group" <c:if test="${!pm:checkUserAttr('MSC_MSS', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">
                                             <label class=" input-group-addon" style="min-width:150px;"  for="exampleInputEmail1">MSC/MSS</label>
-                                            <input   type="text" value="${model.mSCMSS}" class="form-control" placeholder="MSC/MSS" name="mSCMSS" />
+                                            <input   type="text" value="${model.mSCMSS}" class="form-control" placeholder="MSC/MSS" name="mSCMSS"
+                                                <c:if test="${!pm:checkUserAttr('MSC_MSS', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            />
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" <c:if test="${!pm:checkUserAttr('SGSN', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">SGSN</label>
-                                            <input  type="text" class="form-control" value="${model.sGSN}" placeholder="SGSN" name="sGSN" />
+                                            <input  type="text" class="form-control" value="${model.sGSN}" placeholder="SGSN" name="sGSN"
+                                                <c:if test="${!pm:checkUserAttr('SGSN', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            />
                                         </div>
                                     </div>
                                 </c:if>    
                                 <c:if test='${model.neTypeId != 2}'>
-                                    <div class="form-group">
+                                    <div class="form-group" <c:if test="${!pm:checkUserAttr('DC42M', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">DC-HSDPA 42M</label>
-                                            <input  type="text" class="form-control" value="${model.dCHSPDA42M}" placeholder="DC-HSDPA 42M" name="dCHSPDA42M" />
+                                            <input  type="text" class="form-control" value="${model.dCHSPDA42M}" placeholder="DC-HSDPA 42M" name="dCHSPDA42M"
+                                                <c:if test="${!pm:checkUserAttr('DC42M', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            />
                                         </div>
                                     </div>
                                 </c:if> 
 
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('FILTER_USER', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Filter User</label>
-                                        <input  type="text" class="form-control" value="${model.filterUser}" name="filterUser" placeholder="Filter User" />
+                                        <input  type="text" class="form-control" value="${model.filterUser}" name="filterUser" placeholder="Filter User"
+                                            <c:if test="${!pm:checkUserAttr('FILTER_USER', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Frequency Band</label>
     <!--                                        <input  type="text" class="form-control" value="${model.frequencyBand}" placeholder="Frequency Band" name="frequencyBand" />-->
-                                        <select name="bangTanId" id="bangTanId" class="form-control" > >
+                                        <select name="bangTanId" id="bangTanId" class="form-control"
+                                            <c:if test="${!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                         >
                                             <option value="">--- Chọn Frequency Band ---</option>
                                             <c:forEach var="item" items="${bangTanList}">
 
@@ -344,18 +376,22 @@
                                     <h3 class="panel-title">Thông tin toạ độ</h3>
                                 </div>
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"POS_INFO")}'> disableGroup="disable" </c:if>>
-                                    <div class="form-group">
+                                    <div class="form-group"  <c:if test="${!pm:checkUserAttr('LATITUDE', 'POS_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Latitude</label>                                    
 
-                                            <input required type="number" step="any" class="form-control" readonly="readonly" value="${model.lat}" name="lat" id="lat" placeholder="Latitude" value="" />
+                                            <input required type="number" step="any" class="form-control" readonly="readonly" value="${model.lat}" name="lat" id="lat" placeholder="Latitude" value=""
+                                                <c:if test="${!pm:checkUserAttr('LATITUDE', 'POS_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            />
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group"  <c:if test="${!pm:checkUserAttr('LONGITUDE', 'POS_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Longitude</label>                                    
 
-                                        <input required type="number" step="any" class="form-control" readonly="readonly" value="${model.lon}" name="lon" id="lon" placeholder="Longitude" value="" />
+                                        <input required type="number" step="any" class="form-control" readonly="readonly" value="${model.lon}" name="lon" id="lon" placeholder="Longitude" value=""
+                                            <c:if test="${!pm:checkUserAttr('LONGITUDE', 'POS_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div> 
                             </div>
@@ -397,10 +433,12 @@
                                     <h3 class="panel-title">Thông tin cấu hình</h3>
                                 </div>
                                 <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"CONFIG_INFO")}'> disableGroup="disable" </c:if>>
-                                    <div class="form-group">
+                                    <div class="form-group"  <c:if test="${!pm:checkUserAttr('VENDOR', 'CONFIG_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn thiết bị </label>
-                                            <select name="thietBiId" id="thietBiId" class="form-control" required >
+                                            <select name="thietBiId" id="thietBiId" class="form-control" required
+                                                <c:if test="${!pm:checkUserAttr('VENDOR', 'CONFIG_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                            >
                                                 <option value="">--- Chọn thiết bị ---</option>
                                             <c:forEach var="item" items="${thietBiList}">
                                                 <option   <c:choose>
@@ -414,10 +452,12 @@
                                         </select>  
                                     </div>
                                 </div>
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control"  <c:if test="${!pm:checkUserAttr('TYPE', 'CONFIG_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                     <div class="input-group">  
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Loại Trạm</label>
-                                        <select name="loaiTramId" class="form-control" > 
+                                        <select name="loaiTramId" class="form-control"
+                                            <c:if test="${!pm:checkUserAttr('TYPE', 'CONFIG_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                        >
                                             <option value="">--- Chọn loại trạm ---</option>
                                             <c:forEach var="item" items="${tramList}">
                                                 <c:choose>
@@ -436,10 +476,12 @@
                                     </div>
                                 </div>
                                 <c:if test='${model.neTypeId != 8}'>
-                                    <div class="form-group">
+                                    <div class="form-group"  <c:if test="${!pm:checkUserAttr('CONFIG', 'CONFIG_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>>
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Cấu hình </label>
-                                            <select name="cauHinhPortId" id="cauHinhPortId" class="form-control"  >
+                                            <select name="cauHinhPortId" id="cauHinhPortId" class="form-control"
+                                                <c:if test="${!pm:checkUserAttr('CONFIG', 'CONFIG_INFO', model.tenNeType,'UPDATE')}"> disabled="disabled" </c:if>
+                                             >
                                                 <option value="">--- Chọn Cấu Hình ---</option>
                                                 <c:forEach var="item" items="${cauHinhList}">
 
@@ -466,7 +508,7 @@
                                     <div class="form-group" class="form-control">
                                         <div class="input-group">  
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Thời gian bảo dưỡng</label>                    
-                                            <input  type="text" class="form-control date_form" value="${model.ngayBaoDuong}"  id="ngayBaoDuong" name="ngayBaoDuong"  />                    
+                                            <input  type="text" class="form-control date_form" value="${model.ngayBaoDuong}"  id="ngayBaoDuong" name="ngayBaoDuong"  />
                                         </div>
                                         <script>
                                             $(document).ready(function () {
