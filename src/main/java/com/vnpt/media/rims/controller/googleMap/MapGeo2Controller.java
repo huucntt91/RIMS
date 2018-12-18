@@ -315,6 +315,8 @@ public class MapGeo2Controller {
         List<NodeBO> resultSearch=facade.getNodes(objectType, where);
         mm.put("objectType",objectType);
         mm.put("list", resultSearch);
+        mm.put("resultCount",resultSearch.size());
+       
         return NODE_LIST;
     }
 //    trunglk_end

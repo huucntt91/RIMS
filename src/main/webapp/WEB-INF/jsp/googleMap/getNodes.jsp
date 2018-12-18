@@ -39,5 +39,8 @@
 <script>
    
     $('#listNodes').DataTable();
+     <c:if test="${resultCount==1}">
+         SetLocation(${list[0].longitude},${list[0].latitude});                     
+     </c:if>
 
 </script>
