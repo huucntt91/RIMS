@@ -2,6 +2,8 @@ package com.vnpt.media.rims.controller.managerAdmin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.vnpt.media.rims.bean.TinhTpGiapRanhBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.utils.PagingUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
@@ -9,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
@@ -78,7 +81,9 @@ public class UserController extends BaseController {
             endRow = Constants.NUMBER_FOR_PAGING;
         }
         List<UserBO> lst = facade.findAllUsers(null, startRow, endRow);
+        String tinhTpId = "";
         mm.put("list_user", lst);
+        mm.put("tinhTpId", tinhTpId);
         return USER_LIST;
     }
 
@@ -249,6 +254,11 @@ public class UserController extends BaseController {
                 UserBO userBO = facade.findByUserId(userId);
                 mm.put("user", userBO);
                 mm.addAttribute("ubo", userBO);
+
+                List<TinhTpGiapRanhBO> tinhGiapRanhs = facade.findTinhTpGiapRanh(userBO.getId(), Constants.DOI_TUONG_USER);
+                if(tinhGiapRanhs == null)
+                    tinhGiapRanhs = new ArrayList<>();
+                mm.put("tinhTpId", String.join(",", tinhGiapRanhs.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList())));
             }
         } catch (Exception e) {
             logger.error("Exception :", e);
@@ -262,7 +272,6 @@ public class UserController extends BaseController {
     public String add(ModelMap mm, @Valid @ModelAttribute(value = "ubo") UserBO ubo,
             BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request) throws Exception {
         Locale locale = LocaleContextHolder.getLocale();
-
         try {
             
             if (bindingResult.hasErrors()) {
@@ -331,7 +340,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/view/update", method = RequestMethod.POST)
-    public String update(ModelMap mm, @Valid @ModelAttribute(value = "ubo") UserBO ubo, BindingResult bindingResult, RedirectAttributes attr) throws Exception {
+    public String update(ModelMap mm, @Valid @ModelAttribute(value = "ubo") UserBO ubo,  @RequestParam(value = "tinhTpId", required = false) String tinhTpId, BindingResult bindingResult, RedirectAttributes attr, HttpServletRequest request,HttpServletResponse response) throws Exception {
         Locale locale = LocaleContextHolder.getLocale();
         mm.put("ubo", ubo);
         logger.info("update User Action");
@@ -359,6 +368,40 @@ public class UserController extends BaseController {
             
             ubo.setEmail(ubo.getUsername() + "@vnpt.vn");
             adminFacade.updateUser(ubo);
+
+            //huannv
+            //cập nhật quyền xem tỉnh giáp ranh
+            List<String> sqlsDelete = new ArrayList<String>();
+            List<String> sqlsInsert = new ArrayList<String>();
+            List<String> sqls = new ArrayList<String>();
+            //sqls.add(tempDelete);
+
+            if(tinhTpId == null) tinhTpId = "";
+            String[] listTinhtp = tinhTpId.split(",");
+            String tempDelete = "delete from tinh_tp_giap_ranh ua where ma_doi_tuong = " + ubo.getId() + " and loai_doi_tuong='user'";
+            sqlsDelete.add(tempDelete);
+
+            for (int i = 0; i < listTinhtp.length; i++) {
+                String temp = " insert into tinh_tp_giap_ranh(id, ma_doi_tuong, loai_doi_tuong, ma_tinh_tp, ma_quyen) values (SEQ_TINH_TP_GIAP_RANH_ID.nextval, " + ubo.getId() + ","
+                        + "'"+ Constants.DOI_TUONG_USER +"'" + ","
+                        + "'" + listTinhtp[i] + "', 'VIEW') ";
+                sqlsInsert.add(temp);
+            }
+            sqls.addAll(sqlsDelete);
+            sqls.addAll(sqlsInsert);
+
+            if (adminFacade.updateTinhTpGiapRanh(sqls.stream().distinct().collect(Collectors.toList())).equals("1")) {
+                attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
+
+                // set lai quyen  session
+                SetSessionServlet setSession = new SetSessionServlet();
+                setSession.initSession(request, response);
+            } else {
+                String msg = messageSource.getMessage("admin.common.error", null, locale);
+                attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, msg));
+                return "redirect:/user/view/" + ubo.getId();
+            }
+
         } catch (Exception e) {
 
             String message = StringUtils.captureStackTrace(e);
@@ -375,6 +418,7 @@ public class UserController extends BaseController {
         }
         String msg = messageSource.getMessage("admin.common.success", null, locale);
         attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, msg));
+
         return "redirect:/user/init";
     }
 

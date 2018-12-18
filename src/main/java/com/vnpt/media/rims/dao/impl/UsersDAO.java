@@ -436,4 +436,37 @@ public class UsersDAO extends GenericDAO implements IUsers {
             throw new DAOException(e);
         }
     }
+
+
+    @Override
+    public List<TinhTpGiapRanhBO> findTinhTpGiapRanh(long maDoiTuong, String maLoaiDoiTuong) throws DAOException {
+        Connection conn;
+        try {
+            conn = this.getConnection();
+            String querySql = "select * from tinh_tp_giap_ranh where ma_doi_tuong=? and loai_doi_tuong=?";
+            List<Object> vars = new ArrayList<>();
+            vars.add(maDoiTuong);
+            vars.add(maLoaiDoiTuong);
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+            List<?> list = sqlTemplate.query (querySql, (ResultSet rs, int rowNum) -> {
+                TinhTpGiapRanhBO tinhTpGiapRanhBO = new TinhTpGiapRanhBO();
+                tinhTpGiapRanhBO.setId(rs.getLong("id"));
+                tinhTpGiapRanhBO.setMaDoiTuong(rs.getString("ma_doi_tuong"));
+                tinhTpGiapRanhBO.setLoaiDoiTuong(rs.getString("loai_doi_tuong"));
+                tinhTpGiapRanhBO.setMaTinhTp(rs.getString("ma_tinh_tp"));
+                tinhTpGiapRanhBO.setMaQuyen(rs.getString("ma_quyen"));
+                return tinhTpGiapRanhBO;
+            }, vars);
+            return (List<TinhTpGiapRanhBO>)list;
+        } catch (ConnectionException e) {
+            LOGGER.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            LOGGER.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            LOGGER.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
 }

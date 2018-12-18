@@ -22,9 +22,11 @@
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.${pageContext.request.contextPath}/resources/js/1.3.0/respond.min.js"></script>
         <![endif]-->
+
+        <link href="${pageContext.request.contextPath}/resources/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
-        <section class="content">            
+        <section class="content" style="min-height: 700px">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
@@ -72,7 +74,16 @@
                                         <%--<form:options items="${cpList}" />--%>
                                         <form:options items="${cpList}" itemValue="donViId"  itemLabel="tenDonVi"/>
                                     </form:select>
-                                </div> 
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group" style="max-width: 434px">
+                                        <label class=" input-group-addon" style="min-width: 150px" >Tỉnh TP giáp ranh</label>
+                                        <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" >
+                                        </select>
+                                        <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
+                                    </div>
+
+                                </div>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
@@ -90,9 +101,48 @@
         <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js" type="text/javascript"></script>
         <!-- AdminLTE App -->
         <script src="${pageContext.request.contextPath}/resources/js/AdminLTE/app.js" type="text/javascript"></script>
-
+        <script src="${pageContext.request.contextPath}/resources/js/bootstrap-multiselect.js" type="text/javascript"></script>
 
         <!--call ajax-->
         <script src="${pageContext.request.contextPath}/resources/js/common.js" type="text/javascript"></script>
+
+
+        <script type="text/javascript">
+            //lay ra danh sach tinhtp theo khu vuc
+            function getTinhTp() {
+                var tinhTpIds = $("#tinhTpIds").val();
+                $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=1,2,3", function (data) {
+                    var html = '';
+                    if (data.length > 0) {
+                        data.forEach(function (data) {
+                            var htmlx = '<option value="' + data.tinhTpId + '" ';
+                            if (tinhTpIds.indexOf(data.tinhTpId) > -1) {
+                                htmlx += ' selected="selected" ';
+                            }
+                            htmlx += '>' + data.tenTinhTp + '</option>';
+                            html += htmlx;
+                        });
+                    }
+                    $('#tinhTpId').html(html);
+                    $('#tinhTpId').multiselect('rebuild');
+                });
+            }
+
+
+
+            $(document).ready(function () {
+                    $('#tinhTpId').multiselect(({
+                        maxHeight: 200,
+                        buttonWidth: '100%',
+                        enableFiltering: true,
+                        includeSelectAllOption: true,
+                        onChange: function (element, checked) {
+                        }
+                    }));
+
+                    getTinhTp();
+           });
+        </script>
     </body>
 </html>
+
