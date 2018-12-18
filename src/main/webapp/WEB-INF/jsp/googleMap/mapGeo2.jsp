@@ -1612,10 +1612,17 @@
 
         // check addfilter
         var listObjectFill = "";
-        $("#boxSearch .groupFilter").each(function (i) {
-        listObjectFill += $(this).find('.objectFill').val() + ",";
-        where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+        if(tinhId > 0)
+        {
+            // Hien thi tat cac thuoc tinh
+        }
+        else{
+            $("#boxSearch .groupFilter").each(function (i) {
+            listObjectFill += $(this).find('.objectFill').val() + ",";
+            where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
         });
+        }
+        
         if (listObjectFill.length > 0)
         {
         if (listObjectFill.indexOf(neTypeId + ",") == - 1)
