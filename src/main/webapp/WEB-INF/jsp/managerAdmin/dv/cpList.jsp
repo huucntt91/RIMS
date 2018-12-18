@@ -7,7 +7,7 @@
 <%@include file="../../include/header.jsp"%>
 <section class="content-header">
     <h1>
-        Quản lý Đơn Vị <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_QUANLYDONVI_RIMS.mp4');" >Hướng dẫn</button>
+        <i class="fa fa-building-o"></i> Quản lý đơn vị <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_QUANLYDONVI_RIMS.mp4');" >Hướng dẫn</button>
     </h1>
     <ol class="breadcrumb">
         <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/dv/preAdd'" >

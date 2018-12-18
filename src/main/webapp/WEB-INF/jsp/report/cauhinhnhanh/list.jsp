@@ -12,7 +12,7 @@
 
 <section class="content-header">
     <h1>
-        Báo cáo nhanh Config
+        <i class="fa fa-file-word-o"></i>  Báo cáo nhanh config
     </h1>            
 </section>
 <section class="content">   

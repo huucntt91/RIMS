@@ -54,7 +54,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <label class=" input-group-addon" >Chọn event</label>
+                                                <label class=" input-group-addon" style="min-width: 150px;">Chọn event</label>
                                                 <select id="kpiLst" multiple="multiple" name="events" class="form-control">
                                                     <c:forEach var="event" items="${eventLst}">
                                                         <option
@@ -70,7 +70,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <div class="input-group" >
-                                                <label class=" input-group-addon" >Thời gian bắt đầu</label>
+                                                <label class=" input-group-addon"  style="min-width: 150px;" >Thời gian bắt đầu</label>
                                                 <input type="text" class="form-control date_form"  name="startTime" id="startTime" required="true"
                                                        value="<fmt:formatDate pattern="dd/MM/yyyy" value="${modelSearch.startTime}" />" />
                                             </div>
@@ -79,7 +79,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <div class="input-group" >
-                                                <label class=" input-group-addon" >Thời gian kết thúc</label>
+                                                <label class=" input-group-addon"  style="min-width: 150px;">Thời gian kết thúc</label>
                                                 <input type="text" class="form-control date_form"  name="endTime" id="endTime"
                                                        value="<fmt:formatDate pattern="dd/MM/yyyy" value="${modelSearch.endTime}" />" />
                                             </div>
@@ -179,6 +179,7 @@
 
         $('#kpiLst').multiselect(({
             maxHeight: 200,
+            buttonWidth:'100%',
             enableFiltering: true,
             includeSelectAllOption: true,
             onChange: function (element, checked) {

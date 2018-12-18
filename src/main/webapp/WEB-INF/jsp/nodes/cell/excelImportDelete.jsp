@@ -44,14 +44,14 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Đăng ký offair node</h3>
+                            <h3 class="box-title"><i class="fa fa-tasks"></i> Đăng ký offair node</h3>
                         </div>
                         <form:form method="POST" action="${pageContext.request.contextPath}/excelDeleteNode/update" commandName="importNodeForm"
                                    enctype="multipart/form-data">
                             <div class="box-body" >
                                 <div class="form-group">
-
-                                    <div class="col-xs-6">                                    
+                                    <div class="row">
+                                        <div class="col-xs-6">                                    
                                         <div class="input-group">                                
                                             <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn file import</label>
                                             <form:input class="form-control"  id="file3"
@@ -62,11 +62,13 @@
                                     <div class="col-xs-6">                                    
                                         <button type="button" onclick='window.location.href = "${pageContext.request.contextPath}/resources/excel/Template_DELETE_NODE.xlsx"' class="btn btn-facebook"><spring:message code="btn.download.template"/></button>
                                     </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                             </br>
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">Cập nhật dữ liệu</button>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Cập nhật dữ liệu</button>
                             </div>
                         </form:form>
                     </div>

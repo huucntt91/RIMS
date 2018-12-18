@@ -59,14 +59,13 @@
     </ol>
 </section>
 <section class="content">            
-    <div class="row">
+    <div class="row"><form:form method="GET" id="frm_search" >
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title"><spring:message code="admin.common.search" /></h3>
                 </div>
-
-                <form:form method="GET" id="frm_search">
+                
                     <div class="box-body">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -125,12 +124,17 @@
 
                     </div>
                     <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
+                    <div class="box-footer col-md-12">
+                        
+                        <p class="col-md-12 ">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
+                        </p>
+                            
                     </div>
-                </form:form>
+               
             </div>
         </div>
+               </form:form>  
     </div>
 
 

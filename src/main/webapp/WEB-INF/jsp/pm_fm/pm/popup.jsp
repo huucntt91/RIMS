@@ -66,7 +66,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <label class=" input-group-addon" >Chọn kpi</label>
+                                                <label class=" input-group-addon"  style="min-width: 150px;">Chọn kpi</label>
                                                 <select id="kpiLst" multiple="multiple" name="kpis"  class="form-control">
                                                     <c:forEach var="kpi" items="${kpiLst}">
                                                         <option
@@ -83,7 +83,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <label class=" input-group-addon" >Tấn suất</label>
+                                                <label class=" input-group-addon"   style="min-width: 150px;">Tấn suất</label>
                                                 <select name="frequency" class="form-control">
                                                     <option value="HOURLY" <c:if test="${modelSearch.frequency == 'HOURLY'}" >  selected="selected"</c:if>>HOURLY</option>
                                                     <option value="DAILY" <c:if test="${modelSearch.frequency == 'DAILY'}" >  selected="selected"</c:if>>DAILY</option>
@@ -96,7 +96,7 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <div class="input-group" >
-                                                    <label class=" input-group-addon" >Thời gian bắt đầu</label>
+                                                    <label class=" input-group-addon"   style="min-width: 150px;">Thời gian bắt đầu</label>
                                                     <input type="text" class="form-control date_form"  name="startTime" id="startTime" required="true"
                                                            value="<fmt:formatDate pattern="dd/MM/yyyy" value="${modelSearch.startTime}" />" />
                                             </div>
@@ -105,7 +105,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <div class="input-group" >
-                                                <label class=" input-group-addon" >Thời gian kết thúc</label>
+                                                <label class=" input-group-addon"   style="min-width: 150px;">Thời gian kết thúc</label>
                                                 <input type="text" class="form-control date_form"  name="endTime" id="endTime"
                                                        value="<fmt:formatDate pattern="dd/MM/yyyy" value="${modelSearch.endTime}" />" />
                                             </div>

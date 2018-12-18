@@ -20,14 +20,14 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Quản lý cell bất thường</h3>
+                    <h3 class="box-title"><i class="fa fa-chain-broken"></i> Quản lý cell bất thường</h3>
                 </div>
-                <form method="get">
+                <form method="get" class="frmSearchCellBatThuong">
                     <div class="box-body"> 
                         <div class="col-md-3">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">From Date</label>
+                                    <label class=" input-group-addon" style="min-width:120px;" for="exampleInputEmail1">Từ ngày</label>
                                     <input  type="text" class="form-control date_form" value="<fmt:formatDate pattern="yyyy-mm-dd" 
                                                 value="${item.fromDate}" />" id="fromDate" name="fromDate"  />  
                                 </div>
@@ -45,7 +45,7 @@
                         <div class="col-md-3">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">To Date</label>
+                                    <label class=" input-group-addon" style="min-width:120px;" for="exampleInputEmail1">Đến ngày</label>
                                     <input  type="text" class="form-control date_form" value="<fmt:formatDate pattern="yyyy-mm-dd" 
                                                 value="${item.toDate}" />" id="toDate" name="toDate"  />  
                                 </div>
@@ -93,7 +93,7 @@
                         <div class="col-md-3">
                             <div class="form-group" style="padding: 0 15px">
                                 <div class="input-group">       
-                                    <label class=" input-group-addon">Province Code</label>
+                                    <label class=" input-group-addon">Mã tỉnh</label>
                                     <input name="provinceCode" value="${provinceCode}"
                                            type="text" class="form-control" id="provinceCode"
                                            placeholder="Province Code">
@@ -211,7 +211,7 @@
                     </div>
                     <div class="clearfix" ></div>
                     <div class="box-footer" align="center">
-                        <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i>  <spring:message code="admin.common.search" /></button>
                         <button type="button" class="btn btn-primary"onclick="location.href = '<%=request.getContextPath()%>/access/reportPortDSLAMDevice?tinhTpId='+ $('#tinhTpId').val()"> <spring:message code="admin.common.export.excel" /></button>
                     </div>
                 </form>

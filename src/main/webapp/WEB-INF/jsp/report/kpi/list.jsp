@@ -21,7 +21,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Báo cáo PM</h3>
+                    <h3 class="box-title"><i class="fa fa-file-word-o"></i> Báo cáo PM</h3>
                 </div>
                 <form method="get">
                     <div class="box-body">

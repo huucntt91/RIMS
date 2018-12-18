@@ -27,7 +27,7 @@
     </head>
     <body>
         <section class="content-header">
-            <h1>Quản lý nhóm quyền<small></small>
+            <h1> <i class="fa fa-users"></i> Quản lý nhóm quyền<small></small>
            <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_QUANLYNHOMQUYEN_RIMS.mp4');" >Hướng dẫn</button>
         </h1>
             <c:if test="${fn:containsIgnoreCase(sessionScope.function, '/group/preAdd')}">
@@ -56,7 +56,7 @@
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
                             </div>
                         </form:form>
                     </div>

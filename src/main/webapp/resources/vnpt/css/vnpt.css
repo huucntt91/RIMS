@@ -1046,3 +1046,6 @@ border:none;
 .frmSearchPhuTro .input-group .multiselect-native-select .btn-group{
     width:100%;
 }
+.frmSearchCellBatThuong .input-group label.input-group-addon{
+    min-width: 120px;
+}

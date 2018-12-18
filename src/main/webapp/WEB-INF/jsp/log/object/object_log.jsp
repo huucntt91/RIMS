@@ -17,7 +17,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 <section class="content-header">
     <h1>
-        Lịch sử tác động đối tượng <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_LICHSUTACDONG_RIMS.mp4');" >Hướng dẫn</button>
+        <i class="fa fa-history"></i>  Lịch sử tác động đối tượng <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_LICHSUTACDONG_RIMS.mp4');" >Hướng dẫn</button>
     </h1>
 </section>
 <section class="content">            

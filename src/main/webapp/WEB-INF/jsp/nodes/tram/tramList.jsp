@@ -12,7 +12,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Danh sách BTS/NodeB/eNodeB cần duyệt</h3>
+                    <h1 class="box-title"><i class="fa fa-check-square"></i> Danh sách BTS/NodeB/eNodeB cần duyệt</h1>
                 </div>
                 <div class="box-body table-responsive">
                     <div id="tablePagingId">

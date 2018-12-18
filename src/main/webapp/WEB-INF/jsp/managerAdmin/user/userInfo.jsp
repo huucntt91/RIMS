@@ -29,7 +29,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Thông tin cá nhân</h3> <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_THONGTINCANHAN_RIMS.mp4');" >Hướng dẫn</button>
+                            <h3 class="box-title"><i class="fa fa-user-circle-o"></i> Thông tin cá nhân</h3> <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_THONGTINCANHAN_RIMS.mp4');" >Hướng dẫn</button>
                         </div>
                         <form:form method="post" action="updateUserInfo" commandName="ubo">
                             <!--id, username, password, fullname, email, msisdn, status, is_admin,cp_id, create_date-->

@@ -22,7 +22,7 @@
         
 
         <section class="content-header">
-            <h1>Quản lý trạm dự án<small></small> <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_KH_RIMS.mp4');" >Hướng dẫn</button> </h1>
+            <h1><i class="fa fa-building"></i> Quản lý trạm dự án<small></small> <button class="btn btn-default btn-sm" onclick="hdsd('HDSD_TRAM_KH_RIMS.mp4');" >Hướng dẫn</button> </h1>
             <ol class="breadcrumb">
                 <c:if test="${fn:containsIgnoreCase(sessionScope.function, 'ADD_TRAM_DA')}">
                     <button class="btn btn-info btn-sm"  onclick="location.href = '<%=request.getContextPath()%>/stationPlans/preAdd'" >
@@ -73,7 +73,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <label class=" input-group-addon">Tỉnh TP</label>
+                                        <label class=" input-group-addon" style="width:120px;">Tỉnh TP</label>
                                         <select multiple="multiple" name="tinhTpId" id="tinhTpId" class="form-control" > 
                                         </select>
                                         <input type="hidden" value="${tinhTpId}" id="tinhTpIds"/>
@@ -84,24 +84,31 @@
                                     
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class=" input-group-addon">Mã trạm dự án</label>
+                                   
+                                    <div class="input-group">
+                                         <label class=" input-group-addon" style="width:120px;">Mã trạm dự án</label>
                                     <input name="maTramDuAn" value="${maTramDuAn}"
                                            type="text" class="form-control" id="maTramDuAn"
                                            placeholder="Mã trạm dự án"/>
+                                    </div>
+                                   
                                 </div>                                                                                     
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class=" input-group-addon">Tên trạm dự án</label>
+                                    <div class="input-group">
+                                         <label class=" input-group-addon" style="width:120px;">Tên trạm dự án</label>
                                     <input name="tenTramDuAn" value="${tenTramDuAn}"
                                            type="text" class="form-control" id="tenTramDuAn"
                                            placeholder="Tên trạm dự án"/>
+                                    </div>
+                                   
                                 </div>                                                                                     
                             </div>
                                          
                             <!-- /.box-body -->
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary"><spring:message code="admin.common.search" /></button>
+                                <button type="submit" class="btn btn-primary"> <i class="fa fa-search"></i> <spring:message code="admin.common.search" /></button>
                             </div>
                         </form>
                     </div>
@@ -340,6 +347,7 @@
                     });
                     $('#khuvucId').multiselect(({
                         maxHeight: 200,
+                        buttonWidth:'100%',
                         enableFiltering: true,
                         includeSelectAllOption: true,
                         onChange: function (element, checked) {
@@ -348,6 +356,7 @@
 
                     $('#tinhTpId').multiselect(({
                         maxHeight: 200,
+                        buttonWidth:'100%',
                         enableFiltering: true,
                         includeSelectAllOption: true,
                         onChange: function (element, checked) {
@@ -376,7 +385,7 @@
                             });
                         }
                         $('#tinhTpId').html(html);
-                        $('#tinhTpId').multiselect('rebuild');
+                        $('#tinhTpId').r('rebuild');
                     });
                 }
         </script>

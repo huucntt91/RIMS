@@ -40,7 +40,7 @@
     </head>
     <body>
         <div class="content-header">
-            <h1>Xóa node</h1>
+            <h1><i class="fa fa-trash-o"></i> Xóa node</h1>
             <ol class="breadcrumb">                
                 <div class="btn-group">
                     <a href="${pageContext.request.contextPath}/cellExcelImport/files/Template_DELETE_NODE"><button type="button" class="btn btn-danger">
