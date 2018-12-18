@@ -1612,10 +1612,17 @@
 
         // check addfilter
         var listObjectFill = "";
-        $("#boxSearch .groupFilter").each(function (i) {
-        listObjectFill += $(this).find('.objectFill').val() + ",";
-        where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+        if(tinhId > 0)
+        {
+            // Hien thi tat cac thuoc tinh
+        }
+        else{
+            $("#boxSearch .groupFilter").each(function (i) {
+            listObjectFill += $(this).find('.objectFill').val() + ",";
+            where = where + convertQueryFilter(neTypeId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
         });
+        }
+        
         if (listObjectFill.length > 0)
         {
         if (listObjectFill.indexOf(neTypeId + ",") == - 1)
@@ -2567,8 +2574,10 @@
                     }
 
                     $("#boxAddLayer .groupFilter").each(function (i) {
-                    where = where + convertQueryFilter(objectId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
-                    console.log(where);
+                        //cuongvn: ko can loc layer theo doi tuong cho hien thi tat    
+                        //where = where + convertQueryFilter(objectId, $(this).find('.objectFill').val(), $(this).find('.column').val(), $(this).find('.filterType').val(), $(this).find('.value_').val());
+         console.log('bo loc theo thuoc tinh');                
+        console.log(where);
                     });
                     $.post("${pageContext.request.contextPath}/mapGeo/addMyLayer", {layerId: - 1, layerName: nameLayer, styleOpacity: opacity, styleColor:color, styleBorderColor: borderColor, styleSize:size, styleWhere:where, objectId: objectId }, function(data) {
                     if (parseInt(data) < 1){
@@ -2927,7 +2936,8 @@
                     }
                     function SetLocation(long, lat){
                         map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
-                        map.getView().setZoom(18);
+                        //map.getView().setZoom(18);
+                        map.getView().setZoom(17);
                         ShowAndHideResultFiler();
                         $('#iframeDetail').hide();
                         return false
