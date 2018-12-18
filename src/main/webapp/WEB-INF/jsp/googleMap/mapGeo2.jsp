@@ -2936,7 +2936,8 @@
                     }
                     function SetLocation(long, lat){
                         map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
-                        map.getView().setZoom(18);
+                        //map.getView().setZoom(18);
+                        map.getView().setZoom(17);
                         ShowAndHideResultFiler();
                         $('#iframeDetail').hide();
                         return false
