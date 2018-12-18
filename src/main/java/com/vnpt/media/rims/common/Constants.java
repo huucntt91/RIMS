@@ -95,6 +95,9 @@ public class Constants {
 
     public  static  final String USER_PERMISSION_UPDATE = "UPDATE";
 
+    public static final String DOI_TUONG_USER = "user";
+    public static final String DOI_TUONG_GROUP = "group";
+
     static {
         loadConfiguration();
     }
