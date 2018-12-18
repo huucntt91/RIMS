@@ -34,6 +34,7 @@ public class Constants {
     public static final int NUMBER_FOR_PAGING = 10;
     private static final Logger logger = LogManager.getLogger(Constants.class);
     public static final String USER_KEY = "user";
+    public static final String USER_ATTR_KEY = "user_attr";
     public static final String MENU_KEY = "menu";
     public static final String FUNCTION_KEY = "function";
 
@@ -91,6 +92,8 @@ public class Constants {
     public static int NE_APPROVE_OFF = 111;
     public static int NE_UNAPPROVE_OFF = 221;
     public static String API_RIMS = "";
+
+    public  static  final String USER_PERMISSION_UPDATE = "UPDATE";
 
     static {
         loadConfiguration();

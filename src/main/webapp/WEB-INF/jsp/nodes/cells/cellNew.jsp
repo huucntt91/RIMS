@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="pm" uri="/WEB-INF/tld/permissionTagLib" %>
 
 <%@include file="../../include/header.jsp"%>
 <script src="${pageContext.request.contextPath}/resources/js/bootstrap-multiselect.js" type="text/javascript"></script>
@@ -61,27 +62,30 @@
                                     <div class="panel panel-primary">                                    
                                         <div class="panel-heading">                                        
                                             <h3 class="panel-title">
-                                                Thông tin khai sinh</h3>
+                                               Thông tin khai sinh</h3>
                                         </div>
                                         <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"BIRTH_INFO")}'> disableGroup="disable" </c:if> >                
-                                                <div class="form-group">
+                                                <div class="form-group" <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if>  >
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên cho quản lý</label>
                                                     <form:input  type="text" class="form-control" path="tenCell" placeholder="Tên cho quản lý"  required ="true"
+                                                                 disabled = "${(!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
                                                                  value="${cell2gRegForm.tenCell}" />
                                                 </div>                                                
                                             </div>
                                             <div class="form-group">
-                                                <div class="input-group">                                                                                    
+                                                <div class="input-group" <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if> >
                                                     <label class=" input-group-addon" style="min-width:150px;">Hoàn cảnh ra đời</label>
-                                                    <form:input  type="text" class="form-control" placeholder="Hoàn cảnh ra đời " required ="true" 
+                                                    <form:input  type="text" class="form-control" placeholder="Hoàn cảnh ra đời " required ="true"
+                                                                disabled = "${(!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="hoanCanhRaDoi" />
                                                 </div>                                                                                                
                                             </div>
                                             <div class="form-group" class="form-control">                                              
-                                                <div class="input-group">                                                                                    
+                                                <div class="input-group"  <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if>>
                                                     <label class=" input-group-addon" style="min-width:150px;">Ngày hoạt động</label>
                                                     <form:input  class="form-control date_form" id="ngayHoatDong"  required ="true"
+                                                                disabled = "${(!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="ngayHoatDong" />                    
                                                 </div>                                                                                                
                                                 <script>
@@ -104,32 +108,37 @@
                                             <h3 class="panel-title">Thông tin trên OMC</h3>
                                         </div>
                                         <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"OMC_INFO")}'> disableGroup="disable" </c:if> >         
-                                                <div class="form-group">
-                                                    <div class="input-group">                                
+                                                <div class="form-group" <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if>>
+                                                    <div class="input-group" >
                                                         <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Tên trên hệ thống</label>
                                                     <form:input  class="form-control" placeholder="Tên trên hệ thống" name="temTrenHeThong"  required ="true"
+                                                                 disabled = "${(!pm:checkUserAttr('NAME', 'OMC_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="tenTrenHeThong"/>
                                                 </div>                                                                                                
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" <c:if test="${!pm:checkUserAttr('LAC', 'OMC_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">LAC</label>
-                                                    <form:input required="true" class="form-control" placeholder="LAC" name="lac" type="number" 
+                                                    <form:input required="true" class="form-control" placeholder="LAC" name="lac" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('LAC', 'OMC_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="lac"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" <c:if test="${!pm:checkUserAttr('CI', 'OMC_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">CI</label>
                                                     <form:input required="true" class="form-control" placeholder="CI" name="ci" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('CI', 'OMC_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="ci"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if> >
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Frequency Band</label>
 
-                                                    <form:select name="bang_tan_id" path="bangTanId" class="form-control" required="true"  >
+                                                    <form:select name="bang_tan_id" path="bangTanId" class="form-control" required="true"
+                                                        disabled = "${(!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
+                                                    >
                                                         <form:option value="1">--- Băng tần ---</form:option>
                                                         <form:options  items="${bangTanList2G}"  itemValue="bang_tan_id"  itemLabel="ten_bang_tan"/>                                                
                                                     </form:select>  
@@ -144,19 +153,23 @@
                                             <h3 class="panel-title">Thông tin cấu hình</h3>
                                         </div>
                                         <div class="panel-body"  <c:if test='${!fn:contains(classAtrrEdit,"CONFIG_INFO")}'> disableGroup="disable" </c:if> >         
-                                                <div class="form-group">
+                                                <div class="form-group" <c:if test="${!pm:checkUserAttr('VENDOR', 'CONFIG_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if>>
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Chọn thiết bị</label>
-                                                    <form:select name="thietBiId" path="thietBiId" id="thietBiId" class="form-control" required="true"   >
+                                                    <form:select name="thietBiId" path="thietBiId" id="thietBiId" class="form-control" required="true"
+                                                        disabled = "${(!pm:checkUserAttr('VENDOR', 'CONFIG_INFO', 'CELL2G', 'UPDATE')) ? 'true' : 'false'}"
+                                                     >
                                                         <form:option value="">--- Chọn thiết bị ---</form:option>
                                                         <form:options  items="${thietBiList}"  itemValue="thietBiId"  itemLabel="tenThietBi"/>
                                                     </form:select>  
                                                 </div>
                                             </div>
-                                            <div class="form-group" class="form-control">
+                                            <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('CELL_TYPE', 'CONFIG_INFO', 'CELL2G','VIEW')}"> style="display: none" </c:if> >
                                                 <div class="input-group">                                
                                                     <label  class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Loại Trạm</label>
-                                                    <form:select required="true" path="loaiTramId" class="form-control"  > 
+                                                    <form:select required="true" path="loaiTramId" class="form-control"
+                                                        disabled = "${(!pm:checkUserAttr('CELL_TYPE', 'CONFIG_INFO', 'CELL2G','UPDATE')) ? 'true' : 'false'}"
+                                                    >
                                                         <form:option value="">--- Chọn loại trạm ---</form:option>
                                                         <form:options  items="${tramList2G}"  itemValue="loaiTramId"  itemLabel="tenLoaiTram"/>
                                                     </form:select>     
@@ -206,24 +219,27 @@
                                                 Thông tin khai sinh</h3>
                                         </div>
                                         <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"BIRTH_INFO")}'> disableGroup="disable" </c:if> >                
-                                                <div class="form-group">
-                                                    <div class="input-group">                                
+                                                <div class="form-group"  <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if> >
+                                                    <div class="input-group" >
                                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên cho quản lý</label>
-                                                    <form:input  type="text" class="form-control" path="tenCell" placeholder="Tên cho quản lý" 
+                                                    <form:input  type="text" class="form-control" path="tenCell" placeholder="Tên cho quản lý"
+                                                                 disabled = "${(!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                  value="${cell2gRegForm.tenCell}"/>
                                                 </div>                                                
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if> >
                                                 <div class="input-group">                                                                                    
                                                     <label class=" input-group-addon" style="min-width:150px;">Hoàn cảnh ra đời</label>
-                                                    <form:input  type="text" class="form-control" placeholder="Hoàn cảnh ra đời " 
+                                                    <form:input  type="text" class="form-control" placeholder="Hoàn cảnh ra đời "
+                                                                disabled = "${(!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="hoanCanhRaDoi" />
                                                 </div>                                                                                                
                                             </div>
-                                            <div class="form-group" class="form-control">                                              
+                                            <div class="form-group" class="form-control"  <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if> >
                                                 <div class="input-group">                                                                                    
                                                     <label class=" input-group-addon" style="min-width:150px;">Ngày hoạt động</label>
-                                                    <form:input  class="form-control date_form" id="ngayHoatDong3G" 
+                                                    <form:input  class="form-control date_form" id="ngayHoatDong3G"
+                                                                 disabled = "${(!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="ngayHoatDong" />                    
                                                 </div>                                                                                                
                                                 <script>
@@ -246,32 +262,37 @@
                                             <h3 class="panel-title">Thông tin trên OMC</h3>
                                         </div>
                                         <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"OMC_INFO")}'> disableGroup="disable" </c:if> >         
-                                                <div class="form-group">
+                                                <div class="form-group" <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if> >
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Tên trên hệ thống</label>
-                                                    <form:input  class="form-control" placeholder="Tên trên hệ thống" name="temTrenHeThong" 
+                                                    <form:input  class="form-control" placeholder="Tên trên hệ thống" name="temTrenHeThong"
+                                                                disabled = "${(!pm:checkUserAttr('NAME', 'OMC_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="tenTrenHeThong"/>
                                                 </div>                                                                                                
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" <c:if test="${!pm:checkUserAttr('LAC', 'OMC_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">LAC</label>
                                                     <form:input required="true" class="form-control" placeholder="LAC" name="lac" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('LAC', 'OMC_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="lac"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" <c:if test="${!pm:checkUserAttr('CI', 'OMC_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">CI</label>
                                                     <form:input required="true" class="form-control" placeholder="CI" name="ci" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('CI', 'OMC_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="ci"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" <c:if test="${!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Frequency Band</label>
 
-                                                    <form:select name="bang_tan_id" path="bangTanId" class="form-control" required="true"  >
+                                                    <form:select name="bang_tan_id" path="bangTanId" class="form-control" required="true"
+                                                        disabled = "${(!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
+                                                    >
                                                         <form:option value="">--- Băng tần ---</form:option>
                                                         <form:options  items="${bangTanList3G}"  itemValue="bang_tan_id"  itemLabel="ten_bang_tan"/>                                                
                                                     </form:select>  
@@ -286,28 +307,33 @@
                                             <h3 class="panel-title">Thông tin cấu hình</h3>
                                         </div>
                                         <div class="panel-body"  <c:if test='${!fn:contains(classAtrrEdit,"CONFIG_INFO")}'> disableGroup="disable" </c:if> >         
-                                                <div class="form-group">
+                                                <div class="form-group" <c:if test="${!pm:checkUserAttr('tenThietBi', 'CONFIG_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if>>
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Chọn thiết bị</label>
-                                                    <form:select name="thietBiId" path="thietBiId" id="thietBiId" class="form-control" required="true"   >
+                                                    <form:select name="thietBiId" path="thietBiId" id="thietBiId" class="form-control" required="true"
+                                                        disabled = "${(!pm:checkUserAttr('tenThietBi', 'CONFIG_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
+                                                    >
                                                         <form:option value="">--- Chọn thiết bị ---</form:option>
                                                         <form:options  items="${thietBiList}"  itemValue="thietBiId"  itemLabel="tenThietBi"/>
                                                     </form:select>  
                                                 </div>
                                             </div>
-                                            <div class="form-group" class="form-control">
+                                            <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('tenTram', 'CONFIG_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label  class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Loại Trạm</label>
-                                                    <form:select required="true" path="loaiTramId" class="form-control"  > 
+                                                    <form:select required="true" path="loaiTramId" class="form-control"
+                                                         disabled = "${(!pm:checkUserAttr('tenTram', 'CONFIG_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
+                                                    >
                                                         <form:option value="">--- Chọn loại trạm ---</form:option>
                                                         <form:options  items="${tramList3G}"  itemValue="loaiTramId"  itemLabel="tenLoaiTram"/>
                                                     </form:select>     
                                                 </div>
                                             </div>  
-                                            <div class="form-group">
-                                                <div class="input-group">                                
+                                            <div class="form-group" <c:if test="${!pm:checkUserAttr('NO_OF_CARRIER', '3G_OTHER_INFO', 'CELL3G','VIEW')}"> style="display: none" </c:if>>
+                                                <div class="input-group">
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">No of carrier</label>
-                                                    <form:input  class="form-control" placeholder="No of carrier" 
+                                                    <form:input  class="form-control" placeholder="No of carrier"
+                                                                 disabled = "${(!pm:checkUserAttr('NO_OF_CARRIER', '3G_OTHER_INFO', 'CELL3G','UPDATE')) ? 'true' : 'false'}"
                                                                  type="number"  path="noOfCarrier"/>
                                                 </div>
                                             </div>
@@ -354,24 +380,27 @@
                                                 Thông tin khai sinh</h3>
                                         </div>
                                         <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"BIRTH_INFO")}'> disableGroup="disable" </c:if> >                
-                                                <div class="form-group">
+                                                <div class="form-group"  <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên cho quản lý</label>
-                                                    <form:input  type="text" class="form-control" path="tenCell" placeholder="Tên cho quản lý" 
+                                                    <form:input  type="text" class="form-control" path="tenCell" placeholder="Tên cho quản lý"
+                                                                disabled = "${(!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                  value="${cell2gRegForm.tenCell}"/>
                                                 </div>                                                
                                             </div>
                                             <div class="form-group">
-                                                <div class="input-group">                                                                                    
+                                                <div class="input-group"  <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                     <label class=" input-group-addon" style="min-width:150px;">Hoàn cảnh ra đời</label>
-                                                    <form:input  type="text" class="form-control" placeholder="Hoàn cảnh ra đời " 
+                                                    <form:input  type="text" class="form-control" placeholder="Hoàn cảnh ra đời "
+                                                                disabled = "${(!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="hoanCanhRaDoi" />
                                                 </div>                                                                                                
                                             </div>
-                                            <div class="form-group" class="form-control">                                              
+                                            <div class="form-group" class="form-control"  <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                                                                    
                                                     <label class=" input-group-addon" style="min-width:150px;">Ngày hoạt động</label>
-                                                    <form:input  class="form-control date_form" id="ngayHoatDong4G" 
+                                                    <form:input  class="form-control date_form" id="ngayHoatDong4G"
+                                                                disabled = "${(!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="ngayHoatDong" />                    
                                                 </div>                                                                                                
                                                 <script>
@@ -394,39 +423,45 @@
                                             <h3 class="panel-title">Thông tin trên OMC</h3>
                                         </div>
                                         <div class="panel-body" <c:if test='${!fn:contains(classAtrrEdit,"OMC_INFO")}'> disableGroup="disable" </c:if> >         
-                                                <div class="form-group">
+                                                <div class="form-group"  <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Tên trên hệ thống</label>
-                                                    <form:input  class="form-control" placeholder="Tên trên hệ thống" name="temTrenHeThong" 
+                                                    <form:input  class="form-control" placeholder="Tên trên hệ thống" name="temTrenHeThong"
+                                                                disabled = "${(!pm:checkUserAttr('NAME', 'OMC_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                  path="tenTrenHeThong"/>
                                                 </div>                                                                                                
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('LCI', 'OMC_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">LCI</label>
                                                     <form:input required="true" class="form-control" placeholder="LCI" name="lac" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('LCI', 'OMC_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="lac"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('PCI', 'OMC_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">PCI</label>
                                                     <form:input required="true" class="form-control" placeholder="PCI" name="ci" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('PCI', 'OMC_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="ci"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('TAC', 'OMC_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">TAC</label>
                                                     <form:input required="true" class="form-control" placeholder="TAC" name="tac" type="number"
+                                                                disabled = "${(!pm:checkUserAttr('TAC', 'OMC_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                 path="tac"/>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Frequency Band</label>
 
-                                                    <form:select name="bang_tan_id" path="bangTanId" class="form-control" required="true"  >
+                                                    <form:select name="bang_tan_id" path="bangTanId" class="form-control" required="true"
+                                                        disabled = "${(!pm:checkUserAttr('FREQUENCY_BAND', 'OMC_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
+                                                    >
                                                         <form:option value="">--- Băng tần ---</form:option>
                                                         <form:options  items="${bangTanList4G}"  itemValue="bang_tan_id"  itemLabel="ten_bang_tan"/>                                                
                                                     </form:select>  
@@ -441,28 +476,33 @@
                                             <h3 class="panel-title">Thông tin cấu hình</h3>
                                         </div>
                                         <div class="panel-body"  <c:if test='${!fn:contains(classAtrrEdit,"CONFIG_INFO")}'> disableGroup="disable" </c:if> >         
-                                                <div class="form-group">
+                                                <div class="form-group"  <c:if test="${!pm:checkUserAttr('tenThietBi', 'CONFIG_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                     <div class="input-group">                                
                                                         <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Chọn thiết bị</label>
-                                                    <form:select name="thietBiId" path="thietBiId" id="thietBiId" class="form-control" required="true"   >
+                                                    <form:select name="thietBiId" path="thietBiId" id="thietBiId" class="form-control" required="true"
+                                                        disabled = "${(!pm:checkUserAttr('tenThietBi', 'CONFIG_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
+                                                     >
                                                         <form:option value="">--- Chọn thiết bị ---</form:option>
                                                         <form:options  items="${thietBiList}"  itemValue="thietBiId"  itemLabel="tenThietBi"/>
                                                     </form:select>  
                                                 </div>
                                             </div>
-                                            <div class="form-group" class="form-control">
+                                            <div class="form-group" class="form-control"  <c:if test="${!pm:checkUserAttr('tenTram', 'CONFIG_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label  class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">Loại Trạm</label>
-                                                    <form:select required="true" path="loaiTramId" class="form-control"  > 
+                                                    <form:select required="true" path="loaiTramId" class="form-control"
+                                                        disabled = "${(!pm:checkUserAttr('tenTram', 'CONFIG_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
+                                                     >
                                                         <form:option value="">--- Chọn loại trạm ---</form:option>
                                                         <form:options  items="${tramList4G}"  itemValue="loaiTramId"  itemLabel="tenLoaiTram"/>
                                                     </form:select>     
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group"  <c:if test="${!pm:checkUserAttr('noOfCarrier', '4G_OTHER_INFO', 'CELL4G','VIEW')}"> style="display: none" </c:if>>
                                                 <div class="input-group">                                
                                                     <label class=" input-group-addon" style="font-weight: bold; min-width:150px;" for="exampleInputEmail1">No of carrier</label>
-                                                    <form:input  class="form-control" placeholder="No of carrier" 
+                                                    <form:input  class="form-control" placeholder="No of carrier"
+                                                                disabled = "${(!pm:checkUserAttr('noOfCarrier', '4G_OTHER_INFO', 'CELL4G','UPDATE')) ? 'true' : 'false'}"
                                                                  type="number"  path="noOfCarrier"/>
                                                 </div>
                                             </div>

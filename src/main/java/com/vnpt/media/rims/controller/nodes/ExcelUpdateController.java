@@ -9,10 +9,13 @@ import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
+import com.vnpt.media.rims.common.utils.Convert;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
+import com.vnpt.media.rims.common.utils.PermissionUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.facade.BangTanFacade;
 import com.vnpt.media.rims.facade.CategoriesFacade;
+import com.vnpt.media.rims.facade.ManagerAdminFacade;
 import com.vnpt.media.rims.facade.NodesFacade;
 import com.vnpt.media.rims.formbean.CellNewForm;
 import com.vnpt.media.rims.formbean.ImportNodeForm;
@@ -87,13 +90,17 @@ public class ExcelUpdateController {
         try {
             UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
             File convFile = new File(importNodeForm.getFile().getOriginalFilename());
-
+            ManagerAdminFacade adminFacade = new ManagerAdminFacade();
             importNodeForm.getFile().transferTo(convFile);
             NodesFacade nodeFacade = new NodesFacade();
             if (type.equals("1")) {
                 List<ExcelCellUpdateBO> items = ExOM.mapFromExcel(convFile)
                         .to(ExcelCellUpdateBO.class)
                         .map(2);
+
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId(type));
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
                 for (int i = 0; i < items.size(); i++) {
                     String strCheck = nodeFacade.excelUpdateCell(false, user.getId(), items.get(i), attr, messageSource, locale);
                     items.get(i).setCheckDB(strCheck);
@@ -106,6 +113,10 @@ public class ExcelUpdateController {
                 List<ExcelBtsUpdateBO> items = ExOM.mapFromExcel(convFile)
                         .to(ExcelBtsUpdateBO.class)
                         .mapSheet(0, 2);
+
+                List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId(type));
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
                 LOGGER.info("user: {}, ip: {}, call excelUpdateBts ", user.getUsername(), request.getRemoteAddr());
                 for (int i = 0; i < items.size(); i++) {
                     if (items.get(i).getLoaiNE() == null || items.get(i).getLoaiNE().isEmpty()) {
@@ -163,6 +174,10 @@ public class ExcelUpdateController {
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
 
         List<ExcelCellUpdateBO> items = tableUpdateForm.getModels();
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId(type));
+        PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isCheck()) {
                 String strCheck = nodeFacade.excelUpdateCell(true, user.getId(), items.get(i), attr, messageSource, locale);
@@ -185,6 +200,9 @@ public class ExcelUpdateController {
         NodesFacade nodeFacade = new NodesFacade();
         UserBO user = (UserBO) request.getSession().getAttribute(Constants.USER_KEY);
         List<ExcelBtsUpdateBO> items = tableFormUpdateBts.getModels();
+        ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+        List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId(type));
+        PermissionUtils.filterUserExcelAttr(items, classAtrr);
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).isCheck()) {
                 String strCheck = nodeFacade.excelUpdateBts(true, user.getId(), items.get(i), attr, messageSource, locale);

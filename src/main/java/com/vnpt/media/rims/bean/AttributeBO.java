@@ -20,7 +20,8 @@ public class AttributeBO implements Serializable{
     private String attrName;
     private String attrCode;
     private String attrTableName;
-    
+    private  String aliasExcelAttr;
+    private long attrClassId;
 
     public AttributeBO() {
     }
@@ -57,4 +58,19 @@ public class AttributeBO implements Serializable{
         this.attrTableName = attrTableName;
     }
 
-   }
+    public String getAliasExcelAttr() {
+        return aliasExcelAttr;
+    }
+
+    public void setAliasExcelAttr(String aliasExcelAttr) {
+        this.aliasExcelAttr = aliasExcelAttr;
+    }
+
+    public long getAttrClassId() {
+        return attrClassId;
+    }
+
+    public void setAttrClassId(long attrClassId) {
+        this.attrClassId = attrClassId;
+    }
+}
