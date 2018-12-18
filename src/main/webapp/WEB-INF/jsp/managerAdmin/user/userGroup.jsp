@@ -52,7 +52,7 @@
                                             <span class="glyphicon glyphicon-ok"></span>
                                         </button>
                                     </th>
-                                    <th>Tên Nhóm</th>                                        
+                                    <th>Tên Nhóm</th>
                                 </tr>
                             </thead>
 
@@ -60,7 +60,7 @@
                                 <c:forEach var="groupBO1" items="${list_group_not_user}" varStatus="statusgroupBO">                                        
                                     <tr>
                                         <td>${groupBO1.id}</td>
-                                        <td>${groupBO1.name}</td>                                    
+                                        <td>${groupBO1.name}</td>
                                     </tr> 
                                 </c:forEach>
                             </tbody>
@@ -82,7 +82,8 @@
                                         <input type="hidden" id="userId" value="${userId}"/>
                                         <input type="hidden" class="form-control" id="contentList"/>
                                     </th>
-                                    <th>Tên Nhóm</th>                                        
+                                    <th>Tên Nhóm</th>
+                                    <th width="40px">Xử lý</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,7 +94,12 @@
                                         <td>${groupBO.id}</td>
                                         <!--                                                <td>{groupBO.name}</td>                                    -->
                                         <td>
-                                            ${groupBO.name}</td>                                        
+                                            ${groupBO.name}</td>
+                                        <td align="center">
+                                            <a href="${pageContext.request.contextPath}/permission/userAttr?uid=${userName}" title="Phân quyền tài khoản theo thuộc tính">
+                                                <img src="/RIMS/image/icon/document-add-icon.png">
+                                            </a>
+                                        </td>
                                     </tr>    
                                 </c:forEach>
                             </tbody>

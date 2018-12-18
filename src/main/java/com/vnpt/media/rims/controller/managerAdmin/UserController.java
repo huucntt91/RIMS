@@ -558,6 +558,8 @@ public class UserController extends BaseController {
         mm.put("list_group_not_user", adminFacade.getGroupByNotUserId(userId));
         GroupUserForm groupUserForm = new GroupUserForm();
         mm.addAttribute("userId", userId);
+        UserBO user = adminFacade.findByUserId(userId);
+        mm.addAttribute("userName", user.getUsername());
         mm.addAttribute("groupUserForm", groupUserForm);
         return "managerAdmin/user/userGroup";
     }

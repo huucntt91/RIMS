@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="pm" uri="/WEB-INF/tld/permissionTagLib" %>
 
 <%@include file="../../include/header.jsp"%>
 <div class="content-header">
@@ -113,30 +114,38 @@
                                 <h3 class="panel-title">Thông tin khai sinh</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="form-group" class="form-control">
-                                    <div class="input-group">       
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
+                                    <div class="input-group" >
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Ngày hoạt động</label>
-                                        <input required type="text" class="form-control date_form" id="datecreate" value="<fmt:formatDate pattern="dd/MM/yyyy" 
+                                        <input required type="text" class="form-control date_form" id="datecreate"
+                                                        <c:if test="${!pm:checkUserAttr('APPEARANCE_TIME', 'BIRTH_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                                        value="<fmt:formatDate pattern="dd/MM/yyyy"
                                                         value="${model.ngayHoatDong}" />" name="ngayHoatDong" placeholder="Ngày hoạt động"  />                    
                                     </div>
                                 </div> 
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Hoàn cảnh ra đời </label>
-                                        <input required type="text" class="form-control" value="${model.hoanCanhRaDoi}" name="hoanCanhRaDoi" placeholder="Hoàn cảnh ra đời"  />
+                                        <input required type="text" class="form-control" value="${model.hoanCanhRaDoi}" name="hoanCanhRaDoi" placeholder="Hoàn cảnh ra đời"
+                                                        <c:if test="${!pm:checkUserAttr('APPEARANCE_TYPE', 'BIRTH_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div> 
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên người quản lý</label>
-                                        <input type="text" class="form-control" value="${model.tenNgQLy}" name="tenNgQLy" placeholder="Tên người quản lý"  />                    
+                                        <input type="text" class="form-control" value="${model.tenNgQLy}" name="tenNgQLy" placeholder="Tên người quản lý"
+                                                        <c:if test="${!pm:checkUserAttr('MANAGER_NAME', 'MANAGEMENT_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div> 
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên cho quản lý</label>                                    
 
-                                        <input required type="text" class="form-control" value="${model.name}" name="name" placeholder="Tên cho quản lý"  />
+                                        <input required type="text" class="form-control" value="${model.name}" name="name" placeholder="Tên cho quản lý"
+                                                        <c:if test="${!pm:checkUserAttr('MANAGEMENT_NAME', 'BIRTH_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>
                             </div>
@@ -146,17 +155,21 @@
                                 <h3 class="panel-title">Thông tin cấu hình</h3>
                             </div>
                             <div class="panel-body">
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Tên trên hệ thống</label>                                    
-                                        <input type="text" required="true" class="form-control" value="${model.tenTrenHeThong}" name="tenTrenHeThong" placeholder="Tên trên hệ thống"  />
+                                        <input type="text" required="true" class="form-control" value="${model.tenTrenHeThong}" name="tenTrenHeThong" placeholder="Tên trên hệ thống"
+                                                        <c:if test="${!pm:checkUserAttr('NAME', 'OMC_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                        />
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('VENDOR', 'CONFIG_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
 
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Chọn thiết bị </label>
-                                        <select name="thietBiId" id="thietBiId" class="form-control" required >
+                                        <select name="thietBiId" id="thietBiId" class="form-control" required
+                                                        <c:if test="${!pm:checkUserAttr('VENDOR', 'CONFIG_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                        >
                                             <option value="">--- Chọn thiết bị ---</option>
                                             <c:forEach var="item" items="${thietBiList}">
                                                 <option  
@@ -168,10 +181,12 @@
                                     </div>
                                 </div> 
 
-                                <div class="form-group" class="form-control">
+                                <div class="form-group" class="form-control" <c:if test="${!pm:checkUserAttr('TYPE', 'CONFIG_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Loại Trạm</label>
-                                        <select name="loaiTramId" id="loaiTramId" class="form-control" required > 
+                                        <select name="loaiTramId" id="loaiTramId" class="form-control" required
+                                                        <c:if test="${!pm:checkUserAttr('TYPE', 'CONFIG_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                        >
                                             <option value="">--- Chọn loại trạm ---</option>
                                             <c:forEach var="item" items="${tramList}">
                                                 <c:choose>
@@ -185,11 +200,13 @@
                                         </select> 
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" <c:if test="${!pm:checkUserAttr('CONFIG', 'CONFIG_INFO', 'NODEB','VIEW')}"> style="display: none" </c:if>>
                                     <div class="input-group">      
                                         <label class=" input-group-addon" style="min-width:150px;" for="exampleInputEmail1">Cấu hình </label>
 <!--                                        <input required type="text" class="form-control" value="${model.cauHinh}" name="cauHinh" placeholder="Cấu hình"  />-->
-                                        <select name="cauHinhPortId" id="cauHinhPortId" class="form-control" required> >
+                                        <select name="cauHinhPortId" id="cauHinhPortId" class="form-control" required
+                                                        <c:if test="${!pm:checkUserAttr('CONFIG', 'CONFIG_INFO', 'NODEB','UPDATE')}"> disabled="disabled" </c:if>
+                                          >
                                             <option value="">--- Chọn Cấu Hình ---</option>
                                             <c:forEach var="item" items="${cauHinhList}">
 
