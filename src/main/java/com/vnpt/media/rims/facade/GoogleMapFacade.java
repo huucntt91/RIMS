@@ -438,6 +438,216 @@ public class GoogleMapFacade {
         }
         return null;
     }
+    public List<NodeBO> getNodesByLongLat(String type, String lon, String lat) {
+        ResultSet rs = null;
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        ArrayList<NodeBO> arrayList = new ArrayList<>();
+        try {
+            String extTableInfo=getTableName(type);
+            String objectName=getObjectName(type);
+    
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=pkg_test.getNodes_by_lon_lat(?,?,?) ; end;";
+            if (type.equals("2")) {
+                sql = "begin ?:=pkg_test.getNodes_by_lon_lat(?,?,?) ; end;";
+            } else if (type.equals("3")) {
+                sql = "begin ?:=pkg_test.getNodes_by_lon_lat(?,?,?) ; end;";
+            } else if (type.equals("8")) {
+                sql = "begin ?:=pkg_test.getNodes_by_lon_lat(?,?,?) ; end;";
+            }
+            //
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
+            cstmt.setString(2,lon);
+            cstmt.setString(3, lat);
+            cstmt.setString(3, type);
+            cstmt.executeQuery();
+            
+            //return cstmt.getInt(1);
+            rs = (ResultSet) cstmt.getObject(1);
+            while (rs.next()) {
+                NodeBO item = new NodeBO();
+                item.setId(rs.getLong("node_id"));
+                item.setCode(rs.getString("ma_node"));
+                item.setBuildingId(rs.getLong("building_id"));
+                item.setAddress(rs.getString("dia_chi"));
+                item.setLongitude(rs.getDouble("longitude"));
+                item.setLatitude(rs.getDouble("latitude"));
+                if(rs.getLong("ne_type_id")==2)
+                {
+                    item.setTenNeType("BTS");
+                }
+                else if(rs.getLong("ne_type_id")==3)
+                {
+                    item.setTenNeType("NODEB");
+                }
+               
+                else if(rs.getLong("ne_type_id")==5)
+                {
+                    item.setTenNeType("2G");
+                }
+                else if(rs.getLong("ne_type_id")==6)
+                {
+                    item.setTenNeType("CELL3G");
+                }
+                else if(rs.getLong("ne_type_id")==7)
+                {
+                    item.setTenNeType("CELL4G");
+                }
+                 else if(rs.getLong("ne_type_id")==8)
+                {
+                    item.setTenNeType("ENODEB");
+                }
+                else if(rs.getLong("ne_type_id")==9)
+                {
+                    item.setTenNeType("NODE_QH");
+                }
+                else if(rs.getLong("ne_type_id")==10)
+                {
+                    item.setTenNeType("NODE_DA");
+                }
+                else if(rs.getLong("ne_type_id")==11)
+                {
+                    item.setTenNeType("BSC_RNC_MBSC");
+                }
+                else if(rs.getLong("ne_type_id")==12)
+                {
+                    item.setTenNeType("MSC");
+                }
+                else if(rs.getLong("ne_type_id")==13)
+                {
+                    item.setTenNeType("MSS");
+                }
+                else if(rs.getLong("ne_type_id")==14)
+                {
+                    item.setTenNeType("MGW");
+                }
+                else if(rs.getLong("ne_type_id")==15)
+                {
+                    item.setTenNeType("STP");
+                }
+                else if(rs.getLong("ne_type_id")==16)
+                {
+                    item.setTenNeType("TSS");
+                }
+                else if(rs.getLong("ne_type_id")==17)
+                {
+                    item.setTenNeType("HSS");
+                }
+                else if(rs.getLong("ne_type_id")==18)
+                {
+                    item.setTenNeType("HLR");
+                }
+                else if(rs.getLong("ne_type_id")==19)
+                {
+                    item.setTenNeType("IMS");
+                }
+                else if(rs.getLong("ne_type_id")==20)
+                {
+                    item.setTenNeType("NGN");
+                }
+                else if(rs.getLong("ne_type_id")==21)
+                {
+                    item.setTenNeType("ANTEN");
+                }
+                else if(rs.getLong("ne_type_id")==22)
+                {
+                    item.setTenNeType("SGSN");
+                }
+                 else if(rs.getLong("ne_type_id")==23)
+                {
+                    item.setTenNeType("GGSN");
+                }
+                  else if(rs.getLong("ne_type_id")==24)
+                {
+                    item.setTenNeType("MME");
+                }
+                 else if(rs.getLong("ne_type_id")==25)
+                {
+                    item.setTenNeType("PGW");
+                }
+                 else if(rs.getLong("ne_type_id")==26)
+                {
+                    item.setTenNeType("SMSC");
+                }
+                else if(rs.getLong("ne_type_id")==27)
+                {
+                    item.setTenNeType("SMPP");
+                }
+                else if(rs.getLong("ne_type_id")==28)
+                {
+                    item.setTenNeType("DSR");
+                }
+                else if(rs.getLong("ne_type_id")==29)
+                {
+                    item.setTenNeType("MCA");
+                }
+                else if(rs.getLong("ne_type_id")==30)
+                {
+                    item.setTenNeType("CRBT");
+                }
+                 else if(rs.getLong("ne_type_id")==31)
+                {
+                    item.setTenNeType("USSD");
+                }
+                  else if(rs.getLong("ne_type_id")==32)
+                {
+                    item.setTenNeType("DNS");
+                }
+                 else if(rs.getLong("ne_type_id")==33)
+                {
+                    item.setTenNeType("RC");
+                }
+                else if(rs.getLong("ne_type_id")==33)
+                {
+                    item.setTenNeType("RC");
+                }
+                 else if(rs.getLong("ne_type_id")==34)
+                {
+                    item.setTenNeType("SDP");
+                }
+                 else if(rs.getLong("ne_type_id")==35)
+                {
+                    item.setTenNeType("FDA");
+                }
+                else
+                {
+                item.setTenNeType("");
+                }
+                //Ten he thong
+                try
+                {
+                     item.setTenHeThong(rs.getString("TEN_TREN_HE_THONG"));
+                }
+                catch(Exception exx)
+                {
+                     exx.printStackTrace();
+                }
+               
+                arrayList.add(item);
+            }
+            return arrayList;
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+           // return null;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) {
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) {
+                }
+            }
+        }
+        return null;
+    }
     public List<FilterMapBO> findFilterMap(String objectId) throws DAOException {
         CallableStatement cstmt = null;
         ResultSet rs = null;

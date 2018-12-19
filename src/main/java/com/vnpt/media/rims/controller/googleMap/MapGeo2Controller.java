@@ -231,7 +231,9 @@ public class MapGeo2Controller {
                 }
             }
         }
-
+        if(model.getLocationLong()!=null && model.getLocationLong()!="" && model.getLocationLat()!=null && model.getLocationLat()!="" ){
+                 whereLocation += " and sdo_nn (building.geometry, SDO_GEOMETRY(2001, 8307, SDO_POINT_TYPE("+model.getLocationLong()+","+ model.getLocationLat()+ ", NULL), NULL, NULL), 'distance=1 unit=KM', 1) = 'TRUE'";
+            }
         String where = whereLocation + model.getWhere();
         int totalBts=0;
         try
@@ -312,11 +314,22 @@ public class MapGeo2Controller {
                     }
                 }
             }
+            if(model.getLocationLong()!=null && model.getLocationLong()!="" && model.getLocationLat()!=null && model.getLocationLat()!="" ){
+                 whereLocation += " and sdo_nn (building.geometry, SDO_GEOMETRY(2001, 8307, SDO_POINT_TYPE("+model.getLocationLong()+","+ model.getLocationLat()+ ", NULL), NULL, NULL), 'distance=1 unit=KM', 1) = 'TRUE'";
+            }
             //
             String objectType=model.getObjectType();
             String where = whereLocation + model.getWhere();
             if(objectType.equals("-1")) objectType="2";
-            List<NodeBO> resultSearch=facade.getNodes(objectType, where);
+            
+            List<NodeBO> resultSearch=new ArrayList<NodeBO>();
+//            if(model.getLocationLong()!="" && model.getLocationLat()!="" ){
+//                 resultSearch=facade.getNodesByLongLat(objectType, model.getLocationLong(),model.getLocationLat());
+//            }
+//            else{
+//                resultSearch=facade.getNodes(objectType, where);
+//            }
+            resultSearch=facade.getNodes(objectType, where);  
             mm.put("objectType",objectType);
             mm.put("list", resultSearch);
             mm.put("resultCount",resultSearch.size());

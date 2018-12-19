@@ -1703,6 +1703,7 @@
         }
 
         var vectorLayer = ol.source.Vector({});
+        var hasLonLat=false;
         function searchMap() {
         var loca_lat = $('#locationLat').val();
         var loca_long = $('#locationLong').val();
@@ -1754,14 +1755,16 @@
         var checkValue = false;
         $("#boxSearch .groupFilter").each(function (i) {
         if ($(this).find('.value_').val().trim() == '') {
-        checkValue = true;
+            checkValue = true;
         }
         });
         if (checkValue)
         {
-        alert('Bạn phải nhập dữ liệu cho filter');
-        $('#myModal').modal('show');
-        } else
+            alert('Bạn phải nhập dữ liệu cho filter');
+            $('#myModal').modal('show');
+        
+         } 
+        else
         {
         if ($("#tinhTpId").val() == '')
         {
@@ -1892,8 +1895,17 @@
                 {
                         console.log('Ma tinh:' + data);
                         provinceId=data;
-                         $("#tinhTpId").val(provinceId);
-                         $("#tinhTpId").selectpicker("refresh");
+                        if(data> 0)
+                        {
+                            hasLonLat=true;
+                        }
+                        else
+                        {
+                            hasLonLat=false;
+                        }
+                        $("#boxSearch #tinhTpId").val(provinceId)
+                        $("#tinhTpId").val(provinceId);
+                        $("#tinhTpId").selectpicker("refresh");
                 });
              }
             
@@ -2150,7 +2162,7 @@
             {
 
             }
-            $.post("${pageContext.request.contextPath}/mapGeo2/countNodes", {tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(), where: whereSearch}, function (data) {
+            $.post("${pageContext.request.contextPath}/mapGeo2/countNodes", {tinhId:$("#tinhTpId").val(), huyenId: $("#quanHuyenId").val(), xaId: $("#phuongXaId").val(),locationLat:$('#locationLat').val(),locationLong:$('#locationLong').val(), where: whereSearch}, function (data) {
                 $('#countBTS').text(data.bts);
                 $('#countNodeB').text(data.nodeb);
                 $('#counteNodeB').text(data.enodeb);
@@ -2177,12 +2189,18 @@
         
             $.ajax({
                type:'GET',
-               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#boxSearch #tinhTpId").val(), huyenId: $("#boxSearch #quanHuyenId").val(), xaId: $("#boxSearch #phuongXaId").val(), where: whereSearch}
+               data:{objectType:$('#selectObjectFillFiler').val(),tinhId:$("#boxSearch #tinhTpId").val(), huyenId: $("#boxSearch #quanHuyenId").val(), xaId: $("#boxSearch #phuongXaId").val(),locationLat:$('#locationLat').val(),locationLong:$('#locationLong').val(), where: whereSearch}
                ,url:"${pageContext.request.contextPath}/mapGeo2/Nodes"
                ,success:function(data)
                {
                     $('#filterResultContainer').html(data);
                     $('#borough2').show();
+                    var loca_lat = $('#locationLat').val();
+                    var loca_long = $('#locationLong').val();
+                    if (loca_lat != '' && loca_long != '') {
+                        map.getView().setZoom(16);
+                        // SetLocation(loca_long,loca_lat);
+                    }
                },
                error:function()
                {
@@ -2976,8 +2994,8 @@
                     }
                     function SetLocation(long, lat){
                         map.getView().setCenter(ol.proj.transform([long, lat], 'EPSG:4326', 'EPSG:3857'));
-                        //map.getView().setZoom(18);
-                        map.getView().setZoom(17);
+                        //map.getView().setZoom(17);
+                        map.getView().setZoom(18);
                         ShowAndHideResultFiler();
                         $('#iframeDetail').hide();
                         return false

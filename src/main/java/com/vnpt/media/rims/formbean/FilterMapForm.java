@@ -20,6 +20,26 @@ public class FilterMapForm {
     private String xaId;
     
     private String where;
+    
+    private String locationLat;
+    
+    private String locationLong;
+
+    public String getLocationLat() {
+        return locationLat;
+    }
+
+    public void setLocationLat(String locationLat) {
+        this.locationLat = locationLat;
+    }
+
+    public String getLocationLong() {
+        return locationLong;
+    }
+
+    public void setLocationLong(String locationLong) {
+        this.locationLong = locationLong;
+    }
 
     public String getXaId() {
         return xaId;
