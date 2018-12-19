@@ -39,6 +39,7 @@ public class Constants {
     public static final String FUNCTION_KEY = "function";
 
     public static final String PROVINCE_KEY = "province_manager";
+    public static final String PROVINCE_GIAP_RANH = "province_giap_ranh";
 
     public static final String DEFAULT_PASSWORD = "123456";
     // dinh nghia cac file cau hinh

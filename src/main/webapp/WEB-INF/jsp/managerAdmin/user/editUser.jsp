@@ -111,7 +111,7 @@
             //lay ra danh sach tinhtp theo khu vuc
             function getTinhTp() {
                 var tinhTpIds = $("#tinhTpIds").val();
-                $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=1,2,3", function (data) {
+                $.get("${pageContext.request.contextPath}/mane/getTinhTp?khuVucId=1,2,3&getAll=1", function (data) {
                     var html = '';
                     if (data.length > 0) {
                         data.forEach(function (data) {

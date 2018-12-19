@@ -561,8 +561,9 @@
                     <iframe width="100%" height="450" frameborder="0"></iframe>
                 </div>
                 <div class="modal-footer">
-
-                    <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                    <c:if test='${hasRoleUpdate}'>
+                        <button type="button"  class="btn btn-default" data-dismiss="modal">Close</button>
+                    </c:if>
                 </div>
             </div>
 

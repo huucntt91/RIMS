@@ -73,10 +73,13 @@ public class SetSessionServlet extends HttpServlet {
                 //lấy danh sách tính giáp ranh được phân quyền
                 List<TinhTpGiapRanhBO> listByUser = adminFacade.findTinhTpGiapRanh(t.getId(), Constants.DOI_TUONG_USER);
                 List<TinhTpGiapRanhBO> listByGroup = adminFacade.findTinhTpGiapRanh(t.getId(), Constants.DOI_TUONG_GROUP);
-                if(listByUser != null)
-                    provinces.addAll(listByUser.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList()));
-                if(listByGroup != null)
-                    provinces.addAll(listByGroup.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList()));
+                if(listByUser == null) listByUser = new ArrayList<>();
+                if(listByGroup == null) listByGroup = new ArrayList<>();
+
+                provinces.addAll(listByUser.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList()));
+                provinces.addAll(listByGroup.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList()));
+                listByUser.addAll(listByGroup);
+                request.getSession().setAttribute(Constants.PROVINCE_GIAP_RANH, listByUser);
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }
