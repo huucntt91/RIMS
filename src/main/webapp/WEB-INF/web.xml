@@ -174,4 +174,11 @@
      <listener>
          <listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
      </listener>
+
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/WEB-INF/tld/permissionTagLib</taglib-uri>
+            <taglib-location>/WEB-INF/tld/permissionTagLib.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>
