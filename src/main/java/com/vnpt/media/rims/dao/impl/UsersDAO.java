@@ -188,7 +188,7 @@ public class UsersDAO extends GenericDAO implements IUsers {
             conn = this.getConnection();
             String querySql = "{? = call PKG_USER.fc_find_by_user_name(?)}";
             List<Object> vars = new ArrayList<>();
-            vars.add(username.trim());
+            vars.add(username);
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
             UserBO userBO = (UserBO) sqlTemplate.queryFunctionForObject(querySql, (ResultSet rs, int rowNum) -> {
                 UserBO userBO1 = new UserBO();
