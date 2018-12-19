@@ -35,7 +35,8 @@ public class ServiceInterceptor implements HandlerInterceptor {
              user = adminFacade.findByUserName(user.getUsername());
             String url = request.getRequestURL().toString();
             logger.debug("user: {}, url: {}", user.getUsername(), url);
-            if (url.endsWith("/noreg") || url.endsWith("/oss.vnpt.vn")
+            if (url.endsWith("/noreg") || url.endsWith("oss.vnpt.vn/")
+                    || url.endsWith("oss.vnpt.vn")
                     || url.endsWith("RIMS/") || url.contains("decorators")
                     || url.endsWith("logout") || url.contains("api")) {
                 return true;
