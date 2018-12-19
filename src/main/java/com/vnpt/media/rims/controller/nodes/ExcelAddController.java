@@ -7,11 +7,14 @@ import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
 import com.vnpt.media.rims.common.Message;
+import com.vnpt.media.rims.common.utils.Convert;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
+import com.vnpt.media.rims.common.utils.PermissionUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.controller.report.ConfigCellController;
 import com.vnpt.media.rims.facade.BangTanFacade;
 import com.vnpt.media.rims.facade.CategoriesFacade;
+import com.vnpt.media.rims.facade.ManagerAdminFacade;
 import com.vnpt.media.rims.facade.NodesFacade;
 import com.vnpt.media.rims.formbean.CellNewForm;
 import com.vnpt.media.rims.formbean.ImportNodeForm;
@@ -127,11 +130,17 @@ public class ExcelAddController {
             File convFile = new File(folderTemp + File.separator + importNodeForm.getFile().getOriginalFilename());
             importNodeForm.getFile().transferTo(convFile);
             NodesFacade nodeFacade = new NodesFacade();
+            ManagerAdminFacade adminFacade = new ManagerAdminFacade();
+            List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId(type));
+
             boolean resultCheckFile = false;
             if (type.equals("2")) {
                 List<ImportBtsModel> items = ExOM.mapFromExcel(convFile)
                         .to(ImportBtsModel.class)
                         .mapSheet(0, 2);
+
+                PermissionUtils.filterUserExcelAttr(items, classAtrr);
+
                 Integer[] checkRows = {1, 2};
                 resultCheckFile = StringUtils.checkImportFile(convFile, new File(dataDirectory + File.separator + "Template_DK_SITE.xls"), checkRows);
                 LOGGER.debug("user: {}, ip: {}, call check importDkBts {}", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
