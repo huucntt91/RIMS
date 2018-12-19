@@ -296,28 +296,38 @@ public class MapGeo2Controller {
      @RequestMapping(value = "/Nodes", method = RequestMethod.GET)
     // public @ResponseBody
       public  String getNodes(@ModelAttribute(value = "model") FilterMapForm model, ModelMap mm,
-            HttpServletRequest request) throws IOException {
-        GoogleMapFacade facade = new GoogleMapFacade();
-        //
-        String whereLocation = " ";
-        if (model.getTinhId() != null && model.getTinhId() != "" && !model.getTinhId().equals("0")) {
-            whereLocation += " and building.tinhtp_id = " + model.getTinhId();
-            if (model.getHuyenId() != null && model.getHuyenId() != "") {
-                whereLocation += " and building.quanhuyen_id = " + model.getHuyenId();
-                if (model.getXaId() != null && model.getXaId() != "") {
-                    whereLocation += " and building.phuongxa_id = " + model.getXaId();
+            HttpServletRequest request) 
+      {
+        try
+        {
+            GoogleMapFacade facade = new GoogleMapFacade();
+            //
+            String whereLocation = " ";
+            if (model.getTinhId() != null && model.getTinhId() != "" && !model.getTinhId().equals("0")) {
+                whereLocation += " and building.tinhtp_id = " + model.getTinhId();
+                if (model.getHuyenId() != null && model.getHuyenId() != "") {
+                    whereLocation += " and building.quanhuyen_id = " + model.getHuyenId();
+                    if (model.getXaId() != null && model.getXaId() != "") {
+                        whereLocation += " and building.phuongxa_id = " + model.getXaId();
+                    }
                 }
             }
+            //
+            String objectType=model.getObjectType();
+            String where = whereLocation + model.getWhere();
+            if(objectType.equals("-1")) objectType="2";
+            List<NodeBO> resultSearch=facade.getNodes(objectType, where);
+            mm.put("objectType",objectType);
+            mm.put("list", resultSearch);
+            mm.put("resultCount",resultSearch.size());
+            return NODE_LIST;
         }
-        //
-        String objectType=model.getObjectType();
-        String where = whereLocation + model.getWhere();
-        List<NodeBO> resultSearch=facade.getNodes(objectType, where);
-        mm.put("objectType",objectType);
-        mm.put("list", resultSearch);
-        mm.put("resultCount",resultSearch.size());
-       
-        return NODE_LIST;
+        catch(Exception ex)
+        {
+            ex.getStackTrace();
+            
+        }
+        return "Error get data";
     }
 //    trunglk_end
 
@@ -330,6 +340,24 @@ public class MapGeo2Controller {
         ObjectMapper mapper = new ObjectMapper();
         //Object to JSON in String
         return mapper.writeValueAsString(facade.findFilterMap(id));
+    }
+    @RequestMapping(value = "/GetProviceByLonLat/{lon}/{lat}", method = RequestMethod.GET,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    int GetProviceByLonLat(@PathVariable(value = "lon") String lon, @PathVariable(value = "lat") String lat,HttpServletRequest request) throws IOException 
+    {
+        GoogleMapFacade facade = new GoogleMapFacade();
+        return facade.GetProvinceByLonLat(lon,lat);
+    }
+    @RequestMapping(value = "/GetDistrictByLonLat/{lon}/{lat}", method = RequestMethod.GET,
+            produces = "application/json;charset=utf-8")
+    public @ResponseBody
+    String GetDistrictByLonLat(@PathVariable(value = "lon") String lon, @PathVariable(value = "lat") String lat,HttpServletRequest request) throws IOException 
+    {
+        GoogleMapFacade facade = new GoogleMapFacade();
+        ObjectMapper mapper = new ObjectMapper();
+        //return mapper.writeValueAsString(facade.findFilterMap(id));
+        return "";
     }
     
     @RequestMapping(value = "/getchaid/{id}", method = RequestMethod.GET,

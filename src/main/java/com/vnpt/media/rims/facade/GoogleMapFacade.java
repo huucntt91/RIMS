@@ -87,6 +87,46 @@ public class GoogleMapFacade {
 
     private static final String RIMS_DS = ResourceBundle.getBundle("config", Locale.getDefault()).getString("RIMS_DS");
 
+    public static int GetProvinceByLonLat(String lon,String lat)
+    {
+        CallableStatement cstmt = null;
+        Connection conn = null;
+        try{
+            conn = EnvManager.getDbConnection(RIMS_DS);
+            String sql = "begin ?:=PKG_BUILDING.get_province_by_lon_lat(?,?) ; end;";
+            cstmt = conn.prepareCall(sql);
+            cstmt.registerOutParameter(1, oracle.jdbc.OracleTypes.INTEGER);
+
+            cstmt.setString(2, lon);
+            cstmt.setString(3, lat);
+            cstmt.executeQuery();
+            return cstmt.getInt(1);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+        } 
+        finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (Exception ex) 
+                {
+                    
+                }
+            }
+            if (cstmt != null) {
+                try {
+                    cstmt.close();
+                } catch (Exception ex) 
+                {
+                    
+                }
+            }
+        }
+        //return 0;
+    }
+    
     public static int getTotalNodes(String type, String where) {
         CallableStatement cstmt = null;
         Connection conn = null;

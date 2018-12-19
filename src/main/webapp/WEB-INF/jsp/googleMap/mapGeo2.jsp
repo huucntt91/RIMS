@@ -583,13 +583,13 @@
                                             <div class="col-md-4">                            
                                                 <label for="exampleInputEmail1" class="col-md-4 control-label">Latitude</label>
                                                 <div class="col-md-8">
-                                                    <input type="number" id="locationLat" name="locationLat" placeholder="Latitude"  class="form-control">
+                                                    <input type="number" id="locationLat" name="locationLat" value="21.04196" placeholder="Latitude"  class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-4">                            
                                                 <label for="exampleInputEmail1" class="col-md-4 control-label">Longitude</label>
                                                 <div  class="col-md-8">
-                                                    <input type="number" id="locationLong" name="locationLong" placeholder="Longitude"  class="form-control">
+                                                    <input type="number" id="locationLong" name="locationLong" value="105.80788" placeholder="Longitude"  class="form-control">
                                                 </div>
 
                                             </div>
@@ -1590,6 +1590,7 @@
 
         function setDisplayLayer(neTypeId)
         {
+            SetProvinceCodeByLonLat();
         var where = ' AND 1 = 1 ';
         var whereProvince = where;
         var whereDistrict = where;
@@ -1705,6 +1706,7 @@
         function searchMap() {
         var loca_lat = $('#locationLat').val();
         var loca_long = $('#locationLong').val();
+        SetProvinceCodeByLonLat();
         map.removeLayer(vectorLayer);
         if (loca_lat != '' && loca_long != '') {
         map.getView().setCenter(ol.proj.transform([Number(loca_long), Number(loca_lat)], 'EPSG:4326', 'EPSG:3857'));
@@ -1745,9 +1747,9 @@
                 style: style
         });
         map.addLayer(vectorLayer);
-        $('#myModal').modal('hide');
-        return;
-        }
+        //$('#myModal').modal('hide');
+       // return;
+        } //end if lon lat
 
         var checkValue = false;
         $("#boxSearch .groupFilter").each(function (i) {
@@ -1796,6 +1798,7 @@
         map.getView().setZoom(15);
 //            alert(2)
         }
+      
         //map.setCenter(results[0].geometry.location);
         if ($("#phuongXaId").val() !== '')
         {
@@ -1877,7 +1880,44 @@
                 window.alert('Bạn chưa chọn đối tượng tìm kiếm ');
             }
         }
-
+        function SetProvinceCodeByLonLat(){
+           
+             var loca_lat = $('#locationLat').val();
+             var loca_long = $('#locationLong').val();
+             var provinceId=0;
+             if (loca_lat != '' && loca_long != '') 
+             {
+                console.log('Lay ma tinh tu:lat:' + loca_lat + ' ,long:' + loca_long)
+                $.get("${pageContext.request.contextPath}/mapGeo2/GetProviceByLonLat/" + loca_long+'/'+ loca_lat, function (data) 
+                {
+                        console.log('Ma tinh:' + data);
+                        provinceId=data;
+                         $("#tinhTpId").val(provinceId);
+                         $("#tinhTpId").selectpicker("refresh");
+                });
+             }
+            
+            
+        }    
+        function GetProvinceCodeByLonLat(){
+             var loca_lat = $('#locationLat').val();
+             var loca_long = $('#locationLong').val();
+             var provinceId=0;
+             if (loca_lat != '' && loca_long != '') 
+             {
+                console.log('Lay ma tinh tu:lat:' + loca_lat + ' ,long:' + loca_long)
+                $.get("${pageContext.request.contextPath}/mapGeo2/GetProviceByLonLat/" + loca_long+'/'+ loca_lat, function (data) 
+                {
+                        console.log('Ma tinh:' + data);
+                        provinceId=data;
+                         $("#tinhTpId").val(provinceId);
+                         $("#tinhTpId").selectpicker("refresh");
+                        return provinceId;
+                });
+             }
+             return provinceId;
+             
+        }    
 
         function afterLayerText() {
         $('#boxAddLayer').append($('#addFiller').html());
@@ -2145,8 +2185,8 @@
                     $('#borough2').show();
                },
                error:function()
-                {
-                    $('#filterResultContainer').html('');
+               {
+                    $('#filterResultContainer').html('Error');
                }
             });
         }
