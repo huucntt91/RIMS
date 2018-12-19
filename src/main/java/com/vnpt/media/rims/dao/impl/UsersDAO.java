@@ -1,5 +1,6 @@
 package com.vnpt.media.rims.dao.impl;
 
+import com.vnpt.media.rims.bean.*;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.utils.StringUtils;
 import com.vnpt.media.rims.exception.ConnectionException;
@@ -11,8 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.List;
-import com.vnpt.media.rims.bean.GroupBO;
-import com.vnpt.media.rims.bean.UserBO;
+
 import com.vnpt.media.rims.dao.IUsers;
 import com.vnpt.media.rims.jdbc.DbSql;
 import java.util.ArrayList;
@@ -188,7 +188,7 @@ public class UsersDAO extends GenericDAO implements IUsers {
             conn = this.getConnection();
             String querySql = "{? = call PKG_USER.fc_find_by_user_name(?)}";
             List<Object> vars = new ArrayList<>();
-            vars.add(username);
+            vars.add(username.trim());
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
             UserBO userBO = (UserBO) sqlTemplate.queryFunctionForObject(querySql, (ResultSet rs, int rowNum) -> {
                 UserBO userBO1 = new UserBO();
@@ -376,6 +376,88 @@ public class UsersDAO extends GenericDAO implements IUsers {
             DbSql sqlTemplate = new DbSql(conn);
             int count = Integer.parseInt(sqlTemplate.runProc(querySql, vars));
             return count;
+        } catch (ConnectionException e) {
+            LOGGER.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            LOGGER.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            LOGGER.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public List<UserAttrBO> findUserAttrByUserId(String userId) throws DAOException {
+        Connection conn;
+        try {
+            conn = this.getConnection();
+            String querySql = "{? = call PKG_USER.fn_get_usr_attr_by_user_id(?)}";
+            List<Object> vars = new ArrayList<>();
+            vars.add(userId);
+            String action = "";
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+            List<?> list = sqlTemplate.queryFunction(querySql, (ResultSet rs, int rowNum) -> {
+                UserAttrBO userBO = new UserAttrBO();
+                AttributeBO attributeBO = new AttributeBO();
+                AttClassListBO attClassListBO = new AttClassListBO();
+                ObjectListBO objectListBO = new ObjectListBO();
+
+                userBO.setUserId(rs.getLong("USER_ID"));
+                userBO.setUserAttrId(rs.getLong("USER_ATTR_ID"));
+                userBO.setAction(rs.getString("ACTION"));
+
+                attributeBO.setId(rs.getLong("ATTR_ID"));
+                attributeBO.setAttrCode(rs.getString("ATTR_CODE"));
+                attributeBO.setAttrName(rs.getString("ATTR_NAME"));
+                attributeBO.setAliasExcelAttr(rs.getString("alias_excel_attr") == null ? "": rs.getString("alias_excel_attr"));
+
+                attClassListBO.setId(rs.getLong("ATTR_CLASS_ID"));
+                attClassListBO.setCode(rs.getString("ATTR_CLASS_CODE"));
+                attClassListBO.setName(rs.getString("attr_class_name"));
+
+                objectListBO.setCode(rs.getString("object_code"));
+
+                userBO.setAttr(attributeBO);
+                userBO.setAttClass(attClassListBO);
+                userBO.setObject(objectListBO);
+                return userBO;
+            }, vars);
+            return (List<UserAttrBO>) list;
+        } catch (ConnectionException e) {
+            LOGGER.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            LOGGER.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            LOGGER.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+
+
+    @Override
+    public List<TinhTpGiapRanhBO> findTinhTpGiapRanh(long maDoiTuong, String maLoaiDoiTuong) throws DAOException {
+        Connection conn;
+        try {
+            conn = this.getConnection();
+            String querySql = "select * from tinh_tp_giap_ranh where ma_doi_tuong=? and loai_doi_tuong=?";
+            List<Object> vars = new ArrayList<>();
+            vars.add(maDoiTuong);
+            vars.add(maLoaiDoiTuong);
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+            List<?> list = sqlTemplate.query (querySql, (ResultSet rs, int rowNum) -> {
+                TinhTpGiapRanhBO tinhTpGiapRanhBO = new TinhTpGiapRanhBO();
+                tinhTpGiapRanhBO.setId(rs.getLong("id"));
+                tinhTpGiapRanhBO.setMaDoiTuong(rs.getString("ma_doi_tuong"));
+                tinhTpGiapRanhBO.setLoaiDoiTuong(rs.getString("loai_doi_tuong"));
+                tinhTpGiapRanhBO.setMaTinhTp(rs.getString("ma_tinh_tp"));
+                tinhTpGiapRanhBO.setMaQuyen(rs.getString("ma_quyen"));
+                return tinhTpGiapRanhBO;
+            }, vars);
+            return (List<TinhTpGiapRanhBO>)list;
         } catch (ConnectionException e) {
             LOGGER.error("ConnectionException :", e);
             throw new DAOException(e);

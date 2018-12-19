@@ -319,4 +319,102 @@ public class ClassGroupDAO extends GenericDAO implements IClassGroup {
             throw new DAOException(e);
         }
     }
+
+    @Override
+    public List<AttributeBO> findAttrByClassId(long classId) throws DAOException {
+        Connection conn = null;
+        try {
+            conn = this.getConnection();
+            String querySql = "{? = call PKG_GROUP.fc_get_attr_by_classid(?) }";
+
+            List<Object> vars = new Vector<Object>();
+            vars.add(classId);
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+
+            List<?> list = sqlTemplate.queryFunction(querySql, (ResultSet rs, int rowNum) -> {
+                AttributeBO attributeBO = new AttributeBO();
+                attributeBO.setId(rs.getLong("attr_id"));
+                attributeBO.setAttrName(rs.getString("attr_name"));
+                attributeBO.setAttrCode(rs.getString("attr_code"));
+                attributeBO.setAttrTableName(rs.getString("attr_table_name"));
+                attributeBO.setAliasExcelAttr(rs.getString("alias_excel_attr"));
+                attributeBO.setAttrClassId(classId);
+                return attributeBO;
+            }, vars);
+
+            return (List<AttributeBO>) list;
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public String updateAttr(AttributeBO attr) throws DAOException{
+        Connection conn = null;
+        try {
+            conn = this.getConnection();
+            String querySql = "insert into attr_list(attr_id, attr_name, attr_code, attr_desc,\n" +
+                    "       attr_class_id, attr_table_name, alias_excel_attr)\n" +
+                    " values(SEQ_ATTR.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+            List<Object> vars = new Vector<Object>();
+            vars.add(attr.getAttrName());
+            vars.add(attr.getAttrCode());
+            vars.add(""); //attr_desc
+            vars.add(attr.getAttrClassId());
+            vars.add(""); //attr_table_name
+            vars.add(attr.getAliasExcelAttr());
+            if(attr.getId() != null && attr.getId() > 0){
+                querySql =
+                "update attr_list set attr_name=?, attr_code=?, attr_desc=?, attr_class_id=?, attr_table_name=?, alias_excel_attr=?" +
+                        " where attr_id=?";
+                vars.add(attr.getId());
+            }
+
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+            int response = sqlTemplate.executeUpdate(querySql, vars);
+
+            return String.valueOf(response);
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public String deleteAttr(AttributeBO attr) throws DAOException{
+        Connection conn = null;
+        try {
+            conn = this.getConnection();
+            String querySql = "delete from attr_list where attr_id=?";
+            List<Object> vars = new Vector<Object>();
+            vars.add(attr.getId());
+
+            SQLTemplate sqlTemplate = new SQLTemplate(conn);
+            sqlTemplate.executeUpdate(querySql, vars);
+
+            return "1";
+        } catch (ConnectionException e) {
+            logger.error("ConnectionException :", e);
+            throw new DAOException(e);
+        } catch (JdbcException e) {
+            logger.error("JdbcException :", e);
+            throw new DAOException(e);
+        } catch (Exception e) {
+            logger.error("Exception :", e);
+            throw new DAOException(e);
+        }
+    }
 }

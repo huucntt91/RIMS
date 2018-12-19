@@ -3,6 +3,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="pm" uri="/WEB-INF/tld/permissionTagLib" %>
 <%@include file="../../include/header.jsp"%>
 
 <section class="content">            
@@ -84,9 +85,7 @@
                                     <label  for="exampleInputEmail1">Chọn huyện</label>
                                     <select name="quanHuyenId" id="quanHuyenId" class="form-control" required onchange="getListPhuongXa(0);"> 
                                         <option value="">--- Quận / Huyện ---</option>
-
-                                    </select>  
-
+                                    </select>
                                 </div> 
                                 <div class="form-group" class="form-control">
                                     <label for="exampleInputEmail1">Chọn phường xã</label>
@@ -106,10 +105,15 @@
                                         <option value="Nhóm 5" <c:if test="${fn:containsIgnoreCase(model.nhomCSHT, '5')}"> selected </c:if> >Nhóm 5</option>
                                     </select>                              
                                 </div>-->
-                                    
-                               <div class="form-group" class="form-control">
+
+
+                               <div class="form-group" class="form-control"
+                                <c:if test="${not pm:checkUserAttr('INFRAS_ACTIVE_DATE', 'BUILDING','VIEW')}"> style="display: none" </c:if>>
                                     <label for="exampleInputEmail1">Ngày hoạt động CSHT</label>
-                                    <input value="${model.ngayHdCsht}"  type="text" class="form-control date_form" id="ngayHdCsht" name="ngayHdCsht"  />                    
+                                    <input value="${model.ngayHdCsht}"  type="text" class="form-control date_form "
+                                        id="ngayHdCsht" name="ngayHdCsht"
+                                        <c:if test="${not pm:checkUserAttr('INFRAS_ACTIVE_DATE', 'BUILDING','UPDATE')}"> disabled </c:if>
+                                    />
                                     <script>
                                         $(document).ready(function () {
                                             $('#ngayHdCsht').datepicker({

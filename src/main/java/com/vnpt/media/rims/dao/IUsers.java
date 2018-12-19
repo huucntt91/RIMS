@@ -1,10 +1,8 @@
 package com.vnpt.media.rims.dao;
 
+import com.vnpt.media.rims.bean.*;
 import com.vnpt.media.rims.exception.DAOException;
 import java.util.List;
-import com.vnpt.media.rims.bean.GroupBO;
-import com.vnpt.media.rims.bean.UserBO;
-import com.vnpt.media.rims.bean.UserGroupBO;
 
 /**
  * Created with IntelliJ IDEA. User: haidd Date: 6/26/13 Time: 4:21 PM To change
@@ -25,6 +23,7 @@ public interface IUsers extends IGeneric {
     public UserBO findByUserId(String userId) throws DAOException;
 
     public UserBO findByUsername(String username) throws DAOException;
+
 //    UserBO findByUsername(String username) throws DAOException;
 //
 //    UserBO findByEmail(String email) throws DAOException;
@@ -54,4 +53,8 @@ public interface IUsers extends IGeneric {
     UserBO checkLogin(String email, String password) throws DAOException;
     
     int UserLogin(String userId, String Ip) throws DAOException;
+
+    List<UserAttrBO> findUserAttrByUserId(String userId) throws DAOException;
+
+    public List<TinhTpGiapRanhBO> findTinhTpGiapRanh(long maDoiTuong, String maLoaiDoiTuong) throws DAOException;
 }

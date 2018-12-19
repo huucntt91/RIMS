@@ -214,7 +214,7 @@ public class MapGeo2Controller {
         }
     }
 
-    @RequestMapping(value = "/countNodes", method = RequestMethod.POST,
+    @RequestMapping(value = "/countNodes",
             produces = "application/json;charset=utf-8")
     public @ResponseBody
     String getCountNodes(@ModelAttribute(value = "model") FilterMapForm model, ModelMap mm,
@@ -315,6 +315,8 @@ public class MapGeo2Controller {
         List<NodeBO> resultSearch=facade.getNodes(objectType, where);
         mm.put("objectType",objectType);
         mm.put("list", resultSearch);
+        mm.put("resultCount",resultSearch.size());
+       
         return NODE_LIST;
     }
 //    trunglk_end

@@ -1,5 +1,6 @@
 package com.vnpt.media.rims.facade;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.utils.DatabaseUtils;
@@ -868,4 +869,180 @@ public class ManagerAdminFacade {
         }
     }
 
+    //huan.nguyen start
+    public List<UserAttrBO> findUserAttrByUserId(String userId) throws ServiceException {
+        ITransaction trans = null;
+        List<UserAttrBO> result = new ArrayList<>();
+        try {
+            trans = factory.getTransaction();
+            IUsers iUser = factory.getUsersDAO();
+            trans.connectionType(DB_ADMIN);
+            iUser.setTransaction(trans);
+            trans.beginTransaction();
+            result = iUser.findUserAttrByUserId(userId);
+            trans.commit();
+            trans.endTransaction();
+        } catch (DAOException de) {
+            DatabaseUtils.rollback(trans);
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+            return result;
+        }
+    }
+
+    public String updateUserAttr(List<String> sqls) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IMenuAction menu = factory.getMenuActionDAO();
+            trans.connectionType(DB_ADMIN);
+            menu.setTransaction(trans);
+            trans.beginTransaction();
+            ret = menu.updateBatch(sqls);
+            if (ret.equals("0")) {
+                trans.rollback();
+                return "0";
+            } else {
+                trans.commit();
+            }
+            trans.endTransaction();
+            return "1";
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public List<AttributeBO> findAttrByClassId(long classId) throws ServiceException {
+        ITransaction trans = null;
+        List<AttributeBO> result = new ArrayList<>();
+        try {
+            trans = factory.getTransaction();
+            IClassGroup classGroupDAO = factory.getClassGroupDAO();
+            trans.connectionType(DB_ADMIN);
+            classGroupDAO.setTransaction(trans);
+            trans.beginTransaction();
+            result = classGroupDAO.findAttrByClassId(classId);
+            trans.commit();
+            trans.endTransaction();
+        } catch (DAOException de) {
+            DatabaseUtils.rollback(trans);
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+            return result;
+        }
+    }
+
+    public List<AttClassListBO> findAllAttClass() throws ServiceException {
+        ITransaction trans = null;
+        try {
+            List<AttClassListBO> listAttClass = this.findAttrClassListByObjectId("");
+            return  listAttClass;
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public boolean updateAttr(AttributeBO attr) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IClassGroup classGroupDAO = factory.getClassGroupDAO();
+            trans.connectionType(DB_ADMIN);
+            classGroupDAO.setTransaction(trans);
+            trans.beginTransaction();
+            ret = classGroupDAO.updateAttr(attr);
+            trans.commit();
+            trans.endTransaction();
+            return ret.equals("1");
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public boolean deleteAttr(AttributeBO attr) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IClassGroup classGroupDAO = factory.getClassGroupDAO();
+            trans.connectionType(DB_ADMIN);
+            classGroupDAO.setTransaction(trans);
+            trans.beginTransaction();
+            ret = classGroupDAO.deleteAttr(attr);
+            trans.commit();
+            trans.endTransaction();
+            return ret.equals("1");
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public String updateTinhTpGiapRanh(List<String> sqls) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IMenuAction menu = factory.getMenuActionDAO();
+            trans.connectionType(DB_ADMIN);
+            menu.setTransaction(trans);
+            trans.beginTransaction();
+            ret = menu.updateBatch(sqls);
+            if (ret.equals("0")) {
+                trans.rollback();
+                return "0";
+            } else {
+                trans.commit();
+            }
+            trans.endTransaction();
+            return "1";
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public List<TinhTpGiapRanhBO> findTinhTpGiapRanh(long maDoiTuong, String maLoaiDoiTuong) throws ServiceException {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            IUsers users = factory.getUsersDAO();
+            trans.connectionType(DB_ADMIN);
+            users.setTransaction(trans);
+            return users.findTinhTpGiapRanh(maDoiTuong, maLoaiDoiTuong);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+    //huan.nguyen end
 }

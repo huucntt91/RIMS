@@ -84,13 +84,15 @@
                                     
                             <div class="col-md-6">
                                 <div class="form-group">
-                                   
-                                    <div class="input-group">
+                                    <div style="width:100%;">
+                                        <div class="input-group">
                                          <label class=" input-group-addon" style="width:120px;">Mã trạm dự án</label>
                                     <input name="maTramDuAn" value="${maTramDuAn}"
                                            type="text" class="form-control" id="maTramDuAn"
                                            placeholder="Mã trạm dự án"/>
                                     </div>
+                                    </div>
+                                    
                                    
                                 </div>                                                                                     
                             </div>
@@ -385,7 +387,7 @@
                             });
                         }
                         $('#tinhTpId').html(html);
-                        $('#tinhTpId').r('rebuild');
+                        $('#tinhTpId').multiselect('rebuild');
                     });
                 }
         </script>
