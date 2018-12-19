@@ -11,6 +11,7 @@ import com.vnpt.media.rims.bean.*;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.StyledEditorKit;
 import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -608,6 +609,17 @@ public class NodesController {
         String tinhTpId = String.join(",", tinhManager);
         List<BTSInfoBO> list = (List<BTSInfoBO>) nodesFacade.findDetail(id, neTypeId);
         mm.put("model", list.get(0));
+        try {
+            List<TinhTpGiapRanhBO> listTinhTpGiapRanhBO = (List<TinhTpGiapRanhBO>)request.getSession().getAttribute(Constants.PROVINCE_GIAP_RANH);
+            boolean hasRoleUpdate =  true;
+            if(listTinhTpGiapRanhBO != null){
+                hasRoleUpdate = !listTinhTpGiapRanhBO.stream().anyMatch(x->x.getMaTinhTp().equals(list.get(0).getTinhTpId()));
+            }
+            mm.put("hasRoleUpdate", hasRoleUpdate);
+        }
+        catch (Exception e){
+            logger.error("Exception :", e);
+        }
         return "nodes/tram/tramEdit";
 //
     }

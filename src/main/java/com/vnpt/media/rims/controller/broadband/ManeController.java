@@ -135,24 +135,29 @@ public class ManeController {
     @RequestMapping(value = "/getTinhTp", method = RequestMethod.GET,
             produces = "application/json;charset=utf-8")
     public @ResponseBody
-    String getTinhTp(@RequestParam(value = "khuVucId", required = false) String khuVucId, ModelMap mm,
+    String getTinhTp(@RequestParam(value = "khuVucId", required = false) String khuVucId, @RequestParam(value = "getAll", required = false) String getAll, ModelMap mm,
             HttpServletRequest request) throws IOException {
         List<TinhBO> list;
         try {
             CategoriesFacade facade = new CategoriesFacade();
             list = facade.findTinhByKv(khuVucId);
-            String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
             List<TinhBO> temp = new ArrayList<>();
-            if (tinhManager != null && tinhManager.length > 0) {
-                for (String tinh : tinhManager) {
-                    for (TinhBO item : list) {
-                        if (String.valueOf(item.getTinhTpId()).equals(tinh)) {
-                            temp.add(item);
+            if(getAll != null && getAll.equals("1")){
+                temp = list;
+            }
+            else{
+                String[] tinhManager = (String[]) request.getSession().getAttribute(Constants.PROVINCE_KEY);
+                if (tinhManager != null && tinhManager.length > 0) {
+                    for (String tinh : tinhManager) {
+                        for (TinhBO item : list) {
+                            if (String.valueOf(item.getTinhTpId()).equals(tinh)) {
+                                temp.add(item);
+                            }
                         }
                     }
+                } else {
+                    temp = list;
                 }
-            } else {
-                temp = list;
             }
 
             ObjectMapper mapper = new ObjectMapper();
