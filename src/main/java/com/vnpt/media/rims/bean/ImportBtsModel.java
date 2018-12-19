@@ -45,14 +45,37 @@ public class ImportBtsModel {
     private String tenTrenHeThong;
     @Column(name = "Ten thiet bi", index = "11")
     private String thietBi;
-    @Column(name = "loai tram", index = "12")
+    @Column(name = "loai thiet bi", index = "12")
+    private String deviceType;
+    @Column(name = "loai tram", index = "13")
     private String loaiTram;
-    @Column(name = "cau hinh", index = "13")
+    @Column(name = "cau hinh", index = "14")
     private String cauHinh;
-    @Column(name = "enode id", index = "14")
+    @Column(name = "enode id", index = "15")    
     private String enodebId;
+    @Column(name = "frequencyBand", index = "16")    
+    private String frequencyBand;
+    
     public ImportBtsModel() {
     }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getFrequencyBand() {
+        return frequencyBand;
+    }
+
+    public void setFrequencyBand(String frequencyBand) {
+        this.frequencyBand = frequencyBand;
+    }
+    
+    
 
     public boolean isCheck() {
         return check;

@@ -727,10 +727,12 @@ public class NodesFacade {
                 for (ImportBtsModel item : list) {
                     if (resultCheckFile) {
                         String strCheck = addSite(i, userId, item, attr, messageSource, locale);
-                        item.setCheckDB(strCheck);
-                        if (strCheck == null || !strCheck.equalsIgnoreCase("OK")) {
+                        if(strCheck == null || strCheck.isEmpty()){
+                            strCheck = "OK";
+                        }else{
                             commit = false;
                         }
+                        item.setCheckDB(strCheck);
                     } else {
                         item.setCheckDB(resourceBundle.getString("cell.new.import.validate.file"));
                     }
@@ -761,7 +763,7 @@ public class NodesFacade {
             String codeVNPT = "";//getCodeVNPT(importBtsModel.getTenDonViQuanLy(), Convert.convertNeTypeToTechnology(importBtsModel.getNeTypeName()), status);
 
             result = iNode.importDkBts(codeVNPT, userInsertId, importBtsModel, attr, messageSource, locale);
-            result = Convert.convertErrorCodeBTS(result, importBtsModel.getNeTypeName());
+//            result = Convert.convertErrorCodeBTS(result, importBtsModel.getNeTypeName());
             return result;
         } catch (DAOException de) {
             logger.error("DAOException : ", de);

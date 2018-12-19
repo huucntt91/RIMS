@@ -2109,7 +2109,7 @@ public class NodeDAO extends GenericDAO implements INode {
         Connection conn = null;
         try {
             conn = this.getConnection();
-            String querySql = "{? = call PKG_EXCEL_NODE.fn_import_bts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+            String querySql = "{? = call PKG_EXCEL_NODE.fn_import_bts(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 
             //logger.info("SQL : " + querySql);
             List<Object> vars = new Vector<Object>();
@@ -2129,6 +2129,8 @@ public class NodeDAO extends GenericDAO implements INode {
             vars.add(importBtsModel.getCauHinh());
             vars.add(importBtsModel.getEnodebId());
             vars.add(userInsertId);
+            vars.add(importBtsModel.getDeviceType());
+            vars.add(importBtsModel.getFrequencyBand());
 
             for (int i = 0; i < vars.size(); i++) {
 
@@ -2215,7 +2217,7 @@ public class NodeDAO extends GenericDAO implements INode {
             conn = this.getConnection();
             String querySql = "{? = call PKG_EXCEL_NODE.fn_update_bts(?,?,?,?,?"
                     + ",?,?,?,?,?,?,?,?,?,?"
-                    + ",?,?,?,?,?,?,?,?,?)}";
+                    + ",?,?,?,?,?,?,?,?,?,?)}";
             //logger.info("SQL : " + querySql);
             List<Object> vars = new Vector<Object>();
             vars.add(permission);
@@ -2230,7 +2232,7 @@ public class NodeDAO extends GenericDAO implements INode {
             vars.add(excelBtsUpdateBO.getHoanCanhRaDoi());
             vars.add(excelBtsUpdateBO.getNgayHoatDong());
             vars.add(excelBtsUpdateBO.getTenTrenHeThong());
-            vars.add(excelBtsUpdateBO.getTenBscRnc());
+            vars.add(null);
             vars.add(excelBtsUpdateBO.getMscMss());
             vars.add(excelBtsUpdateBO.getSgsn());
             vars.add(excelBtsUpdateBO.getDcHsdpa42M());
@@ -2242,6 +2244,7 @@ public class NodeDAO extends GenericDAO implements INode {
             vars.add(excelBtsUpdateBO.getLoaiTram());
             vars.add(excelBtsUpdateBO.getCauHinh());
             vars.add(userInsertId);
+            vars.add(excelBtsUpdateBO.getDeviceType());
 
             SQLTemplate sqlTemplate = new SQLTemplate(conn);
             String out = sqlTemplate.executeUpdateFunction2(querySql, vars);

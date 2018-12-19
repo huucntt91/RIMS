@@ -1000,5 +1000,49 @@ public class ManagerAdminFacade {
             DatabaseUtils.close(trans);
         }
     }
+
+    public String updateTinhTpGiapRanh(List<String> sqls) {
+        ITransaction trans = null;
+        String ret = "";
+        try {
+            trans = factory.getTransaction();
+            IMenuAction menu = factory.getMenuActionDAO();
+            trans.connectionType(DB_ADMIN);
+            menu.setTransaction(trans);
+            trans.beginTransaction();
+            ret = menu.updateBatch(sqls);
+            if (ret.equals("0")) {
+                trans.rollback();
+                return "0";
+            } else {
+                trans.commit();
+            }
+            trans.endTransaction();
+            return "1";
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            trans.rollback();
+            throw new DAOException(de);
+
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
+
+    public List<TinhTpGiapRanhBO> findTinhTpGiapRanh(long maDoiTuong, String maLoaiDoiTuong) throws ServiceException {
+        ITransaction trans = null;
+        try {
+            trans = factory.getTransaction();
+            IUsers users = factory.getUsersDAO();
+            trans.connectionType(DB_ADMIN);
+            users.setTransaction(trans);
+            return users.findTinhTpGiapRanh(maDoiTuong, maLoaiDoiTuong);
+        } catch (DAOException de) {
+            logger.error("DAOException : ", de);
+            throw new ServiceException(de);
+        } finally {
+            DatabaseUtils.close(trans);
+        }
+    }
     //huan.nguyen end
 }

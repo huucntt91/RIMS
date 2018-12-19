@@ -1,12 +1,16 @@
 package com.vnpt.media.rims.controller.security;
 
 import com.vnpt.media.rims.bean.MenuBO;
+import com.vnpt.media.rims.bean.TinhTpGiapRanhBO;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.exception.ServiceException;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -61,13 +65,25 @@ public class SetSessionServlet extends HttpServlet {
             request.getSession().setAttribute(Constants.FUNCTION_KEY, tempFunction);
             request.getSession().setAttribute(Constants.USER_KEY, t);
 
+            List<String> provinces = new ArrayList<>();
             String[] provincePermission = null;
             try {
                 provincePermission = adminFacade.findListTinhByUserId(String.valueOf(t.getId()));
+                provinces.addAll(Arrays.stream(provincePermission).collect(Collectors.toList()));
+                //lấy danh sách tính giáp ranh được phân quyền
+                List<TinhTpGiapRanhBO> listByUser = adminFacade.findTinhTpGiapRanh(t.getId(), Constants.DOI_TUONG_USER);
+                List<TinhTpGiapRanhBO> listByGroup = adminFacade.findTinhTpGiapRanh(t.getId(), Constants.DOI_TUONG_GROUP);
+                if(listByUser == null) listByUser = new ArrayList<>();
+                if(listByGroup == null) listByGroup = new ArrayList<>();
+
+                provinces.addAll(listByUser.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList()));
+                provinces.addAll(listByGroup.stream().map(x->x.getMaTinhTp()).collect(Collectors.toList()));
+                listByUser.addAll(listByGroup);
+                request.getSession().setAttribute(Constants.PROVINCE_GIAP_RANH, listByUser);
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
             }
-            request.getSession().setAttribute(Constants.PROVINCE_KEY, provincePermission);
+            request.getSession().setAttribute(Constants.PROVINCE_KEY, provinces.toArray(new String[0]));
             return true;
         } catch (ServiceException ex) {
             LOGGER.error(ex.getMessage(), ex);

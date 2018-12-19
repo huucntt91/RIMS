@@ -86,6 +86,7 @@ public class PermissionUtils {
         }
     }
 
+    //Kiểm tra phân quyền thuộc tính, nếu không được phép cập nhật thì set = null
     public static <T> void filterUserExcelAttr(List<T> items, List<String> listAttrClassCode) {
         LOGGER.debug("PermissionUtils.checkUserAttr");
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
