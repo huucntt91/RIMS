@@ -583,13 +583,13 @@
                                             <div class="col-md-4">                            
                                                 <label for="exampleInputEmail1" class="col-md-4 control-label">Latitude</label>
                                                 <div class="col-md-8">
-                                                    <input type="number" id="locationLat" name="locationLat" value="21.04196" placeholder="Latitude"  class="form-control">
+                                                    <input type="number" id="locationLat" name="locationLat"  placeholder="Latitude"  class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-4">                            
                                                 <label for="exampleInputEmail1" class="col-md-4 control-label">Longitude</label>
                                                 <div  class="col-md-8">
-                                                    <input type="number" id="locationLong" name="locationLong" value="105.80788" placeholder="Longitude"  class="form-control">
+                                                    <input type="number" id="locationLong" name="locationLong"  placeholder="Longitude"  class="form-control">
                                                 </div>
 
                                             </div>
