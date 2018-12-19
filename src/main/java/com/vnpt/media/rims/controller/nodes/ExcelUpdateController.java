@@ -3,8 +3,6 @@ package com.vnpt.media.rims.controller.nodes;
 import com.blogspot.na5cent.exom.ExOM;
 import com.vnpt.media.rims.bean.ExcelBtsUpdateBO;
 import com.vnpt.media.rims.bean.ExcelCellUpdateBO;
-import com.vnpt.media.rims.bean.ImportBtsModel;
-import com.vnpt.media.rims.bean.ImportCellModel;
 import com.vnpt.media.rims.bean.UserBO;
 import com.vnpt.media.rims.common.Constants;
 import com.vnpt.media.rims.common.Function;
@@ -13,8 +11,6 @@ import com.vnpt.media.rims.common.utils.Convert;
 import com.vnpt.media.rims.common.utils.DateTimeUtils;
 import com.vnpt.media.rims.common.utils.PermissionUtils;
 import com.vnpt.media.rims.common.utils.StringUtils;
-import com.vnpt.media.rims.facade.BangTanFacade;
-import com.vnpt.media.rims.facade.CategoriesFacade;
 import com.vnpt.media.rims.facade.ManagerAdminFacade;
 import com.vnpt.media.rims.facade.NodesFacade;
 import com.vnpt.media.rims.formbean.CellNewForm;
@@ -26,9 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -65,13 +59,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping(value = "/excelUpdateNode")
 public class ExcelUpdateController {
 
-    private static final Logger LOGGER = LogManager.getLogger(ExcelUpdateController.class);
+    private static final Logger logger = LogManager.getLogger(ExcelUpdateController.class);
     private static final String FORM_NEW = "nodes/cell/excelImportUpdate";
 
     @Autowired
     private MessageSource messageSource;
 
-  
     @RequestMapping(value = "/init/{type}", method = RequestMethod.GET)
     public String init(@PathVariable(value = "type") String type,
             @ModelAttribute("cellNewForm") CellNewForm cellNewForm,
@@ -113,35 +106,28 @@ public class ExcelUpdateController {
                 List<ExcelBtsUpdateBO> items = ExOM.mapFromExcel(convFile)
                         .to(ExcelBtsUpdateBO.class)
                         .mapSheet(0, 2);
-
+                List<String> result = new ArrayList<>();
                 List<String> classAtrr = adminFacade.findClassAttrByUserId(String.valueOf(user.getId()), "U", Convert.convertNeTypeToObjectId(type));
                 PermissionUtils.filterUserExcelAttr(items, classAtrr);
 
-                LOGGER.info("user: {}, ip: {}, call excelUpdateBts ", user.getUsername(), request.getRemoteAddr());
+                logger.info("user: {}, ip: {}, call excelUpdateBts ", user.getUsername(), request.getRemoteAddr());
                 for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).getLoaiNE() == null || items.get(i).getLoaiNE().isEmpty()) {
-                        continue;
-                    }
+
                     String strCheck = nodeFacade.excelUpdateBts(true, user.getId(), items.get(i), attr, messageSource, locale);
                     items.get(i).setCheckDB(strCheck);
+                    result.add(strCheck);
                 }
-                LOGGER.info("user: {}, ip: {}, done excelUpdateBts: {}", user.getUsername(), request.getRemoteAddr(), items.size());
-
-                String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
-                String fileName = "result_update_site.xlsx";
-                File fileTemplate = new File(dataDirectory + File.separator + fileName);
-
-                LOGGER.debug("user: {}, ip: {}, call write excel update tram {} ", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
-                File fileResult = writeExcelBTS(fileTemplate, items);
+                logger.info("user: {}, ip: {}, done excelUpdateBts: {}", user.getUsername(), request.getRemoteAddr(), items.size());
+                logger.debug("user: {}, ip: {}, call write excel update tram {} ", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                File fileResult = writeExcelBTS(convFile, result, StringUtils.getFolderTemp() + File.separator + "result_update_tram_" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx");
                 if (fileResult.exists()) {
                     response.setContentType("application/excel");
-                    fileName = "result_update_site" + DateTimeUtils.convertDateString(new Date(), "ddMMyyy_HHmmss") + ".xlsx";
-                    response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+                    response.addHeader("Content-Disposition", "attachment; filename=" + fileResult.getName());
                     try {
                         FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
                         response.getOutputStream().flush();
                         items.clear();
-                        LOGGER.debug("user: {}, ip: {}, end write excel update tram {} ", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
+                        logger.debug("user: {}, ip: {}, end write excel update tram {} ", user.getUsername(), request.getRemoteAddr(), Function.getInfoMemory());
                     } catch (IOException ex) {
                     }
                 }
@@ -154,10 +140,10 @@ public class ExcelUpdateController {
                 if (message.contains("java.io.FileNotFoundException")) {
                     attr.addFlashAttribute("info", new Message(Message.TYPE_DANGER, Message.HEAD_DANGER, "File import không tồn tại"));
                 } else {
-                    LOGGER.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
             } else {
-                LOGGER.error(e.getMessage(), e);
+                logger.error(e.getMessage(), e);
             }
         }
         return "redirect:/excelUpdateNode/init/" + type;
@@ -216,63 +202,6 @@ public class ExcelUpdateController {
         attr.addFlashAttribute("info", new Message(Message.TYPE_SUCCESS, Message.HEAD_SUCCESS, Message.MESSAGE_UPDATE_SUCCESS));
         return "redirect:/excelUpdateNode/init/" + type;
 
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.POST, params = {"excel"})
-    public String excelCell(ModelMap mm,
-            @RequestParam(value = "type", required = false) String type,
-            @ModelAttribute("tableUpdateForm") TableUpdateForm tableUpdateForm, RedirectAttributes attr, Locale locale, HttpServletRequest request,
-            HttpServletResponse response
-    ) {
-        export(request, response, tableUpdateForm.getModels(), "dk_cell", type);
-        return "redirect:/excelUpdateNode/init/" + type;
-
-    }
-
-    @RequestMapping(value = "/updateBts", method = RequestMethod.POST, params = {"excel"})
-    public String insertBts(ModelMap mm,
-            @RequestParam(value = "type", required = false) String type,
-            @ModelAttribute("tableFormUpdateBts") TableFormUpdateBts tableFormUpdateBts, RedirectAttributes attr, Locale locale, HttpServletRequest request,
-            HttpServletResponse response
-    ) {
-        export(request, response, tableFormUpdateBts.getModels(), "update_bts", type);
-        return "redirect:/excelUpdateNode/init/" + type;
-
-    }
-
-    public void export(HttpServletRequest request, HttpServletResponse response, List<?> items, String name, String type) {
-        String dataDirectory = request.getServletContext().getRealPath("/WEB-INF/excel-templates/");
-        if (type.equals("1")) {
-            String fileName = "Template_CAPNHAT_CELL.xls";
-            File fileTemplate = new File(dataDirectory + File.separator + fileName);
-            File fileResult = writeExcelCell(fileTemplate, items, name);
-            if (fileResult.exists()) {
-                response.setContentType("application/excel");
-                fileName = "result_CAPNHAT_CELL.xls";
-                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
-                try {
-                    FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
-                    response.getOutputStream().flush();
-
-                } catch (IOException ex) {
-                }
-            }
-        } else {
-            String fileName = "Template_CAPNHAT_BTS.xls";
-            File fileTemplate = new File(dataDirectory + File.separator + fileName);
-            File fileResult = writeExcelBTS(fileTemplate, items);
-            if (fileResult.exists()) {
-                response.setContentType("application/excel");
-                fileName = "result_CAPNHAT_BTS.xls";
-                response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
-                try {
-                    FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(fileResult)), response.getOutputStream());
-                    response.getOutputStream().flush();
-
-                } catch (IOException ex) {
-                }
-            }
-        }
     }
 
     public File writeExcelCell(File fileTemplate, List<?> temp, String name) {
@@ -343,89 +272,33 @@ public class ExcelUpdateController {
         return null;
     }
 
-    public File writeExcelBTS(File fileTemplate, List<?> temp) {
+    public File writeExcelBTS(File inputFile, List<String> temp, String filePath) {
         try {
-            FileInputStream fin = new FileInputStream(fileTemplate);
-            XSSFWorkbook workbook = null;
-            workbook = new XSSFWorkbook(fin);
-            Sheet sheet = workbook.getSheetAt(0);//createSheet("2G");
-            Iterator<ExcelBtsUpdateBO> iterator = (Iterator<ExcelBtsUpdateBO>) temp.iterator();
-            Cell cell = null;
-            Row row = null;
-            int rowIndex = 2;
-
-            //header
-            while (iterator.hasNext()) {
-                ExcelBtsUpdateBO item = iterator.next();
-
-                row = sheet.createRow(rowIndex++);
-                CellStyle style = sheet.getWorkbook().createCellStyle();
-                row.setRowStyle(style);
-                //vendor
-                cell = row.createCell(0);
-                cell.setCellValue(item.getCheckDB());
-                cell = row.createCell(1);
-                cell.setCellValue(item.getLoaiNE() == null || item.getLoaiNE().isEmpty() ? "Cần phải nhập Loại NE" : item.getLoaiNE());
-                cell = row.createCell(2);
-                cell.setCellValue(item.getMaBts());
-
-                cell = row.createCell(3);
-                cell.setCellValue(item.getBscCode());
-                cell = row.createCell(4);
-                cell.setCellValue(item.getMaTramDuAn());
-                cell = row.createCell(5);
-
-                cell.setCellValue(item.getMaBuilding());
-                cell = row.createCell(6);
-                cell.setCellValue(item.getTenNguoiQuanLy());
-                cell = row.createCell(7);
-                cell.setCellValue(item.getSdtNguoiQuanLy());
-
-                cell = row.createCell(8);
-                cell.setCellValue(item.getTenChoQuanLy());
-                cell = row.createCell(9);
-                cell.setCellValue(item.getHoanCanhRaDoi());
-                cell = row.createCell(10);
-                cell.setCellValue(item.getNgayHoatDong());
-                cell = row.createCell(11);
-                cell.setCellValue(item.getTenTrenHeThong());
-                cell = row.createCell(12);
-                cell.setCellValue(item.getTenBscRnc());
-                cell = row.createCell(13);
-                cell.setCellValue(item.getMscMss());
-                cell = row.createCell(14);
-                cell.setCellValue(item.getSgsn());
-                cell = row.createCell(15);
-                cell.setCellValue(item.getDcHsdpa42M());
-                cell = row.createCell(16);
-                cell.setCellValue(item.getFilterUser());
-
-                cell = row.createCell(17);
-                cell.setCellValue(item.getLoaiCongNghe());
-
-                cell = row.createCell(18);
-                cell.setCellValue(item.getFrequencyBand());
-
-                cell = row.createCell(19);
-                cell.setCellValue(item.getEnodebId());
-
-                cell = row.createCell(20);
-                cell.setCellValue(item.getThietBi());
-                cell = row.createCell(21);
-                cell.setCellValue(item.getLoaiTram());
-                cell = row.createCell(22);
-                cell.setCellValue(item.getCauHinh());
+            XSSFWorkbook workbook;
+            try (FileInputStream fin = new FileInputStream(inputFile)) {
+                workbook = new XSSFWorkbook(fin);
+                Sheet sheet = workbook.getSheetAt(0);
+                Cell cell;
+                Row row;
+                int rowIndex = 2;
+                for (int i = 0; i < temp.size(); i++) {
+                    row = sheet.getRow(rowIndex++);
+                    if (row != null) {
+                        CellStyle style = sheet.getWorkbook().createCellStyle();
+                        row.setRowStyle(style);
+                        cell = row.createCell(0);
+                        cell.setCellValue(temp.get(i));
+                    }
+                }
             }
-            fin.close();
-            File file = new File("result_update_site.xlsx");
-            FileOutputStream fos = new FileOutputStream(file);
-            workbook.write(fos);
-            fos.close();
+            File file = new File(filePath);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                workbook.write(fos);
+            }
             workbook.close();
             return file;
-
         } catch (IOException e) {
-
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
