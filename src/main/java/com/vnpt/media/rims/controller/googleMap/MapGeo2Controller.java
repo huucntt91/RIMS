@@ -320,7 +320,7 @@ public class MapGeo2Controller {
             //
             String objectType=model.getObjectType();
             String where = whereLocation + model.getWhere();
-            if(objectType.equals("-1")) objectType="2";
+         //   if(objectType.equals("-1")) objectType="2";
             
             List<NodeBO> resultSearch=new ArrayList<NodeBO>();
 //            if(model.getLocationLong()!="" && model.getLocationLat()!="" ){
